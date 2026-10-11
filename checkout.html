@@ -19,7 +19,36 @@
 .payopt{cursor:pointer}
 .payopt .pm{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent-ink);opacity:0;transition:opacity .4s}
 .payopt.on .pm{opacity:1}
-.co-thumb{width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid var(--line);background:var(--bg-soft);flex:none}
+.co-thumb{width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--line);background:var(--bg-soft);flex:none}
+/* sticky pay bar + mobile polish */
+.copaybar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}
+.copaybar .cpt small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.copaybar .cpt b{font-size:22px;letter-spacing:-.01em}
+.copaybar .btn{min-width:170px;justify-content:center}
+.co-items .line{flex-wrap:nowrap;gap:10px;padding:12px 0}
+.co-items .line>div:first-of-type{min-width:0;flex:1}
+.co-items .line b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:20px}
+.co-items .line .stepper button{width:30px;height:30px;font-size:14px}
+.co-items .line .rm{min-width:36px;min-height:36px}
+.billcard h3{font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+.totals .grand b{font-size:22px}
+.payopt{padding:16px;border-radius:14px}
+@media (max-width:1020px){
+  main h1.title{font-size:28px;line-height:32px}
+  .console-head{margin-bottom:2px}
+  .device{display:none}
+  .costeps{margin:10px 0 0}
+  .co-grid{grid-template-columns:1fr;gap:16px;margin-top:14px}
+  .co-grid>section:first-child{order:2}
+  .co-grid>section:last-child{order:1}
+  .billcard{padding:18px;position:static}
+  .copaybar{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom));z-index:50;
+    background:rgba(255,255,255,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line);border-radius:16px;padding:12px 14px;
+    box-shadow:0 -10px 34px rgba(27,36,48,.14)}
+  .co-items .line{padding:10px 0}
+  .trustchips{margin:10px 0 2px}
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -65,7 +94,8 @@
 <h3 style="margin:18px 0 8px">Payment method</h3>
 <div id="payPanel"></div>
 <p class="err" id="coErr" style="color:#9A3412;font-size:13px;min-height:20px"></p>
-<button class="btn btn-primary" id="coPay" type="submit" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-wallet-01"></i>Place order</button>
+<div class="copaybar"><div class="cpt"><small>Order total</small><b id="copayTotal">Rs 0</b></div>
+<button class="btn btn-primary" id="coPay" type="submit"><i class="hgi-stroke hgi-wallet-01"></i>Place order</button></div>
 <p style="font-size:12px;color:var(--muted);margin:10px 0 0">GST invoice with HSN is issued on confirmation. Rates are quote-based — counter confirms before dispatch for order above Rs 25,000.</p>
 </form>
 </div>
@@ -107,7 +137,10 @@ function drawItems(){
   const t=totals();
   SSE.$('#coTotals').innerHTML=`<div><span>Subtotal</span><b>${SSE.fmt(t.sub)}</b></div>
   <div><span>GST</span><b>${SSE.fmt(t.gst)}</b></div>
-  <div class="grand"><span>Total</span><b>${SSE.fmt(t.grand)}</b></div>`;
+  <div class="grand"><span>Total · incl GST</span><b>${SSE.fmt(t.grand)}</b></div>`;
+  const bar=SSE.$('.copaybar');
+  if(bar)bar.style.display=cart.length?'':'none';
+  const pt=SSE.$('#copayTotal');if(pt)pt.textContent=SSE.fmt(t.grand);
 }
 function totals(){
   let sub=0,gst=0;
