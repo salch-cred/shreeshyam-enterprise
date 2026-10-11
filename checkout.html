@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Checkout — Shree Shyam Enterprises</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1E3A8B">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
+<link rel="stylesheet" href="assets/styles.css?v=20261011e"></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain no-print" aria-hidden="true"></div>
+<header class="island no-print"><div class="island-inner">
+<a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Checkout</small></span></a>
+<nav class="navlinks"><a href="index.html">Site</a><a href="shop.html">Shop</a><a href="account.html">Account</a></nav>
+<span class="live"><i></i>Secure order</span>
+</div></header>
+
+<main id="main" class="wrap block" style="padding-top:48px">
+<div class="console-head">
+<div><p class="eyebrow">Checkout</p>
+<h1 class="title" style="margin:0">Confirm and pay</h1></div>
+<span class="device" id="payMode"><i class="hgi-stroke hgi-smart-phone-01" style="font-size:16px"></i><span>UPI direct · zero fee</span></span>
+</div>
+
+<div class="co-grid">
+<section aria-label="Your items">
+<div class="billcard">
+<h3 style="margin:0 0 12px">Your list</h3>
+<div id="coItems" class="co-items"></div>
+<div class="totals" id="coTotals"></div>
+<a class="btn btn-ghost" href="shop.html" style="margin-top:14px"><i class="hgi-stroke hgi-arrow-left-01"></i>Add more items</a>
+</div>
+</section>
+
+<section aria-label="Details and payment">
+<div class="billcard">
+<form id="coForm" novalidate>
+<h3 style="margin:0 0 12px">Delivery details</h3>
+<div class="field"><label for="coName">Name or firm</label><input id="coName" required autocomplete="name"><span class="err"></span></div>
+<div class="formgrid">
+<div class="field"><label for="coPhone">Phone</label><input id="coPhone" inputmode="numeric" pattern="[0-9]{10}" required autocomplete="tel" maxlength="10" placeholder="10 digit mobile"><span class="err"></span></div>
+<div class="field"><label for="coEmail">Email <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="coEmail" type="email" autocomplete="email"></div>
+</div>
+<div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" rows="3" required placeholder="Unit / plot, RIICO industrial area, city, pincode"></textarea><span class="err"></span></div>
+<h3 style="margin:18px 0 8px">Payment</h3>
+<div id="payPanel"></div>
+<p class="err" id="coErr" style="color:#9A3412;font-size:13px;min-height:20px"></p>
+<button class="btn btn-primary" id="coPay" type="submit" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-wallet-01"></i>Place order</button>
+<p style="font-size:12px;color:var(--muted);margin:10px 0 0">GST invoice with HSN is issued on confirmation. Rates are quote-based — counter confirms before dispatch for order above Rs 25,000.</p>
+</form>
+</div>
+</section>
+</div>
+</main>
+
+<div class="toasts no-print" id="toasts" aria-live="polite"></div>
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<script src="assets/app.js?v=20261011e"></script>
+<script>
+let cart=[],status={gateway:'none',upiId:'shreeshyam@upi'},made=null;
+const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2600);};
+const api=()=> (localStorage.getItem('sse_api')||'').replace(/\/$/,'');
+try{cart=JSON.parse(localStorage.getItem('sse_cart')||'[]');}catch{cart=[];}
+
+async function init(){
+  if(api()){try{status=await (await fetch(api()+'/payments/status')).json();}catch{}}
+  SSE.$('#payMode').querySelector('span').textContent=status.gateway==='cashfree'?'UPI + Card · Cashfree':'UPI direct · zero fee';
+  drawItems();drawPay();
+  SSE.tabs();
+}
+function drawItems(){
+  const box=SSE.$('#coItems');
+  if(!cart.length){box.innerHTML=`<div class="empty" style="padding:24px"><i class="hgi-stroke hgi-shopping-cart-01"></i><b>List is empty</b><p>Add items from the shop page first.</p></div>`;
+    SSE.$('#coTotals').innerHTML='';SSE.$('#coPay').disabled=true;return;}
+  SSE.$('#coPay').disabled=false;
+  box.innerHTML=cart.map((c,i)=>`<div class="line"><div style="flex:1;min-width:0"><b>${SSE.esc(c.name)}</b><span>GST ${c.gst_pct||18}%</span></div>
+    <div class="stepper"><button type="button" data-i="${i}" data-d="-1">−</button><b>${c.qty}</b><button type="button" data-i="${i}" data-d="1">+</button></div>
+    <b style="min-width:90px;text-align:right">${c.rate?SSE.fmt(c.qty*c.rate):'On request'}</b>
+    <button type="button" class="rm" data-i="${i}" aria-label="Remove">×</button></div>`).join('');
+  box.querySelectorAll('.stepper button').forEach(b=>b.onclick=()=>{const it=cart[Number(b.dataset.i)];
+    it.qty=Math.max(1,it.qty+Number(b.dataset.d));saveCart();drawItems();});
+  box.querySelectorAll('.rm').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.i),1);saveCart();drawItems();});
+  const t=totals();
+  SSE.$('#coTotals').innerHTML=`<div><span>Subtotal</span><b>${SSE.fmt(t.sub)}</b></div>
+  <div><span>GST</span><b>${SSE.fmt(t.gst)}</b></div>
+  <div class="grand"><span>Total</span><b>${SSE.fmt(t.grand)}</b></div>`;
+}
+function totals(){
+  let sub=0,gst=0;
+  for(const it of cart){const tx=it.qty*(it.rate||0);sub+=tx;gst+=tx*((it.gst_pct||18)/100);}
+  return{sub,gst,grand:Math.round(sub+gst)};
+}
+function saveCart(){localStorage.setItem('sse_cart',JSON.stringify(cart));}
+function drawPay(){
+  const p=SSE.$('#payPanel');
+  if(status.gateway==='cashfree'){
+    p.innerHTML=`<div class="payopt on"><i class="hgi-stroke hgi-wallet-01"></i><div><b>Card · Netbanking · UPI</b><span>Secure checkout by Cashfree. All Indian cards accepted.</span></div></div>
+    <div class="payopt"><i class="hgi-stroke hgi-smart-phone-01"></i><div><b>Direct UPI</b><span>Scan QR from invoice · zero processing fee</span></div></div>`;
+  }else{
+    p.innerHTML=`<div class="payopt on"><i class="hgi-stroke hgi-smart-phone-01"></i><div><b>UPI now, confirmation on WhatsApp</b><span>Pay the UPI QR after we confirm stock, or pay on the invoice. Zero fee, direct to shop account.</span></div></div>
+    <div class="payopt"><i class="hgi-stroke hgi-bank"></i><div><b>Bank transfer against invoice</b><span>For plants on PO terms.</span></div></div>`;
+  }
+}
+SSE.$('#coForm').addEventListener('submit',async e=>{
+  e.preventDefault();SSE.$('#coErr').textContent='';
+  if(!cart.length){SSE.$('#coErr').textContent='Your list is empty.';return;}
+  let ok=true;
+  e.target.querySelectorAll('[required]').forEach(i=>{const err=i.closest('.field').querySelector('.err');
+    const bad=!i.value.trim()||(i.pattern&&!(new RegExp('^'+i.pattern+'$').test(i.value.trim())));
+    if(err)err.textContent=bad?'Required':'';if(bad)ok=false;});
+  if(!ok)return;
+  const body={items:cart.map(c=>({id:c.id,name:c.name,qty:c.qty,rate:c.rate||0,gst_pct:c.gst_pct||18})),
+    name:SSE.$('#coName').value.trim(),phone:SSE.$('#coPhone').value.trim(),
+    email:SSE.$('#coEmail').value.trim(),address:SSE.$('#coAddr').value.trim()};
+  if(!api()){SSE.$('#coErr').textContent='Shop backend not connected on this device. Order saved locally — WhatsApp us to confirm.';return;}
+  try{
+    const r=await fetch(api()+'/payments/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j=await r.json();
+    if(!r.ok){SSE.$('#coErr').textContent=j.error||'Could not place the order. Try again.';return;}
+    made=j;localStorage.setItem('sse_cart','[]');cart=[];
+    if(j.mode==='cashfree'&&window.Cashfree){
+      const cf=new Cashfree({mode:'production'});
+      cf.checkout({paymentSessionId:j.paymentSessionId,redirectTarget:'_modal',
+        onSuccess:()=>{done(j,'Payment received. Invoice reaches you on WhatsApp.');},
+        onFailure:()=>{SSE.$('#coErr').textContent='Payment did not go through. Your order is saved — try paying again.';}});
+    }else done(j,null);
+  }catch{SSE.$('#coErr').textContent='Could not reach the shop backend. Check connection.';}
+});
+function done(j,payMsg){
+  SSE.$('#coForm').innerHTML=`<div class="empty" style="border-style:solid"><i class="hgi-stroke hgi-checkmark-badge-01"></i><b>Order ${SSE.esc(j.orderId)} placed</b>
+  <p>${payMsg?SSE.esc(payMsg):'We confirm stock and share the UPI QR on WhatsApp shortly. Total '+SSE.fmt(j.grand)+' (GST '+SSE.fmt(j.gst)+').'}</p>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+  ${!payMsg?`<a class="btn btn-amber" href="${j.intent}"><i class="hgi-stroke hgi-smart-phone-01"></i>Pay ${SSE.fmt(j.grand)} via UPI</a>`:''}
+  <a class="btn btn-ghost" href="https://wa.me/917240107540?text=${encodeURIComponent('Order '+j.orderId+' placed on site. Name and address shared in checkout.')}"><i class="hgi-stroke hgi-whatsapp"></i>Confirm on WhatsApp</a></div></div>`;
+  toast('Order '+j.orderId+' placed');
+}
+init();
+</script></body></html>

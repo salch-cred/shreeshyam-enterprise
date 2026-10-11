@@ -1,5 +1,5 @@
 ?<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Shop — Shree Shyam Enterprises</title>
 <meta name="description" content="Live catalogue: power tools, paints, plumbing, electricals, plywood and building material with retail and wholesale rates.">
 <meta name="theme-color" content="#1E3A8B">
@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261011c"></head>
+<link rel="stylesheet" href="assets/styles.css?v=20261011e"></head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
@@ -20,15 +20,17 @@
 
 <main id="main" class="wrap block" style="padding-top:48px">
 <p class="eyebrow rv in">Catalogue · updated on every bill</p>
-<h1 class="title rv in" style="font-size:52px;line-height:1;max-width:760px">Search stock, add to list, send in one tap</h1>
-<div class="cmdbar rv in" style="background:var(--bg-soft);box-shadow:none;border:1px solid var(--line)">
+<h1 class="title rv in" style="font-size:52px;line-height:1;max-width:760px">Search 10,000+ items, add to list, check out in one tap</h1>
+<div class="cmdbar shopbar rv in" style="background:var(--bg-soft);box-shadow:none;border:1px solid var(--line)">
 <label class="search" style="background:#fff;border-color:var(--line)"><i class="hgi-stroke hgi-search-01"></i><input id="q" type="search" placeholder="bearing, belt, valve, tube…" aria-label="Search products" style="color:var(--ink)"><kbd>/</kbd></label>
 <div class="seg" id="slabSeg" style="min-width:220px"><button data-s="retail" aria-pressed="true">Retail</button><button data-s="wholesale" aria-pressed="false">Wholesale</button></div>
+<select id="sort" aria-label="Sort products" style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;background:#fff"><option value="az">Name A-Z</option><option value="za">Name Z-A</option><option value="stock">In stock first</option></select>
 </div>
 <div class="catpills" id="cats"></div>
 <p class="spec" id="count" style="margin:16px 0 0"></p>
 <div id="grid" class="grid-products" style="margin-top:16px"></div>
 <div class="toolbar" id="sendbar"><button class="btn btn-ghost" id="more">Load more</button>
+<a class="btn btn-primary" href="checkout.html"><i class="hgi-stroke hgi-wallet-01"></i>Checkout</a>
 <a class="btn btn-amber" id="waSend" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20rates%20chahiye"><i class="hgi-stroke hgi-whatsapp"></i>Send list on WhatsApp</a></div>
 </main>
 
@@ -39,11 +41,15 @@
 <div><b>Counter</b><br><a href="admin.html">Admin</a><br><a href="billing.html">Billing</a></div>
 <div><b>Legal</b><br><a href="privacy.html">Privacy</a><br><a href="terms.html">Terms</a></div>
 </div></footer>
-<script src="assets/app.js?v=20261011c"></script>
+<script src="assets/app.js?v=20261011e"></script>
 <script>
 let ALL=[],pg=1,cart=[],cat='',slab='retail';
+try{cart=JSON.parse(localStorage.getItem('sse_cart')||'[]');}catch{}
+function saveCart(){localStorage.setItem('sse_cart',JSON.stringify(cart));SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);}
 const grid=SSE.$('#grid');
+const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;document.body.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2200);};
 async function init(){
+  grid.innerHTML=Array(8).fill('<div class="skelp"></div>').join('');
   ALL=await SSE.seed();
   const cats=['',...new Set(ALL.map(p=>p.category))];
   SSE.$('#cats').innerHTML=cats.map(c=>`<button data-c="${SSE.esc(c)}" aria-pressed="${c===''}" class="${c===''?'on':''}">${c===''?'All':SSE.esc(c)}</button>`).join('');
@@ -53,6 +59,7 @@ async function init(){
   SSE.$('#slabSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     SSE.$('#slabSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
     b.setAttribute('aria-pressed','true');slab=b.dataset.s;pg=1;render();});
+  SSE.$('#sort').onchange=()=>{pg=1;render()};
   render();SSE.motion();SSE.tabs();
   SSE.$('#q').oninput=()=>{pg=1;render()};
   SSE.$('#more').onclick=()=>{pg++;render(true)};
@@ -64,7 +71,11 @@ async function init(){
 }
 function render(append){
   const f=SSE.filter(ALL,SSE.$('#q').value,cat);
-  const items=SSE.page(f,pg);
+  const fs=[...f];const srt=SSE.$('#sort').value;
+  if(srt==='az')fs.sort((a,b)=>a.name.localeCompare(b.name));
+  if(srt==='za')fs.sort((a,b)=>b.name.localeCompare(a.name));
+  if(srt==='stock')fs.sort((a,b)=>b.stock-a.stock);
+  const items=SSE.page(fs,pg);
   SSE.$('#count').textContent=`${f.length.toLocaleString('en-IN')} items · showing ${Math.min(f.length,pg*SSE.PAGE)} · ${slab} rates`;
   SSE.$('#more').style.display=(pg*SSE.PAGE>=f.length)?'none':'';
   if(!append)grid.innerHTML='';
@@ -72,12 +83,14 @@ function render(append){
   for(const p of items){
     const d=document.createElement('article');d.className='pcard rv in';
     const inCart=cart.find(c=>c.id===p.id);
-    d.innerHTML=`<img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}">
-    <div class="pad"><h3>${SSE.esc(p.name)}</h3><div class="meta">${SSE.esc(p.brand)} · Stock ${Number(p.stock)||0}</div>
-    <div class="price">${(slab==='wholesale'?p.rate_wholesale:p.rate_retail)?SSE.fmt(slab==='wholesale'?p.rate_wholesale:p.rate_retail):'Rate on request'} / ${SSE.esc(p.unit)} <span class="meta">+${Number(p.gst_pct)||0}% GST</span></div>
-    <div class="cta"><button class="btn ${inCart?'btn-primary':'btn-ghost'}">${inCart?'In list · '+inCart.qty:'Add to list'}</button></div></div>`;
-    d.querySelector('button').onclick=()=>{const fnd=cart.find(c=>c.id===p.id);if(fnd)fnd.qty++;else cart.push({id:p.id,name:p.name,qty:1});
-      SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);const bb=d.querySelector('button');bb.className='btn btn-primary';bb.textContent='In list · '+cart.find(c=>c.id===p.id).qty;};
+    const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
+    d.innerHTML=`<div class="pmedia"><img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}"><span class="gstm">GST ${Number(p.gst_pct)||0}%</span></div>
+    <div class="pad"><span class="pbrand">${SSE.esc(p.brand)}</span><h3>${SSE.esc(p.name)}</h3>
+    <div class="pfoot"><div class="pprice">${rate?SSE.fmt(rate):'Rate on request'}<small>per ${SSE.esc(p.unit)} · stock ${Number(p.stock)||0}</small></div>
+    <button class="padd ${inCart?'in':''}" aria-label="Add ${SSE.esc(p.name)} to list">+</button></div></div>`;
+    d.querySelector('.padd').onclick=()=>{const fnd=cart.find(c=>c.id===p.id);
+      if(fnd)fnd.qty++;else cart.push({id:p.id,name:p.name,qty:1,rate,gst_pct:p.gst_pct});
+      saveCart();d.querySelector('.padd').classList.add('in');toast(p.name+' in list');};
     grid.appendChild(d);
   }
 }

@@ -6,6 +6,7 @@ import { billing } from './routes/billing.js';
 import { misc } from './routes/misc.js';
 import { products } from './routes/products.js';
 import { env } from './env.js';
+import { payments } from './routes/payments.js';
 
 export function createApp() {
   const app = express();
@@ -19,6 +20,7 @@ export function createApp() {
   app.use('/products', products);
   app.use('/', billing);
   app.use('/', misc);
+  app.use('/', payments);
 
   // Typed error surface — never leaks stack to clients
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
