@@ -8,7 +8,7 @@
   --max:1240px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{margin:0;font-family:Manrope,system-ui,sans-serif;color:var(--ink);background:var(--bg);
   font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
@@ -638,4 +638,18 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
   .sfooter .cols{grid-template-columns:1fr 1fr;gap:26px;padding:40px 20px 32px}
   .sfooter .fbrand{grid-column:1/-1}
   .sfooter .legal{flex-direction:column;align-items:flex-start;padding:16px 20px}
+}
+
+/* ---- Landing hero decor (mobile-first, open-source pattern shapes) ---- */
+.herodeco{display:none}
+@media (max-width:1020px){
+  .herodeco{display:block;position:absolute;inset:0;pointer-events:none;overflow:visible}
+  .herodeco .hdot{position:absolute;border-radius:50%}
+  .herodeco .d1{width:190px;height:190px;right:-70px;top:-60px;background:radial-gradient(circle at 35% 35%, rgba(29,78,216,.16), transparent 70%)}
+  .herodeco .d2{width:110px;height:110px;left:-46px;top:180px;background:radial-gradient(circle at 60% 40%, rgba(180,83,9,.12), transparent 70%)}
+  .herodeco .ring{width:84px;height:84px;right:14px;top:120px;border:2px dashed rgba(29,78,216,.22);background:none}
+  .herodeco .hatch{left:0;right:0;top:0;height:9px;background:repeating-linear-gradient(90deg,var(--accent) 0 14px,transparent 14px 22px);opacity:.5;border-radius:0}
+  .herodeco .zig{position:absolute;left:0;right:0;top:44px;height:6px;opacity:.35;
+    background:linear-gradient(90deg,var(--accent) 50%,transparent 50%);background-size:12px 6px}
+  .float-card{max-width:46vw}
 }
