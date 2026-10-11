@@ -1,0 +1,4 @@
+# Never upload the API source or local junk with the static site
+backend
+node_modules
+.vercel

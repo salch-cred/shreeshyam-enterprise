@@ -1,0 +1,9 @@
+# secrets + generated — never commit
+.env
+.env.local
+*.pem
+node_modules/
+dist/
+.vercel/
+
+.vercel

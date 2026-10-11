@@ -1,0 +1,76 @@
+// Prisma schema — source of truth for the free Postgres DB.
+// Runtime uses node-postgres directly (smaller Vercel cold start); `npm run db:push` applies this.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id            String   @id
+  name          String
+  brand         String   @default("-")
+  category      String   @default("General")
+  unit          String   @default("pcs")
+  hsn           String   @default("")
+  image         String   @default("")
+  rateRetail    Int      @map("rate_retail")
+  rateWholesale Int      @map("rate_wholesale")
+  gstPct        Int      @default(18) @map("gst_pct")
+  stock         Int      @default(0)
+  minStock      Int      @default(5) @map("min_stock")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@index([name])
+  @@map("products")
+}
+
+model Invoice {
+  no       String   @id
+  date     DateTime @default(now())
+  type     String   @default("TAX") // TAX | EST
+  customer String   @default("")
+  items    Json
+  subtotal Int      @default(0)
+  discount Int      @default(0)
+  gst      Int      @default(0)
+  grand    Int      @default(0)
+  paid     Int      @default(0)
+  balance  Int      @default(0)
+
+  @@index([date])
+  @@map("invoices")
+}
+
+model Order {
+  id      String   @id
+  source  String   @default("web")
+  text    String   @default("")
+  status  String   @default("new")
+  created DateTime @default(now())
+
+  @@index([status])
+  @@map("orders")
+}
+
+model StockLog {
+  id     Int      @id @default(autoincrement())
+  pid    String   @map("product_id")
+  delta  Int
+  reason String   @default("")
+  date   DateTime @default(now())
+
+  @@index([pid])
+  @@map("stock_log")
+}
+
+model Content {
+  key   String @id
+  value Json
+
+  @@map("content")
+}

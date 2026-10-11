@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop — Shree Shyam Enterprises</title>
+<meta name="description" content="Live catalogue: power tools, paints, plumbing, electricals, plywood and building material with retail and wholesale rates.">
+<meta name="theme-color" content="#1E3A8B">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
+<link rel="stylesheet" href="assets/styles.css"></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="announce">Wholesale slab applies on bulk qty · GST bill with every sale</div>
+<header class="island"><div class="island-inner">
+<a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Live stock</small></span></a>
+<nav class="navlinks"><a href="index.html">Home</a><a href="shop.html" aria-current="page">Shop</a><a href="index.html#bulk">Bulk supply</a><a href="billing.html">Estimate</a></nav>
+<a class="btn btn-primary" href="#sendbar"><i class="hgi-stroke hgi-shopping-cart-01"></i><span id="cartN">List 0</span></a>
+</div></header>
+
+<main id="main" class="wrap block" style="padding-top:48px">
+<p class="eyebrow rv in">Catalogue · updated on every bill</p>
+<h1 class="title rv in" style="font-size:52px;line-height:1;max-width:760px">Search stock, add to list, send in one tap</h1>
+<div class="cmdbar rv in" style="background:var(--bg-soft);box-shadow:none;border:1px solid var(--line)">
+<label class="search" style="background:#fff;border-color:var(--line)"><i class="hgi-stroke hgi-search-01"></i><input id="q" type="search" placeholder="drill, cement, pipe, wire…" aria-label="Search products" style="color:var(--ink)"><kbd>/</kbd></label>
+<div class="seg" id="slabSeg" style="min-width:220px"><button data-s="retail" aria-pressed="true">Retail</button><button data-s="wholesale" aria-pressed="false">Wholesale</button></div>
+</div>
+<div class="catpills" id="cats"></div>
+<p class="spec" id="count" style="margin:16px 0 0"></p>
+<div id="grid" class="grid-products" style="margin-top:16px"></div>
+<div class="toolbar" id="sendbar"><button class="btn btn-ghost" id="more">Load more</button>
+<a class="btn btn-amber" id="waSend" href="https://wa.me/919000000000?text=Namaste%2C%20mujhe%20rates%20chahiye"><i class="hgi-stroke hgi-whatsapp"></i>Send list on WhatsApp</a></div>
+</main>
+
+<footer><div class="wrap cols">
+<div><a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Enterprises</small></span></a>
+<p>Retail and wholesale. GSTIN on request at counter.</p></div>
+<div><b>Shop</b><br><a href="shop.html">Catalogue</a><br><a href="billing.html">Estimate</a></div>
+<div><b>Counter</b><br><a href="admin.html">Admin</a><br><a href="billing.html">Billing</a></div>
+<div><b>Legal</b><br><a href="privacy.html">Privacy</a><br><a href="terms.html">Terms</a></div>
+</div></footer>
+<script src="assets/app.js"></script>
+<script>
+let ALL=[],pg=1,cart=[],cat='',slab='retail';
+const grid=SSE.$('#grid');
+async function init(){
+  ALL=await SSE.seed();
+  const cats=['',...new Set(ALL.map(p=>p.category))];
+  SSE.$('#cats').innerHTML=cats.map(c=>`<button data-c="${SSE.esc(c)}" aria-pressed="${c===''}" class="${c===''?'on':''}">${c===''?'All':SSE.esc(c)}</button>`).join('');
+  SSE.$('#cats').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    SSE.$('#cats').querySelectorAll('button').forEach(x=>{x.classList.remove('on');x.setAttribute('aria-pressed','false');});
+    b.classList.add('on');b.setAttribute('aria-pressed','true');cat=b.dataset.c;pg=1;render();});
+  SSE.$('#slabSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    SSE.$('#slabSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');slab=b.dataset.s;pg=1;render();});
+  render();SSE.motion();SSE.tabs();
+  SSE.$('#q').oninput=()=>{pg=1;render()};
+  SSE.$('#more').onclick=()=>{pg++;render(true)};
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();SSE.$('#q').focus();}});
+  SSE.$('#waSend').onclick=e=>{if(!cart.length){e.preventDefault();return}
+    const t=cart.map(c=>`${c.name} x ${c.qty}`).join(', ');
+    e.currentTarget.href='https://wa.me/919000000000?text='+encodeURIComponent('Order: '+t);
+    try{const o=JSON.parse(localStorage.getItem('sse_orders')||'[]');o.push({id:'W'+Date.now(),source:'web',text:t,created:new Date().toISOString(),status:'new'});localStorage.setItem('sse_orders',JSON.stringify(o));}catch{}};
+}
+function render(append){
+  const f=SSE.filter(ALL,SSE.$('#q').value,cat);
+  const items=SSE.page(f,pg);
+  SSE.$('#count').textContent=`${f.length.toLocaleString('en-IN')} items · showing ${Math.min(f.length,pg*SSE.PAGE)} · ${slab} rates`;
+  SSE.$('#more').style.display=(pg*SSE.PAGE>=f.length)?'none':'';
+  if(!append)grid.innerHTML='';
+  if(!items.length&&!append){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><i class="hgi-stroke hgi-package-search"></i><b>Nothing matches</b><p>Try drill, cement, pipe — or WhatsApp us, we arrange it.</p></div>`;return;}
+  for(const p of items){
+    const d=document.createElement('article');d.className='pcard rv in';
+    const inCart=cart.find(c=>c.id===p.id);
+    d.innerHTML=`<img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}">
+    <div class="pad"><h3>${SSE.esc(p.name)}</h3><div class="meta">${SSE.esc(p.brand)} · Stock ${Number(p.stock)||0}</div>
+    <div class="price">${SSE.fmt(slab==='wholesale'?p.rate_wholesale:p.rate_retail)} / ${SSE.esc(p.unit)} <span class="meta">+${Number(p.gst_pct)||0}% GST</span></div>
+    <div class="cta"><button class="btn ${inCart?'btn-primary':'btn-ghost'}">${inCart?'In list · '+inCart.qty:'Add to list'}</button></div></div>`;
+    d.querySelector('button').onclick=()=>{const fnd=cart.find(c=>c.id===p.id);if(fnd)fnd.qty++;else cart.push({id:p.id,name:p.name,qty:1});
+      SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);const bb=d.querySelector('button');bb.className='btn btn-primary';bb.textContent='In list · '+cart.find(c=>c.id===p.id).qty;};
+    grid.appendChild(d);
+  }
+}
+init();
+</script></body></html>

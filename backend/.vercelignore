@@ -1,0 +1,5 @@
+# Deployed by Vercel install step — never upload
+node_modules
+.env
+.env.local
+.vercel

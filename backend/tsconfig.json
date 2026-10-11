@@ -1,0 +1,1 @@
+{"compilerOptions": {"esModuleInterop": true, "forceConsistentCasingInFileNames": true, "lib": ["ES2022"], "module": "CommonJS", "moduleResolution": "Node", "outDir": "dist", "resolveJsonModule": true, "skipLibCheck": true, "sourceMap": true, "strict": true, "target": "ES2022"},   "exclude": ["node_modules", "dist", "api"],   "include": ["src/**/*"]}
