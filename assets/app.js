@@ -100,7 +100,7 @@ const SSE = (() => {
     const items=[
       ['index.html','home-01','Home',cur==='home'],
       ['shop.html','shopping-cart-01','Shop',cur==='shop'],
-      ['checkout.html','wallet-01','Checkout',cur==='checkout','fab'],
+      ['checkout.html','file-01','Estimate',cur==='checkout','fab'],
       ['https://wa.me/919000000000?text=Namaste%2C%20mujhe%20rates%20chahiye','whatsapp','WhatsApp',false],
       ['tel:+919000000000','call','Call',false]];
     const n=document.createElement('nav');n.className='mtabs no-print';n.setAttribute('aria-label','Mobile');
