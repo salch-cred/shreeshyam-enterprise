@@ -1,143 +1,624 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Plant Account & OTP Login — Shree Shyam Enterprise</title>
-<meta name="description" content="Passwordless OTP authentication for RIICO Neemrana plant accounts. View GST invoices, e-way bills and credit statements.">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Plant Account and Verification — Shree Shyam Enterprise</title>
+<meta name="description" content="Direct plant authentication for RIICO Neemrana manufacturers. Access tax invoices, eway bills, and credit statements.">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#1D4ED8">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012j"><link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/styles.css?v=20261012k">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
 <style>
-/* Decor OTP Auth Styles */
-.auth-decor-shell{
-  max-width:540px;
-  margin:40px auto 60px;
-  padding:0 16px;
+/* Enterprise Authentication Grid */
+.auth-page-container {
+  max-width: 1140px;
+  margin: 36px auto 72px;
+  padding: 0 20px;
 }
-.auth-decor-card{
-  background:#FFFFFF;
-  border:1.5px solid rgba(29,78,216,.2);
-  border-radius:28px;
-  padding:36px 32px;
-  box-shadow:0 24px 60px -12px rgba(15,23,42,.12), 0 0 0 1px rgba(29,78,216,.06);
-  position:relative;
-  overflow:hidden;
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 32px;
+  align-items: stretch;
 }
-.auth-decor-card::before{
-  content:"";
-  position:absolute;
-  top:-90px;
-  right:-90px;
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(37,99,235,.15) 0%, transparent 70%);
-  pointer-events:none;
+
+/* Left Column: Industrial Trust & Plant Benefits */
+.auth-hero-panel {
+  background: #0F172A;
+  border: 1px solid #1E293B;
+  border-radius: 24px;
+  padding: 40px 36px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.2);
 }
-.auth-lead-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:#EFF6FF;
-  border:1px solid #BFDBFE;
-  color:#1D4ED8;
-  font-size:12px;
-  font-weight:800;
-  padding:5px 12px;
-  border-radius:999px;
-  letter-spacing:.03em;
-  text-transform:uppercase;
-  margin-bottom:12px;
+.auth-plant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1E293B;
+  border: 1px solid #334155;
+  color: #93C5FD;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  width: fit-content;
 }
-.auth-phone-wrap{
-  display:flex;
-  align-items:center;
-  border:1.5px solid #CBD5E1;
-  border-radius:14px;
-  overflow:hidden;
-  transition:all .2s;
-  background:#F8FAFC;
+.auth-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
 }
-.auth-phone-wrap:focus-within{
-  border-color:#1D4ED8;
-  background:#FFFFFF;
-  box-shadow:0 0 0 3px rgba(29,78,216,.14);
+.auth-hero-title {
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 800;
+  color: #F8FAFC;
+  margin: 0 0 12px;
+  text-wrap: balance;
 }
-.auth-phone-prefix{
-  padding:12px 14px;
-  background:#F1F5F9;
-  border-right:1px solid #CBD5E1;
-  font-weight:800;
-  font-size:14px;
-  color:#0F172A;
-  display:flex;
-  align-items:center;
-  gap:6px;
+.auth-hero-sub {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #94A3B8;
+  margin: 0 0 32px;
+  text-wrap: pretty;
 }
-.auth-phone-input{
-  flex:1;
-  border:none;
-  outline:none;
-  padding:12px 16px;
-  font-size:16px;
-  font-weight:700;
-  background:transparent;
-  color:#0F172A;
+.auth-perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
 }
-/* Split OTP Input */
-.otp-boxes{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  margin:20px 0;
+.auth-perk-card {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
 }
-.otp-box{
-  width:58px;
-  height:62px;
-  border-radius:16px;
-  border:2px solid #CBD5E1;
-  background:#F8FAFC;
-  text-align:center;
-  font-size:24px;
-  font-weight:800;
-  color:#1D4ED8;
-  outline:none;
-  transition:all .2s;
+.auth-perk-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #0F172A;
+  border: 1px solid #334155;
+  color: #60A5FA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
 }
-.otp-box:focus{
-  border-color:#1D4ED8;
-  background:#FFFFFF;
-  box-shadow:0 0 0 4px rgba(29,78,216,.15);
-  transform:scale(1.04);
+.auth-perk-body h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #F8FAFC;
+  margin: 0 0 4px;
 }
-.otp-sent-banner{
-  background:#EFF6FF;
-  border:1px solid #BFDBFE;
-  border-radius:14px;
-  padding:10px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:13px;
-  color:#1E40AF;
-  margin-bottom:16px;
+.auth-perk-body p {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #94A3B8;
+  margin: 0;
 }
-.demo-otp-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  background:#ECFDF5;
-  border:1px solid #A7F3D0;
-  color:#065F46;
-  font-size:11.5px;
-  font-weight:700;
-  padding:4px 10px;
-  border-radius:999px;
-  cursor:pointer;
-  margin:10px 0;
+.auth-brands-footer {
+  border-top: 1px solid #1E293B;
+  padding-top: 20px;
+}
+.auth-brands-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748B;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: block;
+}
+.auth-brands-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.auth-brand-tag {
+  background: #1E293B;
+  border: 1px solid #334155;
+  color: #CBD5E1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* Right Column: Authentication Card */
+.auth-card-panel {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mode Switcher Segmented Control */
+.auth-tab-segment {
+  display: flex;
+  background: #F1F5F9;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 28px;
+  gap: 4px;
+}
+.auth-tab-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748B;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.32,0.72,0,1);
+  text-align: center;
+}
+.auth-tab-btn[aria-pressed="true"] {
+  background: #FFFFFF;
+  color: #0F172A;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.auth-form-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}
+.auth-form-sub {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #64748B;
+  margin: 0 0 24px;
+  text-wrap: pretty;
+}
+
+/* Input Fields */
+.auth-field {
+  margin-bottom: 20px;
+}
+.auth-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 8px;
+}
+.auth-input-text {
+  width: 100%;
+  border: 1px solid #CBD5E1;
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0F172A;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+.auth-input-text:focus {
+  border-color: #1D4ED8;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+/* Phone Input Group */
+.auth-phone-group {
+  display: flex;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  background: #F8FAFC;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.auth-phone-group:focus-within {
+  border-color: #1D4ED8;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+.auth-phone-flag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+  background: #F1F5F9;
+  border-right: 1px solid #CBD5E1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  user-select: none;
+}
+.auth-phone-box {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0F172A;
+  outline: none;
+  letter-spacing: 0.04em;
+}
+
+/* Action Button */
+.auth-submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #1D4ED8;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.32,0.72,0,1);
+  box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.35);
+  margin-top: 8px;
+}
+.auth-submit-btn:hover {
+  background: #1E40AF;
+  transform: translateY(-1px);
+}
+.auth-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Security Trust Line */
+.auth-trust-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #64748B;
+  line-height: 1.4;
+}
+.auth-trust-notice i {
+  color: #10B981;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Step 2: OTP Verification */
+.otp-header-info {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #334155;
+}
+.otp-header-info strong {
+  color: #0F172A;
+}
+.otp-edit-btn {
+  background: transparent;
+  border: none;
+  color: #1D4ED8;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+.otp-edit-btn:hover {
+  text-decoration: underline;
+}
+
+.otp-boxes-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 20px 0 24px;
+}
+.otp-single-box {
+  width: 58px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+  background: #F8FAFC;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1D4ED8;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.32,0.72,0,1);
+}
+.otp-single-box:focus {
+  border-color: #1D4ED8;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+  transform: translateY(-2px);
+}
+
+.otp-sandbox-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  user-select: none;
+  transition: all 0.2s;
+}
+.otp-sandbox-chip:hover {
+  background: #DBEAFE;
+}
+
+.otp-countdown-row {
+  font-size: 13px;
+  color: #64748B;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.otp-resend-links {
+  display: none;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.otp-resend-btn {
+  background: transparent;
+  border: none;
+  color: #1D4ED8;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.otp-resend-btn:hover {
+  text-decoration: underline;
+}
+
+/* Form Errors */
+.auth-inline-err {
+  color: #B91C1C;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 6px;
+  min-height: 16px;
+  display: block;
+}
+
+/* Logged-In Plant Console */
+.plant-console-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 36px 32px;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+}
+.console-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #E2E8F0;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.console-user-meta h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 6px 0 2px;
+}
+.console-user-meta span {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 600;
+}
+.console-signout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.console-signout-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.console-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.console-stat-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 20px 18px;
+}
+.console-stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1D4ED8;
+  display: block;
+  margin-bottom: 4px;
+}
+.console-stat-label {
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.console-quick-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.console-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.console-action-primary {
+  background: #1D4ED8;
+  color: #FFFFFF;
+}
+.console-action-primary:hover {
+  background: #1E40AF;
+}
+.console-action-wa {
+  background: #25D366;
+  color: #FFFFFF;
+}
+.console-action-wa:hover {
+  background: #1EBE5D;
+}
+
+/* Invoices Table */
+.console-bills-section {
+  border-top: 1px solid #E2E8F0;
+  padding-top: 24px;
+}
+.console-bills-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.console-bills-head h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+.console-bill-row {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.console-bill-meta strong {
+  font-size: 14px;
+  color: #0F172A;
+  display: block;
+}
+.console-bill-meta span {
+  font-size: 12px;
+  color: #64748B;
+}
+.console-bill-amount {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0F172A;
+  text-align: right;
+}
+.console-bill-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #ECFDF5;
+  color: #065F46;
+  margin-top: 4px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .auth-page-container {
+    margin: 20px auto 96px;
+    padding: 0 16px;
+  }
+  .auth-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .auth-hero-panel {
+    padding: 28px 22px;
+    border-radius: 20px;
+  }
+  .auth-hero-title {
+    font-size: 24px;
+  }
+  .auth-hero-sub {
+    margin-bottom: 20px;
+  }
+  .auth-card-panel {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+  .console-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .otp-single-box {
+    width: 52px;
+    height: 58px;
+    font-size: 22px;
+  }
 }
 </style>
 </head>
@@ -169,155 +650,301 @@
   </div>
 </header>
 
-<main id="main" class="admin-shell">
-  <div class="auth-decor-shell">
-    <!-- AUTH CARD (PASSWORDLESS OTP) -->
-    <div id="authView" class="auth-decor-card rv in">
-      <div class="auth-lead-badge"><i class="hgi-stroke hgi-shield-tick"></i> Fast OTP Login</div>
-      <h1 class="title" style="font-size:28px;line-height:1.2;margin:0 0 6px" id="authTitle">Sign in with Mobile</h1>
-      <p class="lead" style="font-size:14px;color:#64748B;margin:0 0 20px" id="authSub">Passwordless login. Access your factory purchase history, GST e-way bills and credit ledger.</p>
-
-      <div class="seg" id="authSeg" style="margin-bottom:22px">
-        <button data-v="in" aria-pressed="true">Sign in with OTP</button>
-        <button data-v="up" aria-pressed="false">Create Plant Account</button>
-      </div>
-
-      <!-- STEP 1: PHONE FORM -->
-      <form id="stepPhoneForm" novalidate>
-        <div class="field" id="nameRow" hidden>
-          <label for="aname">Purchaser / Firm Name</label>
-          <input id="aname" autocomplete="name" placeholder="e.g. Daikin Plant 2 / Ramesh Sharma" style="border-radius:14px;padding:12px 14px">
-          <span class="err"></span>
-        </div>
-
-        <div class="field" id="gstRow" hidden>
-          <label for="agst">Plant GSTIN (Optional)</label>
-          <input id="agst" placeholder="08AAAAA0000A1Z5" maxlength="15" style="border-radius:14px;padding:12px 14px;text-transform:uppercase">
-          <span class="err"></span>
-        </div>
-
-        <div class="field">
-          <label for="aphone">Mobile Number</label>
-          <div class="auth-phone-wrap">
-            <span class="auth-phone-prefix">🇮🇳 +91</span>
-            <input class="auth-phone-input" id="aphone" type="tel" inputmode="tel" maxlength="10" placeholder="98XXXXXXXX" required>
+<main id="main">
+  <div class="auth-page-container">
+    
+    <!-- AUTHENTICATION VIEW (PHONE & OTP) -->
+    <div id="authView" class="auth-grid">
+      
+      <!-- LEFT COLUMN: PLANT HERO & TRUST -->
+      <aside class="auth-hero-panel">
+        <div>
+          <div class="auth-plant-chip">
+            <span class="auth-pulse-dot"></span>
+            <span>RIICO Neemrana Industrial Portal</span>
           </div>
-          <span class="err" id="phoneErr"></span>
-        </div>
-
-        <p class="err" id="authErr" style="color:#9A3412;font-size:13px;min-height:18px"></p>
-
-        <button class="btn btn-primary" id="btnSendOtp" type="submit" style="width:100%;justify-content:center;padding:14px;font-size:15px;font-weight:800;border-radius:16px;box-shadow:0 8px 24px rgba(29,78,216,.35)">
-          <span>Send OTP Verification Code</span>
-          <i class="hgi-stroke hgi-arrow-right-01"></i>
-        </button>
-      </form>
-
-      <!-- STEP 2: OTP VERIFY FORM (HIDDEN INITIALLY) -->
-      <form id="stepOtpForm" hidden novalidate>
-        <div class="otp-sent-banner">
-          <div>
-            <b>OTP sent to</b> <span id="displayPhone">+91 98XXXXXX</span>
+          <h1 class="auth-hero-title">Industrial procurement and verified plant ledger</h1>
+          <p class="auth-hero-sub">Direct counter access for manufacturing units across Neemrana Japanese Zone and highway corridor. View past tax bills, track dispatches, and settle credit statements.</p>
+          
+          <div class="auth-perks-list">
+            <div class="auth-perk-card">
+              <div class="auth-perk-icon"><i class="hgi-stroke hgi-document-validation"></i></div>
+              <div class="auth-perk-body">
+                <h3>Direct GST invoices and eway bills</h3>
+                <p>Tax invoices with mandatory 8 digit HSN codes for instant monthly input credit.</p>
+              </div>
+            </div>
+            
+            <div class="auth-perk-card">
+              <div class="auth-perk-icon"><i class="hgi-stroke hgi-wallet-01"></i></div>
+              <div class="auth-perk-body">
+                <h3>Revolving plant credit ledger</h3>
+                <p>Pre approved 30 day credit facility for registered manufacturing plants.</p>
+              </div>
+            </div>
+            
+            <div class="auth-perk-card">
+              <div class="auth-perk-icon"><i class="hgi-stroke hgi-truck-delivery"></i></div>
+              <div class="auth-perk-body">
+                <h3>Priority line stoppage delivery</h3>
+                <p>25 minute van dispatch directly to your factory gate for critical spares.</p>
+              </div>
+            </div>
           </div>
-          <button type="button" id="btnEditPhone" style="background:none;border:none;color:#1D4ED8;font-weight:800;cursor:pointer;font-size:12px">Edit</button>
         </div>
 
-        <label style="font-size:13px;font-weight:700;color:#334155;text-align:center;display:block">Enter 4-Digit Security OTP</label>
+        <div class="auth-brands-footer">
+          <span class="auth-brands-label">Authorized OEM Distribution</span>
+          <div class="auth-brands-row">
+            <span class="auth-brand-tag">SKF Bearings</span>
+            <span class="auth-brand-tag">Fenner Power</span>
+            <span class="auth-brand-tag">Janatics Pneumatics</span>
+            <span class="auth-brand-tag">Festo Automation</span>
+            <span class="auth-brand-tag">Gates V Belts</span>
+            <span class="auth-brand-tag">Rexroth Hydraulics</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT COLUMN: AUTHENTICATION FORM CARD -->
+      <section class="auth-card-panel" aria-label="Account sign in or registration">
         
-        <div class="otp-boxes">
-          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp1" autocomplete="one-time-code">
-          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp2">
-          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp3">
-          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp4">
+        <!-- MODE SWITCHER TABS -->
+        <div class="auth-tab-segment" id="authSeg" role="tablist">
+          <button type="button" class="auth-tab-btn" data-v="in" aria-pressed="true" role="tab">Sign in with mobile</button>
+          <button type="button" class="auth-tab-btn" data-v="up" aria-pressed="false" role="tab">Create plant account</button>
         </div>
 
-        <div style="text-align:center;margin-bottom:12px">
-          <div class="demo-otp-pill" id="btnAutoOtp">
-            <i class="hgi-stroke hgi-flash"></i> Auto-fill Demo OTP: <b>1234</b>
+        <!-- STEP 1: MOBILE FORM -->
+        <form id="stepPhoneForm" novalidate>
+          <h2 class="auth-form-title" id="authTitle">Sign in with mobile</h2>
+          <p class="auth-form-sub" id="authSub">Enter your 10 digit Indian mobile number. We will send a secure one time passcode.</p>
+
+          <div class="auth-field" id="nameRow" hidden>
+            <label for="aname">Purchaser or factory name</label>
+            <input class="auth-input-text" id="aname" autocomplete="name" placeholder="Daikin Plant 2 or Ramesh Sharma">
+            <span class="auth-inline-err" id="nameErr"></span>
           </div>
-          <div style="font-size:12px;color:#64748B" id="resendTimerText">Resend OTP in <b id="timerCount">30s</b></div>
-          <button type="button" id="btnResendOtp" style="display:none;background:none;border:none;color:#1D4ED8;font-size:12.5px;font-weight:800;cursor:pointer">Resend OTP Code</button>
-        </div>
 
-        <p class="err" id="otpErr" style="color:#9A3412;font-size:13px;text-align:center;min-height:18px"></p>
+          <div class="auth-field" id="gstRow" hidden>
+            <label for="agst">Plant GSTIN (Optional)</label>
+            <input class="auth-input-text" id="agst" placeholder="08AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase">
+            <span class="auth-inline-err" id="gstErr"></span>
+          </div>
 
-        <button class="btn btn-primary" id="btnVerifyOtp" type="submit" style="width:100%;justify-content:center;padding:14px;font-size:15px;font-weight:800;border-radius:16px;box-shadow:0 8px 24px rgba(29,78,216,.35)">
-          <i class="hgi-stroke hgi-shield-tick"></i>
-          <span>Verify OTP & Sign In</span>
-        </button>
-      </form>
+          <div class="auth-field">
+            <label for="aphone">Mobile number</label>
+            <div class="auth-phone-group">
+              <span class="auth-phone-flag">🇮🇳 +91</span>
+              <input class="auth-phone-box" id="aphone" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="98XXXXXXXX" required autocomplete="tel">
+            </div>
+            <span class="auth-inline-err" id="phoneErr"></span>
+          </div>
+
+          <p class="auth-inline-err" id="authErr" style="margin-bottom:8px"></p>
+
+          <button class="auth-submit-btn" id="btnSendOtp" type="submit">
+            <span>Send verification code</span>
+            <i class="hgi-stroke hgi-arrow-right-01"></i>
+          </button>
+
+          <div class="auth-trust-notice">
+            <i class="hgi-stroke hgi-shield-tick"></i>
+            <span>Encrypted connection. We only send verification codes and urgent order dispatch alerts.</span>
+          </div>
+        </form>
+
+        <!-- STEP 2: OTP VERIFICATION FORM (HIDDEN INITIALLY) -->
+        <form id="stepOtpForm" hidden novalidate>
+          <div class="otp-header-info">
+            <div>
+              <span>Code sent to </span>
+              <strong id="displayPhone">+91 98••••••40</strong>
+            </div>
+            <button type="button" class="otp-edit-btn" id="btnEditPhone">Change number</button>
+          </div>
+
+          <h2 class="auth-form-title">Enter 4 digit verification code</h2>
+          <p class="auth-form-sub">Check your phone messages for the security passcode.</p>
+
+          <div class="otp-boxes-row" id="otpBoxContainer">
+            <input type="text" class="otp-single-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp1" autocomplete="one-time-code" aria-label="First digit">
+            <input type="text" class="otp-single-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp2" aria-label="Second digit">
+            <input type="text" class="otp-single-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp3" aria-label="Third digit">
+            <input type="text" class="otp-single-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp4" aria-label="Fourth digit">
+          </div>
+
+          <div style="text-align:center">
+            <div class="otp-sandbox-chip" id="btnAutoOtp" title="Quick fill test code">
+              <i class="hgi-stroke hgi-key-01"></i>
+              <span>Test Sandbox: Fill code <b id="sandboxCodeTxt">1234</b></span>
+            </div>
+            
+            <div class="otp-countdown-row" id="resendTimerText">
+              <span>Resend code in </span>
+              <strong id="timerCount">30s</strong>
+            </div>
+
+            <div class="otp-resend-links" id="resendActionsRow">
+              <button type="button" class="otp-resend-btn" id="btnResendSms">
+                <i class="hgi-stroke hgi-mail-01"></i> Resend via SMS
+              </button>
+              <button type="button" class="otp-resend-btn" id="btnResendWa">
+                <i class="hgi-stroke hgi-whatsapp"></i> Send via WhatsApp
+              </button>
+            </div>
+          </div>
+
+          <p class="auth-inline-err" id="otpErr" style="text-align:center;margin-bottom:12px"></p>
+
+          <button class="auth-submit-btn" id="btnVerifyOtp" type="submit">
+            <i class="hgi-stroke hgi-shield-tick"></i>
+            <span>Verify code and enter portal</span>
+          </button>
+        </form>
+
+      </section>
     </div>
 
-    <!-- LOGGED IN VIEW (PLANT CONSOLE & LEDGER) -->
-    <div id="meView" hidden class="auth-decor-card rv in">
-      <div class="console-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #E2E8F0;padding-bottom:16px">
-        <div>
-          <div class="auth-lead-badge"><span class="dot-live"></span> Verified Plant Account</div>
-          <h1 class="title" style="margin:4px 0 0;font-size:26px" id="meName">Rajesh Sharma</h1>
-          <small style="color:#64748B;font-weight:700" id="mePhoneDisplay">+91 98XXXXXX</small>
+    <!-- LOGGED IN VIEW: PLANT CONSOLE & LEDGER -->
+    <div id="meView" hidden class="plant-console-card">
+      <div class="console-top-bar">
+        <div class="console-user-meta">
+          <div class="auth-plant-chip" style="margin-bottom:6px">
+            <span class="auth-pulse-dot"></span>
+            <span>Verified Plant Account</span>
+          </div>
+          <h2 id="meName">Rajesh Sharma</h2>
+          <span id="mePhoneDisplay">+91 98XXXXXXXX</span>
         </div>
-        <button class="btn btn-ghost" id="logout" style="border-radius:12px;padding:8px 14px;border:1px solid #CBD5E1">
-          <i class="hgi-stroke hgi-logout-01"></i>Sign out
+        <button class="console-signout-btn" id="logout" type="button">
+          <i class="hgi-stroke hgi-logout-01"></i>
+          <span>Sign out</span>
         </button>
       </div>
 
-      <div class="statrow rv in" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px">
-        <div style="background:#F8FAFC;border:1px solid #E2E8F0;padding:14px;border-radius:16px">
-          <strong id="meBills" style="font-size:28px;color:#1D4ED8;display:block">0</strong>
-          <span style="font-size:12px;color:#64748B;font-weight:700">Invoices on Record</span>
+      <!-- Quick Metrics -->
+      <div class="console-stats-grid">
+        <div class="console-stat-box">
+          <strong class="console-stat-num" id="meBills">0</strong>
+          <span class="console-stat-label">Tax invoices on record</span>
         </div>
-        <div style="background:#F8FAFC;border:1px solid #E2E8F0;padding:14px;border-radius:16px">
-          <strong id="meDue" style="font-size:28px;color:#0F172A;display:block">₹ 0</strong>
-          <span style="font-size:12px;color:#64748B;font-weight:700">Udhaar Outstanding</span>
+        <div class="console-stat-box">
+          <strong class="console-stat-num" id="meDue">&#8377; 0</strong>
+          <span class="console-stat-label">Outstanding credit</span>
+        </div>
+        <div class="console-stat-box">
+          <strong class="console-stat-num" style="color:#059669">&#8377; 5,00,000</strong>
+          <span class="console-stat-label">Approved credit limit</span>
         </div>
       </div>
 
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <h3 style="margin:0;font-size:18px;font-weight:800">GST Bills & Deliveries</h3>
-        <a class="btn-wa-chip" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20statement%20copy%20chahiye" target="_blank" rel="noopener" style="padding:4px 10px;font-size:11.5px">
-          Request Ledger Copy
+      <!-- Action buttons -->
+      <div class="console-quick-actions">
+        <a class="console-action-link console-action-primary" href="shop.html">
+          <i class="hgi-stroke hgi-shopping-basket-01"></i> Browse OEM Catalog
+        </a>
+        <a class="console-action-link console-action-wa" id="btnStatementWa" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20plant%20ledger%20statement%20copy%20chahiye" target="_blank" rel="noopener">
+          <i class="hgi-stroke hgi-whatsapp"></i> Request Ledger on WhatsApp
         </a>
       </div>
 
-      <div id="meBillsList" class="dblist">
-        <div class="empty" style="text-align:center;padding:30px 16px;background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:16px">
-          <i class="hgi-stroke hgi-file-01" style="font-size:32px;color:#94A3B8;display:block;margin-bottom:8px"></i>
-          <b>No Pending Unpaid Invoices</b>
-          <p style="font-size:12.5px;color:#64748B;margin:4px 0 0">All breakdown orders billed to your phone number will reflect here automatically.</p>
+      <!-- Invoices and Orders List -->
+      <div class="console-bills-section">
+        <div class="console-bills-head">
+          <h3>Recent Tax Invoices and Counter Deliveries</h3>
+          <span style="font-size:12px;color:#64748B;font-weight:600">Auto synced with GST desk</span>
+        </div>
+
+        <div id="meBillsList">
+          <div style="text-align:center;padding:36px 16px;background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:16px">
+            <i class="hgi-stroke hgi-file-01" style="font-size:36px;color:#94A3B8;display:block;margin-bottom:8px"></i>
+            <b style="font-size:15px;color:#334155;display:block">No Pending Unpaid Invoices</b>
+            <p style="font-size:13px;color:#64748B;margin:6px 0 0">Orders dispatched to your phone number will reflect here automatically.</p>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </main>
 
+<!-- FLOATING LIQUID GLASS BOTTOM NAVIGATION FOR MOBILE -->
+<nav class="mtabs no-print" aria-label="Mobile">
+  <a href="index.html">
+    <span class="ti">
+      <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </span>
+    <span class="tl">Home</span>
+  </a>
+  <a href="shop.html">
+    <span class="ti">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+    </span>
+    <span class="tl">Shop</span>
+  </a>
+  <a href="checkout.html" class="mtabs-center" aria-label="Estimate and Cart">
+    <span class="ti">
+      <svg viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+      <span class="nav-badge" style="display:none">0</span>
+    </span>
+    <span class="tl">Estimate</span>
+  </a>
+  <a href="account.html" class="on" aria-current="page">
+    <span class="ti">
+      <svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </span>
+    <span class="tl">Account</span>
+  </a>
+  <a href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" target="_blank" rel="noopener">
+    <span class="ti">
+      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </span>
+    <span class="tl">WhatsApp</span>
+  </a>
+</nav>
+
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
-<script src="assets/app.js?v=20261012a"></script>
+<script src="assets/app.js?v=20261012k"></script>
 <script>
 let mode = 'in';
 let currentPhone = '';
 let generatedOtp = '1234';
 let timerInterval = null;
 
-const toast = (m, i='checkmark-circle-01') => {
+const toast = (m, i = 'checkmark-circle-01') => {
+  const container = document.getElementById('toasts');
+  if (!container) return;
   const t = document.createElement('div');
   t.className = 'toast';
   t.innerHTML = `<i class="hgi-stroke hgi-${i}"></i><span>${m}</span>`;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 500); }, 2600);
+  container.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 400);
+  }, 2600);
 };
 
 const cust = () => {
   try { return JSON.parse(localStorage.getItem('sse_cust') || 'null'); } catch { return null; }
 };
 
-// Mode switcher (Sign in vs Register)
-document.getElementById('authSeg').querySelectorAll('button').forEach(b => b.onclick = () => {
-  mode = b.dataset.v;
-  document.getElementById('authSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  document.getElementById('nameRow').hidden = mode !== 'up';
-  document.getElementById('gstRow').hidden = mode !== 'up';
-  document.getElementById('authTitle').textContent = mode === 'up' ? 'Create Plant Account' : 'Sign in with Mobile';
-  document.getElementById('btnSendOtp').querySelector('span').textContent = mode === 'up' ? 'Send Registration OTP' : 'Send OTP Verification Code';
+// Mode switcher (Sign in vs Create Account)
+document.getElementById('authSeg').querySelectorAll('button').forEach(b => {
+  b.onclick = () => {
+    mode = b.dataset.v;
+    document.getElementById('authSeg').querySelectorAll('button').forEach(x => {
+      x.setAttribute('aria-pressed', String(x === b));
+    });
+    const isSignup = mode === 'up';
+    document.getElementById('nameRow').hidden = !isSignup;
+    document.getElementById('gstRow').hidden = !isSignup;
+    document.getElementById('authTitle').textContent = isSignup ? 'Create plant account' : 'Sign in with mobile';
+    document.getElementById('authSub').textContent = isSignup
+      ? 'Register your factory unit for consolidated credit and instant tax invoices.'
+      : 'Enter your 10 digit Indian mobile number. We will send a secure one time passcode.';
+    document.getElementById('btnSendOtp').querySelector('span').textContent = isSignup ? 'Send registration code' : 'Send verification code';
+  };
 });
 
 // Step 1: Send OTP
@@ -325,36 +952,40 @@ document.getElementById('stepPhoneForm').addEventListener('submit', function(e) 
   e.preventDefault();
   const phone = document.getElementById('aphone').value.trim();
   const name = document.getElementById('aname').value.trim();
-  const err = document.getElementById('phoneErr');
-  err.textContent = '';
+  const phoneErr = document.getElementById('phoneErr');
+  const nameErr = document.getElementById('nameErr');
+  const authErr = document.getElementById('authErr');
+  
+  phoneErr.textContent = '';
+  nameErr.textContent = '';
+  authErr.textContent = '';
 
   if (!/^[6-9]\d{9}$/.test(phone)) {
-    err.textContent = 'Please enter a valid 10-digit Indian mobile number';
+    phoneErr.textContent = 'Please enter a valid 10 digit Indian mobile number';
+    document.getElementById('aphone').focus();
     return;
   }
   if (mode === 'up' && !name) {
-    err.textContent = 'Please enter your Name or Factory Name';
+    nameErr.textContent = 'Please enter your factory or contact name';
+    document.getElementById('aname').focus();
     return;
   }
 
   currentPhone = phone;
-  // Generate random 4-digit code (fallback demo: 1234)
   generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
   
-  // Transition to Step 2 (OTP boxes)
-  document.getElementById('displayPhone').textContent = '+91 ' + phone.slice(0, 2) + 'XXXX' + phone.slice(6);
+  // Update view
+  document.getElementById('displayPhone').textContent = '+91 ' + phone.slice(0, 2) + '••••••' + phone.slice(8);
   document.getElementById('stepPhoneForm').hidden = true;
   document.getElementById('stepOtpForm').hidden = false;
   document.getElementById('authSeg').style.display = 'none';
 
+  document.getElementById('sandboxCodeTxt').textContent = generatedOtp;
   startTimer();
-  toast('OTP sent to +91 ' + phone);
-  
-  // Update demo pill text
-  document.getElementById('btnAutoOtp').innerHTML = `<i class="hgi-stroke hgi-flash"></i> Auto-fill Code: <b>${generatedOtp}</b>`;
+  toast('Verification code sent to +91 ' + phone);
 
   // Focus first OTP box
-  setTimeout(() => document.getElementById('otp1').focus(), 150);
+  setTimeout(() => document.getElementById('otp1').focus(), 120);
 });
 
 // Timer countdown
@@ -362,10 +993,10 @@ function startTimer() {
   let sec = 30;
   const countEl = document.getElementById('timerCount');
   const timerText = document.getElementById('resendTimerText');
-  const resendBtn = document.getElementById('btnResendOtp');
+  const resendRow = document.getElementById('resendActionsRow');
 
   timerText.style.display = 'block';
-  resendBtn.style.display = 'none';
+  resendRow.style.display = 'none';
   clearInterval(timerInterval);
 
   timerInterval = setInterval(() => {
@@ -374,93 +1005,174 @@ function startTimer() {
     if (sec <= 0) {
       clearInterval(timerInterval);
       timerText.style.display = 'none';
-      resendBtn.style.display = 'inline-block';
+      resendRow.style.display = 'flex';
     }
   }, 1000);
 }
 
-document.getElementById('btnResendOtp').onclick = () => {
+// Resend handlers
+function handleResend(channel) {
   generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
-  document.getElementById('btnAutoOtp').innerHTML = `<i class="hgi-stroke hgi-flash"></i> Auto-fill Code: <b>${generatedOtp}</b>`;
-  toast('New OTP sent to +91 ' + currentPhone);
+  document.getElementById('sandboxCodeTxt').textContent = generatedOtp;
+  toast('New code sent via ' + channel);
   startTimer();
-};
+}
+document.getElementById('btnResendSms').onclick = () => handleResend('SMS');
+document.getElementById('btnResendWa').onclick = () => handleResend('WhatsApp');
 
+// Change phone number button
 document.getElementById('btnEditPhone').onclick = () => {
   document.getElementById('stepOtpForm').hidden = true;
   document.getElementById('stepPhoneForm').hidden = false;
   document.getElementById('authSeg').style.display = 'flex';
+  document.getElementById('aphone').focus();
 };
 
-// OTP auto-advance
-const boxes = [document.getElementById('otp1'), document.getElementById('otp2'), document.getElementById('otp3'), document.getElementById('otp4')];
-boxes.forEach((box, idx) => {
-  box.addEventListener('input', (e) => {
-    if (box.value && idx < boxes.length - 1) {
-      boxes[idx + 1].focus();
+// OTP Auto-advance, backspace handling, and paste support
+const otpBoxes = [
+  document.getElementById('otp1'),
+  document.getElementById('otp2'),
+  document.getElementById('otp3'),
+  document.getElementById('otp4')
+];
+
+otpBoxes.forEach((box, idx) => {
+  box.addEventListener('input', () => {
+    box.value = box.value.replace(/[^0-9]/g, '');
+    if (box.value && idx < otpBoxes.length - 1) {
+      otpBoxes[idx + 1].focus();
     }
   });
+
   box.addEventListener('keydown', (e) => {
     if (e.key === 'Backspace' && !box.value && idx > 0) {
-      boxes[idx - 1].focus();
+      otpBoxes[idx - 1].focus();
+    } else if (e.key === 'ArrowLeft' && idx > 0) {
+      otpBoxes[idx - 1].focus();
+    } else if (e.key === 'ArrowRight' && idx < otpBoxes.length - 1) {
+      otpBoxes[idx + 1].focus();
+    }
+  });
+
+  box.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+    if (/^\d{4}$/.test(pasteData)) {
+      pasteData.split('').forEach((char, i) => {
+        if (otpBoxes[i]) otpBoxes[i].value = char;
+      });
+      otpBoxes[3].focus();
     }
   });
 });
 
-// Auto-fill demo button
+// Sandbox Quick Fill
 document.getElementById('btnAutoOtp').onclick = () => {
   const chars = generatedOtp.split('');
-  boxes.forEach((b, i) => b.value = chars[i] || '');
-  boxes[3].focus();
+  otpBoxes.forEach((b, i) => b.value = chars[i] || '');
+  otpBoxes[3].focus();
 };
 
 // Step 2: Verify OTP
 document.getElementById('stepOtpForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  const enteredOtp = boxes.map(b => b.value).join('');
+  const enteredOtp = otpBoxes.map(b => b.value).join('');
   const err = document.getElementById('otpErr');
   err.textContent = '';
 
   if (enteredOtp.length < 4) {
-    err.textContent = 'Please enter all 4 digits of the OTP';
+    err.textContent = 'Please enter all 4 digits of the verification code';
     return;
   }
 
   // Accept generated OTP or fallback 1234
   if (enteredOtp === generatedOtp || enteredOtp === '1234') {
-    const custName = mode === 'up' && document.getElementById('aname').value.trim() 
-      ? document.getElementById('aname').value.trim() 
-      : 'Plant Partner (' + currentPhone.slice(6) + ')';
+    const enteredName = document.getElementById('aname').value.trim();
+    const enteredGst = document.getElementById('agst').value.trim();
+    const custName = enteredName ? enteredName : 'Plant Partner (' + currentPhone.slice(6) + ')';
     
     const userObj = {
       phone: currentPhone,
       name: custName,
+      gst: enteredGst || 'Unregistered Unit',
       token: 'jwt_' + Date.now()
     };
     localStorage.setItem('sse_cust', JSON.stringify(userObj));
-    toast('Login successful! Welcome, ' + custName);
+    toast('Authentication successful. Welcome, ' + custName);
     showMe();
   } else {
-    err.textContent = 'Invalid OTP. Enter ' + generatedOtp + ' or 1234';
+    err.textContent = 'Invalid code. Use ' + generatedOtp + ' or test code 1234';
   }
 });
 
+// Render Logged-In Console
 function showMe() {
   const c = cust();
   if (!c) return;
   document.getElementById('authView').hidden = true;
   document.getElementById('meView').hidden = false;
   document.getElementById('meName').textContent = c.name;
-  document.getElementById('mePhoneDisplay').textContent = '+91 ' + c.phone;
+  document.getElementById('mePhoneDisplay').textContent = '+91 ' + c.phone + (c.gst && c.gst !== 'Unregistered Unit' ? ' · GST: ' + c.gst : '');
+
+  // Populate orders / invoices
+  renderOrders(c.phone);
+}
+
+function renderOrders(phone) {
+  let orders = [];
+  try {
+    orders = JSON.parse(localStorage.getItem('sse_orders') || '[]');
+  } catch { orders = []; }
+
+  const myOrders = orders.filter(o => !o.phone || o.phone === phone);
+  const billsEl = document.getElementById('meBillsList');
+  const countEl = document.getElementById('meBills');
+  const dueEl = document.getElementById('meDue');
+
+  if (myOrders.length === 0) {
+    countEl.textContent = '0';
+    dueEl.textContent = '\u20B9 0';
+    billsEl.innerHTML = `
+      <div style="text-align:center;padding:36px 16px;background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:16px">
+        <i class="hgi-stroke hgi-file-01" style="font-size:36px;color:#94A3B8;display:block;margin-bottom:8px"></i>
+        <b style="font-size:15px;color:#334155;display:block">No Pending Unpaid Invoices</b>
+        <p style="font-size:13px;color:#64748B;margin:6px 0 0">All breakdown orders billed to +91 ${phone} will reflect here automatically.</p>
+      </div>
+    `;
+  } else {
+    countEl.textContent = String(myOrders.length);
+    let totalAmt = 0;
+    let html = '';
+    myOrders.forEach((ord, idx) => {
+      const amt = ord.total || 4850 + (idx * 2100);
+      totalAmt += amt;
+      const orderDate = ord.created ? new Date(ord.created).toLocaleDateString('en-IN') : 'Recent';
+      html += `
+        <div class="console-bill-row">
+          <div class="console-bill-meta">
+            <strong>${ord.id || 'SSE/25-26/' + String(idx + 101).padStart(4, '0')}</strong>
+            <span>Date: ${orderDate} · RIICO Neemrana Dispatch</span>
+          </div>
+          <div style="text-align:right">
+            <div class="console-bill-amount">&#8377; ${Number(amt).toLocaleString('en-IN')}</div>
+            <span class="console-bill-status"><i class="hgi-stroke hgi-tick-02"></i> ${ord.status === 'delivered' ? 'Delivered' : 'Dispatched'}</span>
+          </div>
+        </div>
+      `;
+    });
+    dueEl.textContent = '\u20B9 ' + Number(totalAmt).toLocaleString('en-IN');
+    billsEl.innerHTML = html;
+  }
 }
 
 document.getElementById('logout').onclick = () => {
   localStorage.removeItem('sse_cust');
-  location.reload();
+  toast('Signed out successfully');
+  setTimeout(() => location.reload(), 400);
 };
 
 if (cust()) showMe();
 </script>
 <script src="assets/mascot.js"></script>
-</body></html>
-
+</body>
+</html>

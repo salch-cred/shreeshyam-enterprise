@@ -9,7 +9,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{margin:0;font-family:Manrope,system-ui,sans-serif;color:var(--ink);background:var(--bg);
+body{margin:0;padding-top:64px;font-family:Manrope,system-ui,sans-serif;color:var(--ink);background:var(--bg);
   font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
 ::selection{background:var(--accent);color:#fff}
@@ -28,18 +28,23 @@ a{color:inherit}
 
 /* ==========================================================
    IMPROVED LUXURY ENTERPRISE HEADER
-   Ultra-clean glassmorphic bar, micro-badges & HugeIcons
+   Fixed to top, 100% permanently on screen while scrolling
    ========================================================== */
 .site-header{
-  position:sticky;
-  top:0;
-  z-index:99990;
-  background:linear-gradient(135deg, rgba(29,78,216,.94) 0%, rgba(26,70,194,.96) 100%);
-  backdrop-filter:blur(24px) saturate(200%);
-  -webkit-backdrop-filter:blur(24px) saturate(200%);
-  border-bottom:1px solid rgba(255,255,255,.22);
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  width:100% !important;
+  z-index:99990 !important;
+  background:linear-gradient(135deg, rgba(29,78,216,.96) 0%, rgba(26,70,194,.98) 100%) !important;
+  backdrop-filter:blur(24px) saturate(200%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(200%) !important;
+  border-bottom:1px solid rgba(255,255,255,.22) !important;
   transition:all .3s ease;
-  box-shadow:0 8px 30px -6px rgba(29,78,216,.45), 0 2px 6px rgba(0,0,0,.15);
+  box-shadow:0 8px 30px -6px rgba(29,78,216,.45), 0 2px 6px rgba(0,0,0,.15) !important;
+  transform:translateZ(0) !important;
+  -webkit-transform:translateZ(0) !important;
 }
 .site-header-inner{
   max-width:var(--max);
@@ -855,41 +860,36 @@ section.block{padding:88px 0}
   50%{transform:translateY(-6px)}
 }
 
-/* Hero Mascot Peeking over Phone */
-.weav-mascot-peek{
+/* Hero Counter Status Pill (No AI slop / No cartoon) */
+.weav-counter-status-pill{
   position:absolute;
-  top:-42px;
+  top:-32px;
   right:16px;
   z-index:10;
-  cursor:pointer;
-  display:flex;
-  align-items:flex-end;
-  gap:8px;
-}
-.weav-mascot-peek .speech{
   background:#FFFFFF;
-  color:#0F172A;
-  border-radius:14px;
-  padding:6px 10px;
-  font-size:11.5px;
+  border:1.5px solid rgba(29,78,216,.25);
+  border-radius:999px;
+  padding:5px 14px;
+  font-size:12px;
   font-weight:700;
-  box-shadow:0 8px 20px rgba(0,0,0,.22);
+  color:#1E3A8B;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 6px 18px rgba(15,23,42,.12);
   white-space:nowrap;
-  position:relative;
 }
-.weav-mascot-peek .speech::after{
-  content:"";
-  position:absolute;
-  bottom:8px;
-  right:-6px;
-  border-width:6px 0 6px 6px;
-  border-style:solid;
-  border-color:transparent transparent transparent #FFFFFF;
+.weav-counter-status-pill .dot-live{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#10B981;
+  box-shadow:0 0 8px #10B981;
 }
-.weav-mascot-peek .avatar-art{
-  width:62px;
-  height:68px;
-  animation:mascotBob 3.5s ease-in-out infinite;
+.weav-counter-status-pill small{
+  color:#64748B;
+  font-weight:600;
+  font-size:11px;
 }
 
 @media (max-width:1020px){
@@ -932,12 +932,11 @@ section.block{padding:88px 0}
     bottom:-20px;
     padding:6px 10px;
   }
-  .weav-mascot-peek{
-    top:-36px;
+  .weav-counter-status-pill{
+    top:-28px;
     right:10px;
-  }
-  .weav-mascot-peek .speech{
-    display:none; /* cleaner on small screens */
+    padding:4px 10px;
+    font-size:11px;
   }
 }
 
@@ -2562,31 +2561,44 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
   user-select:none;
   -webkit-user-select:none;
 }
-.sse-mascot-wrap{
-  position:relative;
-  pointer-events:auto;
-  cursor:pointer;
-  transition:transform .3s cubic-bezier(0.34,1.56,0.64,1);
-}
-.sse-mascot-wrap:hover{
-  transform:scale(1.08) translateY(-4px);
-}
-.sse-mascot-wrap:active{
-  transform:scale(0.95);
-}
-.sse-mascot-art{
-  width:88px;
-  height:94px;
-  filter:drop-shadow(0 14px 22px rgba(15,23,42,.32));
-  animation:mascotBob 4.2s ease-in-out infinite;
-}
-.sse-mascot-shadow{
-  width:64px;
-  height:12px;
-  background:radial-gradient(ellipse at center, rgba(15,23,42,.32) 0%, rgba(15,23,42,0) 72%);
+.sse-desk-launcher{
+  width:54px;
+  height:54px;
   border-radius:50%;
-  margin:2px auto 0;
-  animation:shadowScale 4.2s ease-in-out infinite;
+  background:linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+  border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 10px 26px rgba(29,78,216,.45), 0 2px 6px rgba(15,23,42,.2);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  pointer-events:auto;
+  position:relative;
+  transition:all .25s cubic-bezier(0.32,0.72,0,1);
+}
+.sse-desk-launcher:hover{
+  transform:translateY(-3px) scale(1.06);
+  box-shadow:0 14px 32px rgba(29,78,216,.6);
+}
+.sse-desk-launcher:active{
+  transform:scale(.94);
+}
+.desk-launcher-icon{
+  font-size:24px;
+  color:#FFFFFF;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.desk-launcher-pulse{
+  position:absolute;
+  top:2px;
+  right:2px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#10B981;
+  border:2px solid #FFFFFF;
+  box-shadow:0 0 8px #10B981;
 }
 
 /* Speech Bubble */
@@ -2991,18 +3003,17 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
 @media (max-width:1020px){
   .sse-mascot-widget{
     right:12px;
-    bottom:calc(66px + env(safe-area-inset-bottom)) !important;
+    bottom:calc(70px + env(safe-area-inset-bottom)) !important;
   }
-  .sse-mascot-art{
-    width:66px;
-    height:70px;
-  }
-  .sse-mascot-shadow{
+  .sse-desk-launcher{
     width:48px;
-    height:9px;
+    height:48px;
+  }
+  .desk-launcher-icon{
+    font-size:21px;
   }
   .sse-mascot-bubble{
-    max-width:165px;
+    max-width:180px;
     padding:6px 10px;
     font-size:11px;
     margin-bottom:6px;

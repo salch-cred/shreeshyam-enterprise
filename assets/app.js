@@ -131,7 +131,39 @@ const SSE = (() => {
     <span class="lgl"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="sitemap.xml">Sitemap</a></span></div>
     <div class="giant" aria-hidden="true">SHREE SHYAM</div>`;
     updateNavBadge();
+    initLiquidNav();
   }
+
+  /* WhatsApp-style swappable liquid glass bottom navigation */
+  function initLiquidNav() {
+    const nav = document.querySelector('.mtabs');
+    if (!nav || nav.__sse_swapped__) return;
+    nav.__sse_swapped__ = true;
+    const links = Array.from(nav.querySelectorAll('a'));
+    if (!links.length) return;
+
+    let startX = 0, startY = 0;
+    nav.addEventListener('touchstart', e => {
+      startX = e.changedTouches[0].screenX;
+      startY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    nav.addEventListener('touchend', e => {
+      const diffX = e.changedTouches[0].screenX - startX;
+      const diffY = e.changedTouches[0].screenY - startY;
+      if (Math.abs(diffX) > 42 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+        const currentIdx = links.findIndex(a => a.classList.contains('on'));
+        if (currentIdx !== -1) {
+          if (diffX < 0 && currentIdx < links.length - 1) {
+            links[currentIdx + 1].click();
+          } else if (diffX > 0 && currentIdx > 0) {
+            links[currentIdx - 1].click();
+          }
+        }
+      }
+    }, { passive: true });
+  }
+
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',footer);else footer();
 
   return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, footer, updateNavBadge, $ };
