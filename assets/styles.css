@@ -384,8 +384,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
   .mobile-menu.open a:nth-child(3){transition-delay:.19s}
   .mobile-menu.open a:nth-child(4){transition-delay:.26s}
   .mobile-menu.open a:nth-child(5){transition-delay:.33s}
-  .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:80;background:rgba(30,58,139,.97);
-    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line-dark);
+  .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:80;background:#1E3A8B;
+    transform:translateZ(0);border-top:1px solid var(--line-dark);
     padding:6px max(6px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-right))}
   .mtabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#C3D2EE;text-decoration:none;padding:4px 2px;min-height:54px;border-radius:12px}
   .mtabs a .ti{display:grid;place-items:center;width:52px;height:30px;border-radius:999px;transition:background .5s var(--ease)}
