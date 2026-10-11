@@ -196,15 +196,29 @@
       }
     });
 
-    // 4. Rotating Speech Bubble Quotes every 6 seconds
-    setInterval(function(){
-      if (bubble.style.display === 'none') return;
-      currentTipIndex = (currentTipIndex + 1) % TIPS.length;
-      bubble.style.animation = 'none';
-      void bubble.offsetWidth; // trigger reflow
-      bubbleText.textContent = TIPS[currentTipIndex];
-      bubble.style.animation = 'bubblePop .4s cubic-bezier(0.34,1.56,0.64,1) both';
-    }, 6000);
+    // 4. On scroll, immediately dismiss speech bubble so it never blocks content
+    window.addEventListener('scroll', function(){
+      if (bubble && bubble.style.display !== 'none') {
+        bubble.style.display = 'none';
+      }
+    }, { passive: true });
+
+    // On mobile screens, hide speech bubble after 3.5 seconds
+    if (window.innerWidth < 1020) {
+      setTimeout(function(){
+        if(bubble) bubble.style.display = 'none';
+      }, 3500);
+    } else {
+      // Rotating Speech Bubble Quotes on desktop
+      setInterval(function(){
+        if (bubble.style.display === 'none') return;
+        currentTipIndex = (currentTipIndex + 1) % TIPS.length;
+        bubble.style.animation = 'none';
+        void bubble.offsetWidth; // trigger reflow
+        bubbleText.textContent = TIPS[currentTipIndex];
+        bubble.style.animation = 'bubblePop .4s cubic-bezier(0.34,1.56,0.64,1) both';
+      }, 7000);
+    }
 
     // 5. If Hero Mascot Badge exists, link it
     const heroBadge = document.getElementById('heroMascotBadge');

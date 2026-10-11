@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012b">
+<link rel="stylesheet" href="assets/styles.css?v=20261012d">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -71,14 +71,62 @@
     </div>
   </header>
 
-  <!-- MOBILE NAVIGATION DRAWER -->
-  <div class="site-drawer no-print" id="mmenu">
-    <a href="index.html"><i class="hgi-stroke hgi-home-01"></i>Home</a>
-    <a href="shop.html"><i class="hgi-stroke hgi-package"></i>Product Catalogue (5,000+)</a>
-    <a href="#lake"><i class="hgi-stroke hgi-layers-01"></i>Warehouse Product Lake</a>
-    <a href="checkout.html"><i class="hgi-stroke hgi-shopping-cart-01"></i>Estimate & Cart</a>
-    <a href="#contact"><i class="hgi-stroke hgi-customer-service-01"></i>Contact Desk</a>
-    <a href="account.html"><i class="hgi-stroke hgi-user"></i>Account & Ledger</a>
+  <!-- LUXURY MOBILE NAVIGATION DRAWER -->
+  <div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
+    <div class="site-drawer-head">
+      <div class="site-drawer-brand">
+        <span class="brand-icon"><i class="hgi-stroke hgi-settings-01"></i></span>
+        <div>
+          <b>Shree Shyam Enterprise</b>
+          <small>RIICO Neemrana Hub</small>
+        </div>
+      </div>
+      <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
+    </div>
+
+    <div class="site-drawer-nav">
+      <a href="index.html" class="drawer-item active">
+        <div class="di-icon"><i class="hgi-stroke hgi-home-01"></i></div>
+        <div class="di-text"><b>Home</b><small>Overview & Live Desk</small></div>
+        <i class="hgi-stroke hgi-arrow-right-01 di-arr"></i>
+      </a>
+      <a href="shop.html" class="drawer-item">
+        <div class="di-icon"><i class="hgi-stroke hgi-package"></i></div>
+        <div class="di-text"><b>Product Catalogue</b><small>10,000+ Items with GST</small></div>
+        <i class="hgi-stroke hgi-arrow-right-01 di-arr"></i>
+      </a>
+      <a href="#lake" class="drawer-item">
+        <div class="di-icon"><i class="hgi-stroke hgi-layers-01"></i></div>
+        <div class="di-text"><b>Warehouse Lake</b><small>6 Stocked Departments</small></div>
+        <i class="hgi-stroke hgi-arrow-right-01 di-arr"></i>
+      </a>
+      <a href="checkout.html" class="drawer-item">
+        <div class="di-icon"><i class="hgi-stroke hgi-shopping-cart-01"></i></div>
+        <div class="di-text"><b>Estimate & Cart</b><small>Tax Invoice Preview</small></div>
+        <i class="hgi-stroke hgi-arrow-right-01 di-arr"></i>
+      </a>
+      <a href="#contact" class="drawer-item">
+        <div class="di-icon"><i class="hgi-stroke hgi-customer-service-01"></i></div>
+        <div class="di-text"><b>Contact & Counter</b><small>RIICO Industrial Area</small></div>
+        <i class="hgi-stroke hgi-arrow-right-01 di-arr"></i>
+      </a>
+      <a href="account.html" class="drawer-item">
+        <div class="di-icon"><i class="hgi-stroke hgi-user"></i></div>
+        <div class="di-text"><b>Account & Ledger</b><small>Bills, Orders & Statements</small></div>
+        <i class="hgi-stroke hgi-arrow-right-01 di-arr"></i>
+      </a>
+    </div>
+
+    <div class="site-drawer-actions">
+      <a class="drawer-btn-wa" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
+        <i class="hgi-stroke hgi-whatsapp"></i>
+        <span>WhatsApp Your Requirement</span>
+      </a>
+      <a class="drawer-btn-call" href="tel:+917240107540">
+        <i class="hgi-stroke hgi-call"></i>
+        <span>Call Shop Desk (+91 72401 07540)</span>
+      </a>
+    </div>
   </div>
 
   <!-- HERO MAIN CONTENT (WEAV DESIGN: PUNCHY COPY + REALISTIC SMARTPHONE CHAT) -->
@@ -329,10 +377,48 @@
   </div>
 </div>
 </div>
-<div>
-<article class="stack-card rv"><span class="n">A · COUNTER</span><h3>Breakdown part in minutes</h3><p>Bearing, belt, seal or valve matched on the spot from 10,000+ line items. Genuine boxed stock, GST bill in 40 seconds.</p></article>
-<article class="stack-card rv d1"><span class="n">B · PROJECT DESK</span><h3>Full BOQ, one supplier</h3><p>Send the purchase list. We quote with makes, HSN and lead time per line, then stage dispatch against your PO schedule.</p></article>
-<article class="stack-card rv d2"><span class="n">C · PAPER</span><h3>Paper your auditor accepts</h3><p>Tax invoice with HSN, e-way ready challan, test certificates on request. Month end GSTR table exported in one click.</p></article>
+<div class="stack-cards-wrap">
+<article class="stack-card rv">
+  <div class="stack-card-head">
+    <span class="stack-card-badge"><i class="hgi-stroke hgi-flash"></i> Counter Service</span>
+    <span class="stack-card-pill">40-Sec Invoice</span>
+  </div>
+  <h3>Breakdown part in minutes</h3>
+  <p>Bearing, belt, seal or valve matched on the spot from 10,000+ line items. Genuine boxed stock, GST bill in 40 seconds.</p>
+  <div class="stack-card-tags">
+    <span>SKF / FAG Bearings</span>
+    <span>Mitsuboshi Belts</span>
+    <span>Polymatic Valves</span>
+  </div>
+</article>
+
+<article class="stack-card rv d1">
+  <div class="stack-card-head">
+    <span class="stack-card-badge"><i class="hgi-stroke hgi-clipboard-check"></i> Project Desk</span>
+    <span class="stack-card-pill">Single Supplier</span>
+  </div>
+  <h3>Full BOQ, one supplier</h3>
+  <p>Send your purchase list. We quote with makes, HSN codes, and delivery schedules, then stage dispatches to your plant.</p>
+  <div class="stack-card-tags">
+    <span>Full Plant BOQ</span>
+    <span>HSN Coded</span>
+    <span>Staged Deliveries</span>
+  </div>
+</article>
+
+<article class="stack-card rv d2">
+  <div class="stack-card-head">
+    <span class="stack-card-badge"><i class="hgi-stroke hgi-document-validation"></i> Enterprise Paper</span>
+    <span class="stack-card-pill">Auditor Approved</span>
+  </div>
+  <h3>Paper your auditor accepts</h3>
+  <p>Tax invoice with HSN, e-way ready challans, and test certificates. Complete monthly GSTR reconciliations in one click.</p>
+  <div class="stack-card-tags">
+    <span>E-Way Bill Ready</span>
+    <span>Test Certificates</span>
+    <span>GSTR-1 Invoiced</span>
+  </div>
+</article>
 </div>
 </div>
 </section>
@@ -443,10 +529,33 @@
 </main>
 
 <footer class="sfooter"></footer>
-<script src="assets/app.js?v=20261012a"></script>
+<script src="assets/app.js?v=20261012d"></script>
 <script>
-document.getElementById('menuBtn').onclick=()=>document.getElementById('mmenu').classList.toggle('open');
-document.getElementById('mmenu').onclick=e=>{if(e.target.tagName==='A')e.currentTarget.classList.remove('open')};
+(()=>{
+  const mmenu = document.getElementById('mmenu');
+  const menuBtn = document.getElementById('menuBtn');
+  const drawerClose = document.getElementById('drawerClose');
+  if(menuBtn) {
+    menuBtn.onclick = () => {
+      mmenu.classList.add('open');
+      document.body.classList.add('menu-open');
+    };
+  }
+  if(drawerClose) {
+    drawerClose.onclick = () => {
+      mmenu.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    };
+  }
+  if(mmenu) {
+    mmenu.onclick = e => {
+      if(e.target.tagName === 'A' || e.target.closest('a')) {
+        mmenu.classList.remove('open');
+        document.body.classList.remove('menu-open');
+      }
+    };
+  }
+})();
 /* tagline word reveal (built before motion observes it) */
 (()=>{const el=document.getElementById('taglineText');const t=el.textContent;el.innerHTML=t.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');})();
 /* stagger grouped reveals: rows, spots, steps and cards cascade instead of mounting at once */
