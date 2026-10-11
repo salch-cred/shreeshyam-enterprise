@@ -576,8 +576,8 @@ button,a,.btn,.padd,.fitem,.cattile,.mtabs a{touch-action:manipulation}
 .macts{display:none}
 .mnav{display:none}
 @media (max-width:1020px){
-  .island{padding:10px 12px 4px}
-  .island-inner{flex-wrap:wrap;row-gap:10px;padding:8px 8px 8px 14px}
+  .island{padding:10px 12px 4px;flex-direction:column;align-items:center}
+  .island-inner{flex-wrap:wrap;row-gap:10px;padding:8px 8px 8px 14px;width:100%}
   .mm-hide{display:none !important}
   .macts{display:flex;gap:8px;margin-left:auto}
   .mi{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;text-decoration:none;color:var(--ink)}
@@ -585,7 +585,7 @@ button,a,.btn,.padd,.fitem,.cattile,.mtabs a{touch-action:manipulation}
   .mi:active{transform:scale(.92)}
   .mcart{background:var(--accent);border-color:var(--accent);color:#fff}
   .mcart b{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:9px;background:#fff;color:var(--accent-ink);font-size:10px;font-weight:800;display:grid;place-items:center;border:1px solid var(--accent);padding:0 3px}
-  .mnav{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;padding:2px 2px 4px;scrollbar-width:none;scroll-snap-type:x proximity}
+  .mnav{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;flex-basis:100%;min-width:0;padding:2px 2px 4px;scrollbar-width:none;scroll-snap-type:x proximity}
   .mnav::-webkit-scrollbar{display:none}
   .mnav a{flex:none;scroll-snap-align:start;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--muted);text-decoration:none}
   .mnav a i{font-size:16px;color:var(--accent)}
@@ -650,3 +650,5 @@ button,a,.btn,.padd,.fitem,.cattile,.mtabs a{touch-action:manipulation}
   .botlog{max-height:38vh}
 }
 @media (min-width:1021px){.botpanel{bottom:96px}}
+
+@media (max-width:1020px){body:has(#sendbar) .botfab{bottom:calc(196px + env(safe-area-inset-bottom))}}

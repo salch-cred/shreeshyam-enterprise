@@ -96,11 +96,11 @@ const SSE = (() => {
   function tabs(){
     if(document.querySelector('.mtabs'))return;
     const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
-    const cur=path.includes('shop')?'shop':path.includes('bill')?'billing':'home';
+    const cur=path.includes('shop')?'shop':path.includes('checkout')?'checkout':path.includes('account')?'account':path.includes('bill')?'billing':'home';
     const items=[
       ['index.html','home-01','Home',cur==='home'],
       ['shop.html','shopping-cart-01','Shop',cur==='shop'],
-      ['billing.html','file-01','Estimate',cur==='billing','fab'],
+      ['checkout.html','wallet-01','Checkout',cur==='checkout','fab'],
       ['https://wa.me/919000000000?text=Namaste%2C%20mujhe%20rates%20chahiye','whatsapp','WhatsApp',false],
       ['tel:+919000000000','call','Call',false]];
     const n=document.createElement('nav');n.className='mtabs no-print';n.setAttribute('aria-label','Mobile');
@@ -127,7 +127,7 @@ const SSE = (() => {
     const nav=document.createElement('nav');nav.className='mnav';nav.setAttribute('aria-label','Quick links');
     const items=[['index.html','home-01','Home','home'],['shop.html','package','Shop','shop'],['index.html#bulk','file-01','Project desk','bulk'],['checkout.html','wallet-01','Checkout','checkout'],['account.html','user-01','Account','account'],['tel:+917240107540','call','Call','call']];
     nav.innerHTML=items.map(it=>`<a href="${it[0]}" class="${cur===it[3]?'on':''}"><i class="hgi-stroke hgi-${it[1]}"></i>${it[2]}</a>`).join('');
-    header.parentElement.appendChild(nav);
+    header.appendChild(nav);
     try{const c=JSON.parse(localStorage.getItem('sse_cart')||'[]');
       const b=acts.querySelector('#mcartN');if(b)b.textContent=c.reduce((s,x)=>s+(x.qty||1),0);}catch{}
   }

@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261011g"></head>
+<link rel="stylesheet" href="assets/styles.css?v=20261011h"><link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain no-print" aria-hidden="true"></div>
@@ -52,7 +54,7 @@
 </main>
 
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
-<script src="assets/app.js?v=20261011g"></script>
+<script src="assets/app.js?v=20261011h"></script>
 <script>
 let mode='in';
 const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
@@ -112,5 +114,5 @@ async function loadMine(){
 SSE.$('#logout').onclick=()=>{localStorage.removeItem('sse_cust');location.reload();};
 if(cust())showMe();
 SSE.tabs();
-</script><script src="assets/bot.js?v=20261011g"></script>
+</script><script src="assets/bot.js?v=20261011h"></script>
 </body></html>
