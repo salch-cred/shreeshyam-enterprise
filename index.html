@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012d">
+<link rel="stylesheet" href="assets/styles.css?v=20261012e">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -160,9 +160,9 @@
         <div class="stars">★★★★★</div>
         <p><b>Trusted</b> by maintenance & purchase heads across 40+ RIICO Neemrana plants</p>
         <div class="weav-proof-pills">
-          <span>⚡ 25-Min Dispatch</span>
-          <span>📄 GST E-Way Bill</span>
-          <span>🛡️ 100% Genuine Boxed</span>
+          <span><i class="hgi-stroke hgi-delivery-truck-01"></i> 25-Min Dispatch</span>
+          <span><i class="hgi-stroke hgi-file-01"></i> GST E-Way Bill</span>
+          <span><i class="hgi-stroke hgi-shield-tick"></i> 100% Genuine Boxed</span>
         </div>
       </div>
     </div>
@@ -196,14 +196,14 @@
         </div>
       </div>
 
-      <!-- Floating Micro-Badges -->
+      <!-- Floating Micro-Badges (Clean HugeIcons) -->
       <div class="phone-float-badge pf-top">
-        <span class="icon">⚡</span>
+        <span class="icon"><i class="hgi-stroke hgi-flash"></i></span>
         <div><b>25-Min Dispatch</b><small>RIICO Neemrana Hub</small></div>
       </div>
 
       <div class="phone-float-badge pf-bottom">
-        <span class="icon">📄</span>
+        <span class="icon"><i class="hgi-stroke hgi-document-validation"></i></span>
         <div><b>GST Tax Invoice</b><small>HSN 8482 · E-Way Ready</small></div>
       </div>
 
@@ -260,20 +260,19 @@
     </div>
   <!-- WEAV KINETIC WAVE RIBBON DIVIDER (FROM USER DESIGN: media_1791723549636.png) -->
   <div class="weav-wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1440 76" preserveAspectRatio="none" width="100%" height="76">
+    <svg viewBox="0 0 1440 84" preserveAspectRatio="none" width="100%" height="84">
       <defs>
-        <pattern id="weavRibbon" width="120" height="76" patternUnits="userSpaceOnUse">
-          <rect width="120" height="76" fill="#1D4ED8"/>
-          <!-- Top row wavy ribbon interlocking -->
-          <path d="M0,0 Q30,36 60,18 Q90,0 120,36 L120,0 Z" fill="#FFF1ED"/>
-          <!-- Lower wave cutting upwards -->
-          <path d="M0,32 Q30,68 60,50 Q90,32 120,68 L120,76 L0,76 Z" fill="#FFF1ED"/>
-          <!-- Mid interlocking ripples -->
-          <path d="M0,20 Q30,56 60,38 Q90,20 120,56 Q90,74 60,56 Q30,38 0,56 Z" fill="#1D4ED8" opacity="0.9"/>
-          <path d="M8,10 Q38,46 68,28 Q98,10 128,46" stroke="#FFF1ED" stroke-width="4" fill="none" opacity="0.7"/>
+        <pattern id="weavRibbonExact" width="72" height="84" patternUnits="userSpaceOnUse">
+          <!-- Background: Top half electric blue, bottom half peach -->
+          <rect y="0" width="72" height="42" fill="#1D4ED8"/>
+          <rect y="42" width="72" height="42" fill="#FFF1ED"/>
+          <!-- Top row flags/wave teeth pointing down -->
+          <path d="M0,0 Q18,42 36,21 Q54,0 72,42 L72,0 Z" fill="#FFF1ED"/>
+          <!-- Bottom row flags/wave teeth interlocking upwards -->
+          <path d="M0,42 Q18,84 36,63 Q54,42 72,84 L72,84 L0,84 Z" fill="#1D4ED8"/>
         </pattern>
       </defs>
-      <rect width="1440" height="76" fill="url(#weavRibbon)"/>
+      <rect width="1440" height="84" fill="url(#weavRibbonExact)"/>
     </svg>
   </div>
 </div>
