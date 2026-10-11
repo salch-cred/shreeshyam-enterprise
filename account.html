@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My account — Shree Shyam Enterprises</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1E3A8B">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
+<link rel="stylesheet" href="assets/styles.css?v=20261011c"></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain no-print" aria-hidden="true"></div>
+<header class="island no-print"><div class="island-inner">
+<a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>My account</small></span></a>
+<nav class="navlinks"><a href="index.html">Site</a><a href="shop.html">Shop</a><a href="billing.html">Estimate</a></nav>
+<span class="live"><i></i>Secure</span>
+</div></header>
+
+<main id="main" class="admin-shell">
+<div id="authView" class="gate-card rv in">
+<p class="eyebrow">Customer account</p>
+<h1 class="title" style="font-size:32px;line-height:36px" id="authTitle">Sign in</h1>
+<p class="lead" style="font-size:15px">Your bills, udhaar balance and site history in one place. Phone is your ID.</p>
+<div class="seg" id="authSeg" style="margin:16px 0">
+<button data-v="in" aria-pressed="true">Sign in</button><button data-v="up" aria-pressed="false">Create account</button>
+</div>
+<form id="authForm" novalidate>
+<div class="field" id="nameRow" hidden><label for="aname">Name</label><input id="aname" autocomplete="name" placeholder="Your name or firm"><span class="err"></span></div>
+<div class="field"><label for="aphone">Phone</label><input id="aphone" inputmode="tel" autocomplete="tel" placeholder="98…"><span class="err"></span></div>
+<div class="field"><label for="apass">Password</label><input id="apass" type="password" autocomplete="current-password" placeholder="6+ characters"><span class="err"></span></div>
+<p class="err" id="authErr" style="color:#9A3412;font-size:13px;min-height:20px"></p>
+<button class="btn btn-primary" id="authBtn" type="submit" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-lock"></i>Sign in</button>
+</form>
+<p class="err" id="apiNote" style="color:#7C3A06;font-size:13px;margin-top:12px"></p>
+</div>
+
+<div id="meView" hidden>
+<div class="console-head">
+<div><p class="eyebrow">Namaste</p><h1 class="title" style="margin:0" id="meName"></h1></div>
+<button class="btn btn-ghost" id="logout"><i class="hgi-stroke hgi-logout-01"></i>Sign out</button>
+</div>
+<div class="statrow rv in">
+<div><strong id="meBills">0</strong><span>Bills on file</span></div>
+<div><strong id="meDue">Rs 0</strong><span>Udhaar outstanding</span></div>
+<div><strong id="mePhone"></strong><span>Your number</span></div>
+<div><strong style="color:#2F7D33">GST</strong><span>Every bill invoiced</span></div>
+</div>
+<h3 style="margin:24px 0 8px">My bills</h3>
+<div id="meBillsList" class="dblist"></div>
+</div>
+</main>
+
+<div class="toasts no-print" id="toasts" aria-live="polite"></div>
+<script src="assets/app.js?v=20261011c"></script>
+<script>
+let mode='in';
+const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2600);};
+const api=()=> (localStorage.getItem('sse_api')||'').replace(/\/$/,'');
+const cust=()=>{try{return JSON.parse(localStorage.getItem('sse_cust')||'null');}catch{return null;}};
+if(api()==='')SSE.$('#apiNote').textContent='Note: the shop backend is not connected on this device yet. Ask at the counter or set it in Admin → Website → API base.';
+SSE.$('#authSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  mode=b.dataset.v;
+  SSE.$('#authSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  SSE.$('#nameRow').hidden=mode!=='up';
+  SSE.$('#authTitle').textContent=mode==='up'?'Create account':'Sign in';
+  SSE.$('#authBtn').innerHTML=`<i class="hgi-stroke hgi-lock"></i>`+(mode==='up'?'Create account':'Sign in');
+  SSE.$('#apass').setAttribute('autocomplete',mode==='up'?'new-password':'current-password');
+});
+SSE.$('#authForm').addEventListener('submit',async e=>{
+  e.preventDefault();SSE.$('#authErr').textContent='';
+  if(api()===''){SSE.$('#authErr').textContent='Backend not connected on this device. Admin can set it in Admin → Website.';return;}
+  let ok=true;
+  e.target.querySelectorAll('input').forEach(i=>{const row=i.closest('.field');const err=row?row.querySelector('.err'):null;
+    const bad=!i.value.trim()||(i.type==='password'&&i.value.length<6);
+    if(err)err.textContent=bad?'Required':"";if(bad)ok=false;});
+  if(!ok)return;
+  const url=api()+(mode==='up'?'/auth/register':'/auth/login-customer');
+  const body=mode==='up'?{name:SSE.$('#aname').value.trim(),phone:SSE.$('#aphone').value.trim(),password:SSE.$('#apass').value}
+    :{phone:SSE.$('#aphone').value.trim(),password:SSE.$('#apass').value};
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j=await r.json();
+    if(!r.ok){SSE.$('#authErr').textContent=j.error||'Could not sign you in. Try again.';return;}
+    localStorage.setItem('sse_cust',JSON.stringify({token:j.token,name:j.name,phone:j.phone}));
+    toast('Welcome, '+j.name);showMe();
+  }catch{SSE.$('#authErr').textContent='Could not reach the shop backend. Check connection.';}
+});
+function showMe(){
+  const c=cust();if(!c)return;
+  SSE.$('#authView').hidden=true;SSE.$('#meView').hidden=false;
+  SSE.$('#meName').textContent=c.name;SSE.$('#mePhone').textContent=c.phone;
+  loadMine();
+}
+async function loadMine(){
+  const c=cust();if(!c||api()==='')return;
+  try{
+    const r=await fetch(api()+'/invoices/mine',{headers:{Authorization:'Bearer '+c.token}});
+    if(r.status===401){localStorage.removeItem('sse_cust');return;}
+    const j=await r.json();
+    SSE.$('#meBills').textContent=j.items.length;
+    SSE.$('#meDue').textContent=SSE.fmt(j.outstanding);
+    SSE.$('#meBillsList').innerHTML=j.items.length?j.items.map(x=>`<div class="dbrow">
+      <div><b>${SSE.esc(x.no)}</b> <span class="pill ${x.type==='TAX'?'info':'warn'}">${SSE.esc(x.type)}</span>
+      <small>${new Date(x.date).toLocaleDateString('en-IN')} · paid ${SSE.fmt(x.paid)}${x.balance?` · due ${SSE.fmt(x.balance)}`:''}</small></div>
+      <div><b>${SSE.fmt(x.grand)}</b></div><div class="rpr"></div></div>`).join('')
+      :`<div class="empty"><i class="hgi-stroke hgi-file-01"></i><b>No bills yet</b><p>Bills billed to your phone appear here.</p></div>`;
+  }catch{toast('Could not load bills — offline?','alert-01');}
+}
+SSE.$('#logout').onclick=()=>{localStorage.removeItem('sse_cust');location.reload();};
+if(cust())showMe();
+SSE.tabs();
+</script></body></html>

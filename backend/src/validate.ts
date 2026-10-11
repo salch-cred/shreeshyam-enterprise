@@ -31,6 +31,7 @@ export const InvoiceItem = z.object({
 export const InvoiceIn = z.object({
   type: z.enum(['TAX', 'EST']).default('TAX'),
   customer: z.string().max(200).default(''),
+  phone: z.string().max(15).default(''),
   items: z.array(InvoiceItem).min(1).max(200),
   discount: z.number().int().min(0).default(0),
   paid: z.number().int().min(0).default(0),
@@ -42,3 +43,14 @@ export const OrderIn = z.object({
 });
 
 export const ContentIn = z.record(z.unknown());
+
+export const RegisterIn = z.object({
+  name: z.string().min(2).max(80),
+  phone: z.string().regex(/^[0-9+\-\s]{10,15}$/, 'Valid phone required').transform((s) => s.replace(/[\s-]/g, '')),
+  password: z.string().min(6).max(72),
+});
+
+export const CustomerLoginIn = z.object({
+  phone: z.string().regex(/^[0-9+\-\s]{10,15}$/).transform((s) => s.replace(/[\s-]/g, '')),
+  password: z.string().min(1).max(72),
+});

@@ -1,13 +1,13 @@
-﻿<!doctype html>
+?<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Billing â€” Shree Shyam Enterprises</title>
+<title>Billing �?" Shree Shyam Enterprises</title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#1E3A8B">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261011b"></head>
+<link rel="stylesheet" href="assets/styles.css?v=20261011c"></head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain no-print" aria-hidden="true"></div>
@@ -22,7 +22,7 @@
 <p class="eyebrow">Counter only</p>
 <h1 class="title" style="font-size:32px;line-height:36px">Open billing</h1>
 <p class="lead" style="font-size:15px">Every TAX bill cuts stock and updates the day book.</p>
-<div class="pinrow"><input id="pin" inputmode="numeric" type="password" autocomplete="off" placeholder="â€¢â€¢â€¢â€¢" aria-label="Billing PIN"></div>
+<div class="pinrow"><input id="pin" inputmode="numeric" type="password" autocomplete="off" placeholder="�?��?��?��?�" aria-label="Billing PIN"></div>
 <span class="err" id="pinErr" style="color:#9A3412;font-size:13px;min-height:20px;display:block"></span>
 <button class="btn btn-primary" id="unlock" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-lock"></i>Unlock</button>
 </div>
@@ -37,7 +37,7 @@
 <div class="pos">
 <section aria-label="Add items">
 <div class="cmdbar">
-<label class="search"><i class="hgi-stroke hgi-search-01"></i><input id="bq" type="search" placeholder="Type to add â€” drill, cement, pipeâ€¦" aria-label="Search products"><kbd>/</kbd></label>
+<label class="search"><i class="hgi-stroke hgi-search-01"></i><input id="bq" type="search" placeholder="Type to add �?" drill, cement, pipe�?�" aria-label="Search products"><kbd>/</kbd></label>
 <select id="slab" aria-label="Price slab" style="background:#173178;color:#fff;border:1px solid var(--line-dark);border-radius:999px;padding:8px 12px;font:inherit;font-size:14px"><option value="retail">Retail</option><option value="wholesale">Wholesale</option></select>
 </div>
 <div id="held" class="heldrow"></div>
@@ -48,7 +48,7 @@
 <div class="billcard">
 <div class="field"><label for="cust">Customer</label><input id="cust" placeholder="Name, site, phone" autocomplete="off" list="custList"><datalist id="custList"></datalist></div>
 <div class="formgrid">
-<div class="field"><label for="cphone">Phone</label><input id="cphone" inputmode="tel" placeholder="98â€¦" autocomplete="off"></div>
+<div class="field"><label for="cphone">Phone</label><input id="cphone" inputmode="tel" placeholder="98�?�" autocomplete="off"></div>
 <div class="field"><label for="cgstin">GSTIN (optional)</label><input id="cgstin" placeholder="27XXXXX0000X1Z5" autocomplete="off" style="text-transform:uppercase"></div>
 </div>
 <div id="lines"></div>
@@ -74,7 +74,7 @@
 
 <section class="daybook" aria-label="Today's counter">
 <div class="dbhead"><div><p class="eyebrow" style="margin:0">Day book</p><h2>Today at the counter</h2></div>
-<input id="dbq" type="search" placeholder="Search billsâ€¦" aria-label="Search bills"></div>
+<input id="dbq" type="search" placeholder="Search bills�?�" aria-label="Search bills"></div>
 <div class="statrow" id="dbStats" style="margin-top:12px">
 <div><strong id="dbN">0</strong><span>Bills today</span></div>
 <div><strong id="dbBilled">Rs 0</strong><span>Billed</span></div>
@@ -89,7 +89,7 @@
 <div id="printArea" aria-hidden="true"></div>
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
 
-<script src="assets/app.js?v=20261011b"></script>
+<script src="assets/app.js?v=20261011c"></script>
 <script>
 let ALL=[],cart=[],mode='UPI';const BILL_PIN='2580';
 const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
@@ -122,13 +122,13 @@ function draw(){
   const q=SSE.$('#bq').value.toLowerCase(),slab=SSE.$('#slab').value;
   const f=ALL.filter(p=>(p.name+' '+(p.brand||'')).toLowerCase().includes(q)).slice(0,9);
   const box=SSE.$('#res');box.innerHTML='';
-  if(!q){box.innerHTML=`<div class="empty"><i class="hgi-stroke hgi-search-01"></i><b>Search the shelf</b><p>Type 2 letters â€” drill, cement, pipe, wire. Enter adds the first match.</p></div>`;return;}
+  if(!q){box.innerHTML=`<div class="empty"><i class="hgi-stroke hgi-search-01"></i><b>Search the shelf</b><p>Type 2 letters �?" drill, cement, pipe, wire. Enter adds the first match.</p></div>`;return;}
   if(!f.length){box.innerHTML=`<div class="empty"><i class="hgi-stroke hgi-package-search"></i><b>Not on the shelf</b><p>Check spelling or add it from Admin.</p></div>`;return;}
   f.forEach((p,i)=>{const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
     const low=p.stock<=(p.min_stock||5);
     const d=document.createElement('div');d.className='pick rowin';d.style.animationDelay=Math.min(i*40,320)+'ms';
     d.innerHTML=`<img loading="lazy" src="${SSE.safeImg(p.image)}" alt="">
-    <div style="flex:1"><b>${SSE.esc(p.name)}</b><span>${SSE.esc(p.brand)} Â· Stock ${Number(p.stock)||0} ${low?'Â· <b style="color:#9A3412">Low</b>':''} Â· +${Number(p.gst_pct)||0}% GST</span></div>
+    <div style="flex:1"><b>${SSE.esc(p.name)}</b><span>${SSE.esc(p.brand)} · Stock ${Number(p.stock)||0} ${low?'· <b style="color:#9A3412">Low</b>':''} · +${Number(p.gst_pct)||0}% GST</span></div>
     <b>${SSE.fmt(rate)}</b><button class="btn btn-amber add" style="padding:6px 12px;font-size:13px">Add</button>`;
     d.querySelector('button').onclick=ev=>{ev.stopPropagation();addItem(p,rate);};
     d.onclick=()=>d.querySelector('button').click();
@@ -136,7 +136,7 @@ function draw(){
 }
 function addItem(p,rate){
   const ex=cart.find(c=>c.id===p.id),nxt=(ex?ex.qty:0)+1;
-  if(nxt>(Number(p.stock)||0))toast('Only '+p.stock+' in stock â€” bill anyway with care','alert-01');
+  if(nxt>(Number(p.stock)||0))toast('Only '+p.stock+' in stock �?" bill anyway with care','alert-01');
   if(ex)ex.qty++;else cart.push({id:p.id,name:p.name,qty:1,rate,gst_pct:p.gst_pct,hsn:p.hsn||''});
   SSE.$('#billErr').textContent='';drawLines();
 }
@@ -147,10 +147,10 @@ function drawLines(){
   if(!cart.length){box.innerHTML=`<div class="empty" style="padding:24px"><i class="hgi-stroke hgi-shopping-cart-01"></i><b>Bill is empty</b><p>Add items from the left.</p></div>`;}
   else box.innerHTML=cart.map((c,i)=>`<div class="line">
     <div style="flex:1;min-width:0"><b>${SSE.esc(c.name)}</b><span>GST ${c.gst_pct}%</span></div>
-    <div class="stepper"><button data-i="${i}" data-d="-1" aria-label="Decrease">âˆ’</button><b>${c.qty}</b><button data-i="${i}" data-d="1" aria-label="Increase">+</button></div>
+    <div class="stepper"><button data-i="${i}" data-d="-1" aria-label="Decrease">�^'</button><b>${c.qty}</b><button data-i="${i}" data-d="1" aria-label="Increase">+</button></div>
     <input class="ratein" type="number" min="0" value="${c.rate}" data-i="${i}" aria-label="Rate for ${SSE.esc(c.name)}">
     <b style="min-width:86px;text-align:right">${SSE.fmt(c.qty*c.rate)}</b>
-    <button class="rm" data-i="${i}" aria-label="Remove line">Ã—</button></div>`).join('');
+    <button class="rm" data-i="${i}" aria-label="Remove line">�-</button></div>`).join('');
   box.querySelectorAll('.stepper button').forEach(b=>b.onclick=()=>{const c=cart[Number(b.dataset.i)];
     c.qty=Math.max(1,c.qty+Number(b.dataset.d));drawLines();});
   box.querySelectorAll('.ratein').forEach(r=>r.onchange=()=>{cart[Number(r.dataset.i)].rate=Math.max(0,Number(r.value)||0);drawLines();});
@@ -158,21 +158,21 @@ function drawLines(){
   const due=Math.max(0,t.grand-paid);
   SSE.$('#totals').innerHTML=`<div><span>Subtotal</span><b>${SSE.fmt(t.sub)}</b></div>
   <div><span>GST</span><b>${SSE.fmt(t.gst)}</b></div>
-  <div><span>Discount</span><b>âˆ’ ${SSE.fmt(Number(SSE.$('#disc').value||0))}</b></div>
-  <div class="grand"><span>Total Â· ${SSE.esc(mode)}</span><b>${SSE.fmt(t.grand)}</b></div>
+  <div><span>Discount</span><b>�^' ${SSE.fmt(Number(SSE.$('#disc').value||0))}</b></div>
+  <div class="grand"><span>Total · ${SSE.esc(mode)}</span><b>${SSE.fmt(t.grand)}</b></div>
   ${due>0?`<div class="due"><span>Balance to udhaar</span><b>${SSE.fmt(due)}</b></div>`:`<div class="due ok"><span>Settled</span><b>Fully paid</b></div>`}`;
 }
 function hold(){
-  if(!cart.length){SSE.$('#billErr').textContent='Nothing to hold â€” bill is empty.';return;}
+  if(!cart.length){SSE.$('#billErr').textContent='Nothing to hold �?" bill is empty.';return;}
   try{const h=JSON.parse(localStorage.getItem('sse_held')||'[]');
     h.push({id:'H'+Date.now(),customer:SSE.$('#cust').value.trim()||'Walk-in',items:cart,created:new Date().toISOString()});
     localStorage.setItem('sse_held',JSON.stringify(h));}catch{}
-  cart=[];drawLines();held();toast('Bill held â€” resume anytime','inbox');
+  cart=[];drawLines();held();toast('Bill held �?" resume anytime','inbox');
 }
 function held(){
   let h=[];try{h=JSON.parse(localStorage.getItem('sse_held')||'[]');}catch{}
-  SSE.$('#held').innerHTML=h.map(x=>`<span class="heldchip">${SSE.esc(x.customer)} Â· ${x.items.reduce((a,c)=>a+c.qty,0)} pcs
-    <button class="go" data-id="${x.id}">Resume</button><button data-x="${x.id}" aria-label="Discard held bill">Ã—</button></span>`).join('');
+  SSE.$('#held').innerHTML=h.map(x=>`<span class="heldchip">${SSE.esc(x.customer)} · ${x.items.reduce((a,c)=>a+c.qty,0)} pcs
+    <button class="go" data-id="${x.id}">Resume</button><button data-x="${x.id}" aria-label="Discard held bill">�-</button></span>`).join('');
   SSE.$('#held').querySelectorAll('.go').forEach(b=>b.onclick=()=>{const all=JSON.parse(localStorage.getItem('sse_held')||'[]');
     const it=all.find(x=>x.id===b.dataset.id);cart=it.items;SSE.$('#cust').value=it.customer==='Walk-in'?'':it.customer;
     localStorage.setItem('sse_held',JSON.stringify(all.filter(x=>x.id!==b.dataset.id)));drawLines();held();});
@@ -187,7 +187,7 @@ function daybook(){
   SSE.$('#dbN').textContent=list.length;SSE.$('#dbBilled').textContent=SSE.fmt(billed);
   SSE.$('#dbGot').textContent=SSE.fmt(got);SSE.$('#dbDue').textContent=SSE.fmt(list.reduce((a,r)=>a+(r.balance||0),0));
   SSE.$('#dblist').innerHTML=list.length?list.map(r=>`<div class="dbrow">
-    <div><b>${SSE.esc(r.no)}</b> <span class="pill ${r.type==='TAX'?'info':'warn'}">${r.type}</span><small>${SSE.esc(r.customer||'Walk-in')} Â· ${SSE.fmt(r.grand)} Â· paid ${SSE.fmt(r.paid)}${r.balance?` Â· due ${SSE.fmt(r.balance)}`:''}</small></div>
+    <div><b>${SSE.esc(r.no)}</b> <span class="pill ${r.type==='TAX'?'info':'warn'}">${r.type}</span><small>${SSE.esc(r.customer||'Walk-in')} · ${SSE.fmt(r.grand)} · paid ${SSE.fmt(r.paid)}${r.balance?` · due ${SSE.fmt(r.balance)}`:''}</small></div>
     <div><b>${SSE.fmt(r.grand)}</b></div>
     <div class="rpr"><button class="btn btn-ghost rp" data-no="${SSE.esc(r.no)}"><i class="hgi-stroke hgi-printer"></i>Reprint</button></div></div>`).join('')
     :`<div class="empty"><i class="hgi-stroke hgi-file-01"></i><b>No bills yet today</b><p>Saved bills land here with one tap reprint.</p></div>`;
@@ -237,30 +237,30 @@ function buildPrint(r){
   const c=SSE.content(),cgst=r.gst/2,sgst=r.gst-r.gst/2;
   const upi=c.upi_id||'shreeshyam@upi';
   const qr='https://api.qrserver.com/v1/create-qr-code/?size=140x140&data='+encodeURIComponent(`upi://pay?pa=${upi}&am=${r.grand}&tn=${r.no}`);
-  const hsn={};r.items.forEach(it=>{const k=(it.hsn||'â€”')+'|'+it.gst_pct;hsn[k]=hsn[k]||{hsn:it.hsn||'â€”',rate:it.gst_pct,tx:0,g:0};
+  const hsn={};r.items.forEach(it=>{const k=(it.hsn||'�?"')+'|'+it.gst_pct;hsn[k]=hsn[k]||{hsn:it.hsn||'�?"',rate:it.gst_pct,tx:0,g:0};
     const tx=it.qty*it.rate;hsn[k].tx+=tx;hsn[k].g+=tx*it.gst_pct/100;});
   const rows=r.items.map((it,i)=>{const tx=it.qty*it.rate,g=tx*it.gst_pct/100;
-    return`<tr><td>${i+1}</td><td><b>${SSE.esc(it.name)}</b><br><span>HSN ${SSE.esc(it.hsn||'â€”')}</span></td>
+    return`<tr><td>${i+1}</td><td><b>${SSE.esc(it.name)}</b><br><span>HSN ${SSE.esc(it.hsn||'�?"')}</span></td>
     <td class="r">${it.qty}</td><td class="r">${SSE.fmt(it.rate)}</td><td class="r">${SSE.fmt(tx)}</td>
     <td class="r">${it.gst_pct}%</td><td class="r">${SSE.fmt(g)}</td><td class="r"><b>${SSE.fmt(tx+g)}</b></td></tr>`;}).join('');
   const copy=(label,brk)=>`<div class="inv${brk?' brk':''}">
     <div class="copy">${label}</div>
     <div class="ihead"><div><h1>Shree Shyam Enterprises</h1>
-    <p>${SSE.esc(c.address||'Main Market Road')}${c.gstin&&c.gstin.indexOf('ADD')!==0?' Â· GSTIN '+SSE.esc(c.gstin):''} Â· ${SSE.esc(c.phone||'')}</p></div>
+    <p>${SSE.esc(c.address||'Main Market Road')}${c.gstin&&c.gstin.indexOf('ADD')!==0?' · GSTIN '+SSE.esc(c.gstin):''} · ${SSE.esc(c.phone||'')}</p></div>
     <div class="r"><h2>${r.type==='TAX'?'Tax Invoice':'Estimate'}</h2><p>${r.type==='TAX'?'':'Not a tax invoice'}</p></div></div>
     <div class="imeta"><div><span>Bill no</span><b>${SSE.esc(r.no)}</b></div>
     <div><span>Date</span><b>${new Date(r.date).toLocaleString('en-IN')}</b></div>
-    <div><span>Customer</span><b>${SSE.esc(r.customer||'Walk-in')}${r.phone?' Â· '+SSE.esc(r.phone):''}</b></div>
-    <div><span>Customer GSTIN</span><b>${SSE.esc(r.gstin||'â€”')}</b></div></div>
+    <div><span>Customer</span><b>${SSE.esc(r.customer||'Walk-in')}${r.phone?' · '+SSE.esc(r.phone):''}</b></div>
+    <div><span>Customer GSTIN</span><b>${SSE.esc(r.gstin||'�?"')}</b></div></div>
     <table class="itbl"><thead><tr><th>#</th><th>Item</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Taxable</th><th class="r">GST</th><th class="r">GST Amt</th><th class="r">Amount</th></tr></thead><tbody>${rows}</tbody></table>
     <div class="irow"><div class="ileft">
       <p><span>Amount in words</span><b>${words(r.grand)}</b></p>
       <table class="htbl"><thead><tr><th>HSN</th><th class="r">Rate</th><th class="r">Taxable</th><th class="r">CGST</th><th class="r">SGST</th></tr></thead><tbody>
       ${Object.values(hsn).map(h=>`<tr><td>${SSE.esc(h.hsn)}</td><td class="r">${h.rate}%</td><td class="r">${SSE.fmt(h.tx)}</td><td class="r">${SSE.fmt(h.g/2)}</td><td class="r">${SSE.fmt(h.g-h.g/2)}</td></tr>`).join('')}</tbody></table>
-      <div class="qrbox"><img class="qr" src="${qr}" alt="UPI QR"><div><b>Pay ${SSE.fmt(r.grand)}</b><span>UPI ${SSE.esc(upi)} Â· ${SSE.esc(r.mode)}</span></div></div>
+      <div class="qrbox"><img class="qr" src="${qr}" alt="UPI QR"><div><b>Pay ${SSE.fmt(r.grand)}</b><span>UPI ${SSE.esc(upi)} · ${SSE.esc(r.mode)}</span></div></div>
     </div><div class="iright">
       <div><span>Subtotal</span><b>${SSE.fmt(r.sub)}</b></div>
-      <div><span>Discount</span><b>âˆ’ ${SSE.fmt(r.disc)}</b></div>
+      <div><span>Discount</span><b>�^' ${SSE.fmt(r.disc)}</b></div>
       <div><span>CGST</span><b>${SSE.fmt(cgst)}</b></div>
       <div><span>SGST</span><b>${SSE.fmt(sgst)}</b></div>
       <div><span>Round off</span><b>${SSE.fmt(r.grand-(r.sub+r.gst-r.disc))}</b></div>
@@ -272,6 +272,6 @@ function buildPrint(r){
     <div class="sign"><span>For Shree Shyam Enterprises</span><b>Authorised signatory</b></div></div>
   </div>`;
   SSE.$('#printArea').innerHTML=r.type==='TAX'?copy('Original for Recipient',true)+copy('Duplicate for Supplier',false)
-    :copy('Estimate â€” valid 7 days',false);
+    :copy('Estimate �?" valid 7 days',false);
 }
 </script></body></html>

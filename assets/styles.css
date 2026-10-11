@@ -514,4 +514,20 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
   .dbrow .rpr{grid-column:1/-1}
   .line{flex-wrap:wrap}
 }
+/* ---- ObsidianUI-inspired decor (patterns reimplemented for vanilla stack) ---- */
+.prism-ring{position:absolute;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg,#1D4ED8,#22D3EE,#A78BFA,#F472B6,#FBBF24,#1D4ED8);
+  -webkit-mask:radial-gradient(circle,transparent 54%,#000 56%);mask:radial-gradient(circle,transparent 54%,#000 56%);
+  opacity:.55;animation:spin 16s linear infinite}
+.prism-ring::after{content:"";position:absolute;inset:18%;border-radius:50%;border:1px solid rgba(255,255,255,.25)}
+.statusline{display:flex;gap:3px;height:30px;align-items:stretch;margin:20px 0 6px}
+.statusline span{flex:1;border-radius:3px;background:rgba(74,222,128,.4);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.statusline span.d{background:rgba(251,191,36,.55)}
+.statusline:hover span{opacity:.3}
+.statusline span:hover{opacity:1;transform:scaleY(1.12)}
+.statusmeta{display:flex;justify-content:space-between;font-size:11px;color:#8FA5D4;font-weight:600}
+.actsline{display:flex;gap:3px;height:22px;align-items:stretch;margin:12px 0 4px}
+.actsline span{flex:1;border-radius:2px;background:var(--line);min-height:3px}
+.actsline span.on{background:var(--accent);animation:grow .6s var(--ease) backwards}
+@media (max-width:1020px){.prism-ring{right:-90px;top:-90px;width:200px;height:200px;opacity:.4}.statusline span:nth-child(n+29){display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.rv{opacity:1;transform:none;filter:none}}

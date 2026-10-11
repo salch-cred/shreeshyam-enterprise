@@ -29,11 +29,23 @@ model Product {
   @@map("products")
 }
 
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  phone        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("customer")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
 model Invoice {
   no       String   @id
   date     DateTime @default(now())
   type     String   @default("TAX") // TAX | EST
   customer String   @default("")
+  phone    String   @default("")
   items    Json
   subtotal Int      @default(0)
   discount Int      @default(0)

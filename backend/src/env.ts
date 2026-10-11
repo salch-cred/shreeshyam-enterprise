@@ -13,4 +13,4 @@ const Env = z.object({
 });
 
 export const env = Env.parse(process.env);
-export type Role = 'admin' | 'billing';
+export type Role = 'admin' | 'billing' | 'customer';

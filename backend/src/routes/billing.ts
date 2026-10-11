@@ -37,8 +37,8 @@ billing.post('/invoices', auth(['admin', 'billing']), async (req, res, next) => 
       : `EST-${Date.now()}`;
     await p.query('BEGIN');
     await p.query(
-      'INSERT INTO invoices(no,type,customer,items,subtotal,discount,gst,grand,paid,balance) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
-      [no, b.type, b.customer, JSON.stringify(b.items), t.sub, b.discount, t.gst, t.grand, b.paid, balance]);
+      'INSERT INTO invoices(no,type,customer,phone,items,subtotal,discount,gst,grand,paid,balance) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
+      [no, b.type, b.customer, b.phone, JSON.stringify(b.items), t.sub, b.discount, t.gst, t.grand, b.paid, balance]);
     if (b.type === 'TAX') {
       for (const it of b.items) {
         await p.query('UPDATE products SET stock = stock - $2, updated_at=NOW() WHERE id=$1', [it.id, it.qty]);
@@ -48,6 +48,16 @@ billing.post('/invoices', auth(['admin', 'billing']), async (req, res, next) => 
     await p.query('COMMIT');
     res.status(201).json({ no, ...t, balance });
   } catch (e) { try { await requireDb().query('ROLLBACK'); } catch {} next(e); }
+});
+
+billing.get('/invoices/mine', auth(['customer']), async (req, res, next) => {
+  try {
+    const phone = (req as unknown as { phone?: string }).phone || '';
+    const rows = (await requireDb().query(
+      'SELECT no,type,customer,grand,gst,paid,balance,date FROM invoices WHERE phone=$1 ORDER BY date DESC LIMIT 100', [phone])).rows;
+    const due = rows.reduce((a, r) => a + (r.balance || 0), 0);
+    res.json({ items: rows, outstanding: due });
+  } catch (e) { next(e); }
 });
 
 billing.get('/invoices', auth(['admin', 'billing']), async (req, res, next) => {
