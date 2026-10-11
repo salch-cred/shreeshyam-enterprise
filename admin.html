@@ -1,13 +1,13 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Counter console — Shree Shyam Enterprises</title>
+<title>Counter console â€” Shree Shyam Enterprises</title>
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#1E3A8B">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css"></head>
+<link rel="stylesheet" href="assets/styles.css?v=20261011b"></head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
@@ -23,10 +23,10 @@
 <p class="eyebrow">Counter only</p>
 <h1 class="title" style="font-size:32px;line-height:36px">Open the console</h1>
 <p class="lead" style="font-size:15px">PIN lives on this device. Customers never see this page.</p>
-<div class="pinrow"><input id="pin" inputmode="numeric" type="password" autocomplete="off" placeholder="••••" aria-label="Admin PIN"></div>
+<div class="pinrow"><input id="pin" inputmode="numeric" type="password" autocomplete="off" placeholder="â€¢â€¢â€¢â€¢" aria-label="Admin PIN"></div>
 <span class="err" id="pinErr" style="color:#9A3412;font-size:13px;min-height:20px;display:block"></span>
 <button class="btn btn-primary" id="unlock" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-lock"></i>Unlock</button>
-<p style="font-size:12px;color:var(--muted)">Default 2580 — change it in admin.html and backend env after first login.</p>
+<p style="font-size:12px;color:var(--muted)">Default 2580 â€” change it in admin.html and backend env after first login.</p>
 </div>
 
 <!-- APP -->
@@ -34,7 +34,7 @@
 <div class="console-head">
 <div><p class="eyebrow">Today at the counter</p>
 <h1 class="title" style="margin:0">Namaste, sethji</h1></div>
-<span class="device"><i class="hgi-stroke hgi-database-01" style="font-size:16px"></i><span id="dbInfo">IndexedDB · unlimited SKUs</span></span>
+<span class="device"><i class="hgi-stroke hgi-database-01" style="font-size:16px"></i><span id="dbInfo">IndexedDB Â· unlimited SKUs</span></span>
 </div>
 
 <div class="statrow rv in" id="stats">
@@ -45,7 +45,7 @@
 </div>
 
 <div class="cmdbar rv in">
-<label class="search"><i class="hgi-stroke hgi-search-01"></i><input id="aq" type="search" placeholder="Search across everything… try cement, Bosch, pipe" aria-label="Search products"><kbd>/</kbd></label>
+<label class="search"><i class="hgi-stroke hgi-search-01"></i><input id="aq" type="search" placeholder="Search across everythingâ€¦ try cement, Bosch, pipe" aria-label="Search products"><kbd>/</kbd></label>
 <button class="btn btn-amber" id="addP"><i class="hgi-stroke hgi-plus-sign"></i>Add product</button>
 <button class="btn btn-ghost" id="expJ" style="border-color:#7EA4E8;color:#fff"><i class="hgi-stroke hgi-download-01"></i>Export</button>
 <label class="btn btn-ghost" style="border-color:#7EA4E8;color:#fff;cursor:pointer"><i class="hgi-stroke hgi-upload-01"></i>CSV<input type="file" id="csv" accept=".csv" hidden></label>
@@ -95,13 +95,13 @@
 <div class="field"><label for="fGst">GST %</label><select id="fGst"><option>5</option><option>12</option><option selected>18</option><option>28</option></select></div>
 <div class="field"><label for="fStock">Stock</label><input id="fStock" type="number" value="10"></div>
 <div class="field"><label for="fMin">Minimum</label><input id="fMin" type="number" min="0" value="5"></div>
-<div class="field full"><label for="fImg">Image URL (R2 / Supabase)</label><input id="fImg" placeholder="https://…"></div>
+<div class="field full"><label for="fImg">Image URL (R2 / Supabase)</label><input id="fImg" placeholder="https://â€¦"></div>
 </div></div>
 <footer><button class="btn btn-ghost" id="shCancel">Cancel</button><button class="btn btn-primary" id="shSave"><i class="hgi-stroke hgi-checkmark-circle-01"></i>Save product</button></footer>
 </aside>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
-<script src="assets/app.js"></script>
+<script src="assets/app.js?v=20261011b"></script>
 <script>
 let ALL=[],pg=1,editing=null;const PIN='2580';
 const toast=(msg,icon='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
@@ -140,7 +140,7 @@ async function init(){
   SSE.$('#addP').onclick=()=>sheet();
   SSE.$('#expJ').onclick=async()=>{const all=await SSE.all();
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({products:all},null,1)],{type:'application/json'}));
-    a.download='catalog-export.json';a.click();toast('Catalogue exported — split into shards of 2000','download-01');};
+    a.download='catalog-export.json';a.click();toast('Catalogue exported â€” split into shards of 2000','download-01');};
   SSE.$('#csv').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
     r.onload=async()=>{let n2=0;for(const ln of String(r.result).split('\n').slice(1)){const c=ln.split(',');if(c.length<4)continue;
       await SSE.put({id:(c[0]||'').trim()||'P-'+Date.now().toString(36)+n2, name:c[1].trim(),category:(c[2]||'General').trim(),brand:'-',unit:'pcs',hsn:'',rate_retail:Number(c[3])||0,rate_wholesale:Number(c[4])||Number(c[3])||0,gst_pct:Number(c[5])||18,stock:Number(c[6])||0,min_stock:5,image:''});n2++;}
@@ -152,16 +152,16 @@ function pill(stock,min){return stock<=(min||5)?'<span class="pill bad">Low</spa
 function draw(){
   const f=SSE.filter(ALL,SSE.$('#aq').value,'');
   const items=SSE.page(f,pg);
-  SSE.$('#pgInfo').textContent=`Page ${pg} · ${f.length.toLocaleString('en-IN')} products`;
+  SSE.$('#pgInfo').textContent=`Page ${pg} Â· ${f.length.toLocaleString('en-IN')} products`;
   const tb=SSE.$('#rows');
   if(!items.length){tb.innerHTML='';SSE.$('#pane-products').querySelector('.tblwrap').hidden=true;
     if(!SSE.$('#pane-products .empty'))SSE.$('#pane-products').insertAdjacentHTML('beforeend',
-    `<div class="empty"><i class="hgi-stroke hgi-package-search"></i><b>Nothing matches</b><p>Try drill, cement, pipe — or add it fresh.</p><button class="btn btn-amber" onclick="document.getElementById('addP').click()">Add product</button></div>`);
+    `<div class="empty"><i class="hgi-stroke hgi-package-search"></i><b>Nothing matches</b><p>Try drill, cement, pipe â€” or add it fresh.</p><button class="btn btn-amber" onclick="document.getElementById('addP').click()">Add product</button></div>`);
     return;}
   SSE.$('#pane-products').querySelector('.tblwrap').hidden=false;
   SSE.$('#pane-products .empty')?.remove();
   tb.innerHTML=items.map((p,i)=>`<tr class="rowin" style="animation-delay:${Math.min(i*30,300)}ms">
-    <td><b>${SSE.esc(p.name)}</b><br><span style="color:var(--muted);font-size:12px">${SSE.esc(p.id)} · ${SSE.esc(p.brand)} · GST ${Number(p.gst_pct)||0}%</span></td>
+    <td><b>${SSE.esc(p.name)}</b><br><span style="color:var(--muted);font-size:12px">${SSE.esc(p.id)} Â· ${SSE.esc(p.brand)} Â· GST ${Number(p.gst_pct)||0}%</span></td>
     <td>${SSE.esc(p.category)}</td><td><b>${SSE.fmt(p.rate_retail)}</b></td><td>${SSE.fmt(p.rate_wholesale)}</td>
     <td>${Number(p.stock)||0} ${pill(p.stock,p.min_stock)}</td>
     <td style="text-align:right;white-space:nowrap"><button class="btn btn-ghost ed" data-id="${SSE.esc(p.id)}">Edit</button>
@@ -174,7 +174,7 @@ function draw(){
     const inp=cell.querySelector('input');inp.focus();inp.select();
     cell.querySelector('.ok').onclick=async()=>{const q=Number(inp.value);if(!q){draw();return;}
       const all=await SSE.all();const p=all.find(x=>x.id===b.dataset.id);p.stock+=q;await SSE.put(p);
-      SSE.logStock(p.id,q,'admin');ALL=all;draw();stats();toast((q>0?'+':'')+q+' · '+p.name);};});
+      SSE.logStock(p.id,q,'admin');ALL=all;draw();stats();toast((q>0?'+':'')+q+' Â· '+p.name);};});
 }
 function stats(){
   let inv=[];try{inv=JSON.parse(localStorage.getItem('sse_invoices')||'[]');}catch{}
@@ -236,9 +236,9 @@ async function drawOrders(){
 async function drawContent(){
   const el=SSE.$('#pane-content');const c=SSE.content();
   el.innerHTML=`<div class="field"><label>Announcement bar</label><input id="c_ann" value="${SSE.esc(c.announcement||'')}"></div>
-  <div class="field"><label>WhatsApp number (91…)</label><input id="c_wa" value="${SSE.esc(c.whatsapp||'')}"></div>
+  <div class="field"><label>WhatsApp number (91â€¦)</label><input id="c_wa" value="${SSE.esc(c.whatsapp||'')}"></div>
   <div class="field"><label>UPI ID</label><input id="c_upi" value="${SSE.esc(c.upi_id||'')}"></div>
-  <div class="field"><label>API base (TypeScript backend, optional)</label><input id="c_api" value="${SSE.esc(localStorage.getItem('sse_api')||'')}" placeholder="https://…vercel.app"></div>
+  <div class="field"><label>API base (TypeScript backend, optional)</label><input id="c_api" value="${SSE.esc(localStorage.getItem('sse_api')||'')}" placeholder="https://â€¦vercel.app"></div>
   <button class="btn btn-primary" id="c_save"><i class="hgi-stroke hgi-checkmark-circle-01"></i>Save website content</button>`;
   SSE.$('#c_save').onclick=()=>{SSE.saveContent({...c,announcement:SSE.$('#c_ann').value,whatsapp:SSE.$('#c_wa').value,upi_id:SSE.$('#c_upi').value});
     const u=SSE.$('#c_api').value.trim();u?localStorage.setItem('sse_api',u):localStorage.removeItem('sse_api');
@@ -255,7 +255,7 @@ async function drawLedger(){
     <td style="text-align:right">Total ${SSE.fmt(i.grand)}<br><span class="pill warn">Due ${SSE.fmt(i.balance)}</span></td>
     <td style="text-align:right"><span class="paybox"><input type="number" min="1" value="${i.balance}" data-no="${SSE.esc(i.no)}" aria-label="Amount received"><button class="btn btn-primary rk" data-no="${SSE.esc(i.no)}" style="padding:6px 10px;font-size:13px">Receive</button></span></td></tr>`).join('')+`</tbody></table></div>`
     :`<div class="empty"><i class="hgi-stroke hgi-checkmark-badge-01"></i><b>Nothing outstanding</b><p>Every bill is settled.</p></div>`)
-    +(shut.length?`<h3 style="margin-top:20px">Recently settled</h3><div class="tblwrap"><table class="tbl"><tbody>`+shut.map(i=>`<tr><td>${SSE.esc(i.no)} · ${SSE.esc(i.customer||'Walk-in')}</td><td style="text-align:right"><span class="pill ok">${SSE.fmt(i.grand)}</span></td></tr>`).join('')+`</tbody></table></div>`:'');
+    +(shut.length?`<h3 style="margin-top:20px">Recently settled</h3><div class="tblwrap"><table class="tbl"><tbody>`+shut.map(i=>`<tr><td>${SSE.esc(i.no)} Â· ${SSE.esc(i.customer||'Walk-in')}</td><td style="text-align:right"><span class="pill ok">${SSE.fmt(i.grand)}</span></td></tr>`).join('')+`</tbody></table></div>`:'');
   el.querySelectorAll('.rk').forEach(b=>b.onclick=()=>{const inp=el.querySelector(`input[data-no="${b.dataset.no}"]`);
     const amt=Math.max(0,Number(inp.value)||0);if(!amt)return;
     const all=JSON.parse(localStorage.getItem('sse_invoices')||'[]');const r=all.find(x=>x.no===b.dataset.no);
@@ -279,8 +279,8 @@ async function drawReports(){
   const days=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(13-i));return d.toISOString().slice(0,10);});
   const per=days.map(d=>inv.filter(x=>(x.date||'').slice(0,10)===d&&x.type==='TAX').reduce((a,x)=>a+(x.grand||0),0));
   const mx=Math.max(1,...per);
-  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3 style="margin:0">Last 14 days</h3><button class="btn btn-ghost" id="csvExp"><i class="hgi-stroke hgi-download-01"></i>Bills CSV</button></div><div class="bars">${per.map((v,i)=>`<span style="height:${Math.max(3,Math.round(v/mx*100))}%;animation-delay:${i*40}ms" title="${days[i]} · Rs ${v.toLocaleString('en-IN')}"></span>`).join('')}</div>
-  <p style="color:var(--muted);font-size:14px"><b style="color:var(--ink)">${inv.length}</b> bills · <b style="color:var(--ink)">Rs ${inv.reduce((a,i)=>a+(i.grand||0),0).toLocaleString('en-IN')}</b> billed · GSTR table below.</p>
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3 style="margin:0">Last 14 days</h3><button class="btn btn-ghost" id="csvExp"><i class="hgi-stroke hgi-download-01"></i>Bills CSV</button></div><div class="bars">${per.map((v,i)=>`<span style="height:${Math.max(3,Math.round(v/mx*100))}%;animation-delay:${i*40}ms" title="${days[i]} Â· Rs ${v.toLocaleString('en-IN')}"></span>`).join('')}</div>
+  <p style="color:var(--muted);font-size:14px"><b style="color:var(--ink)">${inv.length}</b> bills Â· <b style="color:var(--ink)">Rs ${inv.reduce((a,i)=>a+(i.grand||0),0).toLocaleString('en-IN')}</b> billed Â· GSTR table below.</p>
   <div class="tblwrap"><table class="tbl"><thead><tr><th>Bill</th><th>Total</th><th>GST</th><th>Paid</th><th>Due</th></tr></thead><tbody>`+
   (inv.slice(-50).reverse().map(i=>`<tr><td>${SSE.esc(i.no)}</td><td>${SSE.fmt(i.grand)}</td><td>${SSE.fmt(i.gst)}</td><td>${SSE.fmt(i.paid)}</td><td>${SSE.fmt(i.balance)}</td></tr>`).join('')||'<tr><td>No bills yet.</td></tr>')+`</tbody></table></div>`;
   SSE.$('#csvExp').onclick=exportCSV;
