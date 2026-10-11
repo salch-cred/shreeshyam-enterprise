@@ -118,5 +118,28 @@ const SSE = (() => {
       document.body.appendChild(w);}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',tabs);else tabs();
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, tabs, $ };
+  /* Enterprise footer — generated once, consistent on every public page */
+  function footer(){
+    const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    if(path.includes('admin')||path.includes('bill'))return;
+    const c=SSE.content();
+    let f=document.querySelector('footer.sfooter');
+    if(!f){f=document.createElement('footer');f.className='sfooter';document.body.appendChild(f);}
+    const yr=new Date().getFullYear();
+    f.innerHTML=`<div class="wrap cols">
+    <div class="fbrand"><a class="brand" href="index.html" style="filter:invert(0)"><span class="brand-mark">S</span><span style="color:#fff">Shree Shyam<small style="color:#8FA5D4">Industrial & Project Suppliers</small></span></a>
+    <p>Bearings, belts, fasteners, pneumatics, tools and industrial electricals for plants that cannot stop. Authorized Polymatic Pneumatic distributor since 2009.</p>
+    <div class="fbtns"><a class="btn btn-amber" href="tel:+917240107540"><i class="hgi-stroke hgi-call"></i>Call</a>
+    <a class="btn btn-ghost fgb" href="https://wa.me/917240107540"><i class="hgi-stroke hgi-whatsapp"></i>WhatsApp</a></div></div>
+    <div><h5>Catalogue</h5><a href="shop.html">All items</a><a href="checkout.html">Checkout</a><a href="index.html#bulk">Project desk</a><a href="account.html">Your account</a></div>
+    <div><h5>Reach us</h5><a href="tel:+917240107540">72401 07540</a><a href="tel:+9188797979884">98879 79884</a><a href="https://wa.me/917240107540">WhatsApp us</a><a href="mailto:shreeshyamenterprises7540@gmail.com">Email</a></div>
+    <div><h5>Counter</h5><span>Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705</span><span>Open 9 to 8 · all days</span><span>GSTIN ${SSE.esc(c.gstin||'08SJHPS7017F1ZK')}</span></div>
+    </div>
+    <div class="wrap legal"><span>© ${yr} Shree Shyam Enterprises · Industrial & Project Suppliers</span>
+    <span class="lgl"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="sitemap.xml">Sitemap</a></span></div>
+    <div class="giant" aria-hidden="true">SHREE SHYAM</div>`;
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',footer);else footer();
+
+  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, tabs, footer, $ };
 })();

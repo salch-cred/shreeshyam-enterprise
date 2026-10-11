@@ -614,3 +614,28 @@ body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
 @media (min-width:1021px){.botpanel{bottom:96px}}
 
 @media (max-width:1020px){body:has(#sendbar) .botfab{bottom:calc(196px + env(safe-area-inset-bottom))}}
+
+/* ---- Enterprise footer ---- */
+footer.sfooter{background:var(--dark);color:#C3D2EE;border-top:1px solid var(--line-dark);padding:0;margin-top:0;position:relative;overflow:hidden}
+footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.sfooter .cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:36px;padding:56px 24px 40px;max-width:var(--max);margin:0 auto}
+.sfooter .fbrand p{color:#8FA5D4;font-size:14px;line-height:22px;margin:14px 0 16px;max-width:340px}
+.sfooter .fbrand .brand{color:#fff}
+.sfooter .fbrand small{color:#8FA5D4 !important}
+.sfooter h5{color:#fff;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:4px 0 16px;font-weight:800}
+.sfooter a{display:block;color:#C3D2EE;text-decoration:none;font-size:14px;padding:5px 0;transition:color .4s var(--ease),transform .4s var(--ease)}
+.sfooter a:hover{color:#fff;transform:translateX(4px)}
+.sfooter .fbtns{display:flex;gap:10px;flex-wrap:wrap}
+.sfooter .fbtns .fgb{border-color:var(--line-dark);color:#fff}
+.sfooter .fbtns .fgb:hover{border-color:#fff}
+.sfooter .fbrand div+div a,.sfooter div>span{display:block;color:#8FA5D4;font-size:13.5px;line-height:21px;padding:4px 0}
+.sfooter .legal{border-top:1px solid rgba(255,255,255,.1);padding:18px 24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:#8FA5D4;max-width:var(--max);margin:0 auto}
+.sfooter .legal .lgl{display:flex;gap:18px}
+.sfooter .legal a{display:inline;padding:0;font-size:12.5px}
+.sfooter .giant{font-size:clamp(56px,10.5vw,150px);line-height:.85;font-weight:800;letter-spacing:-.04em;text-align:center;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.09);padding:10px 0 18px;user-select:none;white-space:nowrap;overflow:hidden}
+@media (max-width:1020px){
+  .sfooter .cols{grid-template-columns:1fr 1fr;gap:26px;padding:40px 20px 32px}
+  .sfooter .fbrand{grid-column:1/-1}
+  .sfooter .legal{flex-direction:column;align-items:flex-start;padding:16px 20px}
+}
