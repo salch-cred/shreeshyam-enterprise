@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012g">
+<link rel="stylesheet" href="assets/styles.css?v=20261012h">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -264,22 +264,11 @@
         </div>
       </div>
     </div>
-  <!-- WEAV KINETIC WAVE RIBBON DIVIDER (EXACT GEOMETRY FROM USER DESIGN: media_1791723549636.png) -->
+  <!-- SMOOTH FLOWING WAVE DIVIDER (EXACT DESIGN FROM USER IMAGE: media_1791734234940.png) -->
   <div class="weav-wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1440 68" preserveAspectRatio="none" width="100%" height="68">
-      <defs>
-        <pattern id="weavRibbonExact" width="60" height="68" patternUnits="userSpaceOnUse">
-          <!-- Background: Top electric blue #1D4ED8, Bottom warm peach #FFF1ED -->
-          <rect y="0" width="60" height="34" fill="#1D4ED8"/>
-          <rect y="34" width="60" height="34" fill="#FFF1ED"/>
-          <!-- Top Row interlocking ribbons/flags cutting downward into the blue -->
-          <!-- Left half upward slope, right half curved hook -->
-          <path d="M0,0 C12,0 20,8 30,22 C40,8 48,0 60,0 L60,34 L0,34 Z" fill="#FFF1ED"/>
-          <!-- Bottom Row matching waves cutting upward into the peach -->
-          <path d="M0,34 C12,34 20,42 30,56 C40,42 48,34 60,34 L60,68 L0,68 Z" fill="#1D4ED8"/>
-        </pattern>
-      </defs>
-      <rect width="1440" height="68" fill="url(#weavRibbonExact)"/>
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" width="100%" height="90">
+      <path d="M0,0 L0,30 Q180,75 360,30 T720,30 T1080,30 T1440,30 L1440,0 Z" fill="#1D4ED8"/>
+      <path d="M0,30 Q180,75 360,30 T720,30 T1080,30 T1440,30 L1440,90 L0,90 Z" fill="#FFF1ED"/>
     </svg>
   </div>
 </div>
@@ -497,25 +486,146 @@
 </div>
 </section>
 
-<!-- FAQ -->
+<!-- 05 FAQ INTERACTIVE DECOR SECTION -->
 <section class="block wrap" style="padding-top:0">
-<p class="eyebrow">05 — Asked daily at the counter</p>
-<span class="secnum" aria-hidden="true">05</span>
-<h2 class="title">Before you visit</h2>
-<div class="split">
-<div style="display:grid;gap:12px">
-<div class="stack-card rv"><h3 style="font-size:18px">Do I get a GST bill?</h3><p>Yes, on every sale with HSN. Share your GSTIN once, it prints automatically after that.</p></div>
-<div class="stack-card rv"><h3 style="font-size:18px">Are products genuine?</h3><p>Authorized makes only, boxed stock with batch details. Test certificates on request for project items.</p></div>
-<div class="stack-card rv"><h3 style="font-size:18px">Do you deliver?</h3><p>Same-day van across the RIICO Neemrana belt. All-India transport dispatch for projects.</p></div>
-<div class="stack-card rv"><h3 style="font-size:18px">Rate contract possible?</h3><p>Yes, for plants with monthly consumption. Annual rates with fixed makes and lead times.</p></div>
-</div>
-<div style="display:grid;gap:12px">
-<div class="stack-card rv d1"><h3 style="font-size:18px">How is pricing done?</h3><p>Quote-based per line since industrial rates move. Counter items carry a printed rate board.</p></div>
-<div class="stack-card rv d1"><h3 style="font-size:18px">Can you source non-stock items?</h3><p>Yes, through our authorized vendor network. Non-catalog items quoted with lead time in the same sheet.</p></div>
-<div class="stack-card rv d1"><h3 style="font-size:18px">Payment modes?</h3><p>Bank transfer, UPI, cash. PO-based plants get 30 day terms after the first three cash bills.</p></div>
-<div class="stack-card rv d1"><h3 style="font-size:18px">Is stock live?</h3><p>Shop page cuts on each bill. Call ahead for bulk quantities or project lots.</p></div>
-</div>
-</div>
+  <p class="eyebrow">05 — Asked daily at the counter</p>
+  <span class="secnum" aria-hidden="true">05</span>
+  <h2 class="title rv">Top 5 Questions Answered</h2>
+  <p class="lead rv">Clear answers on GST compliance, authentic OEM stock, same-day van dispatches, and credit terms for RIICO plant heads.</p>
+
+  <div class="faq-grid-wrap">
+    <!-- 5 Clean Accordion Questions -->
+    <div class="faq-accordion" id="faqAccordion">
+
+      <!-- Question 1 -->
+      <div class="faq-item active rv" onclick="toggleFaq(this)">
+        <div class="faq-item-head">
+          <div class="faq-q-left">
+            <span class="faq-num-badge">01</span>
+            <h3>Do I get a 100% compliant GST Tax Invoice with HSN codes?</h3>
+          </div>
+          <div class="faq-chevron"><i class="hgi-stroke hgi-arrow-down-01"></i></div>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, absolutely. Every single purchase carries an itemized GST tax invoice with mandatory 8-digit HSN codes (e.g., 8482 for bearings, 4010 for transmission belts). Share your plant’s GSTIN once—it maps directly into our system for seamless monthly GSTR-1 & 2B input credit reconciliation.</p>
+          <div class="faq-answer-tags">
+            <span><i class="hgi-stroke hgi-document-validation"></i> GSTR-1 Invoiced</span>
+            <span><i class="hgi-stroke hgi-shield-tick"></i> HSN 8482 / 4010</span>
+            <span><i class="hgi-stroke hgi-tick-02"></i> 100% Tax Credit</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="faq-item rv" onclick="toggleFaq(this)">
+        <div class="faq-item-head">
+          <div class="faq-q-left">
+            <span class="faq-num-badge">02</span>
+            <h3>Are all bearings, belts, and valves 100% genuine boxed OEM stock?</h3>
+          </div>
+          <div class="faq-chevron"><i class="hgi-stroke hgi-arrow-down-01"></i></div>
+        </div>
+        <div class="faq-answer" style="display:none">
+          <p>Strict zero-counterfeit policy. We only source direct factory-sealed stock from SKF, FAG Schaeffler, NBC, Polymatic, Mitsuboshi, Gates, and Unbrako. Every bearing and valve comes in its original manufacturer carton with intact holographic QR tamper seals and manufacturer test certificates on request.</p>
+          <div class="faq-answer-tags">
+            <span><i class="hgi-stroke hgi-award-04"></i> Authorized Polymatic Hub</span>
+            <span><i class="hgi-stroke hgi-package"></i> Sealed Factory Boxes</span>
+            <span><i class="hgi-stroke hgi-file-01"></i> Test Certs on Request</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="faq-item rv" onclick="toggleFaq(this)">
+        <div class="faq-item-head">
+          <div class="faq-q-left">
+            <span class="faq-num-badge">03</span>
+            <h3>How fast is same-day delivery across the RIICO Neemrana industrial belt?</h3>
+          </div>
+          <div class="faq-chevron"><i class="hgi-stroke hgi-arrow-down-01"></i></div>
+        </div>
+        <div class="faq-answer" style="display:none">
+          <p>For line breakdowns and urgent maintenance parts, our dedicated delivery vans dispatch within 25–40 minutes across RIICO Neemrana Phase I, II, Japanese Zone, Ghiloth, Behror, and Keshwana. For planned project BOQs across India, orders stage and ship via express cargo.</p>
+          <div class="faq-answer-tags">
+            <span><i class="hgi-stroke hgi-delivery-truck-01"></i> 25–40 Min Plant Dispatch</span>
+            <span><i class="hgi-stroke hgi-location-01"></i> Japanese Zone & Ghiloth</span>
+            <span><i class="hgi-stroke hgi-flash"></i> Breakdown Priority</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="faq-item rv" onclick="toggleFaq(this)">
+        <div class="faq-item-head">
+          <div class="faq-q-left">
+            <span class="faq-num-badge">04</span>
+            <h3>Can our factory set up monthly credit terms against formal Purchase Orders?</h3>
+          </div>
+          <div class="faq-chevron"><i class="hgi-stroke hgi-arrow-down-01"></i></div>
+        </div>
+        <div class="faq-answer" style="display:none">
+          <p>Yes. Registered manufacturing units and regular industrial clients can transition to 30-day billing terms against official plant POs following three initial transactions. Consolidated monthly statements are dispatched on the 1st of each month with comprehensive delivery challans attached.</p>
+          <div class="faq-answer-tags">
+            <span><i class="hgi-stroke hgi-wallet-01"></i> 30-Day Plant Credit</span>
+            <span><i class="hgi-stroke hgi-clipboard-check"></i> PO Billing Supported</span>
+            <span><i class="hgi-stroke hgi-invoice-01"></i> Monthly Statements</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="faq-item rv" onclick="toggleFaq(this)">
+        <div class="faq-item-head">
+          <div class="faq-q-left">
+            <span class="faq-num-badge">05</span>
+            <h3>Can you source rare, obsolete, or specialized non-catalog machinery spares?</h3>
+          </div>
+          <div class="faq-chevron"><i class="hgi-stroke hgi-arrow-down-01"></i></div>
+        </div>
+        <div class="faq-answer" style="display:none">
+          <p>Yes. If you need custom bore sizes, high-temperature Viton seals, specialized timing belt pitch lengths, or discontinued pneumatic cylinders, send us a photo of the nameplate or sample dimensions. We quote exact lead times and OEM equivalents within 2 hours.</p>
+          <div class="faq-answer-tags">
+            <span><i class="hgi-stroke hgi-search-01"></i> Rare Spares Sourcing</span>
+            <span><i class="hgi-stroke hgi-settings-01"></i> High-Temp Viton & PU</span>
+            <span><i class="hgi-stroke hgi-clock-01"></i> 2-Hour Lead Time Quote</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Side Enterprise Support Card -->
+    <div class="faq-side-card rv">
+      <div class="faq-side-head">
+        <span class="faq-side-badge"><i class="hgi-stroke hgi-customer-service-01"></i> Live Plant Desk</span>
+      </div>
+      <h3>Have a custom breakdown requirement?</h3>
+      <p>Talk directly with our technical counter engineers at Hanuman Market, RIICO Neemrana. We look up OEM cross-references instantly.</p>
+      
+      <div class="faq-contact-list">
+        <a class="faq-c-item" href="tel:+917240107540">
+          <div class="faq-c-icon"><i class="hgi-stroke hgi-call"></i></div>
+          <div>
+            <b>+91 72401 07540</b>
+            <small>Direct Counter Desk (9 AM – 8 PM)</small>
+          </div>
+        </a>
+        <a class="faq-c-item" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20plant%20requirement%20quote%20chahiye" target="_blank" rel="noopener">
+          <div class="faq-c-icon"><i class="hgi-stroke hgi-whatsapp"></i></div>
+          <div>
+            <b>WhatsApp Part Photo / BOQ</b>
+            <small>Instant PDF Quote in 10 Mins</small>
+          </div>
+        </a>
+      </div>
+
+      <a class="faq-side-btn" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20plant%20requirement%20quote%20chahiye" target="_blank" rel="noopener">
+        <i class="hgi-stroke hgi-whatsapp"></i>
+        <span>Chat with Technical Engineer</span>
+      </a>
+    </div>
+
+  </div>
 </section>
 
 <!-- FINAL -->
@@ -562,10 +672,24 @@
     };
   }
 })();
+/* FAQ Accordion toggle */
+function toggleFaq(el){
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.classList.remove('active');
+    const ans = item.querySelector('.faq-answer');
+    if(ans) ans.style.display = 'none';
+  });
+  if(!wasActive){
+    el.classList.add('active');
+    const ans = el.querySelector('.faq-answer');
+    if(ans) ans.style.display = 'block';
+  }
+}
 /* tagline word reveal (built before motion observes it) */
 (()=>{const el=document.getElementById('taglineText');const t=el.textContent;el.innerHTML=t.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');})();
 /* stagger grouped reveals: rows, spots, steps and cards cascade instead of mounting at once */
-(()=>{const groups=['.index-row','.spot','.step','.stack-card','.quote-mini'];
+(()=>{const groups=['.index-row','.spot','.step','.stack-card','.quote-mini','.faq-item'];
   groups.forEach(sel=>{document.querySelectorAll(sel).forEach((el,i)=>{el.classList.add('rv');
     el.style.transitionDelay=Math.min(i*90,450)+'ms';});});})();
 SSE.motion();SSE.tabs();
