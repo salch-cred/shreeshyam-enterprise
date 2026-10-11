@@ -203,6 +203,7 @@ const iconFor=c=>/bearing|wheel|caster/.test(c)?'settings-01':/belt|chain|sprock
 
 async function init(){
   grid.innerHTML=Array(9).fill('<div class="skelp"></div>').join('');
+  SSE.tabs();
   ALL=await SSE.seed();
   SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);
   buildTiles();buildFilters();render();

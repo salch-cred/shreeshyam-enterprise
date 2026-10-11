@@ -117,5 +117,6 @@ const SSE = (() => {
       w.setAttribute('aria-label','Chat on WhatsApp');w.innerHTML='<i class="hgi-stroke hgi-whatsapp"></i>';
       document.body.appendChild(w);}
   }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',tabs);else tabs();
   return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, tabs, $ };
 })();
