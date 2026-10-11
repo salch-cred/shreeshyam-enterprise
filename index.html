@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012h">
+<link rel="stylesheet" href="assets/styles.css?v=20261012i">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -30,9 +30,10 @@
     Authorized <b>Polymatic Pneumatic</b> distributor · Same-day dispatch across RIICO Neemrana belt · GST tax invoice on every sale
   </div>
 
-  <!-- IMPROVED LUXURY HEADER WITH HUGEICONS -->
+  <!-- WEAV-STYLE LUXURY HEADER (LEFT: LOGO | RIGHT: CART & NAVIBUTTON) -->
   <header class="site-header no-print">
-    <div class="site-header-inner">
+    <div class="site-header-inner weav-header-layout">
+      <!-- Left: Brand Logo -->
       <a class="site-brand" href="index.html">
         <div class="site-brand-icon">
           <i class="hgi-stroke hgi-settings-01"></i>
@@ -49,29 +50,24 @@
         </div>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
-        <a href="index.html" class="active" aria-current="page"><i class="hgi-stroke hgi-home-01"></i>Home</a>
-        <a href="shop.html"><i class="hgi-stroke hgi-package"></i>Catalogue (5,000+)</a>
-        <a href="#lake"><i class="hgi-stroke hgi-layers-01"></i>Warehouse Lake</a>
-        <a href="checkout.html"><i class="hgi-stroke hgi-shopping-cart-01"></i>Instant Estimate</a>
-        <a href="#contact"><i class="hgi-stroke hgi-customer-service-01"></i>Plant Desk</a>
-      </nav>
-
-      <div class="site-actions">
+      <!-- Right: Cart & Navibutton -->
+      <div class="weav-header-right">
         <div class="site-live-tag">
           <span class="dot"></span>
-          <span>Counter Open</span>
+          <span>Live Desk Open</span>
         </div>
-        <a class="site-call-btn" href="tel:+917240107540">
-          <i class="hgi-stroke hgi-call"></i>
-          <span>+91 72401 07540</span>
+
+        <a class="weav-cart-btn" href="checkout.html" aria-label="Cart and Instant Estimate">
+          <i class="hgi-stroke hgi-shopping-cart-01"></i>
+          <span class="weav-cart-label">Cart</span>
+          <span class="weav-cart-count nav-badge" data-nav-badge>0</span>
         </a>
-        <a class="site-cta-btn" href="shop.html">
-          <span>Get Quote</span>
-          <i class="hgi-stroke hgi-arrow-right-01"></i>
-        </a>
-        <button class="site-menu-btn" id="menuBtn" aria-label="Toggle navigation menu">
-          <i class="hgi-stroke hgi-menu-01"></i>
+
+        <button class="weav-navi-btn" id="menuBtn" aria-label="Toggle navigation menu">
+          <span class="weav-navi-label">Menu</span>
+          <span class="weav-navi-icon">
+            <i class="hgi-stroke hgi-menu-01"></i>
+          </span>
         </button>
       </div>
     </div>
@@ -228,29 +224,30 @@
             <span class="dot-live" title="Online"></span>
           </div>
 
-          <!-- Chat Conversation (Inspired by Weav Screenshot) -->
-          <div class="phone-chat">
+          <!-- Chat Conversation (24/7 Animated Loop: 10 Company & Spares Scenarios) -->
+          <div class="phone-chat" id="phoneChat">
             <div class="msg-bot">
-              <span class="label">👷‍♂️ Shyamu (SSE Desk)</span>
-              <div class="bubble">Namaste Rajesh ji! What breakdown parts or BOQ list do you need today?</div>
+              <span class="label"><i class="hgi-stroke hgi-user"></i> Shyamu (SSE Live Desk)</span>
+              <div class="bubble">Namaste Rajesh ji! What breakdown parts or plant BOQ do you need today?</div>
             </div>
 
             <div class="msg-user">
               <span class="label">Ramesh (Maintenance Head)</span>
-              <div class="bubble">Hi! Line 2 breakdown. Need 4 pcs SKF 6205 bearings & 2 pcs Polymatic 5/2 valves urgently. Can you dispatch to Neemrana plant?</div>
+              <div class="bubble">Line 2 breakdown! Urgent need: 4 pcs SKF 6205 bearings & 2 pcs Polymatic 5/2 solenoid valves. Can you dispatch to Japanese Zone?</div>
             </div>
 
             <div class="msg-bot">
-              <span class="label">👷‍♂️ Shyamu (SSE Desk)</span>
-              <div class="bubble">Located in stock! Quoting ₹1,480 + GST. Delivery van leaving Neemrana hub in 20 mins with tax invoice & test cert.</div>
+              <span class="label"><i class="hgi-stroke hgi-user"></i> Shyamu (SSE Live Desk)</span>
+              <div class="bubble">Both in shelf stock! ₹1,480 + GST. Delivery van leaving Neemrana hub in 20 mins with tax invoice & test cert.</div>
               <div class="msg-actions">
-                <span>✓ In Stock</span>
-                <span>⚡ Same-day</span>
+                <span>✓ Boxed SKF</span>
+                <span>⚡ 20-Min Dispatch</span>
+                <span>📄 HSN 8482</span>
               </div>
             </div>
 
             <div class="msg-user">
-              <span class="label">Ramesh</span>
+              <span class="label">Ramesh (Maintenance Head)</span>
               <div class="bubble">Approved! Dispatch immediately with e-way bill.</div>
             </div>
           </div>
@@ -264,11 +261,12 @@
         </div>
       </div>
     </div>
-  <!-- SMOOTH FLOWING WAVE DIVIDER (EXACT DESIGN FROM USER IMAGE: media_1791734234940.png) -->
+  </div>
+
+  <!-- SMOOTH FULL-BLEED FLOWING WAVE DIVIDER (MATHEMATICALLY SEAMLESS TO PARTNER BAND) -->
   <div class="weav-wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" width="100%" height="90">
-      <path d="M0,0 L0,30 Q180,75 360,30 T720,30 T1080,30 T1440,30 L1440,0 Z" fill="#1D4ED8"/>
-      <path d="M0,30 Q180,75 360,30 T720,30 T1080,30 T1440,30 L1440,90 L0,90 Z" fill="#FFF1ED"/>
+    <svg viewBox="0 0 1440 72" preserveAspectRatio="none" width="100%" height="72">
+      <path d="M0,36 C138,64 222,64 360,36 C498,8 582,8 720,36 C858,64 942,64 1080,36 C1218,8 1302,8 1440,36 L1440,72 L0,72 Z" fill="#FFF1ED"/>
     </svg>
   </div>
 </div>
@@ -671,6 +669,132 @@
       }
     };
   }
+})();
+
+/* ==========================================================
+   24/7 LOOPING SMARTPHONE CHAT: 10 REAL COMPANY & SPARES SCENARIOS
+   Questions asked and answered smoothly in continuous loop
+   ========================================================== */
+(()=>{
+  const chatContainer = document.getElementById('phoneChat');
+  if(!chatContainer) return;
+
+  const SCENARIOS = [
+    {
+      userRole: "Ramesh (Maintenance Head, Plant #2)",
+      userQ: "Line 2 breakdown! Urgent need: 4 pcs SKF 6205 bearings & 2 pcs Polymatic 5/2 solenoid valves. Can you dispatch to Japanese Zone?",
+      botA: "Both in shelf stock! ₹1,480 + GST. Delivery van leaving Neemrana hub in 20 mins with tax invoice & test cert.",
+      tags: ["✓ Boxed SKF", "⚡ 20-Min Dispatch", "📄 HSN 8482"],
+      userAck: "Approved! Dispatch immediately with e-way bill."
+    },
+    {
+      userRole: "Amit Sharma (Purchase Manager, Auto Components)",
+      userQ: "Do you supply factory-sealed Mitsuboshi 8PK1420 Poly-V belts & Gates timing belts?",
+      botA: "Yes Amit ji, authorized distributor stock on shelf. 12 pcs available right now, batch 2026 sealed.",
+      tags: ["✓ 100% Genuine", "🏭 Mitsuboshi OEM", "🛡️ Warranty"],
+      userAck: "Great, raising PO for 12 pcs today."
+    },
+    {
+      userRole: "Vikas Verma (Project Lead, RIICO Phase II)",
+      userQ: "Can I get a formal GST tax invoice with 8-digit HSN codes and e-way bill for auditor compliance?",
+      botA: "100% compliant tax invoice generated in 40 seconds. Automatic GSTR-1 input credit upload.",
+      tags: ["📄 GSTR-1 Ready", "✓ Auditor Approved", "⚡ 100% Credit"],
+      userAck: "Perfect! Sharing our company GSTIN now."
+    },
+    {
+      userRole: "Sunil Meena (Plant Engineer, Ghiloth Hub)",
+      userQ: "Our CNC hydraulic cylinder seals failed. Can you provide Viton high-temp oil seals 45x65x10 today?",
+      botA: "In stock at our counter! Viton 200°C grade ready for immediate counter pickup or van dispatch.",
+      tags: ["✓ Viton High-Temp", "⚡ Instant Counter", "🛡️ Oil Resistant"],
+      userAck: "Sending our driver to Hanuman Market counter right now."
+    },
+    {
+      userRole: "Deepak Rawat (Procurement, Japanese Zone)",
+      userQ: "Can our manufacturing unit set up 30-day billing terms against official Purchase Orders?",
+      botA: "Yes Deepak ji! After 3 initial cash orders, we approve 30-day PO credit terms with monthly ledger.",
+      tags: ["💳 30-Day Credit", "📋 PO Billing", "📊 Monthly Ledger"],
+      userAck: "Excellent, sending vendor registration forms."
+    },
+    {
+      userRole: "Anil Joshi (Electrical Maintenance, Behror Plant)",
+      userQ: "Do you stock high-tensile 12.9 grade fasteners from Unbrako and TVS?",
+      botA: "Full metric & imperial shelf stock! M6 to M24 Allen bolts, socket head caps, and spring washers ready.",
+      tags: ["✓ Unbrako Grade 12.9", "🔩 Metric M6–M24", "📦 Boxed Stock"],
+      userAck: "Adding 100 pcs M10x40 to our purchase list."
+    },
+    {
+      userRole: "Pradeep (Line Supervisor, Keshwana Hub)",
+      userQ: "Need Polymatic FRL unit 1/2\" with auto-drain & pressure gauge. Price & dispatch time?",
+      botA: "Authorized Polymatic hub stock: ₹2,150 + GST. Van is leaving towards Keshwana at 11:30 AM.",
+      tags: ["✓ Polymatic Hub", "⏱️ Same-Day Van", "📄 Test Certificate"],
+      userAck: "Confirmed, dispatch with the 11:30 AM van."
+    },
+    {
+      userRole: "Sanjay Singhal (Store Manager, Sotanala Plant)",
+      userQ: "We have an obsolete machinery bearing #6308-2RS C3. Can you match equivalent OEM specs?",
+      botA: "Exact match in FAG Schaeffler & NBC deep groove with C3 high-clearance rating in stock.",
+      tags: ["✓ FAG / NBC OEM", "⚙️ C3 Clearance", "🔍 100% Interchange"],
+      userAck: "Exact spec we needed! Booking 6 pieces."
+    },
+    {
+      userRole: "Rohit Jain (Purchase Head, Riico Phase I)",
+      userQ: "Sending full monthly plant BOQ with 48 line items. Can you quote with makes & HSN in 2 hours?",
+      botA: "Yes Rohit ji! Send PDF or Excel on WhatsApp (+91 72401 07540). Itemized quote back within 2 hours.",
+      tags: ["⏱️ 2-Hour SLA", "📑 48 Lines Quoted", "💰 Wholesale Rate"],
+      userAck: "Sent on WhatsApp. Please check!"
+    },
+    {
+      userRole: "Manoj Kumar (Factory Operations, Neemrana)",
+      userQ: "What are your counter working hours? Can we collect breakdown spares on Sunday?",
+      botA: "We are open 9:00 AM to 8:00 PM all 7 days including Sunday! Over 10,000+ line items ready on shelf.",
+      tags: ["🕒 Open 9 to 8", "📅 All 7 Days", "🏪 RIICO Counter"],
+      userAck: "Great to know, coming directly to counter!"
+    }
+  ];
+
+  let scenarioIdx = 0;
+
+  function renderScenario(idx){
+    const s = SCENARIOS[idx];
+    chatContainer.style.opacity = '0';
+    chatContainer.style.transform = 'translateY(6px)';
+    
+    setTimeout(() => {
+      chatContainer.innerHTML = `
+        <div class="msg-bot">
+          <span class="label"><i class="hgi-stroke hgi-user"></i> Shyamu (SSE Live Desk)</span>
+          <div class="bubble">Namaste! Shree Shyam Live Industrial Desk. How can we support your plant today?</div>
+        </div>
+
+        <div class="msg-user">
+          <span class="label">${s.userRole}</span>
+          <div class="bubble">${s.userQ}</div>
+        </div>
+
+        <div class="msg-bot">
+          <span class="label"><i class="hgi-stroke hgi-user"></i> Shyamu (SSE Live Desk)</span>
+          <div class="bubble">${s.botA}</div>
+          <div class="msg-actions">
+            ${s.tags.map(t => `<span>${t}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="msg-user">
+          <span class="label">${s.userRole.split(' ')[0]}</span>
+          <div class="bubble">${s.userAck}</div>
+        </div>
+      `;
+      chatContainer.style.transition = 'opacity .4s ease, transform .4s ease';
+      chatContainer.style.opacity = '1';
+      chatContainer.style.transform = 'translateY(0)';
+    }, 300);
+  }
+
+  // Initial scenario is already in DOM, cycle every 8 seconds indefinitely (24 hours)
+  setInterval(() => {
+    scenarioIdx = (scenarioIdx + 1) % SCENARIOS.length;
+    renderScenario(scenarioIdx);
+  }, 8000);
 })();
 /* FAQ Accordion toggle */
 function toggleFaq(el){

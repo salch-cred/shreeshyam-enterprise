@@ -112,136 +112,117 @@ a{color:inherit}
   font-size:12px;
   color:#38BDF8;
 }
-.site-nav{
+/* ==========================================================
+   WEAV-STYLE LUXURY HEADER (Left: Logo | Right: Cart & Navibutton)
+   Matches https://saaspo.com/pages/weav-landing-page aesthetic
+   ========================================================== */
+.weav-header-layout{
   display:flex;
   align-items:center;
-  gap:3px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  padding:4px 6px;
-  border-radius:999px;
+  justify-content:space-between;
+  width:100%;
 }
-.site-nav a{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  color:#CBD5E1;
-  text-decoration:none;
-  font-size:13.5px;
-  font-weight:600;
-  padding:7px 15px;
-  border-radius:999px;
-  transition:all .2s ease;
-  position:relative;
-}
-.site-nav a:hover{
-  color:#FFFFFF;
-  background:rgba(255,255,255,.09);
-}
-.site-nav a.active,
-.site-nav a[aria-current="page"]{
-  color:#FFFFFF;
-  background:linear-gradient(135deg,rgba(37,99,235,.45),rgba(29,78,216,.35));
-  border:1px solid rgba(147,197,253,.35);
-  box-shadow:0 2px 10px rgba(29,78,216,.25);
-  font-weight:700;
-}
-.site-nav a i{
-  font-size:16px;
-  line-height:1;
-  color:#93C5FD;
-}
-.site-actions{
+.weav-header-right{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px;
 }
-.site-live-tag{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-size:11.5px;
-  font-weight:700;
-  color:#34D399;
-  background:rgba(16,185,129,.12);
-  border:1px solid rgba(16,185,129,.28);
-  padding:4px 10px;
-  border-radius:999px;
-}
-.site-live-tag .dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#34D399;
-  box-shadow:0 0 8px #34D399;
-  animation:pulse 2s infinite;
-}
-.site-call-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  color:#E2E8F0;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:700;
-  padding:8px 14px;
-  border-radius:999px;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.15);
-  transition:all .2s;
-}
-.site-call-btn:hover{
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  border-color:rgba(255,255,255,.3);
-  transform:translateY(-1px);
-}
-.site-cta-btn{
+.weav-cart-btn{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  background:linear-gradient(135deg,#FFFFFF 0%,#F1F5F9 100%);
-  color:#1D4ED8 !important;
-  font-weight:800;
-  font-size:13.5px;
-  padding:9px 18px;
-  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.18);
+  color:#FFFFFF;
   text-decoration:none;
-  box-shadow:0 6px 20px rgba(0,0,0,.22), inset 0 1px 0 #FFFFFF;
+  padding:8px 16px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:13.5px;
+  letter-spacing:.01em;
   transition:all .25s var(--ease);
-  border:1px solid rgba(255,255,255,.8);
+  position:relative;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
-.site-cta-btn:hover{
-  transform:translateY(-1.5px);
-  box-shadow:0 10px 24px rgba(0,0,0,.32);
-  background:#FFFFFF;
+.weav-cart-btn i{
+  font-size:16px;
+  color:#93C5FD;
+  transition:transform .2s;
 }
-.site-menu-btn{
-  display:none;
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);
-  color:#fff;
+.weav-cart-btn:hover{
+  background:rgba(255,255,255,.18);
+  border-color:rgba(255,255,255,.32);
+  color:#FFFFFF;
+  transform:translateY(-1px);
+}
+.weav-cart-btn:hover i{
+  transform:scale(1.1);
+}
+.weav-cart-count{
+  display:inline-flex;
   align-items:center;
   justify-content:center;
+  min-width:19px;
+  height:19px;
+  padding:0 5px;
+  border-radius:999px;
+  background:#1D4ED8;
+  color:#FFFFFF;
+  font-size:11px;
+  font-weight:800;
+  border:1.5px solid rgba(255,255,255,.5);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+/* Weav Navibutton (Menu trigger) */
+.weav-navi-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
+  color:#0F172A;
+  border:1px solid rgba(255,255,255,.9);
+  padding:8px 18px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:13.5px;
   cursor:pointer;
-  font-size:22px;
-  transition:all .2s;
+  transition:all .25s var(--ease);
+  box-shadow:0 4px 16px rgba(0,0,0,.22), inset 0 1px 0 #FFFFFF;
 }
-.site-menu-btn:active{
-  transform:scale(.92);
-  background:rgba(255,255,255,.2);
+.weav-navi-btn:hover{
+  transform:translateY(-1.5px);
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+  background:#FFFFFF;
 }
+.weav-navi-btn:active{
+  transform:scale(.96);
+}
+.weav-navi-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  color:#1D4ED8;
+}
+
 @media (max-width:1020px){
-  .site-nav{display:none}
-  .site-call-btn{display:none}
   .site-live-tag{display:none}
-  .site-menu-btn{display:flex}
-  .site-header-inner{padding:10px 16px}
-  .site-brand-title{font-size:15.5px}
-  .site-brand-tag{font-size:10.5px}
+  .weav-header-right{gap:8px}
+  .site-header-inner{padding:10px 14px}
+  .weav-cart-btn{padding:7px 12px;font-size:12.5px}
+  .weav-cart-btn i{font-size:15px}
+  .weav-navi-btn{padding:7px 14px;font-size:12.5px}
+  .weav-navi-icon{font-size:15px}
+  .site-brand-title{font-size:15px}
+  .site-brand-tag{font-size:10px}
+}
+@media (max-width:480px){
+  .weav-cart-label{display:none}
+  .weav-cart-btn{padding:8px 10px;border-radius:999px}
+  .weav-navi-label{display:none}
+  .weav-navi-btn{padding:8px 10px;border-radius:999px}
 }
 
 /* CAD Blueprint Card (Replaces AI slop hardware images) */
@@ -330,30 +311,34 @@ a{color:inherit}
 .cad-row span{color:#94A3B8}
 .cad-row b{color:#E2E8F0}
 
-/* Smooth Flowing Wave Divider (From user image: media_1791734234940.png) */
+/* Smooth Flowing Wave Divider (From user image: media_1791734234940.png & media_1791734487139.png) */
 .weav-wave-divider{
   width:100%;
-  height:90px;
+  height:72px;
   overflow:hidden;
   line-height:0;
-  margin-top:-2px;
+  margin:0;
+  padding:0;
   position:relative;
   z-index:3;
-  background:#1D4ED8;
+  background:transparent;
   display:block;
 }
 .weav-wave-divider svg{
   display:block;
   width:100%;
-  height:90px;
+  height:72px;
+  margin:0;
+  padding:0;
 }
 .weav-partners-band{
   background:#FFF1ED;
   border-bottom:1px solid #FCDAD0;
-  padding:20px 0;
+  padding:22px 0;
   overflow:hidden;
   position:relative;
   z-index:2;
+  margin-top:0;
 }
 .weav-partners-inner{
   max-width:var(--max);
@@ -486,7 +471,9 @@ section.block{padding:88px 0}
   color:#FFFFFF;
   position:relative;
   overflow:hidden;
-  border-bottom:1px solid rgba(255,255,255,.15);
+  border-bottom:none;
+  margin-bottom:0;
+  padding-bottom:0;
 }
 .hero-weav::before{
   content:"";
@@ -506,7 +493,7 @@ section.block{padding:88px 0}
   align-items:center;
   max-width:var(--max);
   margin:0 auto;
-  padding:44px 24px 68px;
+  padding:44px 24px 28px;
   position:relative;
   z-index:2;
 }
