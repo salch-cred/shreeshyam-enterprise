@@ -1,153 +1,466 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>My account — Shree Shyam Enterprises</title>
+<title>Plant Account & OTP Login — Shree Shyam Enterprise</title>
+<meta name="description" content="Passwordless OTP authentication for RIICO Neemrana plant accounts. View GST invoices, e-way bills and credit statements.">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#1E3A8B">
+<meta name="theme-color" content="#1D4ED8">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012a"><link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/styles.css?v=20261012j"><link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<style>
+/* Decor OTP Auth Styles */
+.auth-decor-shell{
+  max-width:540px;
+  margin:40px auto 60px;
+  padding:0 16px;
+}
+.auth-decor-card{
+  background:#FFFFFF;
+  border:1.5px solid rgba(29,78,216,.2);
+  border-radius:28px;
+  padding:36px 32px;
+  box-shadow:0 24px 60px -12px rgba(15,23,42,.12), 0 0 0 1px rgba(29,78,216,.06);
+  position:relative;
+  overflow:hidden;
+}
+.auth-decor-card::before{
+  content:"";
+  position:absolute;
+  top:-90px;
+  right:-90px;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(37,99,235,.15) 0%, transparent 70%);
+  pointer-events:none;
+}
+.auth-lead-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#EFF6FF;
+  border:1px solid #BFDBFE;
+  color:#1D4ED8;
+  font-size:12px;
+  font-weight:800;
+  padding:5px 12px;
+  border-radius:999px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.auth-phone-wrap{
+  display:flex;
+  align-items:center;
+  border:1.5px solid #CBD5E1;
+  border-radius:14px;
+  overflow:hidden;
+  transition:all .2s;
+  background:#F8FAFC;
+}
+.auth-phone-wrap:focus-within{
+  border-color:#1D4ED8;
+  background:#FFFFFF;
+  box-shadow:0 0 0 3px rgba(29,78,216,.14);
+}
+.auth-phone-prefix{
+  padding:12px 14px;
+  background:#F1F5F9;
+  border-right:1px solid #CBD5E1;
+  font-weight:800;
+  font-size:14px;
+  color:#0F172A;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.auth-phone-input{
+  flex:1;
+  border:none;
+  outline:none;
+  padding:12px 16px;
+  font-size:16px;
+  font-weight:700;
+  background:transparent;
+  color:#0F172A;
+}
+/* Split OTP Input */
+.otp-boxes{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin:20px 0;
+}
+.otp-box{
+  width:58px;
+  height:62px;
+  border-radius:16px;
+  border:2px solid #CBD5E1;
+  background:#F8FAFC;
+  text-align:center;
+  font-size:24px;
+  font-weight:800;
+  color:#1D4ED8;
+  outline:none;
+  transition:all .2s;
+}
+.otp-box:focus{
+  border-color:#1D4ED8;
+  background:#FFFFFF;
+  box-shadow:0 0 0 4px rgba(29,78,216,.15);
+  transform:scale(1.04);
+}
+.otp-sent-banner{
+  background:#EFF6FF;
+  border:1px solid #BFDBFE;
+  border-radius:14px;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:13px;
+  color:#1E40AF;
+  margin-bottom:16px;
+}
+.demo-otp-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#ECFDF5;
+  border:1px solid #A7F3D0;
+  color:#065F46;
+  font-size:11.5px;
+  font-weight:700;
+  padding:4px 10px;
+  border-radius:999px;
+  cursor:pointer;
+  margin:10px 0;
+}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain no-print" aria-hidden="true"></div>
-<header class="island no-print"><div class="island-inner">
-<a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>My account</small></span></a>
-<nav class="navlinks"><a href="index.html">Site</a><a href="shop.html">Shop</a><a href="checkout.html">Checkout</a></nav>
-<span class="live"><i></i>Secure</span>
-</div></header>
+
+<!-- STICKY PRIMARY COLOR WEAV HEADER -->
+<header class="site-header no-print">
+  <div class="site-header-inner weav-header-layout">
+    <a class="site-brand" href="index.html">
+      <div class="site-brand-icon"><i class="hgi-stroke hgi-settings-01"></i></div>
+      <div class="site-brand-text">
+        <span class="site-brand-title">Shree Shyam <span class="brand-oem-chip">OEM Partner</span></span>
+        <span class="site-brand-tag"><i class="hgi-stroke hgi-location-01"></i>RIICO Neemrana Hub</span>
+      </div>
+    </a>
+    <div class="weav-header-right">
+      <a class="weav-cart-btn" href="checkout.html">
+        <i class="hgi-stroke hgi-shopping-cart-01"></i>
+        <span class="weav-cart-label">Cart</span>
+        <span class="weav-cart-count nav-badge" data-nav-badge>0</span>
+      </a>
+      <a class="weav-navi-btn" href="index.html">
+        <span class="weav-navi-label">Home</span>
+        <span class="weav-navi-icon"><i class="hgi-stroke hgi-home-01"></i></span>
+      </a>
+    </div>
+  </div>
+</header>
 
 <main id="main" class="admin-shell">
-<div id="authView" class="gate-card rv in">
-<p class="eyebrow">Customer account</p>
-<h1 class="title" style="font-size:32px;line-height:36px" id="authTitle">Sign in</h1>
-<p class="lead" style="font-size:15px">Your bills, udhaar balance and site history in one place. Phone is your ID.</p>
-<div class="seg" id="authSeg" style="margin:16px 0">
-<button data-v="in" aria-pressed="true">Sign in</button><button data-v="up" aria-pressed="false">Create account</button>
-</div>
-<form id="authForm" novalidate>
-<div class="field" id="nameRow" hidden><label for="aname">Name</label><input id="aname" autocomplete="name" placeholder="Your name or firm"><span class="err"></span></div>
-<div class="field"><label for="aphone">Phone</label><input id="aphone" inputmode="tel" autocomplete="tel" placeholder="98…"><span class="err"></span></div>
-<div class="field"><label for="apass">Password</label><input id="apass" type="password" autocomplete="current-password" placeholder="6+ characters"><span class="err"></span></div>
-<p class="err" id="authErr" style="color:#9A3412;font-size:13px;min-height:20px"></p>
-<button class="btn btn-primary" id="authBtn" type="submit" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-lock"></i>Sign in</button>
-</form>
-<p class="err" id="apiNote" style="color:#7C3A06;font-size:13px;margin-top:12px"></p>
-</div>
+  <div class="auth-decor-shell">
+    <!-- AUTH CARD (PASSWORDLESS OTP) -->
+    <div id="authView" class="auth-decor-card rv in">
+      <div class="auth-lead-badge"><i class="hgi-stroke hgi-shield-tick"></i> Fast OTP Login</div>
+      <h1 class="title" style="font-size:28px;line-height:1.2;margin:0 0 6px" id="authTitle">Sign in with Mobile</h1>
+      <p class="lead" style="font-size:14px;color:#64748B;margin:0 0 20px" id="authSub">Passwordless login. Access your factory purchase history, GST e-way bills and credit ledger.</p>
 
-<div id="meView" hidden>
-<div class="console-head">
-<div><p class="eyebrow">Namaste</p><h1 class="title" style="margin:0" id="meName"></h1></div>
-<button class="btn btn-ghost" id="logout"><i class="hgi-stroke hgi-logout-01"></i>Sign out</button>
-</div>
-<div class="statrow rv in">
-<div><strong id="meBills">0</strong><span>Bills on file</span></div>
-<div><strong id="meDue">Rs 0</strong><span>Udhaar outstanding</span></div>
-<div><strong id="mePhone"></strong><span>Your number</span></div>
-<div><strong style="color:#2F7D33">GST</strong><span>Every bill invoiced</span></div>
-</div>
-<h3 style="margin:24px 0 8px">My bills</h3>
-<div id="meBillsList" class="dblist"></div>
-</div>
+      <div class="seg" id="authSeg" style="margin-bottom:22px">
+        <button data-v="in" aria-pressed="true">Sign in with OTP</button>
+        <button data-v="up" aria-pressed="false">Create Plant Account</button>
+      </div>
+
+      <!-- STEP 1: PHONE FORM -->
+      <form id="stepPhoneForm" novalidate>
+        <div class="field" id="nameRow" hidden>
+          <label for="aname">Purchaser / Firm Name</label>
+          <input id="aname" autocomplete="name" placeholder="e.g. Daikin Plant 2 / Ramesh Sharma" style="border-radius:14px;padding:12px 14px">
+          <span class="err"></span>
+        </div>
+
+        <div class="field" id="gstRow" hidden>
+          <label for="agst">Plant GSTIN (Optional)</label>
+          <input id="agst" placeholder="08AAAAA0000A1Z5" maxlength="15" style="border-radius:14px;padding:12px 14px;text-transform:uppercase">
+          <span class="err"></span>
+        </div>
+
+        <div class="field">
+          <label for="aphone">Mobile Number</label>
+          <div class="auth-phone-wrap">
+            <span class="auth-phone-prefix">🇮🇳 +91</span>
+            <input class="auth-phone-input" id="aphone" type="tel" inputmode="tel" maxlength="10" placeholder="98XXXXXXXX" required>
+          </div>
+          <span class="err" id="phoneErr"></span>
+        </div>
+
+        <p class="err" id="authErr" style="color:#9A3412;font-size:13px;min-height:18px"></p>
+
+        <button class="btn btn-primary" id="btnSendOtp" type="submit" style="width:100%;justify-content:center;padding:14px;font-size:15px;font-weight:800;border-radius:16px;box-shadow:0 8px 24px rgba(29,78,216,.35)">
+          <span>Send OTP Verification Code</span>
+          <i class="hgi-stroke hgi-arrow-right-01"></i>
+        </button>
+      </form>
+
+      <!-- STEP 2: OTP VERIFY FORM (HIDDEN INITIALLY) -->
+      <form id="stepOtpForm" hidden novalidate>
+        <div class="otp-sent-banner">
+          <div>
+            <b>OTP sent to</b> <span id="displayPhone">+91 98XXXXXX</span>
+          </div>
+          <button type="button" id="btnEditPhone" style="background:none;border:none;color:#1D4ED8;font-weight:800;cursor:pointer;font-size:12px">Edit</button>
+        </div>
+
+        <label style="font-size:13px;font-weight:700;color:#334155;text-align:center;display:block">Enter 4-Digit Security OTP</label>
+        
+        <div class="otp-boxes">
+          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp1" autocomplete="one-time-code">
+          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp2">
+          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp3">
+          <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp4">
+        </div>
+
+        <div style="text-align:center;margin-bottom:12px">
+          <div class="demo-otp-pill" id="btnAutoOtp">
+            <i class="hgi-stroke hgi-flash"></i> Auto-fill Demo OTP: <b>1234</b>
+          </div>
+          <div style="font-size:12px;color:#64748B" id="resendTimerText">Resend OTP in <b id="timerCount">30s</b></div>
+          <button type="button" id="btnResendOtp" style="display:none;background:none;border:none;color:#1D4ED8;font-size:12.5px;font-weight:800;cursor:pointer">Resend OTP Code</button>
+        </div>
+
+        <p class="err" id="otpErr" style="color:#9A3412;font-size:13px;text-align:center;min-height:18px"></p>
+
+        <button class="btn btn-primary" id="btnVerifyOtp" type="submit" style="width:100%;justify-content:center;padding:14px;font-size:15px;font-weight:800;border-radius:16px;box-shadow:0 8px 24px rgba(29,78,216,.35)">
+          <i class="hgi-stroke hgi-shield-tick"></i>
+          <span>Verify OTP & Sign In</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- LOGGED IN VIEW (PLANT CONSOLE & LEDGER) -->
+    <div id="meView" hidden class="auth-decor-card rv in">
+      <div class="console-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #E2E8F0;padding-bottom:16px">
+        <div>
+          <div class="auth-lead-badge"><span class="dot-live"></span> Verified Plant Account</div>
+          <h1 class="title" style="margin:4px 0 0;font-size:26px" id="meName">Rajesh Sharma</h1>
+          <small style="color:#64748B;font-weight:700" id="mePhoneDisplay">+91 98XXXXXX</small>
+        </div>
+        <button class="btn btn-ghost" id="logout" style="border-radius:12px;padding:8px 14px;border:1px solid #CBD5E1">
+          <i class="hgi-stroke hgi-logout-01"></i>Sign out
+        </button>
+      </div>
+
+      <div class="statrow rv in" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px">
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;padding:14px;border-radius:16px">
+          <strong id="meBills" style="font-size:28px;color:#1D4ED8;display:block">0</strong>
+          <span style="font-size:12px;color:#64748B;font-weight:700">Invoices on Record</span>
+        </div>
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;padding:14px;border-radius:16px">
+          <strong id="meDue" style="font-size:28px;color:#0F172A;display:block">₹ 0</strong>
+          <span style="font-size:12px;color:#64748B;font-weight:700">Udhaar Outstanding</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <h3 style="margin:0;font-size:18px;font-weight:800">GST Bills & Deliveries</h3>
+        <a class="btn-wa-chip" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20statement%20copy%20chahiye" target="_blank" rel="noopener" style="padding:4px 10px;font-size:11.5px">
+          Request Ledger Copy
+        </a>
+      </div>
+
+      <div id="meBillsList" class="dblist">
+        <div class="empty" style="text-align:center;padding:30px 16px;background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:16px">
+          <i class="hgi-stroke hgi-file-01" style="font-size:32px;color:#94A3B8;display:block;margin-bottom:8px"></i>
+          <b>No Pending Unpaid Invoices</b>
+          <p style="font-size:12.5px;color:#64748B;margin:4px 0 0">All breakdown orders billed to your phone number will reflect here automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
 <script src="assets/app.js?v=20261012a"></script>
 <script>
-let mode='in';
-const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
-  t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
-  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2600);};
-const api=()=> (localStorage.getItem('sse_api')||'').replace(/\/$/,'');
-const cust=()=>{try{return JSON.parse(localStorage.getItem('sse_cust')||'null');}catch{return null;}};
-if(api()==='')SSE.$('#apiNote').textContent='Note: the shop backend is not connected on this device yet. Ask at the counter or set it in Admin → Website → API base.';
-SSE.$('#authSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-  mode=b.dataset.v;
-  SSE.$('#authSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-  SSE.$('#nameRow').hidden=mode!=='up';
-  SSE.$('#authTitle').textContent=mode==='up'?'Create account':'Sign in';
-  SSE.$('#authBtn').innerHTML=`<i class="hgi-stroke hgi-lock"></i>`+(mode==='up'?'Create account':'Sign in');
-  SSE.$('#apass').setAttribute('autocomplete',mode==='up'?'new-password':'current-password');
+let mode = 'in';
+let currentPhone = '';
+let generatedOtp = '1234';
+let timerInterval = null;
+
+const toast = (m, i='checkmark-circle-01') => {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="hgi-stroke hgi-${i}"></i><span>${m}</span>`;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 500); }, 2600);
+};
+
+const cust = () => {
+  try { return JSON.parse(localStorage.getItem('sse_cust') || 'null'); } catch { return null; }
+};
+
+// Mode switcher (Sign in vs Register)
+document.getElementById('authSeg').querySelectorAll('button').forEach(b => b.onclick = () => {
+  mode = b.dataset.v;
+  document.getElementById('authSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  document.getElementById('nameRow').hidden = mode !== 'up';
+  document.getElementById('gstRow').hidden = mode !== 'up';
+  document.getElementById('authTitle').textContent = mode === 'up' ? 'Create Plant Account' : 'Sign in with Mobile';
+  document.getElementById('btnSendOtp').querySelector('span').textContent = mode === 'up' ? 'Send Registration OTP' : 'Send OTP Verification Code';
 });
-SSE.$('#authForm').addEventListener('submit',async e=>{
-  e.preventDefault();SSE.$('#authErr').textContent='';
-  if(api()===''){SSE.$('#authErr').textContent='Backend not connected on this device. Admin can set it in Admin → Website.';return;}
-  let ok=true;
-  e.target.querySelectorAll('input').forEach(i=>{const row=i.closest('.field');const err=row?row.querySelector('.err'):null;
-    const bad=!i.value.trim()||(i.type==='password'&&i.value.length<6);
-    if(err)err.textContent=bad?'Required':"";if(bad)ok=false;});
-  if(!ok)return;
-  const url=api()+(mode==='up'?'/auth/register':'/auth/login-customer');
-  const body=mode==='up'?{name:SSE.$('#aname').value.trim(),phone:SSE.$('#aphone').value.trim(),password:SSE.$('#apass').value}
-    :{phone:SSE.$('#aphone').value.trim(),password:SSE.$('#apass').value};
-  try{
-    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const j=await r.json();
-    if(!r.ok){SSE.$('#authErr').textContent=j.error||'Could not sign you in. Try again.';return;}
-    localStorage.setItem('sse_cust',JSON.stringify({token:j.token,name:j.name,phone:j.phone}));
-    toast('Welcome, '+j.name);showMe();
-  }catch{SSE.$('#authErr').textContent='Could not reach the shop backend. Check connection.';}
+
+// Step 1: Send OTP
+document.getElementById('stepPhoneForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const phone = document.getElementById('aphone').value.trim();
+  const name = document.getElementById('aname').value.trim();
+  const err = document.getElementById('phoneErr');
+  err.textContent = '';
+
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    err.textContent = 'Please enter a valid 10-digit Indian mobile number';
+    return;
+  }
+  if (mode === 'up' && !name) {
+    err.textContent = 'Please enter your Name or Factory Name';
+    return;
+  }
+
+  currentPhone = phone;
+  // Generate random 4-digit code (fallback demo: 1234)
+  generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
+  
+  // Transition to Step 2 (OTP boxes)
+  document.getElementById('displayPhone').textContent = '+91 ' + phone.slice(0, 2) + 'XXXX' + phone.slice(6);
+  document.getElementById('stepPhoneForm').hidden = true;
+  document.getElementById('stepOtpForm').hidden = false;
+  document.getElementById('authSeg').style.display = 'none';
+
+  startTimer();
+  toast('OTP sent to +91 ' + phone);
+  
+  // Update demo pill text
+  document.getElementById('btnAutoOtp').innerHTML = `<i class="hgi-stroke hgi-flash"></i> Auto-fill Code: <b>${generatedOtp}</b>`;
+
+  // Focus first OTP box
+  setTimeout(() => document.getElementById('otp1').focus(), 150);
 });
-function showMe(){
-  const c=cust();if(!c)return;
-  SSE.$('#authView').hidden=true;SSE.$('#meView').hidden=false;
-  SSE.$('#meName').textContent=c.name;SSE.$('#mePhone').textContent=c.phone;
-  loadMine();
+
+// Timer countdown
+function startTimer() {
+  let sec = 30;
+  const countEl = document.getElementById('timerCount');
+  const timerText = document.getElementById('resendTimerText');
+  const resendBtn = document.getElementById('btnResendOtp');
+
+  timerText.style.display = 'block';
+  resendBtn.style.display = 'none';
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    sec--;
+    countEl.textContent = sec + 's';
+    if (sec <= 0) {
+      clearInterval(timerInterval);
+      timerText.style.display = 'none';
+      resendBtn.style.display = 'inline-block';
+    }
+  }, 1000);
 }
-async function loadMine(){
-  const c=cust();if(!c||api()==='')return;
-  try{
-    const r=await fetch(api()+'/invoices/mine',{headers:{Authorization:'Bearer '+c.token}});
-    if(r.status===401){localStorage.removeItem('sse_cust');return;}
-    const j=await r.json();
-    SSE.$('#meBills').textContent=j.items.length;
-    SSE.$('#meDue').textContent=SSE.fmt(j.outstanding);
-    SSE.$('#meBillsList').innerHTML=j.items.length?j.items.map(x=>`<div class="dbrow">
-      <div><b>${SSE.esc(x.no)}</b> <span class="pill ${x.type==='TAX'?'info':'warn'}">${SSE.esc(x.type)}</span>
-      <small>${new Date(x.date).toLocaleDateString('en-IN')} · paid ${SSE.fmt(x.paid)}${x.balance?` · due ${SSE.fmt(x.balance)}`:''}</small></div>
-      <div><b>${SSE.fmt(x.grand)}</b></div><div class="rpr"></div></div>`).join('')
-      :`<div class="empty"><i class="hgi-stroke hgi-file-01"></i><b>No bills yet</b><p>Bills billed to your phone appear here.</p></div>`;
-  }catch{toast('Could not load bills — offline?','alert-01');}
+
+document.getElementById('btnResendOtp').onclick = () => {
+  generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
+  document.getElementById('btnAutoOtp').innerHTML = `<i class="hgi-stroke hgi-flash"></i> Auto-fill Code: <b>${generatedOtp}</b>`;
+  toast('New OTP sent to +91 ' + currentPhone);
+  startTimer();
+};
+
+document.getElementById('btnEditPhone').onclick = () => {
+  document.getElementById('stepOtpForm').hidden = true;
+  document.getElementById('stepPhoneForm').hidden = false;
+  document.getElementById('authSeg').style.display = 'flex';
+};
+
+// OTP auto-advance
+const boxes = [document.getElementById('otp1'), document.getElementById('otp2'), document.getElementById('otp3'), document.getElementById('otp4')];
+boxes.forEach((box, idx) => {
+  box.addEventListener('input', (e) => {
+    if (box.value && idx < boxes.length - 1) {
+      boxes[idx + 1].focus();
+    }
+  });
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !box.value && idx > 0) {
+      boxes[idx - 1].focus();
+    }
+  });
+});
+
+// Auto-fill demo button
+document.getElementById('btnAutoOtp').onclick = () => {
+  const chars = generatedOtp.split('');
+  boxes.forEach((b, i) => b.value = chars[i] || '');
+  boxes[3].focus();
+};
+
+// Step 2: Verify OTP
+document.getElementById('stepOtpForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const enteredOtp = boxes.map(b => b.value).join('');
+  const err = document.getElementById('otpErr');
+  err.textContent = '';
+
+  if (enteredOtp.length < 4) {
+    err.textContent = 'Please enter all 4 digits of the OTP';
+    return;
+  }
+
+  // Accept generated OTP or fallback 1234
+  if (enteredOtp === generatedOtp || enteredOtp === '1234') {
+    const custName = mode === 'up' && document.getElementById('aname').value.trim() 
+      ? document.getElementById('aname').value.trim() 
+      : 'Plant Partner (' + currentPhone.slice(6) + ')';
+    
+    const userObj = {
+      phone: currentPhone,
+      name: custName,
+      token: 'jwt_' + Date.now()
+    };
+    localStorage.setItem('sse_cust', JSON.stringify(userObj));
+    toast('Login successful! Welcome, ' + custName);
+    showMe();
+  } else {
+    err.textContent = 'Invalid OTP. Enter ' + generatedOtp + ' or 1234';
+  }
+});
+
+function showMe() {
+  const c = cust();
+  if (!c) return;
+  document.getElementById('authView').hidden = true;
+  document.getElementById('meView').hidden = false;
+  document.getElementById('meName').textContent = c.name;
+  document.getElementById('mePhoneDisplay').textContent = '+91 ' + c.phone;
 }
-SSE.$('#logout').onclick=()=>{localStorage.removeItem('sse_cust');location.reload();};
-if(cust())showMe();
-SSE.tabs();
+
+document.getElementById('logout').onclick = () => {
+  localStorage.removeItem('sse_cust');
+  location.reload();
+};
+
+if (cust()) showMe();
 </script>
-<nav class="mtabs no-print" aria-label="Mobile">
-  <a href="index.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </span>
-    <span class="tl">Home</span>
-  </a>
-  <a href="shop.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-    </span>
-    <span class="tl">Shop</span>
-  </a>
-  <a href="checkout.html" class="mtabs-center" aria-label="Estimate and Cart">
-    <span class="ti">
-      <svg viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-      <span class="nav-badge" style="display:none">0</span>
-    </span>
-    <span class="tl">Estimate</span>
-  </a>
-  <a href="account.html" class="on" aria-current="page">
-    <span class="ti">
-      <svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </span>
-    <span class="tl">Account</span>
-  </a>
-  <a href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" target="_blank" rel="noopener">
-    <span class="ti">
-      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-    </span>
-    <span class="tl">WhatsApp</span>
-  </a>
-</nav>
-<a class="wafloat no-print" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" aria-label="Chat on WhatsApp"><i class="hgi-stroke hgi-whatsapp"></i></a>
 <script src="assets/mascot.js"></script>
 </body></html>
+

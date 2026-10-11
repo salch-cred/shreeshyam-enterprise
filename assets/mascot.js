@@ -139,26 +139,67 @@
     `;
     document.body.appendChild(widget);
 
-    // 2. Create Modal Dialog
+    // 2. Create Modal Dialog with AI Live Chat
     const dialog = document.createElement('div');
     dialog.id = 'sseMascotDialog';
     dialog.className = 'sse-mascot-dialog no-print';
     dialog.innerHTML = `
-      <div class="sse-mascot-dialog-head">
-        <span class="badge"><span class="dot"></span> Online Desk</span>
-        <button class="sse-mascot-dialog-close" id="mascotDialogClose" aria-label="Close dialog">&times;</button>
-      </div>
-      <h4>Meet Shyamu 👷‍♂️</h4>
-      <p>Your Shree Shyam Enterprise supply buddy. We quote, stock & dispatch 10,000+ genuine parts across RIICO Neemrana.</p>
-      <div class="sse-mascot-actions">
-        <a class="btn-wa" href="https://wa.me/917240107540?text=Namaste%20Shyamu%2C%20mujhe%20industrial%20parts%20quote%20chahiye%3A%20" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
-          Quick Quote on WhatsApp
-        </a>
-        <a class="btn-shop" href="shop.html">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
-          Browse 5,000+ Catalogue
-        </a>
+      <div class="shyamu-chat-window">
+        <div class="shyamu-chat-head">
+          <div class="head-left">
+            <div class="shyamu-mini-avatar">
+              <svg viewBox="0 0 100 110" width="26" height="28">
+                <ellipse cx="50" cy="56" rx="28" ry="25" fill="#FEF3C7"/>
+                <path d="M22 43 C22 22 34 15 50 15 C66 15 78 22 78 43 Z" fill="#FACC15"/>
+                <circle cx="50" cy="27" r="4.5" fill="#1D4ED8"/>
+                <ellipse cx="38" cy="52" rx="4.5" ry="6" fill="#0F172A"/>
+                <circle cx="36.5" cy="50.5" r="1.8" fill="#FFFFFF"/>
+                <ellipse cx="62" cy="52" rx="4.5" ry="6" fill="#0F172A"/>
+                <circle cx="60.5" cy="50.5" r="1.8" fill="#FFFFFF"/>
+                <path d="M44 63 Q50 69 56 63" stroke="#DC2626" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <b class="head-title">Shyamu (Live AI Desk)</b>
+              <small class="head-sub"><span class="dot-live"></span> 24/7 Industrial Assistant · RIICO Neemrana</small>
+            </div>
+          </div>
+          <button class="sse-mascot-dialog-close" id="mascotDialogClose" aria-label="Close dialog">&times;</button>
+        </div>
+
+        <div class="shyamu-chat-body" id="shyamuChatBody">
+          <div class="chat-msg bot">
+            <div class="msg-bubble">
+              Namaste! 🙏 I'm Shyamu, your 24/7 AI industrial assistant at Shree Shyam Enterprise. Ask me about SKF bearings, Polymatic valves, Mitsuboshi belts, GST tax bills, or same-day plant dispatch!
+            </div>
+            <span class="msg-time">Just now · Verified Desk</span>
+          </div>
+        </div>
+
+        <!-- Quick Question Chips -->
+        <div class="shyamu-quick-chips" id="shyamuQuickChips">
+          <button type="button" data-q="What is the price of SKF 6205 bearing?">⚡ SKF 6205 Price</button>
+          <button type="button" data-q="Do you have Polymatic 5/2 solenoid valve in stock?">💨 Polymatic 5/2 Valve</button>
+          <button type="button" data-q="What is your dispatch lead time to Neemrana plants?">🚚 Neemrana Dispatch</button>
+          <button type="button" data-q="Do you provide 100% GST tax invoices?">📄 GST & E-Way Bills</button>
+        </div>
+
+        <!-- Input Bar -->
+        <form class="shyamu-input-bar" id="shyamuChatForm">
+          <input type="text" id="shyamuChatInput" placeholder="Ask part number, size, or price..." autocomplete="off">
+          <button type="submit" id="shyamuChatSendBtn" aria-label="Send message">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <div class="shyamu-chat-actions">
+          <a class="btn-wa-chip" href="https://wa.me/917240107540?text=Namaste%20Shyamu%2C%20mujhe%20industrial%20parts%20quote%20chahiye%3A%20" target="_blank" rel="noopener">
+            <i class="hgi-stroke hgi-whatsapp"></i> Chat on WhatsApp Desk
+          </a>
+          <a class="btn-cat-chip" href="shop.html">
+            <i class="hgi-stroke hgi-package"></i> Browse 5,000+ Parts
+          </a>
+        </div>
       </div>
     `;
     document.body.appendChild(dialog);
@@ -169,10 +210,18 @@
     const bubbleText = document.getElementById('mascotBubbleText');
     const bubbleClose = document.getElementById('mascotBubbleClose');
     const dialogClose = document.getElementById('mascotDialogClose');
+    const chatBody = document.getElementById('shyamuChatBody');
+    const chatForm = document.getElementById('shyamuChatForm');
+    const chatInput = document.getElementById('shyamuChatInput');
+    const quickChips = document.getElementById('shyamuQuickChips');
 
     function toggleDialog(e) {
       if (e) e.stopPropagation();
       dialog.classList.toggle('active');
+      if (dialog.classList.contains('active')) {
+        chatInput.focus();
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
     }
 
     avatar.addEventListener('click', toggleDialog);
@@ -194,6 +243,71 @@
       if (!dialog.contains(e.target) && !widget.contains(e.target)) {
         dialog.classList.remove('active');
       }
+    });
+
+    // AI Chat Engine
+    function getAiAnswer(q) {
+      const query = q.toLowerCase();
+      if (query.includes('6205') || query.includes('skf') || query.includes('bearing') || query.includes('fag') || query.includes('nbc')) {
+        return "SKF & FAG deep groove ball bearings (including 6205-2RS, 6204, 6308) are stocked in ready shelf quantities. Genuine boxed with intact holographic tamper seals. Dispatched in 25 mins with GST Tax Invoice (HSN 8482).";
+      }
+      if (query.includes('polymatic') || query.includes('valve') || query.includes('solenoid') || query.includes('pneumatic') || query.includes('cylinder') || query.includes('frl')) {
+        return "We are authorized Polymatic distributors. Ready stock of 5/2, 5/3, and 3/2 solenoid valves (1/8\" & 1/4\" BSP), PU tubing (4mm to 12mm), cylinders, and FRL modular units. Same-day delivery across Neemrana.";
+      }
+      if (query.includes('belt') || query.includes('mitsuboshi') || query.includes('timing') || query.includes('gates') || query.includes('v-belt')) {
+        return "Mitsuboshi and Gates transmission belts available in all standard classical V-belts (A, B, C, D section), Poly-V (PK, PL), and HTD timing belts (5M, 8M, 14M). Instant matching on machine breakdown.";
+      }
+      if (query.includes('dispatch') || query.includes('neemrana') || query.includes('delivery') || query.includes('time') || query.includes('van') || query.includes('lead')) {
+        return "Our dedicated delivery van provides same-day dispatch across RIICO Neemrana, Japanese Zone, Ghiloth, and Behror. Breakdown orders average 25-minute dispatch.";
+      }
+      if (query.includes('gst') || query.includes('tax') || query.includes('invoice') || query.includes('e-way') || query.includes('hsn') || query.includes('bill')) {
+        return "100% of our sales include computerized GST Tax Invoices and E-Way bills. HSN codes (8482, 8481, 4010, 7318) strictly match for zero-error GSTR-1 audit reconciliation.";
+      }
+      if (query.includes('credit') || query.includes('payment') || query.includes('term') || query.includes('po')) {
+        return "Approved corporate plant accounts in RIICO get 30-day revolving credit terms on formal Purchase Order (PO). Instant counter billing available via UPI or RTGS.";
+      }
+      return "Got it! For this specific plant BOM or breakdown requirement, send part photo or size to our WhatsApp desk (+91 72401 07540) and our engineers will reply with a stamped quote within 2 working hours.";
+    }
+
+    function appendMessage(sender, text) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      msgDiv.innerHTML = `
+        <div class="msg-bubble">${text}</div>
+        <span class="msg-time">${sender === 'user' ? 'You' : 'Shyamu · Live'} · ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+      `;
+      chatBody.appendChild(msgDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function handleUserSend(text) {
+      if (!text || !text.trim()) return;
+      appendMessage('user', text.trim());
+      chatInput.value = '';
+
+      // Typing indicator
+      const typing = document.createElement('div');
+      typing.className = 'chat-msg bot typing-ind';
+      typing.innerHTML = `<div class="msg-bubble"><span class="dots"><span>.</span><span>.</span><span>.</span></span> Shyamu is checking stock...</div>`;
+      chatBody.appendChild(typing);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      setTimeout(function() {
+        typing.remove();
+        const ans = getAiAnswer(text);
+        appendMessage('bot', ans);
+      }, 700);
+    }
+
+    chatForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleUserSend(chatInput.value);
+    });
+
+    quickChips.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        handleUserSend(btn.dataset.q);
+      });
     });
 
     // 4. On scroll, immediately dismiss speech bubble so it never blocks content
