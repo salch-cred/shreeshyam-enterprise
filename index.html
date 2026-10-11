@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012f">
+<link rel="stylesheet" href="assets/styles.css?v=20261012g">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -264,21 +264,22 @@
         </div>
       </div>
     </div>
-  <!-- WEAV KINETIC WAVE RIBBON DIVIDER (FROM USER DESIGN: media_1791723549636.png) -->
+  <!-- WEAV KINETIC WAVE RIBBON DIVIDER (EXACT GEOMETRY FROM USER DESIGN: media_1791723549636.png) -->
   <div class="weav-wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1440 84" preserveAspectRatio="none" width="100%" height="84">
+    <svg viewBox="0 0 1440 68" preserveAspectRatio="none" width="100%" height="68">
       <defs>
-        <pattern id="weavRibbonExact" width="72" height="84" patternUnits="userSpaceOnUse">
-          <!-- Background: Top half electric blue, bottom half peach -->
-          <rect y="0" width="72" height="42" fill="#1D4ED8"/>
-          <rect y="42" width="72" height="42" fill="#FFF1ED"/>
-          <!-- Top row flags/wave teeth pointing down -->
-          <path d="M0,0 Q18,42 36,21 Q54,0 72,42 L72,0 Z" fill="#FFF1ED"/>
-          <!-- Bottom row flags/wave teeth interlocking upwards -->
-          <path d="M0,42 Q18,84 36,63 Q54,42 72,84 L72,84 L0,84 Z" fill="#1D4ED8"/>
+        <pattern id="weavRibbonExact" width="60" height="68" patternUnits="userSpaceOnUse">
+          <!-- Background: Top electric blue #1D4ED8, Bottom warm peach #FFF1ED -->
+          <rect y="0" width="60" height="34" fill="#1D4ED8"/>
+          <rect y="34" width="60" height="34" fill="#FFF1ED"/>
+          <!-- Top Row interlocking ribbons/flags cutting downward into the blue -->
+          <!-- Left half upward slope, right half curved hook -->
+          <path d="M0,0 C12,0 20,8 30,22 C40,8 48,0 60,0 L60,34 L0,34 Z" fill="#FFF1ED"/>
+          <!-- Bottom Row matching waves cutting upward into the peach -->
+          <path d="M0,34 C12,34 20,42 30,56 C40,42 48,34 60,34 L60,68 L0,68 Z" fill="#1D4ED8"/>
         </pattern>
       </defs>
-      <rect width="1440" height="84" fill="url(#weavRibbonExact)"/>
+      <rect width="1440" height="68" fill="url(#weavRibbonExact)"/>
     </svg>
   </div>
 </div>
