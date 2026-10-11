@@ -1,4 +1,5 @@
-# Never upload the API source or local junk with the static site
+# Never upload the API source, repo internals, or local junk with the static site
 backend
+.git
 node_modules
 .vercel
