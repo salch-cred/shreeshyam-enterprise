@@ -120,10 +120,24 @@ main.wide{max-width:1440px}
 
 <main id="main" class="wrap wide block" style="padding-top:32px">
 <p class="crumbs rv in"><a href="index.html">Home</a> / <b id="crumbCat">Catalogue</b></p>
-<div class="banner rv in">
-<div><b>Project desk</b><h2>50+ line items? Get a line-wise quote in 2 hours.</h2>
-<p>Makes, HSN and lead time on every line. Rates hold 7 days. Counter open 9 to 8, all days.</p></div>
-<a class="btn btn-amber" href="index.html#bulk"><i class="hgi-stroke hgi-sent"></i>Open project desk</a>
+<div class="banner rv in" style="position:relative;background:radial-gradient(ellipse at 85% 20%, rgba(29,78,216,.32), transparent 60%), #0F172A;border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 50px rgba(0,0,0,.35)">
+  <div style="position:absolute;top:12px;left:14px;color:rgba(147,197,253,.45);font-family:monospace;font-size:13px;user-select:none">+</div>
+  <div style="position:absolute;top:12px;right:14px;color:rgba(147,197,253,.45);font-family:monospace;font-size:13px;user-select:none">+</div>
+  <div style="position:absolute;bottom:12px;left:14px;color:rgba(147,197,253,.45);font-family:monospace;font-size:13px;user-select:none">+</div>
+  <div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.2);border:1px solid rgba(96,165,250,.35);color:#93C5FD;border-radius:999px;padding:3px 11px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">
+        <span style="width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981"></span> Live Shelf Catalog
+      </span>
+      <span style="color:#94A3B8;font-size:12px">· Authorized Polymatic Pneumatics & Bearings</span>
+    </div>
+    <h2 style="font-size:26px;line-height:34px;margin:0 0 6px;letter-spacing:-.02em;color:#fff">10,000+ Industrial Items Stocked on the Shelf</h2>
+    <p style="margin:0;color:#CBD5E1;font-size:14px;max-width:580px;line-height:22px">Bearings, transmission belts, high-tensile fasteners, cylinders and automation. Quoted fast, invoiced with HSN, dispatched same day across RIICO Neemrana.</p>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:relative;z-index:2">
+    <a class="btn btn-amber" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" target="_blank" rel="noopener"><i class="hgi-stroke hgi-whatsapp"></i>WhatsApp BOQ list</a>
+    <a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.28)" href="index.html#bulk"><i class="hgi-stroke hgi-sent"></i>Project quote desk</a>
+  </div>
 </div>
 
 <div class="cmdbar shopbar rv in" style="background:var(--bg-soft);box-shadow:none;border:1px solid var(--line)">
@@ -192,14 +206,18 @@ const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');
   t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
   setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2200);};
 try{cart=JSON.parse(localStorage.getItem('sse_cart')||'[]');}catch{cart=[];}
-function saveCart(){localStorage.setItem('sse_cart',JSON.stringify(cart));SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);}
+function saveCart(){
+  localStorage.setItem('sse_cart',JSON.stringify(cart));
+  SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);
+  SSE.updateNavBadge();
+}
 const iconFor=c=>/bearing|wheel|caster/.test(c)?'settings-01':/belt|chain|sprocket|transmission/.test(c)?'link-01':/fastener|seal|circlip|tool/.test(c)?'screw-driver':/valve|pneumat|frl|cylind|gripp|booster|pump/.test(c)?'wind-power-02':/fitting|tube|tubing|coupl|silencer/.test(c)?'pipe':/electric|switch|sensor/.test(c)?'plug-01':/gauge/.test(c)?'file-01':/pack|strap|tape/.test(c)?'layers-01':/weld/.test(c)?'shield-01':/adhes|glue|wd/.test(c)?'wallet-01':'package';
 
 async function init(){
   grid.innerHTML=Array(9).fill('<div class="skelp"></div>').join('');
   SSE.tabs();
   ALL=await SSE.seed();
-  SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);
+  saveCart();
   buildTiles();buildFilters();render();
   SSE.$('#q').oninput=()=>{pg=1;render()};
   SSE.$('#sort').onchange=()=>{pg=1;render()};
@@ -232,12 +250,12 @@ function openQv(p){qvP=p;qvQty=1;SSE.$('#qvQty').textContent='1';
   SSE.$('#qvName').textContent=p.name;SSE.$('#qvBrand').textContent=p.brand;
   const ok=(p.stock||0)>0;
   SSE.$('#qvStock').className='pstock '+(ok?'ok':'low');
-  SSE.$('#qvStock').innerHTML=`<i></i>${ok?'In stock · '+Number(p.stock)+' '+SSE.esc(p.unit):'Made to order — ask lead time'}`;
+  SSE.$('#qvStock').innerHTML=`<i class="stock-dot"></i>${ok?'In stock · '+Number(p.stock)+' '+SSE.esc(p.unit):'Made to order — dispatch 24h'}`;
   SSE.$('#qvSpecs').innerHTML=`<div><dt>Category</dt><dd>${SSE.esc(p.category)}</dd></div>
-  <div><dt>HSN</dt><dd>${SSE.esc(p.hsn||'—')}</dd></div>
-  <div><dt>GST</dt><dd>${Number(p.gst_pct)||0}%</dd></div>
-  <div><dt>Make</dt><dd>${SSE.esc(p.brand)}</dd></div>`;
-  SSE.$('#qvPrice').textContent=rate?SSE.fmt(rate):'Rate on request';
+  <div><dt>HSN Code</dt><dd>${SSE.esc(p.hsn||'—')}</dd></div>
+  <div><dt>GST Slab</dt><dd>${Number(p.gst_pct)||0}%</dd></div>
+  <div><dt>Make / OEM</dt><dd>${SSE.esc(p.brand)}</dd></div>`;
+  SSE.$('#qvPrice').textContent=rate?SSE.fmt(rate):'₹ Quote on request';
   SSE.$('#qvUnit').textContent=rate?('per '+p.unit):'counter confirms before dispatch';
   SSE.$('#qvWa').href='https://wa.me/917240107540?text='+encodeURIComponent('Requirement: '+p.name+' ('+p.brand+') — please share rate and lead time.');
   SSE.$('#qvScrim').classList.add('open');SSE.$('#qv').classList.add('open');}
@@ -300,20 +318,60 @@ function render(append){
     const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
     const stockOk=(p.stock||0)>0;
     const meter=stockOk?Math.min(100,Math.round(((p.stock||0)/Math.max(1,(p.min_stock||5)*4))*100)):0;
-    d.innerHTML=`<div class="pmedia"><img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}"><span class="gstm">GST ${Number(p.gst_pct)||0}%</span></div>
-    <div class="pad"><span class="pbrand">${SSE.esc(p.brand)}</span><h3>${SSE.esc(p.name)}</h3>
-    <span class="pstock ${stockOk?'ok':'low'}"><i></i>${stockOk?'In stock · '+Number(p.stock)+' '+SSE.esc(p.unit):'Made to order'}</span>
-    <div class="smeter" aria-hidden="true"><span style="width:${stockOk?Math.max(8,meter):100}%;${stockOk?'':'background:#9A3412'}"></span></div>
-    <div class="pfoot"><div class="pprice">${rate?SSE.fmt(rate):'Rate on request'}<small>per ${SSE.esc(p.unit)}</small></div>
-    <button class="padd ${inCart?'in':''}" aria-label="Add ${SSE.esc(p.name)} to list">+</button></div></div>`;
-    d.querySelector('.padd').onclick=e=>{e.stopPropagation();const fnd=cart.find(c=>c.id===p.id);
+    const brandName=SSE.esc(p.brand||'SSE');
+    const hsnText=p.hsn?`HSN ${SSE.esc(p.hsn)}`:'';
+    const waMsg=encodeURIComponent(`Requirement: ${p.name} (${p.brand}) — please share rate and delivery.`);
+
+    d.innerHTML=`<div class="pmedia">
+      <img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}">
+      <div class="pmedia-badges">
+        <span class="oem-badge"><i class="hgi-stroke hgi-award-04"></i>${brandName}</span>
+        <span class="gstm">GST ${Number(p.gst_pct)||0}%</span>
+      </div>
+      <div class="pmedia-actions">
+        <button type="button" class="pmedia-btn qv-act" title="Quick view" aria-label="Quick view ${SSE.esc(p.name)}"><i class="hgi-stroke hgi-view"></i></button>
+        <a class="pmedia-btn" href="https://wa.me/917240107540?text=${waMsg}" target="_blank" rel="noopener" title="WhatsApp enquiry" aria-label="WhatsApp rate"><i class="hgi-stroke hgi-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="pad">
+      <div class="pbrand-row">
+        <span class="pbrand">${brandName}</span>
+        ${hsnText?`<span class="hsn-tag">${hsnText}</span>`:''}
+      </div>
+      <h3>${SSE.esc(p.name)}</h3>
+      <span class="pstock ${stockOk?'ok':'low'}"><i class="stock-dot"></i>${stockOk?`In stock · ${Number(p.stock)} ${SSE.esc(p.unit)}`:'Made to order · 24h'}</span>
+      <div class="smeter" aria-hidden="true"><span style="width:${stockOk?Math.max(10,meter):100}%;${stockOk?'':'background:#F59E0B'}"></span></div>
+      <div class="pfoot">
+        <div class="pprice">${rate?SSE.fmt(rate):'₹ Quote on request'}<small>per ${SSE.esc(p.unit)} · ${slab==='wholesale'?'project':'counter'}</small></div>
+        <div class="pactions-row">
+          <a class="pwa-mini" href="https://wa.me/917240107540?text=${waMsg}" target="_blank" rel="noopener" title="Ask on WhatsApp" aria-label="Ask on WhatsApp"><i class="hgi-stroke hgi-whatsapp"></i></a>
+          <button class="padd ${inCart?'in':''}" aria-label="Add ${SSE.esc(p.name)} to list">${inCart?'✓ In list':'+ Add'}</button>
+        </div>
+      </div>
+    </div>`;
+
+    d.querySelector('.qv-act')?.addEventListener('click',e=>{e.stopPropagation();openQv(p);});
+    d.querySelector('.padd').onclick=e=>{
+      e.stopPropagation();
+      const fnd=cart.find(c=>c.id===p.id);
       if(fnd)fnd.qty++;else cart.push({id:p.id,name:p.name,qty:1,rate,gst_pct:p.gst_pct});
-      saveCart();d.querySelector('.padd').classList.add('in');toast(p.name+' in list');};
+      saveCart();
+      const btn=d.querySelector('.padd');
+      btn.classList.add('in');
+      btn.textContent='✓ In list';
+      toast(p.name+' added to estimate');
+    };
     d.onclick=()=>openQv(p);
     grid.appendChild(d);
   }
 }
 init();
-</script><script src="assets/bot.js?v=20261012a"></script>
-<nav class="mtabs no-print" aria-label="Mobile"><a href="index.html"><span class="ti"><i class="hgi-stroke hgi-home-01"></i></span><span class="tl">Home</span></a><a href="shop.html" class="on" aria-current="page"><span class="ti"><i class="hgi-stroke hgi-package"></i></span><span class="tl">Shop</span></a><a href="account.html"><span class="ti"><i class="hgi-stroke hgi-user-01"></i></span><span class="tl">Account</span></a><a href="tel:+917240107540"><span class="ti"><i class="hgi-stroke hgi-call"></i></span><span class="tl">Call</span></a></nav>
+</script>
+<nav class="mtabs no-print" aria-label="Mobile">
+  <a href="index.html"><span class="ti"><i class="hgi-stroke hgi-home-01"></i></span><span class="tl">Home</span></a>
+  <a href="shop.html" class="on" aria-current="page"><span class="ti"><i class="hgi-stroke hgi-package"></i></span><span class="tl">Shop</span></a>
+  <a href="checkout.html" class="mtabs-center" aria-label="Estimate and Cart"><span class="ti"><i class="hgi-stroke hgi-shopping-cart-01"></i><span class="nav-badge" style="display:none">0</span></span><span class="tl">Estimate</span></a>
+  <a href="account.html"><span class="ti"><i class="hgi-stroke hgi-user-01"></i></span><span class="tl">Account</span></a>
+  <a href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" target="_blank" rel="noopener"><span class="ti"><i class="hgi-stroke hgi-whatsapp"></i></span><span class="tl">WhatsApp</span></a>
+</nav>
 </body></html>

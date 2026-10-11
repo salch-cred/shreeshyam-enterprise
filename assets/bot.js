@@ -1,7 +1,7 @@
 /* Shyam Assist — scripted business assistant.
-   The KNOWLEDGE prompt below is the full "training" context: plug it into any
-   LLM later (backend /ai/chat) or keep the zero-cost matcher that uses it now. */
+   AI chat temporarily disabled by user request. */
 (function () {
+  return; // AI Chat disabled
   const PROMPT = [
     'You are Shyam Assist for Shree Shyam Enterprises, Industrial and Project Suppliers,',
     'Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705.',

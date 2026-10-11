@@ -48,12 +48,12 @@ const SSE = (() => {
   }
   const content = () => { try { return JSON.parse(localStorage.getItem('sse_content') || '{}'); } catch { return {}; } };
   const saveContent = c => localStorage.setItem('sse_content', JSON.stringify(c));
-  const fmt = n => 'Rs ' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  const fmt = n => '₹ ' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
   // Escape anything rendered via innerHTML: product names (admin/CSV import),
   // order text (public form), customer names. Prevents stored XSS.
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   // Product images are admin-pasted URLs — allow http(s) only, else placeholder.
-  const safeImg = u => { try { const x = new URL(u, location.href); if (x.protocol === 'http:' || x.protocol === 'https:') return x.href; } catch {} return 'https://picsum.photos/seed/sse-fallback/800/600'; };
+  const safeImg = u => { try { const x = new URL(u, location.href); if (x.protocol === 'http:' || x.protocol === 'https:') return x.href; } catch {} return 'assets/img/cat-p21.png'; };
 
   function filter(list, q, cat) {
     q = (q || '').toLowerCase();
@@ -92,7 +92,26 @@ const SSE = (() => {
     const wio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); wio.unobserve(e.target); } }), { threshold: .6, rootMargin: '0px 0px -40% 0px' });
     words.forEach((w, i) => { w.style.transitionDelay = (i * 40) + 'ms'; wio.observe(w); });
   }
-  /* Enterprise footer — generated once, consistent on every public page */
+
+  /* Update mobile bottom navigation cart badge & active states */
+  function updateNavBadge() {
+    try {
+      const cart = JSON.parse(localStorage.getItem('sse_cart') || '[]');
+      const count = cart.reduce((a, c) => a + (Number(c.qty) || 0), 0);
+      const badges = document.querySelectorAll('.nav-badge, [data-nav-badge]');
+      badges.forEach(b => {
+        if (count > 0) {
+          b.textContent = count;
+          b.style.display = 'inline-block';
+        } else {
+          b.textContent = '0';
+          b.style.display = 'none';
+        }
+      });
+    } catch {}
+  }
+
+  /* Enterprise footer — clean corporate layout without mobile bottom nav buttons */
   function footer(){
     const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
     if(path.includes('admin')||path.includes('bill'))return;
@@ -103,8 +122,7 @@ const SSE = (() => {
     f.innerHTML=`<div class="wrap cols">
     <div class="fbrand"><a class="brand" href="index.html" style="filter:invert(0)"><span class="brand-mark">S</span><span style="color:#fff">Shree Shyam<small style="color:#8FA5D4">Industrial & Project Suppliers</small></span></a>
     <p>Bearings, belts, fasteners, pneumatics, tools and industrial electricals for plants that cannot stop. Authorized Polymatic Pneumatic distributor since 2009.</p>
-    <div class="fbtns"><a class="btn btn-amber" href="tel:+917240107540"><i class="hgi-stroke hgi-call"></i>Call</a>
-    <a class="btn btn-ghost fgb" href="https://wa.me/917240107540"><i class="hgi-stroke hgi-whatsapp"></i>WhatsApp</a></div></div>
+    </div>
     <div><h5>Catalogue</h5><a href="shop.html">All items</a><a href="checkout.html">Checkout</a><a href="index.html#bulk">Project desk</a><a href="account.html">Your account</a></div>
     <div><h5>Reach us</h5><a href="tel:+917240107540">72401 07540</a><a href="tel:+9188797979884">98879 79884</a><a href="https://wa.me/917240107540">WhatsApp us</a><a href="mailto:shreeshyamenterprises7540@gmail.com">Email</a></div>
     <div><h5>Counter</h5><span>Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705</span><span>Open 9 to 8 · all days</span><span>GSTIN ${SSE.esc(c.gstin||'08SJHPS7017F1ZK')}</span></div>
@@ -112,8 +130,9 @@ const SSE = (() => {
     <div class="wrap legal"><span>© ${yr} Shree Shyam Enterprises · Industrial & Project Suppliers</span>
     <span class="lgl"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="sitemap.xml">Sitemap</a></span></div>
     <div class="giant" aria-hidden="true">SHREE SHYAM</div>`;
+    updateNavBadge();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',footer);else footer();
 
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, footer, $ };
+  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, footer, updateNavBadge, $ };
 })();
