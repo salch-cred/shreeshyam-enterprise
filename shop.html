@@ -9,7 +9,18 @@
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
 <link rel="stylesheet" href="assets/styles.css?v=20261011f">
 <style>
-/* ---- shop v3: marketplace layout ---- */
+/* ---- shop v4: large desktop marketplace ---- */
+main.wide{max-width:1440px}
+.crumbs{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.crumbs a{text-decoration:none;color:var(--muted)}
+.crumbs a:hover{color:var(--ink)}
+.crumbs b{color:var(--ink)}
+.banner{margin:6px 0 22px;border:1px solid var(--line);border-radius:var(--r-xl);background:var(--dark);color:#fff;padding:26px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;overflow:hidden}
+.banner::after{content:"BOQ";position:absolute;right:6px;bottom:-34px;font-size:120px;font-weight:800;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.14);pointer-events:none}
+.banner b{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#BFDBFE;display:block;margin-bottom:6px}
+.banner h2{margin:0 0 4px;font-size:24px;line-height:30px;letter-spacing:-.01em}
+.banner p{margin:0;color:#C3D2EE;font-size:14px;max-width:520px}
+.banner .btn{position:relative;z-index:2}
 .cattiles{display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:4px 2px 10px;scrollbar-width:none}
 .cattiles::-webkit-scrollbar{display:none}
 .cattile{flex:none;scroll-snap-align:start;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .5s var(--ease);white-space:nowrap}
@@ -17,7 +28,7 @@
 .cattile small{font-weight:700;color:var(--muted);opacity:.7}
 .cattile.on{background:var(--accent);border-color:var(--accent);color:#fff}
 .cattile.on i,.cattile.on small{color:#fff}
-.shoplay{display:grid;grid-template-columns:250px 1fr;gap:22px;align-items:start;margin-top:18px}
+.shoplay{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start;margin-top:18px}
 .side{position:sticky;top:132px;border:1px solid var(--line);border-radius:var(--r-lg);background:#fff;padding:18px;max-height:calc(100vh - 150px);overflow:auto}
 .side h4{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
 .side h4 button{border:0;background:none;font:inherit;font-size:12px;font-weight:700;color:var(--accent);cursor:pointer}
@@ -28,6 +39,9 @@
 .fitem.on{background:var(--bg-soft);font-weight:700}
 .fitem input{accent-color:var(--accent);width:15px;height:15px;flex:none}
 .fitem small{margin-left:auto;color:var(--muted);font-weight:600}
+.sidepromo{margin-top:14px;border:1px solid var(--line-dark);border-radius:var(--r-md);background:var(--dark);color:#fff;padding:18px}
+.sidepromo b{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#BFDBFE;margin-bottom:6px}
+.sidepromo p{margin:0 0 12px;font-size:13px;color:#C3D2EE}
 .tbar2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .tbar2 .rc{font-size:13px;color:var(--muted);font-weight:600}
 .tbar2 .rgt{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -37,17 +51,58 @@
 .fchips:empty{display:none}
 .fchip{display:inline-flex;align-items:center;gap:7px;background:var(--bg-soft);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 12px;font-size:12px;font-weight:700}
 .fchip button{border:0;background:#fff;border-radius:50%;width:18px;height:18px;line-height:1;font-size:12px;cursor:pointer}
-.pcard .pstock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;margin-top:6px}
-.pcard .pstock i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.pcard .pstock.ok{color:#2F7D33}.pcard .pstock.ok i{background:#2F7D33}
-.pcard .pstock.low{color:#9A3412}.pcard .pstock.low i{background:#9A3412}
-.scrim{z-index:110}.side.open{transform:none}
+/* larger cards */
+.grid-products{grid-template-columns:repeat(3,1fr);gap:20px}
+@media (min-width:1800px){.grid-products{grid-template-columns:repeat(4,1fr)}}
+.pcard{cursor:pointer;position:relative;transition:all .6s var(--ease)}
+.pcard::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(27,36,48,.14)}
+.pcard:hover::after{transform:scaleX(1)}
+.pmedia{position:relative;overflow:hidden;background:var(--bg-soft)}
+.pmedia img{aspect-ratio:1/1;transition:transform .7s var(--ease)}
+.pcard:hover .pmedia img{transform:scale(1.06)}
+.gstm{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;color:var(--accent-ink)}
+.pad{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pbrand{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pcard h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;line-height:23px;min-height:46px}
+.pstock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.pstock i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.pstock.ok{color:#2F7D33}.pstock.ok i{background:#2F7D33}
+.pstock.low{color:#9A3412}.pstock.low i{background:#9A3412}
+.smeter{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:2px}
+.smeter span{display:block;height:100%;border-radius:2px;background:var(--accent);transition:width .8s var(--ease)}
+.pfoot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:6px}
+.pprice{font-weight:800;font-size:20px;letter-spacing:-.01em}
+.pprice small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.padd{width:46px;height:46px;border-radius:13px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:24px;font-weight:600;cursor:pointer;flex:none;transition:all .5s var(--ease)}
+.padd:active{transform:scale(.92)}
+.padd:hover,.padd.in{background:var(--accent);color:#fff;border-color:var(--accent)}
+.skelp{border:1px solid var(--line);border-radius:var(--r-lg);aspect-ratio:3/3.5;position:relative;overflow:hidden;background:#fff}
+.skelp::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.7);transform:translateX(-100%);animation:shimmer 1.4s infinite}
+/* quick view */
+.qv{width:min(880px,100vw)}
+.qv-body{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.q-media img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--r-md);border:1px solid var(--line);background:var(--bg-soft)}
+.q-info{display:flex;flex-direction:column;gap:10px}
+.q-info h2{margin:0;font-size:24px;line-height:30px;letter-spacing:-.01em}
+.q-specs{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin:0;font-size:13px}
+.q-specs div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:5px 0}
+.q-specs dt{color:var(--muted)}
+.q-specs dd{margin:0;font-weight:700}
+.q-price{font-size:28px;font-weight:800;letter-spacing:-.02em}
+.q-price small{font-size:13px;color:var(--muted);font-weight:600}
+.q-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
 @media (max-width:1020px){
   .shoplay{display:block}
   .side{position:fixed;top:0;left:0;bottom:0;width:min(320px,86vw);max-height:none;border-radius:0 var(--r-lg) var(--r-lg) 0;z-index:115;
     transform:translateX(-104%);transition:transform .7s var(--ease);box-shadow:30px 0 80px rgba(0,0,0,.2)}
   #fBtn{display:inline-flex}
   .cattiles{margin:0 -24px;padding:4px 24px 10px}
+  .grid-products{grid-template-columns:repeat(2,1fr)}
+  .banner{flex-direction:column;align-items:flex-start;padding:22px}
+  .banner::after{font-size:90px}
+  .qv-body{grid-template-columns:1fr}
+  .qv{width:100vw}
 }
 </style></head>
 <body>
@@ -60,9 +115,14 @@
 <a class="btn btn-primary" href="checkout.html"><i class="hgi-stroke hgi-shopping-cart-01"></i><span id="cartN">List 0</span></a>
 </div></header>
 
-<main id="main" class="wrap block" style="padding-top:36px">
-<p class="eyebrow rv in">Catalogue · updated on every bill</p>
-<h1 class="title rv in" style="font-size:44px;line-height:1;max-width:720px;margin-bottom:14px">Shop 10,000+ industrial items</h1>
+<main id="main" class="wrap wide block" style="padding-top:32px">
+<p class="crumbs rv in"><a href="index.html">Home</a> / <b id="crumbCat">Catalogue</b></p>
+<div class="banner rv in">
+<div><b>Project desk</b><h2>50+ line items? Get a line-wise quote in 2 hours.</h2>
+<p>Makes, HSN and lead time on every line. Rates hold 7 days. Counter open 9 to 8, all days.</p></div>
+<a class="btn btn-amber" href="index.html#bulk"><i class="hgi-stroke hgi-sent"></i>Open project desk</a>
+</div>
+
 <div class="cmdbar shopbar rv in" style="background:var(--bg-soft);box-shadow:none;border:1px solid var(--line)">
 <label class="search" style="background:#fff;border-color:var(--line)"><i class="hgi-stroke hgi-search-01"></i><input id="q" type="search" placeholder="Search bearing, valve, belt, tube…" aria-label="Search products" style="color:var(--ink)"><kbd>/</kbd></label>
 <div class="seg" id="slabSeg" style="min-width:200px"><button data-s="retail" aria-pressed="true">Counter</button><button data-s="wholesale" aria-pressed="false">Project</button></div>
@@ -76,6 +136,8 @@
 <div class="fgroup"><div class="flist" id="fStock"></div></div>
 <div class="fgroup"><h4 style="border:0;padding:0;margin-bottom:8px">Category</h4><div class="flist" id="fCats"></div></div>
 <div class="fgroup"><h4 style="border:0;padding:0;margin-bottom:8px">Brand</h4><div class="flist" id="fBrands"></div></div>
+<div class="sidepromo"><b>Bulk enquiry</b><p>Send the full BOQ — one sheet back with makes, HSN and dispatch dates.</p>
+<a class="btn btn-amber" href="index.html#bulk" style="width:100%;justify-content:center">Get project quote</a></div>
 </aside>
 
 <section aria-label="Products">
@@ -88,7 +150,7 @@
 </div>
 <div class="fchips" id="chips"></div>
 <div id="grid" class="grid-products"></div>
-<div class="toolbar" id="sendbar" style="margin-top:20px">
+<div class="toolbar" id="sendbar" style="margin-top:24px">
 <button class="btn btn-ghost" id="more">Load more</button>
 <a class="btn btn-primary" href="checkout.html"><i class="hgi-stroke hgi-wallet-01"></i>Checkout</a>
 <a class="btn btn-amber" id="waSend" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai"><i class="hgi-stroke hgi-whatsapp"></i>Send list on WhatsApp</a>
@@ -104,10 +166,30 @@
 <div><b>Counter</b><br><a href="admin.html">Admin</a><br><a href="account.html">Your account</a></div>
 <div><b>Legal</b><br><a href="privacy.html">Privacy</a><br><a href="terms.html">Terms</a></div>
 </div></footer>
+
+<div class="scrim no-print" id="qvScrim"></div>
+<aside class="sheet qv no-print" id="qv" aria-label="Product quick view">
+<header><div><p class="spec" style="margin:0">Quick view</p><h2 id="qvName" style="margin:4px 0 0;font-size:20px"></h2></div>
+<button class="btn btn-ghost" id="qvClose" aria-label="Close quick view"><i class="hgi-stroke hgi-cancel-01"></i></button></header>
+<div class="body qv-body">
+<div class="q-media"><img id="qvImg" alt=""></div>
+<div class="q-info">
+<span class="pbrand" id="qvBrand"></span>
+<span class="pstock" id="qvStock"></span>
+<dl class="q-specs" id="qvSpecs"></dl>
+<div class="q-price"><span id="qvPrice"></span> <small id="qvUnit"></small></div>
+<div class="q-actions">
+<div class="stepper"><button type="button" id="qvMinus" aria-label="Decrease">−</button><b id="qvQty">1</b><button type="button" id="qvPlus" aria-label="Increase">+</button></div>
+<button class="btn btn-primary" id="qvAdd" style="flex:1;justify-content:center"><i class="hgi-stroke hgi-plus-sign"></i>Add to list</button>
+</div>
+<a class="btn btn-ghost" id="qvWa" href="#"><i class="hgi-stroke hgi-whatsapp"></i>Ask about this item</a>
+</div>
+</div>
+</aside>
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
 <script src="assets/app.js?v=20261011f"></script>
 <script>
-let ALL=[],pg=1,cart=[],cat='',slab='retail',brands=new Set(),stockOnly=false;
+let ALL=[],pg=1,cart=[],cat='',slab='retail',brands=new Set(),stockOnly=false,qvP=null,qvQty=1;
 const grid=SSE.$('#grid');
 const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
   t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
@@ -117,7 +199,7 @@ function saveCart(){localStorage.setItem('sse_cart',JSON.stringify(cart));SSE.$(
 const iconFor=c=>/bearing|wheel|caster/.test(c)?'settings-01':/belt|chain|sprocket|transmission/.test(c)?'link-01':/fastener|seal|circlip|tool/.test(c)?'screw-driver':/valve|pneumat|frl|cylind|gripp|booster|pump/.test(c)?'wind-power-02':/fitting|tube|tubing|coupl|silencer/.test(c)?'pipe':/electric|switch|sensor/.test(c)?'plug-01':/gauge/.test(c)?'file-01':/pack|strap|tape/.test(c)?'layers-01':/weld/.test(c)?'shield-01':/adhes|glue|wd/.test(c)?'wallet-01':'package';
 
 async function init(){
-  grid.innerHTML=Array(8).fill('<div class="skelp"></div>').join('');
+  grid.innerHTML=Array(9).fill('<div class="skelp"></div>').join('');
   ALL=await SSE.seed();
   SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);
   buildTiles();buildFilters();render();
@@ -129,14 +211,39 @@ async function init(){
   SSE.$('#more').onclick=()=>{pg++;render(true)};
   SSE.$('#fBtn').onclick=()=>{SSE.$('#side').classList.add('open');document.querySelector('.scrim')?.remove();const s=document.createElement('div');s.className='scrim open no-print';s.onclick=closeSide;document.body.appendChild(s);};
   SSE.$('#fClear').onclick=()=>{cat='';brands.clear();stockOnly=false;pg=1;buildTiles();buildFilters();render();};
-  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();SSE.$('#q').focus();}});
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();SSE.$('#q').focus();}
+    if(e.key==='Escape')closeQv();});
   SSE.$('#waSend').onclick=e=>{if(!cart.length){e.preventDefault();toast('Add items to the list first','alert-01');return}
     const t=cart.map(c=>`${c.name} x ${c.qty}`).join(', ');
     e.currentTarget.href='https://wa.me/917240107540?text='+encodeURIComponent('Order: '+t);
     try{const o=JSON.parse(localStorage.getItem('sse_orders')||'[]');o.push({id:'W'+Date.now(),source:'web',text:t,created:new Date().toISOString(),status:'new'});localStorage.setItem('sse_orders',JSON.stringify(o));}catch{}};
+  /* quick view wiring */
+  SSE.$('#qvClose').onclick=closeQv;SSE.$('#qvScrim').onclick=closeQv;
+  SSE.$('#qvMinus').onclick=()=>{qvQty=Math.max(1,qvQty-1);SSE.$('#qvQty').textContent=qvQty;};
+  SSE.$('#qvPlus').onclick=()=>{qvQty++;SSE.$('#qvQty').textContent=qvQty;};
+  SSE.$('#qvAdd').onclick=()=>{if(!qvP)return;const fnd=cart.find(c=>c.id===qvP.id);
+    const rate=slab==='wholesale'?qvP.rate_wholesale:qvP.rate_retail;
+    if(fnd)fnd.qty+=qvQty;else cart.push({id:qvP.id,name:qvP.name,qty:qvQty,rate,gst_pct:qvP.gst_pct});
+    saveCart();toast(qvP.name+' × '+qvQty+' in list');};
   SSE.motion();SSE.tabs();
 }
 function closeSide(){SSE.$('#side').classList.remove('open');document.querySelector('.scrim')?.remove();}
+function openQv(p){qvP=p;qvQty=1;SSE.$('#qvQty').textContent='1';
+  const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
+  SSE.$('#qvImg').src=SSE.safeImg(p.image);SSE.$('#qvImg').alt=p.name;
+  SSE.$('#qvName').textContent=p.name;SSE.$('#qvBrand').textContent=p.brand;
+  const ok=(p.stock||0)>0;
+  SSE.$('#qvStock').className='pstock '+(ok?'ok':'low');
+  SSE.$('#qvStock').innerHTML=`<i></i>${ok?'In stock · '+Number(p.stock)+' '+SSE.esc(p.unit):'Made to order — ask lead time'}`;
+  SSE.$('#qvSpecs').innerHTML=`<div><dt>Category</dt><dd>${SSE.esc(p.category)}</dd></div>
+  <div><dt>HSN</dt><dd>${SSE.esc(p.hsn||'—')}</dd></div>
+  <div><dt>GST</dt><dd>${Number(p.gst_pct)||0}%</dd></div>
+  <div><dt>Make</dt><dd>${SSE.esc(p.brand)}</dd></div>`;
+  SSE.$('#qvPrice').textContent=rate?SSE.fmt(rate):'Rate on request';
+  SSE.$('#qvUnit').textContent=rate?('per '+p.unit):'counter confirms before dispatch';
+  SSE.$('#qvWa').href='https://wa.me/917240107540?text='+encodeURIComponent('Requirement: '+p.name+' ('+p.brand+') — please share rate and lead time.');
+  SSE.$('#qvScrim').classList.add('open');SSE.$('#qv').classList.add('open');}
+function closeQv(){SSE.$('#qvScrim').classList.remove('open');SSE.$('#qv').classList.remove('open');}
 function buildTiles(){
   const cats=[...new Set(ALL.map(p=>p.category))];
   const t=SSE.$('#tiles');t.innerHTML='';
@@ -145,7 +252,7 @@ function buildTiles(){
   all.onclick=()=>{cat='';pg=1;buildTiles();buildFilters();render();};t.appendChild(all);
   cats.forEach(cn=>{const b=document.createElement('button');b.className='cattile'+(cat===cn?' on':'');
     b.innerHTML=`<i class="hgi-stroke hgi-${iconFor(cn)}"></i>${SSE.esc(cn)}<small>${ALL.filter(p=>p.category===cn).length}</small>`;
-    b.onclick=()=>{cat=cat===cn?'':cn;pg=1;buildTiles();buildFilters();render();scrollTo({top:SSE.$('#tiles').offsetTop+40,behavior:'smooth'})};t.appendChild(b);});
+    b.onclick=()=>{cat=cat===cn?'':cn;pg=1;buildTiles();buildFilters();render();};t.appendChild(b);});
 }
 function buildFilters(){
   const st=SSE.$('#fStock');
@@ -175,6 +282,7 @@ function chips(){
   if(cat)add(cat,()=>{cat='';pg=1;buildTiles();buildFilters();render();});
   if(stockOnly)add('In stock only',()=>{stockOnly=false;pg=1;buildFilters();render();});
   brands.forEach(br=>add(br,()=>{brands.delete(br);pg=1;buildFilters();render();}));
+  SSE.$('#crumbCat').textContent=cat||'Catalogue';
 }
 function render(append){
   chips();
@@ -193,14 +301,17 @@ function render(append){
     const inCart=cart.find(c=>c.id===p.id);
     const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
     const stockOk=(p.stock||0)>0;
+    const meter=stockOk?Math.min(100,Math.round(((p.stock||0)/Math.max(1,(p.min_stock||5)*4))*100)):0;
     d.innerHTML=`<div class="pmedia"><img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}"><span class="gstm">GST ${Number(p.gst_pct)||0}%</span></div>
     <div class="pad"><span class="pbrand">${SSE.esc(p.brand)}</span><h3>${SSE.esc(p.name)}</h3>
     <span class="pstock ${stockOk?'ok':'low'}"><i></i>${stockOk?'In stock · '+Number(p.stock)+' '+SSE.esc(p.unit):'Made to order'}</span>
+    <div class="smeter" aria-hidden="true"><span style="width:${stockOk?Math.max(8,meter):100}%;${stockOk?'':'background:#9A3412'}"></span></div>
     <div class="pfoot"><div class="pprice">${rate?SSE.fmt(rate):'Rate on request'}<small>per ${SSE.esc(p.unit)}</small></div>
     <button class="padd ${inCart?'in':''}" aria-label="Add ${SSE.esc(p.name)} to list">+</button></div></div>`;
-    d.querySelector('.padd').onclick=()=>{const fnd=cart.find(c=>c.id===p.id);
+    d.querySelector('.padd').onclick=e=>{e.stopPropagation();const fnd=cart.find(c=>c.id===p.id);
       if(fnd)fnd.qty++;else cart.push({id:p.id,name:p.name,qty:1,rate,gst_pct:p.gst_pct});
       saveCart();d.querySelector('.padd').classList.add('in');toast(p.name+' in list');};
+    d.onclick=()=>openQv(p);
     grid.appendChild(d);
   }
 }
