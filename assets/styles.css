@@ -384,42 +384,24 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
   .mobile-menu.open a:nth-child(3){transition-delay:.19s}
   .mobile-menu.open a:nth-child(4){transition-delay:.26s}
   .mobile-menu.open a:nth-child(5){transition-delay:.33s}
-  .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:80;background:rgba(30,58,139,.96);
+  .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:80;background:rgba(30,58,139,.97);
     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line-dark);
     padding:6px max(6px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-right))}
-  .mtabs a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-    color:#C3D2EE;text-decoration:none;font-size:11px;font-weight:700;padding:8px 2px;min-height:58px;border-radius:12px}
-  .mtabs a i{font-size:22px;line-height:1}
-  .mtabs a.on{color:#BFDBFE}
+  .mtabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#C3D2EE;text-decoration:none;padding:4px 2px;min-height:54px;border-radius:12px}
+  .mtabs a .ti{display:grid;place-items:center;width:52px;height:30px;border-radius:999px;transition:background .5s var(--ease)}
+  .mtabs a .ti i{font-size:21px;line-height:1}
+  .mtabs a .tl{font-size:11px;font-weight:700}
+  .mtabs a.on .ti{background:rgba(191,219,254,.22)}
+  .mtabs a.on{color:#fff}
+  .mtabs a.on .ti i{color:#BFDBFE}
   .mtabs a:active{transform:scale(.94)}
-  .hero{padding-top:36px}
-  .hero h1{font-size:52px}
-  .stats strong{font-size:30px}
-  .admin-shell{padding:16px}
-  .pick img{width:48px;height:48px}
-  .cta-deco::after{font-size:140px;bottom:-30px}
-  .giant{font-size:20vw}
-  /* attraction pack: snap carousels, raised action, sticky order bar */
-  .announce{font-size:12px}
-  .hero-grid{gap:36px}
-  .stage{min-height:420px}
-  .float-card{padding:10px 12px}
-  .float-card strong{font-size:18px}
-  .float-rate{left:4px;bottom:72px;min-width:0;max-width:210px}
-  .float-bill{right:4px;top:48px;min-width:0;max-width:220px}
-  .marquee span{font-size:12px;padding:0 14px}
-  .spots{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;gap:12px;margin:24px -24px 0;padding:0 24px 10px;scrollbar-width:none}
-  .spots::-webkit-scrollbar{display:none}
-  .spots .spot{min-width:78%;scroll-snap-align:center}
-  .steps{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;margin:24px -24px 0;scrollbar-width:none}
-  .steps::-webkit-scrollbar{display:none}
-  .steps .step{min-width:82%;scroll-snap-align:center}
-  .index-row i{display:grid;place-items:center;width:52px;height:52px;border:1px solid var(--line-dark);border-radius:14px;background:rgba(191,219,254,.14);flex:none}
-  .mtabs a.fab{overflow:visible}
-  .mtabs a.fab i{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--accent);color:#fff;font-size:26px;margin-top:-32px;border:4px solid #1E3A8B;box-shadow:0 12px 30px rgba(29,78,216,.55)}
-  .mtabs a.fab.on{color:#BFDBFE}
-  .mtabs a.fab.on i{background:#BFDBFE;color:#1E3A8B}
-  #sendbar{position:sticky;bottom:calc(102px + env(safe-area-inset-bottom));z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;padding:10px}
+  .mfab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:81;width:56px;height:56px;border-radius:18px;
+    background:var(--accent);color:#fff;display:grid;place-items:center;text-decoration:none;
+    box-shadow:0 14px 34px rgba(29,78,216,.55);transition:transform .6s var(--ease)}
+  .mfab i{font-size:26px}
+  .mfab:active{transform:scale(.92)}
+  .wafloat{bottom:calc(150px + env(safe-area-inset-bottom))}
+  #sendbar{position:sticky;bottom:calc(78px + env(safe-area-inset-bottom));z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;padding:10px}
   .quote-big{padding:28px}
   .quote-big blockquote{font-size:23px;line-height:31px}
   .tagline{padding:64px 0}

@@ -92,23 +92,28 @@ const SSE = (() => {
     const wio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); wio.unobserve(e.target); } }), { threshold: .6, rootMargin: '0px 0px -40% 0px' });
     words.forEach((w, i) => { w.style.transitionDelay = (i * 40) + 'ms'; wio.observe(w); });
   }
-  /* Mobile bottom tabs: Home / Shop / Estimate / WhatsApp / Call. CSS shows them only on small screens. */
+  /* Mobile bottom tabs — WhatsApp style: 4 tabs + floating action button */
   function tabs(){
     if(document.querySelector('.mtabs'))return;
     const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
     const cur=path.includes('shop')?'shop':path.includes('checkout')?'checkout':path.includes('account')?'account':path.includes('bill')?'billing':'home';
     const items=[
       ['index.html','home-01','Home',cur==='home'],
-      ['shop.html','shopping-cart-01','Shop',cur==='shop'],
-      ['checkout.html','file-01','Estimate',cur==='checkout','fab'],
-      ['https://wa.me/919000000000?text=Namaste%2C%20mujhe%20rates%20chahiye','whatsapp','WhatsApp',false],
-      ['tel:+919000000000','call','Call',false]];
+      ['shop.html','package','Shop',cur==='shop'],
+      ['account.html','user-01','Account',cur==='account'],
+      ['tel:+917240107540','call','Call',false]];
     const n=document.createElement('nav');n.className='mtabs no-print';n.setAttribute('aria-label','Mobile');
-    n.innerHTML=items.map(it=>{const c=[it[4]||'',it[3]?'on':''].join(' ').trim();
-      return`<a href="${it[0]}"${it[3]?' aria-current="page"':''}${c?` class="${c}"`:''}><i class="hgi-stroke hgi-${it[1]}"></i><span>${it[2]}</span></a>`;}).join('');
+    n.innerHTML=items.map(it=>`<a href="${it[0]}"${it[3]?' aria-current="page" class="on"':''}><span class="ti"><i class="hgi-stroke hgi-${it[1]}"></i></span><span class="tl">${it[2]}</span></a>`).join('');
     document.body.appendChild(n);
+    if(cur!=='shop'){
+      const f=document.createElement('a');
+      f.className='mfab no-print';f.href='checkout.html';f.title='New estimate';
+      f.setAttribute('aria-label','Start estimate');
+      f.innerHTML='<i class="hgi-stroke hgi-file-01"></i>';
+      document.body.appendChild(f);
+    }
     if(cur!=='shop'&&!document.querySelector('.wafloat')){const w=document.createElement('a');
-      w.className='wafloat no-print';w.href='https://wa.me/919000000000?text=Namaste%2C%20mujhe%20rates%20chahiye';
+      w.className='wafloat no-print';w.href='https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai';
       w.setAttribute('aria-label','Chat on WhatsApp');w.innerHTML='<i class="hgi-stroke hgi-whatsapp"></i>';
       document.body.appendChild(w);}
   }
