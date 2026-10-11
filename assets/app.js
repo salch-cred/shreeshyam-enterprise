@@ -112,5 +112,25 @@ const SSE = (() => {
       w.setAttribute('aria-label','Chat on WhatsApp');w.innerHTML='<i class="hgi-stroke hgi-whatsapp"></i>';
       document.body.appendChild(w);}
   }
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, tabs, $ };
+  /* Mobile top quick-nav rail + unified header actions */
+  function mnav(){
+    if(!document.querySelector('.island-inner')||document.querySelector('.mnav'))return;
+    const header=document.querySelector('.island-inner');
+    const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    const cur=path.includes('shop')?'shop':path.includes('checkout')?'checkout':path.includes('account')?'account':'home';
+    header.querySelectorAll('.btn,.live').forEach(b=>b.classList.add('mm-hide'));
+    const acts=document.createElement('div');acts.className='macts';
+    acts.innerHTML=`<a class="mi" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" aria-label="WhatsApp"><i class="hgi-stroke hgi-whatsapp"></i></a>
+    <a class="mi" href="account.html" aria-label="My account"><i class="hgi-stroke hgi-user-01"></i></a>
+    <a class="mi mcart" href="checkout.html" aria-label="My list"><i class="hgi-stroke hgi-shopping-cart-01"></i><b id="mcartN">0</b></a>`;
+    header.appendChild(acts);
+    const nav=document.createElement('nav');nav.className='mnav';nav.setAttribute('aria-label','Quick links');
+    const items=[['index.html','home-01','Home','home'],['shop.html','package','Shop','shop'],['index.html#bulk','file-01','Project desk','bulk'],['checkout.html','wallet-01','Checkout','checkout'],['account.html','user-01','Account','account'],['tel:+917240107540','call','Call','call']];
+    nav.innerHTML=items.map(it=>`<a href="${it[0]}" class="${cur===it[3]?'on':''}"><i class="hgi-stroke hgi-${it[1]}"></i>${it[2]}</a>`).join('');
+    header.parentElement.appendChild(nav);
+    try{const c=JSON.parse(localStorage.getItem('sse_cart')||'[]');
+      const b=acts.querySelector('#mcartN');if(b)b.textContent=c.reduce((s,x)=>s+(x.qty||1),0);}catch{}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mnav);else mnav();
+  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, tabs, mnav, $ };
 })();

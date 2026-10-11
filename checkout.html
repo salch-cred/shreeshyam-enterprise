@@ -7,7 +7,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261011e"></head>
+<link rel="stylesheet" href="assets/styles.css?v=20261011g">
+<style>
+.costeps{display:flex;gap:8px;margin:14px 0 0;flex-wrap:wrap}
+.costeps span{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--muted);background:#fff}
+.costeps span.done{border-color:#BFE0BF;color:#2F7D33;background:#EAF5EA}
+.costeps span.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.trustchips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.trustchips span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--bg-soft);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+.trustchips span::before{content:"\2713";font-weight:800}
+.payopt{cursor:pointer}
+.payopt .pm{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent-ink);opacity:0;transition:opacity .4s}
+.payopt.on .pm{opacity:1}
+.co-thumb{width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid var(--line);background:var(--bg-soft);flex:none}
+</style>
+</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain no-print" aria-hidden="true"></div>
@@ -24,6 +38,7 @@
 <span class="device" id="payMode"><i class="hgi-stroke hgi-smart-phone-01" style="font-size:16px"></i><span>UPI direct · zero fee</span></span>
 </div>
 
+<div class="costeps" aria-hidden="true"><span class="done">1 · List</span><span class="done">2 · Details</span><span class="on">3 · Payment</span></div>
 <div class="co-grid">
 <section aria-label="Your items">
 <div class="billcard">
@@ -44,7 +59,8 @@
 <div class="field"><label for="coEmail">Email <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="coEmail" type="email" autocomplete="email"></div>
 </div>
 <div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" rows="3" required placeholder="Unit / plot, RIICO industrial area, city, pincode"></textarea><span class="err"></span></div>
-<h3 style="margin:18px 0 8px">Payment</h3>
+<div class="trustchips" aria-hidden="true"><span>GST invoice · HSN</span><span>Same-day RIICO belt</span><span>Genuine makes</span><span>COD available</span></div>
+<h3 style="margin:18px 0 8px">Payment method</h3>
 <div id="payPanel"></div>
 <p class="err" id="coErr" style="color:#9A3412;font-size:13px;min-height:20px"></p>
 <button class="btn btn-primary" id="coPay" type="submit" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-wallet-01"></i>Place order</button>
@@ -57,9 +73,9 @@
 
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
-<script src="assets/app.js?v=20261011e"></script>
+<script src="assets/app.js?v=20261011g"></script>
 <script>
-let cart=[],status={gateway:'none',upiId:'shreeshyam@upi'},made=null;
+let cart=[],status={gateway:'none',upiId:'shreeshyam@upi'},made=null,ALL=[];
 const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
   t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
   setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2600);};
@@ -67,6 +83,7 @@ const api=()=> (localStorage.getItem('sse_api')||'').replace(/\/$/,'');
 try{cart=JSON.parse(localStorage.getItem('sse_cart')||'[]');}catch{cart=[];}
 
 async function init(){
+  SSE.seed().then(a=>{ALL=a;drawItems();});
   if(api()){try{status=await (await fetch(api()+'/payments/status')).json();}catch{}}
   SSE.$('#payMode').querySelector('span').textContent=status.gateway==='cashfree'?'UPI + Card · Cashfree':'UPI direct · zero fee';
   drawItems();drawPay();
@@ -77,10 +94,11 @@ function drawItems(){
   if(!cart.length){box.innerHTML=`<div class="empty" style="padding:24px"><i class="hgi-stroke hgi-shopping-cart-01"></i><b>List is empty</b><p>Add items from the shop page first.</p></div>`;
     SSE.$('#coTotals').innerHTML='';SSE.$('#coPay').disabled=true;return;}
   SSE.$('#coPay').disabled=false;
-  box.innerHTML=cart.map((c,i)=>`<div class="line"><div style="flex:1;min-width:0"><b>${SSE.esc(c.name)}</b><span>GST ${c.gst_pct||18}%</span></div>
+  box.innerHTML=cart.map((c,i)=>{const src=ALL.find(x=>x.id===c.id);c.img=src?src.image:c.img;
+    return`<div class="line">${c.img?`<img class="co-thumb" loading="lazy" src="${SSE.safeImg(c.img)}" alt="">`:''}<div style="flex:1;min-width:0"><b>${SSE.esc(c.name)}</b><span>GST ${c.gst_pct||18}%</span></div>
     <div class="stepper"><button type="button" data-i="${i}" data-d="-1">−</button><b>${c.qty}</b><button type="button" data-i="${i}" data-d="1">+</button></div>
     <b style="min-width:90px;text-align:right">${c.rate?SSE.fmt(c.qty*c.rate):'On request'}</b>
-    <button type="button" class="rm" data-i="${i}" aria-label="Remove">×</button></div>`).join('');
+    <button type="button" class="rm" data-i="${i}" aria-label="Remove">×</button></div>`;}).join('');
   box.querySelectorAll('.stepper button').forEach(b=>b.onclick=()=>{const it=cart[Number(b.dataset.i)];
     it.qty=Math.max(1,it.qty+Number(b.dataset.d));saveCart();drawItems();});
   box.querySelectorAll('.rm').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.i),1);saveCart();drawItems();});
@@ -95,15 +113,18 @@ function totals(){
   return{sub,gst,grand:Math.round(sub+gst)};
 }
 function saveCart(){localStorage.setItem('sse_cart',JSON.stringify(cart));}
+let method='upi';
 function drawPay(){
   const p=SSE.$('#payPanel');
-  if(status.gateway==='cashfree'){
-    p.innerHTML=`<div class="payopt on"><i class="hgi-stroke hgi-wallet-01"></i><div><b>Card · Netbanking · UPI</b><span>Secure checkout by Cashfree. All Indian cards accepted.</span></div></div>
-    <div class="payopt"><i class="hgi-stroke hgi-smart-phone-01"></i><div><b>Direct UPI</b><span>Scan QR from invoice · zero processing fee</span></div></div>`;
-  }else{
-    p.innerHTML=`<div class="payopt on"><i class="hgi-stroke hgi-smart-phone-01"></i><div><b>UPI now, confirmation on WhatsApp</b><span>Pay the UPI QR after we confirm stock, or pay on the invoice. Zero fee, direct to shop account.</span></div></div>
-    <div class="payopt"><i class="hgi-stroke hgi-bank"></i><div><b>Bank transfer against invoice</b><span>For plants on PO terms.</span></div></div>`;
-  }
+  const opts=[
+    ['upi','UPI · zero fee','Pay by any UPI app on the QR we share after confirmation.','smart-phone-01',true],
+    ['cod','Cash on delivery','Pay cash or UPI to the delivery van. RIICO belt area orders.','delivery-truck-01',true],
+  ];
+  if(status.gateway==='cashfree')opts.push(['card','Card · Netbanking','Secure checkout by Cashfree. All Indian cards and UPI apps.','wallet-01',true]);
+  p.innerHTML=opts.map(o=>`<div class="payopt ${method===o[0]?'on':''}" data-m="${o[0]}" role="button" tabindex="0">
+    <i class="hgi-stroke hgi-${o[3]}"></i><div style="flex:1"><b>${o[1]}</b><span>${o[2]}</span></div><span class="pm">SELECTED</span></div>`).join('');
+  p.querySelectorAll('.payopt').forEach(el=>{el.onclick=()=>{method=el.dataset.m;drawPay();};
+    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();method=el.dataset.m;drawPay();}};});
 }
 SSE.$('#coForm').addEventListener('submit',async e=>{
   e.preventDefault();SSE.$('#coErr').textContent='';
@@ -115,19 +136,20 @@ SSE.$('#coForm').addEventListener('submit',async e=>{
   if(!ok)return;
   const body={items:cart.map(c=>({id:c.id,name:c.name,qty:c.qty,rate:c.rate||0,gst_pct:c.gst_pct||18})),
     name:SSE.$('#coName').value.trim(),phone:SSE.$('#coPhone').value.trim(),
-    email:SSE.$('#coEmail').value.trim(),address:SSE.$('#coAddr').value.trim()};
+    email:SSE.$('#coEmail').value.trim(),address:SSE.$('#coAddr').value.trim(),method};
   if(!api()){SSE.$('#coErr').textContent='Shop backend not connected on this device. Order saved locally — WhatsApp us to confirm.';return;}
   try{
     const r=await fetch(api()+'/payments/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const j=await r.json();
     if(!r.ok){SSE.$('#coErr').textContent=j.error||'Could not place the order. Try again.';return;}
-    made=j;localStorage.setItem('sse_cart','[]');cart=[];
+    made=j;localStorage.setItem('sse_cart','[]');cart=[];saveCart();
     if(j.mode==='cashfree'&&window.Cashfree){
       const cf=new Cashfree({mode:'production'});
       cf.checkout({paymentSessionId:j.paymentSessionId,redirectTarget:'_modal',
         onSuccess:()=>{done(j,'Payment received. Invoice reaches you on WhatsApp.');},
         onFailure:()=>{SSE.$('#coErr').textContent='Payment did not go through. Your order is saved — try paying again.';}});
-    }else done(j,null);
+    }else if(j.mode==='cod')done(j,'Pay '+SSE.fmt(j.grand)+' cash or UPI to the delivery van. Invoice reaches you on WhatsApp.');
+    else done(j,null);
   }catch{SSE.$('#coErr').textContent='Could not reach the shop backend. Check connection.';}
 });
 function done(j,payMsg){
@@ -139,4 +161,5 @@ function done(j,payMsg){
   toast('Order '+j.orderId+' placed');
 }
 init();
-</script></body></html>
+</script><script src="assets/bot.js?v=20261011g"></script>
+</body></html>

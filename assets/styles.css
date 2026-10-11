@@ -565,3 +565,88 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 .actsline span.on{background:var(--accent);animation:grow .6s var(--ease) backwards}
 @media (max-width:1020px){.prism-ring{right:-90px;top:-90px;width:200px;height:200px;opacity:.4}.statusline span:nth-child(n+29){display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.rv{opacity:1;transform:none;filter:none}}
+
+/* ---- iOS/Android hardening ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+button,a,.btn,.padd,.fitem,.cattile,.mtabs a{touch-action:manipulation}
+.island-inner,.side,.tabs,.panel{position:-webkit-sticky}
+
+/* ---- Mobile top nav (rail) + unified header actions ---- */
+.macts{display:none}
+.mnav{display:none}
+@media (max-width:1020px){
+  .island{padding:10px 12px 4px}
+  .island-inner{flex-wrap:wrap;row-gap:10px;padding:8px 8px 8px 14px}
+  .mm-hide{display:none !important}
+  .macts{display:flex;gap:8px;margin-left:auto}
+  .mi{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;text-decoration:none;color:var(--ink)}
+  .mi i{font-size:19px}
+  .mi:active{transform:scale(.92)}
+  .mcart{background:var(--accent);border-color:var(--accent);color:#fff}
+  .mcart b{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:9px;background:#fff;color:var(--accent-ink);font-size:10px;font-weight:800;display:grid;place-items:center;border:1px solid var(--accent);padding:0 3px}
+  .mnav{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;padding:2px 2px 4px;scrollbar-width:none;scroll-snap-type:x proximity}
+  .mnav::-webkit-scrollbar{display:none}
+  .mnav a{flex:none;scroll-snap-align:start;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--muted);text-decoration:none}
+  .mnav a i{font-size:16px;color:var(--accent)}
+  .mnav a.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .mnav a.on i{color:#fff}
+}
+/* ---- Mobile background decor (open-source style patterns: dot grid + diagonal hatch) ---- */
+@media (max-width:1020px){
+  .mbg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      radial-gradient(circle, rgba(29,78,216,.07) 1px, transparent 1.5px),
+      repeating-linear-gradient(135deg, rgba(29,78,216,.028) 0 1px, transparent 1px 14px);
+    background-size:22px 22px, auto}
+  .island,.mtabs,.wafloat,.botfab,.botpanel,#sendbar,.bactions{position:relative;z-index:2}
+  .mtabs,.wafloat,.botfab,.botpanel,.island{z-index:60}
+  main,.wrap{position:relative;z-index:1}
+}
+/* ---- Footer contact buttons (mobile) ---- */
+@media (max-width:1020px){
+  footer .cols{grid-template-columns:1fr;gap:20px}
+  .fbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .fbtns a{flex:1 1 auto;justify-content:center}
+}
+.fbtns{display:none}
+/* ---- Shyam Assist ---- */
+.botfab{position:fixed;left:16px;bottom:24px;z-index:85;width:56px;height:56px;border-radius:50%;
+  border:0;background:var(--dark);color:#BFDBFE;display:grid;place-items:center;cursor:pointer;
+  box-shadow:0 16px 40px rgba(30,58,139,.4);transition:transform .6s var(--ease)}
+.botfab i{font-size:26px}
+.botfab:hover{transform:translateY(-3px)}
+.botfab:active{transform:scale(.93)}
+.botpanel{position:fixed;left:16px;bottom:92px;z-index:95;width:min(380px,calc(100vw - 32px));
+  background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(27,36,48,.3);display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transform:translateY(24px) scale(.98);transition:all .6s var(--ease)}
+.botpanel.open{opacity:1;pointer-events:auto;transform:none}
+.botpanel header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--dark);color:#fff}
+.botpanel header .spec{color:#BFDBFE}
+.botclose{border:0;background:rgba(255,255,255,.12);color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer}
+.botlog{padding:14px;display:flex;flex-direction:column;gap:10px;max-height:min(46vh,380px);overflow-y:auto;background:var(--bg-soft)}
+.botmsg{max-width:88%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:19px}
+.botmsg.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.botmsg.me{background:var(--accent);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.botmsg.t span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);margin-right:3px;animation:pulse 1.2s infinite}
+.botmsg.t span:nth-child(2){animation-delay:.2s}.botmsg.t span:nth-child(3){animation-delay:.4s}
+.botmsg b{font-weight:700}
+.botcard{background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:6px}
+.botcard span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.botrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.botrow a{font-size:12px;font-weight:700;color:var(--accent-ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:#fff}
+.botchips{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 8px}
+.botchips button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.botform{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.botform input{flex:1;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font:inherit;font-size:14px;outline:none}
+.botform input:focus{border-color:var(--accent)}
+.botsend{width:40px;height:40px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:17px;cursor:pointer;flex:none}
+.botfoot{margin:0;padding:6px 14px 10px;font-size:11px;color:var(--muted);text-align:center}
+.botfoot a{color:var(--accent-ink);font-weight:700}
+@media (max-width:1020px){
+  .botfab{left:12px;bottom:calc(120px + env(safe-area-inset-bottom));width:52px;height:52px}
+  .botpanel{left:10px;right:10px;width:auto;bottom:calc(182px + env(safe-area-inset-bottom))}
+  .botlog{max-height:38vh}
+}
+@media (min-width:1021px){.botpanel{bottom:96px}}

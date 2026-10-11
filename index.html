@@ -13,23 +13,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261011e">
+<link rel="stylesheet" href="assets/styles.css?v=20261011g">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
+<div class="mbg" aria-hidden="true"></div>
 <div class="announce">Authorized <b>Polymatic Pneumatic</b> distributor · Same-day supply across the RIICO Neemrana belt · GST invoice with every sale</div>
 
 <header class="island no-print"><div class="island-inner">
 <a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Industrial & Project Suppliers</small></span></a>
 <nav class="navlinks" aria-label="Primary">
-<a href="index.html" aria-current="page">Home</a><a href="shop.html">Shop</a><a href="#lake">Product lake</a><a href="billing.html">Estimate</a><a href="#contact">Contact</a>
+<a href="index.html" aria-current="page">Home</a><a href="shop.html">Shop</a><a href="#lake">Product lake</a><a href="checkout.html">Checkout</a><a href="#contact">Contact</a>
 </nav>
 <span class="live"><i></i>Counter open</span>
 <a class="btn btn-amber" href="shop.html">Get estimate</a>
 <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="hgi-stroke hgi-menu-01"></i></button>
 </div></header>
-<div class="mobile-menu" id="mmenu"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="#lake">Product lake</a><a href="billing.html">Estimate</a><a href="#contact">Contact</a><a href="account.html">Account</a><a href="admin.html">Counter login</a></div>
+<div class="mobile-menu" id="mmenu"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="#lake">Product lake</a><a href="checkout.html">Checkout</a><a href="#contact">Contact</a><a href="account.html">Account</a></div>
 
 <main id="main">
 <!-- HERO -->
@@ -205,7 +206,6 @@
 <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;position:relative;z-index:2">
 <a class="btn btn-amber" href="shop.html">Start estimate</a>
 <a class="btn btn-ghost" style="border-color:#BFDBFE;color:#fff" href="tel:+917240107540">Call shop</a>
-<a class="btn btn-ghost" style="border-color:#BFDBFE;color:#fff" href="admin.html">Counter login</a>
 </div>
 </div>
 </section>
@@ -213,12 +213,14 @@
 
 <footer><div class="wrap cols">
 <div><a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Enterprises</small></span></a>
-<p>Bearings, belts, fasteners, pneumatics, tools and industrial electricals.<br>Authorized Polymatic Pneumatic distributor.</p><span class="live"><i></i>Stock synced on each bill</span></div>
-<div><b>Shop</b><br><a href="shop.html">Catalogue</a><br><a href="billing.html">Estimate</a><br><a href="#lake">Product lake</a></div>
-<div><b>Counter</b><br><a href="admin.html">Admin</a><br><a href="billing.html">Billing</a><br><a href="account.html">Your account</a></div>
+<p>Bearings, belts, fasteners, pneumatics, tools and industrial electricals.<br>Authorized Polymatic Pneumatic distributor.</p>
+<div class="fbtns"><a class="btn btn-primary" href="tel:+917240107540"><i class="hgi-stroke hgi-call"></i>Call shop</a>
+<a class="btn btn-amber" href="https://wa.me/917240107540"><i class="hgi-stroke hgi-whatsapp"></i>WhatsApp</a></div><span class="live"><i></i>Stock synced on each bill</span></div>
+<div><b>Shop</b><br><a href="shop.html">Catalogue</a><br><a href="checkout.html">Checkout</a><br><a href="#lake">Product lake</a></div>
+<div><b>Reach us</b><br><a href="tel:+917240107540">Call 72401 07540</a><br><a href="https://wa.me/917240107540">WhatsApp</a><br><a href="mailto:shreeshyamenterprises7540@gmail.com">Email</a></div>
 <div><b>Legal</b><br><a href="privacy.html">Privacy</a><br><a href="terms.html">Terms</a></div>
 </div><div class="wrap"><div class="giant" aria-hidden="true">SHREE SHYAM</div></div></footer>
-<script src="assets/app.js?v=20261011e"></script>
+<script src="assets/app.js?v=20261011g"></script>
 <script>
 document.getElementById('menuBtn').onclick=()=>document.getElementById('mmenu').classList.toggle('open');
 document.getElementById('mmenu').onclick=e=>{if(e.target.tagName==='A')e.currentTarget.classList.remove('open')};
@@ -272,5 +274,6 @@ document.getElementById('bulkForm').addEventListener('submit',e=>{
   window.open('https://wa.me/917240107540?text='+encodeURIComponent(msg),'_blank');
 });
 </script>
+<script src="assets/bot.js?v=20261011g"></script>
 </body>
 </html>

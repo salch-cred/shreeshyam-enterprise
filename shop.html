@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261011f">
+<link rel="stylesheet" href="assets/styles.css?v=20261011g">
 <style>
 /* ---- shop v4: large desktop marketplace ---- */
 main.wide{max-width:1440px}
@@ -108,10 +108,11 @@ main.wide{max-width:1440px}
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
+<div class="mbg" aria-hidden="true"></div>
 <div class="announce">Authorized <b>Polymatic Pneumatic</b> distributor · Same-day supply across the RIICO Neemrana belt · GST invoice with every sale</div>
 <header class="island"><div class="island-inner">
 <a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Live stock</small></span></a>
-<nav class="navlinks"><a href="index.html">Home</a><a href="shop.html" aria-current="page">Shop</a><a href="index.html#bulk">Project desk</a><a href="billing.html">Estimate</a><a href="account.html">Account</a></nav>
+<nav class="navlinks"><a href="index.html">Home</a><a href="shop.html" aria-current="page">Shop</a><a href="index.html#bulk">Project desk</a><a href="checkout.html">Checkout</a><a href="account.html">Account</a></nav>
 <a class="btn btn-primary" href="checkout.html"><i class="hgi-stroke hgi-shopping-cart-01"></i><span id="cartN">List 0</span></a>
 </div></header>
 
@@ -162,8 +163,8 @@ main.wide{max-width:1440px}
 <footer><div class="wrap cols">
 <div><a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Enterprises</small></span></a>
 <p>Retail and wholesale. GSTIN on request at counter.</p></div>
-<div><b>Shop</b><br><a href="shop.html">Catalogue</a><br><a href="checkout.html">Checkout</a><br><a href="billing.html">Estimate</a></div>
-<div><b>Counter</b><br><a href="admin.html">Admin</a><br><a href="account.html">Your account</a></div>
+<div><b>Shop</b><br><a href="shop.html">Catalogue</a><br><a href="checkout.html">Checkout</a><br><a href="checkout.html">Checkout</a></div>
+<div><b>Reach us</b><br><a href="tel:+917240107540">Call 72401 07540</a><br><a href="https://wa.me/917240107540">WhatsApp</a><br><a href="account.html">Your account</a></div>
 <div><b>Legal</b><br><a href="privacy.html">Privacy</a><br><a href="terms.html">Terms</a></div>
 </div></footer>
 
@@ -187,7 +188,7 @@ main.wide{max-width:1440px}
 </div>
 </aside>
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
-<script src="assets/app.js?v=20261011f"></script>
+<script src="assets/app.js?v=20261011g"></script>
 <script>
 let ALL=[],pg=1,cart=[],cat='',slab='retail',brands=new Set(),stockOnly=false,qvP=null,qvQty=1;
 const grid=SSE.$('#grid');
@@ -316,4 +317,5 @@ function render(append){
   }
 }
 init();
-</script></body></html>
+</script><script src="assets/bot.js?v=20261011g"></script>
+</body></html>

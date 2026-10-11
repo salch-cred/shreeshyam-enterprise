@@ -20,6 +20,7 @@ const CheckoutIn = z.object({
   phone: z.string().regex(/^[0-9]{10}$/),
   email: z.string().max(120).optional().default(''),
   address: z.string().min(4).max(400),
+  method: z.enum(['upi', 'cod', 'card']).default('upi'),
 });
 
 function gatewayConfigured(): boolean {
@@ -42,10 +43,18 @@ payments.post('/payments/create-order', rateLimit(60 * 60 * 1000, 30), async (re
     if (grand < 1) return next(Object.assign(new Error('Amount must be at least Rs 1'), { status: 400 }));
 
     const orderId = 'SSE' + Date.now().toString(36).toUpperCase();
-    const record = JSON.stringify({ orderId, customer: { name: b.name, phone: b.phone, address: b.address }, items: b.items, sub, gst, grand });
+    const record = JSON.stringify({ orderId, method: b.method, customer: { name: b.name, phone: b.phone, address: b.address }, items: b.items, sub, gst, grand });
 
     // Best-effort persistence; checkout still works before the DB is wired.
     try { await requireDb().query('INSERT INTO orders(id,source,text) VALUES($1,$2,$3)', [orderId, 'checkout', record.slice(0, 1000)]); } catch { /* offline */ }
+
+    // Cash on delivery — no gateway, collect on dispatch. Belt area only note on UI.
+    if (b.method === 'cod') {
+      return res.status(201).json({ mode: 'cod', orderId, sub, gst, grand });
+    }
+    if (b.method === 'card' && !gatewayConfigured()) {
+      return next(Object.assign(new Error('Card payments are not active yet — choose UPI or Cash on delivery.'), { status: 400 }));
+    }
 
     if (gatewayConfigured()) {
       const email = b.email || `orders+${b.phone}@shreeshyamhardware.site`;
