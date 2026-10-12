@@ -592,8 +592,8 @@ const SSE = (() => {
       });
     }
 
-    // Load Canva URL
-    function loadCanvaUrl(url) {
+    // Load Figma / Canva / Video URL
+    function loadMediaUrl(url) {
       if (!url) return;
       let embedUrl = url.trim();
 
@@ -601,8 +601,17 @@ const SSE = (() => {
       const srcMatch = embedUrl.match(/src=["'](.*?)["']/);
       if (srcMatch && srcMatch[1]) embedUrl = srcMatch[1];
 
-      // Clean and normalize Canva URL
-      if (embedUrl.includes('canva.com/design/')) {
+      let isFigma = false;
+      let isCanva = false;
+
+      // Figma handler (proto, design, file)
+      if (embedUrl.includes('figma.com')) {
+        isFigma = true;
+        if (!embedUrl.includes('figma.com/embed')) {
+          embedUrl = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(embedUrl)}`;
+        }
+      } else if (embedUrl.includes('canva.com/design/')) {
+        isCanva = true;
         if (!embedUrl.includes('?embed') && !embedUrl.includes('&embed')) {
           embedUrl = embedUrl.replace(/\/view(\?.*)?$/, '') + '/view?embed';
         }
@@ -613,8 +622,8 @@ const SSE = (() => {
         canvaIframe.style.display = 'block';
         canvas.style.display = 'none';
       }
-      if (stageTitle) stageTitle.textContent = 'Canva Live Motion & Video Presentation';
-      if (stageBadge) stageBadge.textContent = 'CANVA EMBED';
+      if (stageTitle) stageTitle.textContent = isFigma ? 'Live Figma Interactive Prototype (Working Flows & Clicks)' : (isCanva ? 'Canva Motion Video Reel' : 'Live Embedded Motion Console');
+      if (stageBadge) stageBadge.textContent = isFigma ? 'FIGMA PROTOTYPE' : (isCanva ? 'CANVA EMBED' : 'LIVE EMBED');
       if (btnResetToReels) btnResetToReels.style.display = 'inline-flex';
     }
 
@@ -624,21 +633,21 @@ const SSE = (() => {
       btnLoadCanva.addEventListener('click', () => {
         const u = inputUrl.value.trim();
         if (u) {
-          loadCanvaUrl(u);
+          loadMediaUrl(u);
         } else {
-          alert('Please paste a Canva design embed link or view URL.');
+          alert('Please paste a Figma prototype link (https://www.figma.com/proto/...) or design embed URL.');
         }
       });
     }
 
-    // Demo Canva Reel
+    // Demo Figma Prototype
     const btnSampleCanva = document.getElementById('btnSampleCanva');
     if (btnSampleCanva) {
       btnSampleCanva.addEventListener('click', () => {
-        // High quality industrial presentation embed demo
-        const demoUrl = 'https://www.canva.com/design/DAGQ_8yJ3f0/view?embed';
-        if (inputUrl) inputUrl.value = demoUrl;
-        loadCanvaUrl(demoUrl);
+        // Live working Figma design embed
+        const figmaDemoUrl = 'https://www.figma.com/proto/6R0pT9Y7o8w7BqJz/Design-System-Live?node-id=1-2&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&embed_host=share';
+        if (inputUrl) inputUrl.value = 'https://www.figma.com/proto/6R0pT9Y7o8w7BqJz/Design-System-Live';
+        loadMediaUrl(figmaDemoUrl);
       });
     }
 
