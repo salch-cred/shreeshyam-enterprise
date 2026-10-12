@@ -860,7 +860,46 @@ section.block{padding:88px 0}
   50%{transform:translateY(-6px)}
 }
 
-/* Hero Counter Status Pill (No AI slop / No cartoon) */
+/* Hero Mascot Peeking over Phone */
+.weav-mascot-peek{
+  position:absolute;
+  top:-46px;
+  right:16px;
+  z-index:10;
+  cursor:pointer;
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+}
+.weav-mascot-peek .speech{
+  background:#FFFFFF;
+  color:#0F172A;
+  border-radius:14px;
+  padding:6px 12px;
+  font-size:11.5px;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  white-space:nowrap;
+  position:relative;
+  border:1px solid #E2E8F0;
+}
+.weav-mascot-peek .speech::after{
+  content:"";
+  position:absolute;
+  bottom:8px;
+  right:-6px;
+  border-width:6px 0 6px 6px;
+  border-style:solid;
+  border-color:transparent transparent transparent #FFFFFF;
+}
+.weav-mascot-peek .avatar-art{
+  width:64px;
+  height:72px;
+  animation:mascotBob 3.5s ease-in-out infinite;
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,.2));
+}
+
+/* Also support clean pill if needed */
 .weav-counter-status-pill{
   position:absolute;
   top:-32px;
@@ -2561,6 +2600,32 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
   user-select:none;
   -webkit-user-select:none;
 }
+.sse-mascot-wrap{
+  position:relative;
+  pointer-events:auto;
+  cursor:pointer;
+  transition:transform .3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.sse-mascot-wrap:hover{
+  transform:scale(1.08) translateY(-4px);
+}
+.sse-mascot-wrap:active{
+  transform:scale(0.95);
+}
+.sse-mascot-art{
+  width:88px;
+  height:94px;
+  filter:drop-shadow(0 14px 22px rgba(15,23,42,.32));
+  animation:mascotBob 4.2s ease-in-out infinite;
+}
+.sse-mascot-shadow{
+  width:64px;
+  height:12px;
+  background:radial-gradient(ellipse at center, rgba(15,23,42,.32) 0%, rgba(15,23,42,0) 72%);
+  border-radius:50%;
+  margin:2px auto 0;
+  animation:shadowScale 4.2s ease-in-out infinite;
+}
 .sse-desk-launcher{
   width:54px;
   height:54px;
@@ -3011,6 +3076,14 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
   }
   .desk-launcher-icon{
     font-size:21px;
+  }
+  .sse-mascot-art{
+    width:66px;
+    height:70px;
+  }
+  .sse-mascot-shadow{
+    width:48px;
+    height:9px;
   }
   .sse-mascot-bubble{
     max-width:180px;
