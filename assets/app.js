@@ -209,9 +209,58 @@ const SSE = (() => {
     });
   }
 
+  /* EventBeds™ Luxury Header Menu and Drawer Controller */
+  function initEventBedsHeader() {
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('mmenu');
+    const drawerClose = document.getElementById('drawerClose');
+
+    if (!menuBtn || !drawer) return;
+
+    function toggleMenu(open) {
+      const isOpen = open !== undefined ? open : !drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.add('open');
+        document.body.classList.add('menu-open');
+        menuBtn.setAttribute('aria-expanded', 'true');
+      } else {
+        drawer.classList.remove('open');
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    if (drawerClose) {
+      drawerClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu(false);
+      });
+    }
+
+    // Close on clicking backdrop/outside drawer
+    document.addEventListener('click', (e) => {
+      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !menuBtn.contains(e.target)) {
+        toggleMenu(false);
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) {
+        toggleMenu(false);
+      }
+    });
+  }
+
   function initApp() {
     footer();
     initInsporaFeed();
+    initEventBedsHeader();
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);else initApp();

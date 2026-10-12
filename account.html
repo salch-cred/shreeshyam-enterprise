@@ -626,61 +626,132 @@
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain no-print" aria-hidden="true"></div>
 
-<!-- FIGMA & WEBFLOW LUXURY HEADER -->
+<!-- EVENTBEDS™ LUXURY HEADER (https://www.eventbeds.com) -->
 <header class="site-header no-print">
-  <div class="site-header-inner weav-header-layout">
-    <!-- Left: Brand Logo Geometry -->
-    <a class="site-brand" href="index.html">
-      <div class="site-brand-icon"><i class="hgi-stroke hgi-settings-01"></i></div>
-      <div class="site-brand-text">
-        <span class="site-brand-title">Shree Shyam <span class="brand-oem-chip">OEM Partner</span></span>
-        <span class="site-brand-tag"><i class="hgi-stroke hgi-location-01"></i>RIICO Neemrana Hub · 25m SLA</span>
+  <div class="site-header-inner">
+    <!-- Brand Logotype: EventBeds™ styling -->
+    <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
+      <div class="eventbeds-logo-icon">
+        <i class="hgi-stroke hgi-settings-01" style="font-size:20px"></i>
+      </div>
+      <div class="eventbeds-brand-text">
+        <span class="eventbeds-title">
+          Shree Shyam<span class="eventbeds-tm">™</span>
+        </span>
+        <span class="eventbeds-sub">by RIICO Industrial Hub</span>
       </div>
     </a>
 
-    <!-- Center: Figma Floating Capsule Nav -->
-    <nav class="figma-nav-center" aria-label="Quick Navigation">
-      <a href="shop.html" class="figma-nav-link">
-        <i class="hgi-stroke hgi-package"></i>
-        <span>Catalog</span>
-        <span class="figma-nav-badge">10k+</span>
+    <!-- Center: EventBeds Desktop Nav -->
+    <nav class="eventbeds-nav-center" aria-label="Main Navigation">
+      <a href="shop.html" class="eventbeds-nav-link">
+        <span>Catalogue</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
       </a>
-      <a href="index.html#lake" class="figma-nav-link">
-        <i class="hgi-stroke hgi-layers-01"></i>
-        <span>OEM Makes</span>
-        <span class="figma-nav-badge">SKF · Fenner</span>
+      <a href="index.html#lake" class="eventbeds-nav-link">
+        <span>For Plants</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
       </a>
-      <a href="account.html" class="figma-nav-link active">
-        <i class="hgi-stroke hgi-wallet-01"></i>
+      <a href="account.html" class="eventbeds-nav-link active" style="color:#FFFFFF">
         <span>Plant Credit</span>
-        <span class="figma-nav-badge">Net 30</span>
+        <span class="eb-nav-arrow" style="opacity:1;transform:none"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
       </a>
-      <a href="index.html#bulk" class="figma-nav-link">
-        <i class="hgi-stroke hgi-document-validation"></i>
-        <span>Project Desk</span>
-        <span class="figma-nav-badge">BOQ</span>
+      <a href="index.html#bulk" class="eventbeds-nav-link">
+        <span>Project BOQ</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
       </a>
     </nav>
 
     <!-- Right: Fast Action Suite -->
-    <div class="weav-header-right">
-      <a class="figma-search-pill" href="shop.html" aria-label="Search parts">
+    <div class="eventbeds-actions">
+      <a class="eventbeds-search-pill" href="shop.html" aria-label="Search parts">
         <i class="hgi-stroke hgi-search-01"></i>
         <span>Search parts...</span>
         <kbd>⌘K</kbd>
       </a>
-      <a class="weav-cart-btn" href="checkout.html">
+
+      <a class="eventbeds-cart-btn" href="checkout.html" aria-label="Cart and Instant Estimate">
         <i class="hgi-stroke hgi-shopping-cart-01"></i>
-        <span class="weav-cart-label">Cart</span>
-        <span class="weav-cart-count nav-badge" data-nav-badge>0</span>
+        <span class="eventbeds-cart-label">Cart</span>
+        <span class="eventbeds-cart-count nav-badge" data-nav-badge>0</span>
       </a>
-      <a class="weav-navi-btn" href="index.html">
-        <span class="weav-navi-label">Home</span>
-        <span class="weav-navi-icon"><i class="hgi-stroke hgi-home-01"></i></span>
+
+      <!-- EventBeds Signature Black Pill Button -->
+      <a class="eventbeds-black-btn desktop" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
+        <div class="eb-btn-slider">
+          <span class="eb-btn-text">Quick BOQ</span>
+          <span class="eb-btn-text hover">WhatsApp 24/7</span>
+        </div>
       </a>
+
+      <!-- EventBeds Menu Capsule -->
+      <button class="eventbeds-menu-btn" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <div class="eb-menu-text-wrap">
+          <span class="eb-menu-label open">Menu</span>
+          <span class="eb-menu-label close">Close</span>
+        </div>
+        <div class="eb-status-dots-box" aria-hidden="true">
+          <span class="eb-status-dot pulse-lime"></span>
+          <span class="eb-status-dot neutral"></span>
+        </div>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- EVENTBEDS™ MOBILE DRAWER -->
+<div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
+  <div class="site-drawer-head">
+    <div class="eventbeds-brand">
+      <div class="eventbeds-logo-icon">
+        <i class="hgi-stroke hgi-settings-01" style="font-size:18px"></i>
+      </div>
+      <div class="eventbeds-brand-text">
+        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
+        <span class="eventbeds-sub">RIICO Industrial Hub</span>
+      </div>
+    </div>
+    <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
+  </div>
+
+  <div class="site-drawer-nav">
+    <a href="index.html" class="drawer-link-block">
+      <span>Home Overview</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="shop.html" class="drawer-link-block">
+      <span>Catalogue & Pricing (10k+ SKU)</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="index.html#lake" class="drawer-link-block">
+      <span>Warehouse OEM Lakes</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="account.html" class="drawer-link-block">
+      <span>Plant Credit & Net 30 Ledger (Active)</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="checkout.html" class="drawer-link-block">
+      <span>Cart & GST Estimate</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+  </div>
+
+  <div class="site-drawer-footer">
+    <a class="eventbeds-black-btn" style="width:100%;height:46px;font-size:14px" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
+      <div class="eb-btn-slider" style="height:20px;line-height:20px">
+        <span class="eb-btn-text" style="height:20px">Instant WhatsApp Desk</span>
+        <span class="eb-btn-text hover" style="height:20px">+91 72401 07540</span>
+      </div>
+    </a>
+    <div class="drawer-socials">
+      <a class="drawer-social-icon" href="tel:+917240107540" title="Call Shop Desk"><i class="hgi-stroke hgi-call"></i></a>
+      <a class="drawer-social-icon" href="mailto:shreeshyamenterprises7540@gmail.com" title="Email Dispatch"><i class="hgi-stroke hgi-mail-01"></i></a>
+      <a class="drawer-social-icon" href="https://maps.google.com/?q=RIICO+Industrial+Area+Neemrana" target="_blank" rel="noopener" title="Directions"><i class="hgi-stroke hgi-location-01"></i></a>
+      <span style="font-size:11px;color:#94A3B8;margin-left:auto;font-weight:600">Open 9AM - 8PM</span>
+    </div>
+  </div>
+</div>
 
 <main id="main">
   <div class="auth-page-container">
