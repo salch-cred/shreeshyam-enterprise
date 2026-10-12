@@ -162,6 +162,20 @@ const SSE = (() => {
         }
       }
     }, { passive: true });
+
+    // Global Cmd+K / Ctrl+K search shortcut (Figma / Webflow pattern)
+    window.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        const qInput = document.getElementById('q');
+        if (qInput) {
+          qInput.focus();
+          qInput.select();
+        } else {
+          window.location.href = 'shop.html';
+        }
+      }
+    });
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',footer);else footer();
