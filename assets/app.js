@@ -178,9 +178,46 @@ const SSE = (() => {
     });
   }
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',footer);else footer();
+  /* Inspora.design live category filter tab handler */
+  function initInsporaFeed() {
+    const tabs = document.querySelectorAll('#insporaTabs .inspora-tab-btn');
+    const cards = document.querySelectorAll('#insporaFeed .inspora-card');
+    if (!tabs.length || !cards.length) return;
 
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, footer, updateNavBadge, $ };
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.getAttribute('data-filter') || 'all';
+
+        cards.forEach(card => {
+          const cat = card.getAttribute('data-category');
+          if (filter === 'all' || cat === filter) {
+            card.style.display = 'block';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(12px)';
+            requestAnimationFrame(() => {
+              card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            });
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  function initApp() {
+    footer();
+    initInsporaFeed();
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);else initApp();
+
+  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, footer, updateNavBadge, initInsporaFeed, $ };
 })();
+
 
 
