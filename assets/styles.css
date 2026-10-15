@@ -4587,5 +4587,696 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
   }
 }
 
+/* ==========================================================
+   EVENTBEDS™ LUXURY DESIGN SYSTEM (1:1 ARCHITECTURE)
+   Adapted for Shree Shyam Enterprises Industrial MRO Platform
+   ========================================================== */
 
+:root {
+  --eb-black: #0A0F1D;
+  --eb-dark-card: #121829;
+  --eb-lime: #CDE06A;
+  --eb-lime-hover: #b8cc58;
+  --eb-violet: #8D8AFF;
+  --eb-violet-dark: #6E56CF;
+  --eb-grey-text: #8F9CAE;
+  --eb-white: #FFFFFF;
+  --eb-border: rgba(255, 255, 255, 0.1);
+  --eb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
 
+/* 2. EventBeds Hero Section with 3D Plant Layers & Floating Pins */
+.eb-hero-sc {
+  position: relative;
+  background: #080D1A;
+  color: #FFFFFF;
+  overflow: hidden;
+  padding: 50px 0 70px;
+  min-height: 82vh;
+  display: flex;
+  align-items: center;
+}
+.eb-hero-sc::before {
+  content: "";
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(56, 189, 248, 0.18) 0%, rgba(29, 78, 216, 0.08) 50%, transparent 75%);
+  pointer-events: none;
+}
+.eb-city-layers {
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+.eb-hero-header {
+  text-align: center;
+  max-width: 880px;
+  margin: 0 auto 34px;
+  position: relative;
+  z-index: 5;
+}
+.eb-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--eb-lime);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.eb-hero-eyebrow .eb-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--eb-lime);
+  box-shadow: 0 0 10px var(--eb-lime);
+  animation: ebDotPulse 2s infinite ease-in-out;
+}
+.eb-hero-subhead {
+  font-size: clamp(16px, 2.2vw, 22px);
+  color: var(--eb-grey-text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.eb-hero-h1 {
+  font-size: clamp(38px, 5.8vw, 72px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  margin: 0 0 22px;
+  text-wrap: balance;
+}
+.eb-hero-h1 span.hl {
+  color: var(--eb-lime);
+  display: inline-block;
+  position: relative;
+}
+.eb-hero-desc {
+  font-size: clamp(15px, 1.6vw, 17.5px);
+  line-height: 1.6;
+  color: #94A3B8;
+  max-width: 680px;
+  margin: 0 auto 32px;
+  text-wrap: pretty;
+}
+
+/* EventBeds Floating Interactive Pins over Plant Map */
+.eb-map-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: 420px;
+  margin: 0 auto;
+  border-radius: 32px;
+  background: linear-gradient(180deg, rgba(18, 24, 41, 0.85) 0%, rgba(10, 15, 29, 0.98) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+.eb-map-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(205, 224, 106, 0.14) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px, 48px 48px, 48px 48px;
+  pointer-events: none;
+}
+.eb-map-radar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(56, 189, 248, 0.18);
+  pointer-events: none;
+}
+.eb-map-radar-ring.r1 { width: 180px; height: 180px; }
+.eb-map-radar-ring.r2 { width: 340px; height: 340px; }
+.eb-map-radar-ring.r3 { width: 500px; height: 500px; }
+
+.eb-map-zone-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.eb-zone-tag {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: monospace;
+}
+.eb-zone-tag.z1 { top: 25px; left: 35px; }
+.eb-zone-tag.z2 { top: 25px; right: 45px; }
+.eb-zone-tag.z3 { bottom: 30px; left: 45px; }
+.eb-zone-tag.z4 { bottom: 30px; right: 45px; }
+
+/* Interactive Pins */
+.eb-pin {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #FFFFFF;
+  color: #000000;
+  padding: 7px 14px 7px 10px;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition: transform 0.28s var(--eb-ease), box-shadow 0.28s;
+  z-index: 10;
+  text-decoration: none;
+}
+.eb-pin:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 16px 36px rgba(205, 224, 106, 0.35);
+}
+.eb-pin-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--eb-lime);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  color: #000000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.eb-pin-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.eb-pin-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.01em;
+}
+.eb-pin-sub {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #64748B;
+}
+.eb-pin-price {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: -0.02em;
+  margin-left: 4px;
+}
+.eb-pin.p1 { top: 20%; left: 14%; }
+.eb-pin.p2 { top: 44%; left: 42%; }
+.eb-pin.p3 { top: 22%; right: 15%; }
+.eb-pin.p4 { bottom: 20%; right: 24%; }
+
+/* Pin Tooltip Dropdown */
+.eb-pin-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: #0B1120;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  padding: 10px 14px;
+  color: #FFFFFF;
+  min-width: 210px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s var(--eb-ease);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+  z-index: 20;
+}
+.eb-pin:hover .eb-pin-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.eb-pin-tooltip b {
+  display: block;
+  font-size: 12px;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+.eb-pin-tooltip span {
+  display: block;
+  font-size: 10.5px;
+  color: #94A3B8;
+  margin-bottom: 6px;
+}
+.eb-pin-tooltip .cta-line {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--eb-lime);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Hero Center Fast CTAs */
+.eb-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+/* 3. EventBeds Triple-Device Discovery Section */
+.eb-discover-sc {
+  background: #060A14;
+  padding: 90px 0;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.eb-discover-head {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 56px;
+}
+.eb-discover-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--eb-grey-text);
+  margin-bottom: 12px;
+}
+.eb-discover-h2 {
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  color: #FFFFFF;
+  line-height: 1.08;
+  margin: 0 0 14px;
+}
+.eb-discover-sub {
+  font-size: 16px;
+  color: #94A3B8;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.eb-device-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.eb-device-card {
+  background: #0B1120;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 24px 20px 26px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s var(--eb-ease), border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.5);
+}
+.eb-device-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(205, 224, 106, 0.4);
+  box-shadow: 0 24px 60px -10px rgba(205, 224, 106, 0.15);
+}
+.eb-device-screen {
+  background: #080D1A;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  height: 240px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.eb-screen-head {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.eb-screen-dots {
+  display: flex;
+  gap: 4px;
+}
+.eb-screen-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+.eb-screen-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94A3B8;
+  font-family: monospace;
+}
+.eb-screen-content {
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+.eb-device-info h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+.eb-device-info p {
+  font-size: 13.5px;
+  color: #94A3B8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 4. EventBeds Feature Suite ("Procure & Run") */
+.eb-features-sc {
+  background: #0A0F1D;
+  padding: 90px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.eb-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.eb-feat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.28s var(--eb-ease);
+}
+.eb-feat-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(205, 224, 106, 0.35);
+  transform: translateY(-4px);
+}
+.eb-feat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(205, 224, 106, 0.12);
+  border: 1px solid rgba(205, 224, 106, 0.25);
+  color: var(--eb-lime);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+.eb-feat-card h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 8px;
+}
+.eb-feat-card p {
+  font-size: 13px;
+  color: #94A3B8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 5. EventBeds Asymmetric Bento Grid ("Deals to make your eyes water") */
+.eb-bento-sc {
+  background: #080D1A;
+  padding: 100px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.eb-bento-head {
+  text-align: center;
+  max-width: 740px;
+  margin: 0 auto 56px;
+}
+.eb-bento-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 28px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.eb-bento-card {
+  background: #0B1120;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 32px 36px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.5);
+}
+.eb-bento-card.wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: center;
+}
+.eb-bento-card h3 {
+  font-size: 26px;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin: 0 0 10px;
+  letter-spacing: -0.03em;
+}
+.eb-bento-card p {
+  font-size: 15px;
+  color: #94A3B8;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+.eb-bento-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--eb-lime);
+  background: rgba(205, 224, 106, 0.1);
+  border: 1px solid rgba(205, 224, 106, 0.25);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+/* 6. EventBeds Split Cards (Safe Payments + Corporate Credit) */
+.eb-split-sc {
+  background: #060A14;
+  padding: 90px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.eb-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.eb-split-card {
+  border-radius: 28px;
+  padding: 38px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.eb-split-card.violet {
+  background: linear-gradient(135deg, #4338CA 0%, #312E81 100%);
+  color: #FFFFFF;
+  box-shadow: 0 24px 60px -15px rgba(67, 56, 202, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.eb-split-card.obsidian {
+  background: #0B1120;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.5);
+}
+.eb-split-card h3 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 12px;
+  letter-spacing: -0.03em;
+}
+.eb-split-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+  opacity: 0.9;
+}
+
+/* 7. EventBeds Moving Ticker Marquee Strip */
+.eb-ticker-strip {
+  background: var(--eb-lime);
+  color: #000000;
+  padding: 14px 0;
+  overflow: hidden;
+  font-weight: 900;
+  font-size: 13.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.eb-ticker-track {
+  display: inline-flex;
+  animation: ebTickerScroll 28s linear infinite;
+}
+.eb-ticker-track span {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+}
+@keyframes ebTickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 8. EventBeds Plant Credit Modal Popup */
+.eb-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 25, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--eb-ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.eb-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.eb-modal-frame {
+  width: 100%;
+  max-width: 520px;
+  background: #0B1120;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 32px 28px;
+  color: #FFFFFF;
+  position: relative;
+  box-shadow: 0 32px 72px rgba(0, 0, 0, 0.7);
+  transform: translateY(20px);
+  transition: transform 0.35s var(--eb-ease);
+}
+.eb-modal-backdrop.open .eb-modal-frame {
+  transform: translateY(0);
+}
+.eb-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.eb-modal-close:hover {
+  background: var(--eb-lime);
+  color: #000000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1020px) {
+  .eb-device-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .eb-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .eb-bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .eb-bento-card.wide {
+    grid-template-columns: 1fr;
+  }
+  .eb-split-grid {
+    grid-template-columns: 1fr;
+  }
+  .eb-map-stage {
+    height: 380px;
+  }
+  .eb-pin.p1 { left: 8%; top: 18%; }
+  .eb-pin.p2 { left: 35%; top: 44%; }
+  .eb-pin.p3 { right: 8%; top: 22%; }
+  .eb-pin.p4 { right: 12%; bottom: 18%; }
+}
+
+@media (max-width: 640px) {
+  .eb-features-grid {
+    grid-template-columns: 1fr;
+  }
+  .eb-map-stage {
+    height: 320px;
+  }
+  .eb-pin {
+    padding: 6px 10px 6px 8px;
+  }
+  .eb-pin-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+  .eb-pin-label {
+    font-size: 10px;
+  }
+  .eb-pin-price {
+    font-size: 11.5px;
+  }
+}
