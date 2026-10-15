@@ -195,7 +195,7 @@ const SSE = (() => {
       badges.forEach(b => {
         if (count > 0) {
           b.textContent = count;
-          b.style.display = 'inline-block';
+          b.style.display = 'inline-flex';
         } else {
           b.textContent = '0';
           b.style.display = 'none';
