@@ -30,7 +30,7 @@
     <!-- Brand Logotype: EventBeds™ styling -->
     <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
       <div class="eventbeds-logo-icon">
-        <i class="hgi-stroke hgi-settings-01" style="font-size:20px"></i>
+        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
       </div>
       <div class="eventbeds-brand-text">
         <span class="eventbeds-title">
@@ -102,7 +102,7 @@
   <div class="site-drawer-head">
     <div class="eventbeds-brand">
       <div class="eventbeds-logo-icon">
-        <i class="hgi-stroke hgi-settings-01" style="font-size:18px"></i>
+        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
       </div>
       <div class="eventbeds-brand-text">
         <span class="eventbeds-title">
@@ -165,51 +165,73 @@
   </div>
 </div>
 
-<!-- WEAV-STYLE ELECTRIC BLUE HERO HEADER & CANVAS -->
-<div class="hero-weav">
-
-  <!-- HERO MAIN CONTENT (WEAV DESIGN: PUNCHY COPY + REALISTIC SMARTPHONE CHAT) -->
-  <div class="weav-grid">
-    <div class="weav-content">
-      <div class="weav-eyebrow">
-        <span class="dot"></span>
-        <span>Industrial & MRO Supply Partner · RIICO Neemrana</span>
+<!-- UPGRADED INDUSTRIAL COMMAND HUB & LIVE DISPATCH TERMINAL -->
+<section class="hero-industrial-hub" aria-label="Industrial Supply Command Hub">
+  <div class="hub-grid">
+    <!-- LEFT: COMPELLING HERO COPY + FAST PARTS SEARCH TERMINAL -->
+    <div class="hub-content">
+      <div class="hub-live-eyebrow">
+        <span class="pulse-dot"></span>
+        <span>Precision MRO Supply · RIICO Neemrana Hub · 25-Min Dispatch</span>
       </div>
 
-      <h1 class="weav-h1">
-        You didn’t build a factory to chase parts and wait for quotes all day.
+      <h1 class="hub-h1">
+        You didn’t build a factory to chase parts and wait for quotes all day. <span class="gradient-text">Get genuine spares in 25 minutes.</span>
       </h1>
 
-      <p class="weav-sub">
-        Shree Shyam Enterprise delivers 10,000+ genuine bearings, transmission belts, pneumatics and fasteners directly to your plant floor. Quoted in 2 minutes, billed with GST, dispatched same-day.
+      <p class="hub-sub">
+        Shree Shyam Enterprises delivers 10,000+ genuine bearings, transmission belts, pneumatics, and high-tensile fasteners directly to your plant floor. Quoted in 2 minutes, billed with GST, dispatched same-day.
       </p>
 
-      <div class="weav-ctas">
-        <a class="weav-btn-white" href="shop.html">
-          Browse 5,000+ Catalogue
+      <!-- FAST PARTS COMMAND SEARCH BAR -->
+      <div class="hero-search-box">
+        <div class="search-input-wrap">
+          <i class="hgi-stroke hgi-search-01 search-icon"></i>
+          <input type="text" id="heroFastSearchInput" placeholder="Quick search 10,000+ parts (e.g. 6205, Polymatic 5/2, M10 Bolt)..." autocomplete="off" aria-label="Fast search industrial parts">
+          <button class="hero-search-submit" id="heroFastSearchBtn" type="button">
+            <span>Find Part</span>
+            <i class="hgi-stroke hgi-arrow-right-01"></i>
+          </button>
+        </div>
+        <div class="hero-fast-chips">
+          <span class="chip-label">Quick SKUs:</span>
+          <button type="button" class="hero-sku-chip" data-search="6205">SKF 6205-2RS</button>
+          <button type="button" class="hero-sku-chip" data-search="Polymatic 5/2">Polymatic 5/2 Valve</button>
+          <button type="button" class="hero-sku-chip" data-search="Fenner A46">Fenner A46 Belt</button>
+          <button type="button" class="hero-sku-chip" data-search="Unbrako M10">Unbrako M10</button>
+          <button type="button" class="hero-sku-chip" data-search="Janatics">Janatics FRL</button>
+        </div>
+      </div>
+
+      <!-- CALLS TO ACTION -->
+      <div class="hub-ctas">
+        <a class="hub-btn-primary" href="shop.html">
+          <span>Browse 10,000+ Catalogue</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a class="weav-btn-glass" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
+        <a class="hub-btn-whatsapp" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          WhatsApp Your BOQ
+          <span>WhatsApp Your BOQ</span>
         </a>
       </div>
 
-      <div class="weav-proof">
-        <div class="stars">★★★★★</div>
-        <p><b>Trusted</b> by maintenance & purchase heads across 40+ RIICO Neemrana plants</p>
-        <div class="weav-proof-pills">
-          <span><i class="hgi-stroke hgi-delivery-truck-01"></i> 25-Min Dispatch</span>
-          <span><i class="hgi-stroke hgi-file-01"></i> GST E-Way Bill</span>
+      <!-- TRUST PROOF METRICS -->
+      <div class="hub-proof">
+        <div class="hub-proof-stars">★★★★★</div>
+        <p class="hub-proof-text"><b>Trusted</b> by maintenance & purchase heads across 40+ RIICO Neemrana plants</p>
+        <div class="hub-proof-pills">
+          <span><i class="hgi-stroke hgi-delivery-truck-01"></i> 25-Min Dispatch SLA</span>
+          <span><i class="hgi-stroke hgi-file-01"></i> GST E-Way Bill Ready</span>
           <span><i class="hgi-stroke hgi-shield-tick"></i> 100% Genuine Boxed</span>
+          <span><i class="hgi-stroke hgi-credit-card-validation"></i> Plant Credit Net 30</span>
         </div>
       </div>
     </div>
 
-    <!-- SMARTPHONE CHAT MOCKUP WITH CARTOON MASCOT PEEK -->
-    <div class="weav-phone-col">
-      <!-- Cartoon Mascot "Shyamu" peeking above the phone -->
-      <div class="weav-mascot-peek" id="heroMascotBadge" title="Tap to talk to Shyamu!">
+    <!-- RIGHT: DUAL-MODE COMMAND CHASSIS (CHAT + DISPATCH RADAR) -->
+    <div class="hub-terminal-col">
+      <!-- Cartoon Mascot "Shyamu" peeking above the terminal chassis -->
+      <div class="hub-mascot-peek" id="heroMascotBadge" title="Tap to talk to Shyamu!">
         <div class="speech">Namaste! Need bulk rates? 👋</div>
         <div class="avatar-art">
           <svg viewBox="0 0 100 110" width="100%" height="100%" fill="none">
@@ -235,78 +257,113 @@
         </div>
       </div>
 
-      <!-- Floating Micro-Badges (Clean HugeIcons) -->
-      <div class="phone-float-badge pf-top">
+      <!-- Floating Micro-Badges -->
+      <div class="hub-float-badge hub-float-top">
         <span class="icon"><i class="hgi-stroke hgi-flash"></i></span>
         <div><b>25-Min Dispatch</b><small>RIICO Neemrana Hub</small></div>
       </div>
 
-      <div class="phone-float-badge pf-bottom">
+      <div class="hub-float-badge hub-float-bottom">
         <span class="icon"><i class="hgi-stroke hgi-document-validation"></i></span>
         <div><b>GST Tax Invoice</b><small>HSN 8482 · E-Way Ready</small></div>
       </div>
 
-      <!-- Smartphone Device Frame -->
-      <div class="weav-phone">
-        <div class="weav-phone-inner">
-          <div class="phone-notch">
-            <div class="notch-camera"></div>
+      <!-- Terminal Frame -->
+      <div class="hub-terminal">
+        <!-- Terminal Head Bar -->
+        <div class="hub-terminal-head">
+          <div class="hub-win-dots">
+            <span class="d-red"></span>
+            <span class="d-yellow"></span>
+            <span class="d-green"></span>
+            <span class="hub-terminal-title">SSE // COUNTER DESK</span>
+          </div>
+          <!-- Mode Tabs -->
+          <div class="hub-mode-tabs" role="tablist">
+            <button class="hub-tab-btn active" id="tabBtnChat" role="tab" aria-selected="true">
+              <i class="hgi-stroke hgi-chat-round-dots"></i>
+              <span>Live Desk</span>
+            </button>
+            <button class="hub-tab-btn" id="tabBtnRadar" role="tab" aria-selected="false">
+              <i class="hgi-stroke hgi-radar"></i>
+              <span>Dispatch Radar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 1: LIVE URGENT BREAKDOWN CHAT -->
+        <div class="hub-view-chat" id="hubViewChat" role="tabpanel">
+          <div class="ht-msg bot">
+            <span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Neemrana)</span>
+            <div class="ht-bubble">Namaste Rajesh ji! Line breakdown or scheduled plant PM today?</div>
           </div>
 
-          <div class="phone-url-bar">
-            <span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              shreeshyam.in/desk
-            </span>
-            <span class="dot-live" title="Online"></span>
+          <div class="ht-msg user">
+            <span class="ht-label user">Ramesh (Maintenance Head)</span>
+            <div class="ht-bubble">Line 2 conveyor stopped! Need: 4 pcs SKF 6205 bearings & 2 pcs Polymatic 5/2 solenoid valves. Fast dispatch to Japanese Zone?</div>
           </div>
 
-          <!-- Chat Conversation (24/7 Animated Loop: Real Technical Scenarios) -->
-          <div class="phone-chat" id="phoneChat">
-            <div class="msg-bot">
-              <span class="label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Hub)</span>
-              <div class="bubble">Namaste Rajesh ji! What breakdown parts or plant BOQ do you need today?</div>
-            </div>
-
-            <div class="msg-user">
-              <span class="label">Ramesh (Maintenance Head)</span>
-              <div class="bubble">Line 2 breakdown! Urgent need: 4 pcs SKF 6205 bearings & 2 pcs Polymatic 5/2 solenoid valves. Can you dispatch to Japanese Zone?</div>
-            </div>
-
-            <div class="msg-bot">
-              <span class="label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Hub)</span>
-              <div class="bubble">Both in shelf stock! ₹1,480 + GST. Delivery van leaving Neemrana hub in 20 mins with tax invoice & test cert.</div>
-              <div class="msg-actions">
-                <span><i class="hgi-stroke hgi-tick-02"></i> Boxed SKF</span>
-                <span><i class="hgi-stroke hgi-truck-delivery"></i> 20-Min Dispatch</span>
-                <span><i class="hgi-stroke hgi-document-validation"></i> HSN 8482</span>
-              </div>
-            </div>
-
-            <div class="msg-user">
-              <span class="label">Ramesh (Maintenance Head)</span>
-              <div class="bubble">Approved! Dispatch immediately with e-way bill.</div>
+          <div class="ht-msg bot">
+            <span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Neemrana)</span>
+            <div class="ht-bubble">Ready in-shelf! ₹1,480 + GST. Delivery van leaving hub in 20 mins with tax invoice & test cert.</div>
+            <div class="ht-tags">
+              <span><i class="hgi-stroke hgi-tick-02"></i> Genuine Boxed</span>
+              <span><i class="hgi-stroke hgi-truck-delivery"></i> Van En Route</span>
+              <span><i class="hgi-stroke hgi-file-01"></i> HSN 8482</span>
             </div>
           </div>
 
-          <!-- Fake Input Area -->
-          <div class="phone-input-fake">
-            <span>Ask for parts or paste part #...</span>
-            <div class="send-btn">↑</div>
+          <div class="ht-quick-prompts">
+            <button type="button" class="ht-prompt-chip" data-ask="Check SKF 6205 Price">Quote: 6205 Bearing</button>
+            <button type="button" class="ht-prompt-chip" data-ask="Polymatic Solenoid Stock?">Polymatic Stock</button>
+            <button type="button" class="ht-prompt-chip" data-ask="Can you issue Net 30 GST Invoice?">Net 30 Terms</button>
           </div>
-          <div class="phone-legal">Authorized Polymatic, SKF & FAG Hub · GST Invoiced</div>
+
+          <div class="ht-input-box">
+            <input type="text" id="htChatInput" placeholder="Ask Shyamu for part price or stock..." autocomplete="off">
+            <button type="button" id="htChatSend" title="Send message"><i class="hgi-stroke hgi-arrow-right-01"></i></button>
+          </div>
+        </div>
+
+        <!-- TAB 2: LIVE DISPATCH RADAR & TELEMETRY HUD -->
+        <div class="hub-view-radar" id="hubViewRadar" role="tabpanel">
+          <div class="radar-hud-bar">
+            <div class="radar-stat">
+              <span>Today Dispatched</span>
+              <b>48 Orders</b>
+            </div>
+            <div class="radar-stat">
+              <span>Avg Plant SLA</span>
+              <b style="color:#CDE06A">21 Mins</b>
+            </div>
+            <div class="radar-stat">
+              <span>Line Uptime</span>
+              <b>99.4%</b>
+            </div>
+          </div>
+
+          <div class="radar-canvas-wrap">
+            <canvas id="dispatchRadarCanvas" width="400" height="190"></canvas>
+            <div class="radar-overlay-badge">
+              <i></i> RIICO NEEMRANA DISPATCH RADAR
+            </div>
+          </div>
+
+          <div class="radar-live-routes">
+            <div class="route-row">
+              <span class="dest"><i class="hgi-stroke hgi-truck-delivery"></i> Van #01 → Japanese Zone (Daikin Line)</span>
+              <span class="eta">ETA 7 mins</span>
+            </div>
+            <div class="route-row">
+              <span class="dest"><i class="hgi-stroke hgi-truck-delivery"></i> Van #02 → Ghiloth Industrial (Havells)</span>
+              <span class="eta">ETA 14 mins</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- SMOOTH FULL-BLEED FLOWING WAVE DIVIDER (MATHEMATICALLY SEAMLESS TO PARTNER BAND) -->
-  <div class="weav-wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1440 72" preserveAspectRatio="none" width="100%" height="72">
-      <path d="M0,36 C138,64 222,64 360,36 C498,8 582,8 720,36 C858,64 942,64 1080,36 C1218,8 1302,8 1440,36 L1440,72 L0,72 Z" fill="#FFF1ED"/>
-    </svg>
-  </div>
-</div>
+</section>
 
 <main id="main">
 
@@ -945,12 +1002,181 @@
 })();
 
 /* ==========================================================
-   24/7 LOOPING SMARTPHONE CHAT: 10 REAL COMPANY & SPARES SCENARIOS
-   Questions asked and answered smoothly in continuous loop
+   UPGRADED INDUSTRIAL COMMAND HUB: SEARCH, CHAT & RADAR
    ========================================================== */
 (()=>{
-  const chatContainer = document.getElementById('phoneChat');
-  if(!chatContainer) return;
+  // 1. Live Fast Parts Search & SKU Chips
+  const searchInput = document.getElementById('heroFastSearchInput');
+  const searchBtn = document.getElementById('heroFastSearchBtn');
+  const skuChips = document.querySelectorAll('.hero-sku-chip');
+
+  const doSearch = (query) => {
+    const q = (query || (searchInput ? searchInput.value : '')).trim();
+    if(q) {
+      window.location.href = `shop.html?q=${encodeURIComponent(q)}`;
+    } else {
+      window.location.href = 'shop.html';
+    }
+  };
+
+  if(searchBtn) {
+    searchBtn.addEventListener('click', () => doSearch());
+  }
+  if(searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') {
+        e.preventDefault();
+        doSearch();
+      }
+    });
+  }
+  skuChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const q = chip.dataset.search || chip.textContent.trim();
+      if(searchInput) searchInput.value = q;
+      doSearch(q);
+    });
+  });
+
+  // 2. Terminal Tabs (Live Desk vs. Dispatch Radar)
+  const tabChat = document.getElementById('tabBtnChat');
+  const tabRadar = document.getElementById('tabBtnRadar');
+  const viewChat = document.getElementById('hubViewChat');
+  const viewRadar = document.getElementById('hubViewRadar');
+
+  let radarActive = false;
+
+  if(tabChat && tabRadar && viewChat && viewRadar) {
+    tabChat.addEventListener('click', () => {
+      tabChat.classList.add('active');
+      tabChat.setAttribute('aria-selected', 'true');
+      tabRadar.classList.remove('active');
+      tabRadar.setAttribute('aria-selected', 'false');
+      viewChat.classList.remove('hidden');
+      viewRadar.classList.remove('active');
+      radarActive = false;
+    });
+
+    tabRadar.addEventListener('click', () => {
+      tabRadar.classList.add('active');
+      tabRadar.setAttribute('aria-selected', 'true');
+      tabChat.classList.remove('active');
+      tabChat.setAttribute('aria-selected', 'false');
+      viewRadar.classList.add('active');
+      viewChat.classList.add('hidden');
+      radarActive = true;
+      initRadarCanvas();
+    });
+  }
+
+  // 3. Radar HTML5 Canvas Simulation
+  let radarInitDone = false;
+  function initRadarCanvas() {
+    if(radarInitDone) return;
+    radarInitDone = true;
+    const canvas = document.getElementById('dispatchRadarCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+
+    // Delivery blips
+    const blips = [
+      { x: 130, y: 80, label: "Van 01 (Japanese Zone)", dist: "4.2 km", color: "#38BDF8" },
+      { x: 260, y: 120, label: "Van 02 (Ghiloth)", dist: "8.1 km", color: "#CDE06A" },
+      { x: 200, y: 55, label: "Van 03 (Neemrana Hub)", dist: "1.1 km", color: "#60A5FA" }
+    ];
+
+    function drawRadar() {
+      if(!radarActive) {
+        requestAnimationFrame(drawRadar);
+        return;
+      }
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      ctx.fillStyle = '#050914';
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+      ctx.lineWidth = 1;
+      for(let x = 0; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for(let y = 0; y < h; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Range Rings
+      const maxR = Math.min(cx, cy) - 10;
+      [0.35, 0.7, 1.0].forEach((ratio, i) => {
+        ctx.strokeStyle = i === 2 ? 'rgba(56, 189, 248, 0.3)' : 'rgba(56, 189, 248, 0.15)';
+        ctx.beginPath();
+        ctx.arc(cx, cy, maxR * ratio, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      // Crosshairs
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
+      ctx.beginPath();
+      ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+      ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+      ctx.stroke();
+
+      // Rotating Sweep
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, maxR);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(1, 'rgba(56, 189, 248, 0.28)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, maxR, -0.4, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // Sweep Line
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(maxR, 0);
+      ctx.stroke();
+      ctx.restore();
+
+      // Blips
+      const t = Date.now() / 1000;
+      blips.forEach(b => {
+        const pulse = (Math.sin(t * 4) + 1) / 2;
+        ctx.fillStyle = b.color;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = b.color;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, 6 + pulse * 6, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#E2E8F0';
+        ctx.font = '9px monospace';
+        ctx.fillText(b.label, b.x + 8, b.y + 3);
+      });
+
+      angle += 0.028;
+      requestAnimationFrame(drawRadar);
+    }
+    requestAnimationFrame(drawRadar);
+  }
+
+  // 4. Looping Technical Chat & Quick Prompts
+  const chatView = document.getElementById('hubViewChat');
+  if(!chatView) return;
 
   const SCENARIOS = [
     {
@@ -987,41 +1213,6 @@
       botA: "Yes Deepak ji! After 3 initial cash orders, we approve 30-day PO credit terms with monthly ledger.",
       tags: ['<i class="hgi-stroke hgi-wallet-01"></i> 30-Day Credit', '<i class="hgi-stroke hgi-invoice-01"></i> PO Billing', '<i class="hgi-stroke hgi-chart-line-data-01"></i> Monthly Ledger'],
       userAck: "Excellent, sending vendor registration forms."
-    },
-    {
-      userRole: "Anil Joshi (Electrical Maintenance, Behror Plant)",
-      userQ: "Do you stock high-tensile 12.9 grade fasteners from Unbrako and TVS?",
-      botA: "Full metric & imperial shelf stock! M6 to M24 Allen bolts, socket head caps, and spring washers ready.",
-      tags: ['<i class="hgi-stroke hgi-tick-02"></i> Unbrako 12.9', '<i class="hgi-stroke hgi-settings-02"></i> Metric M6-M24', '<i class="hgi-stroke hgi-package"></i> Boxed Stock'],
-      userAck: "Adding 100 pcs M10x40 to our purchase list."
-    },
-    {
-      userRole: "Pradeep (Line Supervisor, Keshwana Hub)",
-      userQ: "Need Polymatic FRL unit 1/2\" with auto-drain & pressure gauge. Price & dispatch time?",
-      botA: "Authorized Polymatic hub stock: ₹2,150 + GST. Van is leaving towards Keshwana at 11:30 AM.",
-      tags: ['<i class="hgi-stroke hgi-tick-02"></i> Polymatic OEM', '<i class="hgi-stroke hgi-delivery-truck-01"></i> 11:30 AM Van', '<i class="hgi-stroke hgi-file-01"></i> Test Certificate'],
-      userAck: "Confirmed, dispatch with the 11:30 AM van."
-    },
-    {
-      userRole: "Sanjay Singhal (Store Manager, Sotanala Plant)",
-      userQ: "We have an obsolete machinery bearing #6308-2RS C3. Can you match equivalent OEM specs?",
-      botA: "Exact match in FAG Schaeffler & NBC deep groove with C3 high-clearance rating in stock.",
-      tags: ['<i class="hgi-stroke hgi-tick-02"></i> FAG / NBC OEM', '<i class="hgi-stroke hgi-settings-01"></i> C3 Clearance', '<i class="hgi-stroke hgi-checkmark-circle-01"></i> Spec Match'],
-      userAck: "Exact spec we needed! Booking 6 pieces."
-    },
-    {
-      userRole: "Rohit Jain (Purchase Head, Riico Phase I)",
-      userQ: "Sending full monthly plant BOQ with 48 line items. Can you quote with makes & HSN in 2 hours?",
-      botA: "Send PDF or Excel on WhatsApp (+91 72401 07540). Itemized quote back within 2 hours.",
-      tags: ['<i class="hgi-stroke hgi-clock-01"></i> 2-Hour SLA', '<i class="hgi-stroke hgi-file-02"></i> 48 Lines Quoted', '<i class="hgi-stroke hgi-wallet-01"></i> Wholesale Rates'],
-      userAck: "Sent on WhatsApp. Please check!"
-    },
-    {
-      userRole: "Manoj Kumar (Factory Operations, Neemrana)",
-      userQ: "What are your counter working hours? Can we collect breakdown spares on Sunday?",
-      botA: "We are open 9:00 AM to 8:00 PM all 7 days including Sunday! Over 10,000+ line items ready on shelf.",
-      tags: ['<i class="hgi-stroke hgi-clock-01"></i> Open 9 to 8', '<i class="hgi-stroke hgi-calendar-01"></i> All 7 Days', '<i class="hgi-stroke hgi-store-01"></i> RIICO Counter'],
-      userAck: "Great to know, coming directly to counter!"
     }
   ];
 
@@ -1031,74 +1222,150 @@
   function streamBotReply(bubbleEl, text, tags, onDone) {
     bubbleEl.textContent = '';
     let idx = 0;
-    const speed = 15;
     const timer = setInterval(() => {
       if (idx < text.length) {
         bubbleEl.textContent += text.charAt(idx);
         idx++;
-        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
       } else {
         clearInterval(timer);
         if (tags && tags.length) {
           const acts = document.createElement('div');
-          acts.className = 'msg-actions';
+          acts.className = 'ht-tags';
           acts.innerHTML = tags.map(t => `<span>${t}</span>`).join('');
           bubbleEl.parentElement.appendChild(acts);
         }
         if (onDone) onDone();
       }
-    }, speed);
+    }, 15);
   }
 
-  function renderScenarioSmooth(idx) {
+  function renderScenario(idx) {
     if (isTyping) return;
     isTyping = true;
     const s = SCENARIOS[idx];
 
-    chatContainer.innerHTML = `
-      <div class="msg-bot">
-        <span class="label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Hub)</span>
-        <div class="bubble">Namaste! Shree Shyam Live Industrial Desk. How can we support your plant today?</div>
-      </div>
-      <div class="msg-user">
-        <span class="label">${s.userRole}</span>
-        <div class="bubble">${s.userQ}</div>
-      </div>
-      <div class="msg-bot typing-active">
-        <span class="label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Hub)</span>
-        <div class="bubble"><span class="dots"><span>.</span><span>.</span><span>.</span></span> Checking shelf inventory...</div>
-      </div>
+    const existingPrompts = chatView.querySelector('.ht-quick-prompts');
+
+    // Clear previous messages
+    const msgs = chatView.querySelectorAll('.ht-msg');
+    msgs.forEach(m => m.remove());
+
+    const botIntro = document.createElement('div');
+    botIntro.className = 'ht-msg bot';
+    botIntro.innerHTML = `
+      <span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Hub)</span>
+      <div class="ht-bubble">Namaste! Shree Shyam Live Industrial Desk. How can we support your plant?</div>
     `;
-    chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+
+    const userMsg = document.createElement('div');
+    userMsg.className = 'ht-msg user';
+    userMsg.innerHTML = `
+      <span class="ht-label user">${s.userRole}</span>
+      <div class="ht-bubble">${s.userQ}</div>
+    `;
+
+    const botReply = document.createElement('div');
+    botReply.className = 'ht-msg bot';
+    botReply.innerHTML = `
+      <span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Hub)</span>
+      <div class="ht-bubble">Checking shelf stock...</div>
+    `;
+
+    if(existingPrompts) {
+      chatView.insertBefore(botIntro, existingPrompts);
+      chatView.insertBefore(userMsg, existingPrompts);
+      chatView.insertBefore(botReply, existingPrompts);
+    } else {
+      chatView.appendChild(botIntro);
+      chatView.appendChild(userMsg);
+      chatView.appendChild(botReply);
+    }
 
     setTimeout(() => {
-      const activeBot = chatContainer.querySelector('.typing-active');
-      if (!activeBot) return;
-      activeBot.classList.remove('typing-active');
-      const bubble = activeBot.querySelector('.bubble');
-
+      const bubble = botReply.querySelector('.ht-bubble');
       streamBotReply(bubble, s.botA, s.tags, () => {
         setTimeout(() => {
           const userAck = document.createElement('div');
-          userAck.className = 'msg-user';
+          userAck.className = 'ht-msg user';
           userAck.innerHTML = `
-            <span class="label">${s.userRole.split(' ')[0]}</span>
-            <div class="bubble">${s.userAck}</div>
+            <span class="ht-label user">${s.userRole.split(' ')[0]}</span>
+            <div class="ht-bubble">${s.userAck}</div>
           `;
-          chatContainer.appendChild(userAck);
-          chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+          if(existingPrompts) {
+            chatView.insertBefore(userAck, existingPrompts);
+          } else {
+            chatView.appendChild(userAck);
+          }
           isTyping = false;
         }, 600);
       });
-    }, 500);
+    }, 600);
   }
 
+  // Quick Prompt Chips
+  const promptChips = chatView.querySelectorAll('.ht-prompt-chip');
+  promptChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const ask = chip.dataset.ask || chip.textContent.trim();
+      const userMsg = document.createElement('div');
+      userMsg.className = 'ht-msg user';
+      userMsg.innerHTML = `<span class="ht-label user">You (Plant Lead)</span><div class="ht-bubble">${ask}</div>`;
+      const botMsg = document.createElement('div');
+      botMsg.className = 'ht-msg bot';
+      botMsg.innerHTML = `<span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk</span><div class="ht-bubble">In stock! Tap WhatsApp to dispatch immediately or collect from Hanuman Market counter.</div><div class="ht-tags"><span><i class="hgi-stroke hgi-tick-02"></i> Instant Quote</span><span><i class="hgi-stroke hgi-truck-delivery"></i> Ready to Dispatch</span></div>`;
+      
+      const existingPrompts = chatView.querySelector('.ht-quick-prompts');
+      if(existingPrompts) {
+        chatView.insertBefore(userMsg, existingPrompts);
+        chatView.insertBefore(botMsg, existingPrompts);
+      }
+    });
+  });
+
+  // Chat Input
+  const chatInput = document.getElementById('htChatInput');
+  const chatSend = document.getElementById('htChatSend');
+  const sendChat = () => {
+    if(!chatInput) return;
+    const text = chatInput.value.trim();
+    if(!text) return;
+    chatInput.value = '';
+    const userMsg = document.createElement('div');
+    userMsg.className = 'ht-msg user';
+    userMsg.innerHTML = `<span class="ht-label user">You (Plant Lead)</span><div class="ht-bubble">${text}</div>`;
+    const botMsg = document.createElement('div');
+    botMsg.className = 'ht-msg bot';
+    botMsg.innerHTML = `<span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk</span><div class="ht-bubble">Searching 10,000+ line items for "${text}"... Ready on shelf! Forwarding to our WhatsApp technical desk.</div>`;
+    
+    const existingPrompts = chatView.querySelector('.ht-quick-prompts');
+    if(existingPrompts) {
+      chatView.insertBefore(userMsg, existingPrompts);
+      chatView.insertBefore(botMsg, existingPrompts);
+    }
+    setTimeout(() => {
+      window.open(`https://wa.me/917240107540?text=${encodeURIComponent('Namaste, enquiry regarding: ' + text)}`, '_blank');
+    }, 1200);
+  };
+
+  if(chatSend) chatSend.addEventListener('click', sendChat);
+  if(chatInput) {
+    chatInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') {
+        e.preventDefault();
+        sendChat();
+      }
+    });
+  }
+
+  // Loop scenarios every 9 seconds when chat tab is visible
   setTimeout(() => {
     setInterval(() => {
-      scenarioIdx = (scenarioIdx + 1) % SCENARIOS.length;
-      renderScenarioSmooth(scenarioIdx);
-    }, 8500);
-  }, 3500);
+      if(!radarActive) {
+        scenarioIdx = (scenarioIdx + 1) % SCENARIOS.length;
+        renderScenario(scenarioIdx);
+      }
+    }, 9500);
+  }, 4000);
 })();
 /* FAQ Accordion toggle */
 function toggleFaq(el){
