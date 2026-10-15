@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261015a">
+<link rel="stylesheet" href="assets/styles.css?v=20261015b">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -324,10 +324,15 @@
           <!-- Dynamic Live UPI QR Box (Rendered when UPI is active) -->
           <div id="upiPreviewBox" class="pos-upi-preview">
             <img id="posQrImg" src="" alt="Dynamic UPI QR Code">
-            <div>
+            <div style="flex:1">
               <b id="posQrAmt">Scan & Pay ₹ 0</b>
-              <span>UPI: <strong id="posQrId">shreeshyam@upi</strong></span>
-              <small style="color:#64748B;display:block;margin-top:4px">Zero gateway fee · Instant counter settlement</small>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:2px">
+                <span style="font-size:12px;color:#166534">UPI: <strong id="posQrId">shreeshyam@upi</strong></span>
+                <button type="button" class="btn btn-ghost" id="copyUpiBtn" style="font-size:11px;padding:2px 8px;border-radius:6px;height:22px;background:#DCFCE7;border-color:#86EFAC;color:#166534">
+                  <i class="hgi-stroke hgi-copy-01" style="font-size:12px"></i> Copy
+                </button>
+              </div>
+              <small style="color:#15803D;display:block;margin-top:4px">Instant Bharat UPI · Zero gateway charges</small>
             </div>
           </div>
 
@@ -428,7 +433,7 @@
 <div id="printArea" aria-hidden="true"></div>
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
 
-<script src="assets/app.js?v=20261015a"></script>
+<script src="assets/app.js?v=20261015b"></script>
 <script>
 let ALL = [], cart = [], mode = 'UPI', currentCategory = '', dbFilter = 'all';
 const BILL_PIN = '2580';
@@ -606,6 +611,15 @@ async function init() {
     drawLines();
   };
 
+  // 1-Click Copy UPI ID with feedback
+  const copyUpiBtn = SSE.$('#copyUpiBtn');
+  if (copyUpiBtn) {
+    copyUpiBtn.onclick = () => {
+      const c = SSE.content();
+      SSE.copyText(c.upi_id || 'shreeshyam@upi', 'UPI ID Copied to Clipboard!');
+    };
+  }
+
   // Hotkey / for search
   document.addEventListener('keydown', e => {
     if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
@@ -718,6 +732,9 @@ function draw() {
 
     d.querySelector('button.add').onclick = (ev) => {
       ev.stopPropagation();
+      d.classList.remove('picked-bump');
+      void d.offsetWidth;
+      d.classList.add('picked-bump');
       addItem(p, rate);
     };
     d.onclick = () => d.querySelector('button.add').click();
@@ -744,6 +761,7 @@ function addItem(p, rate) {
       hsn: p.hsn || '8483'
     });
   }
+  toast(`+1 ${p.name.slice(0, 24)}`, 'shopping-bag-01');
   SSE.$('#billErr').textContent = '';
   drawLines();
 }

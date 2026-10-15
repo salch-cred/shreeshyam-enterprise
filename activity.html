@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261015a">
+<link rel="stylesheet" href="assets/styles.css?v=20261015b">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
@@ -180,7 +180,7 @@
       <div>
         <div style="display:flex;align-items:center;gap:10px">
           <span class="eyebrow" style="margin:0;color:var(--accent)">Live Operational Stream</span>
-          <span class="pill ok" style="font-size:10.5px">Real-Time Telemetry</span>
+          <span class="pill ok" style="font-size:10.5px"><span class="live-beacon"></span> Real-Time Telemetry</span>
         </div>
         <h1 class="title" style="margin:4px 0 0;font-size:28px">Counter Activity & Audit Log</h1>
       </div>
@@ -220,7 +220,7 @@
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
-<script src="assets/app.js?v=20261015a"></script>
+<script src="assets/app.js?v=20261015b"></script>
 <script>
 let currentFilter = 'all';
 const PIN = '2580';
@@ -371,7 +371,7 @@ function render() {
           });
 
           return `
-            <div class="act-item">
+            <div class="act-item" data-type="${SSE.esc(a.type)}">
               <div class="act-icon ${a.type}"><i class="hgi-stroke ${typeIcon}"></i></div>
               <div class="act-body">
                 <div class="act-title-row">
@@ -401,7 +401,7 @@ function render() {
             <h3 style="margin:0;font-size:16px;font-weight:800">Counter Activity Intensity (Last 30 Days)</h3>
             <p style="margin:2px 0 0;font-size:12.5px;color:var(--muted)">Daily transaction volume and counter operational heat</p>
           </div>
-          <span class="pill ok">Live Telemetry</span>
+          <span class="pill ok"><span class="live-beacon"></span> Live Telemetry</span>
         </div>
         <div class="actsline" id="actsline"></div>
       </div>

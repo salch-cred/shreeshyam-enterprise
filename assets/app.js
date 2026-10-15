@@ -302,6 +302,49 @@ const SSE = (() => {
     });
   }
 
+  /* Global Smooth Frosted Toast Notification */
+  function toast(msg, icon = 'checkmark-circle-01', duration = 2600) {
+    let container = document.getElementById('toasts');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toasts';
+      container.className = 'toasts';
+      document.body.appendChild(container);
+    }
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `<i class="hgi-stroke hgi-${icon}"></i><span>${esc(msg)}</span>`;
+    container.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('out');
+      setTimeout(() => t.remove(), 350);
+    }, duration);
+    return t;
+  }
+
+  /* Smooth Clipboard Copy with Feedback */
+  async function copyText(text, label = 'Copied to clipboard!') {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      toast(label, 'copy-01');
+      return true;
+    } catch {
+      toast('Copied: ' + text, 'copy-01');
+      return false;
+    }
+  }
+
   /* EventBeds™ Luxury Header Menu and Drawer Controller */
   function initEventBedsHeader() {
     const menuBtn = document.getElementById('menuBtn');
@@ -309,6 +352,15 @@ const SSE = (() => {
     const drawerClose = document.getElementById('drawerClose');
 
     if (!menuBtn || !drawer) return;
+
+    // Inject dedicated backdrop for silk-smooth mobile drawer interaction
+    let backdrop = document.querySelector('.site-drawer-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'site-drawer-backdrop';
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(backdrop);
+    }
 
     function toggleMenu(open) {
       const isOpen = open !== undefined ? open : !drawer.classList.contains('open');
@@ -335,7 +387,11 @@ const SSE = (() => {
       });
     }
 
-    // Close on clicking backdrop/outside drawer
+    backdrop.addEventListener('click', () => {
+      toggleMenu(false);
+    });
+
+    // Close on clicking outside drawer
     document.addEventListener('click', (e) => {
       if (drawer.classList.contains('open') && !drawer.contains(e.target) && !menuBtn.contains(e.target)) {
         toggleMenu(false);
@@ -348,6 +404,27 @@ const SSE = (() => {
         toggleMenu(false);
       }
     });
+
+    // Silk-smooth header elevation on scroll
+    const header = document.querySelector('.site-header');
+    if (header) {
+      let ticking = false;
+      const onScroll = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            if (window.scrollY > 15) {
+              header.classList.add('scrolled');
+            } else {
+              header.classList.remove('scrolled');
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      if (window.scrollY > 15) header.classList.add('scrolled');
+    }
   }
 
   function initApp() {
@@ -358,7 +435,7 @@ const SSE = (() => {
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);else initApp();
 
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, logActivity, getActivities, seedActivities, motion, footer, updateNavBadge, initInsporaFeed, initEventBedsHeader, $ };
+  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, logActivity, getActivities, seedActivities, motion, footer, updateNavBadge, initInsporaFeed, initEventBedsHeader, toast, copyText, $ };
 })();
 
 
