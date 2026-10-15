@@ -165,11 +165,11 @@
   </div>
 </div>
 
-<!-- 1. FIGMA COMMUNITY ENTERPRISE MRO COMMAND HERO ($10B TIER) -->
+<!-- 1. OPENSOURCEUI.IN & DESIGNENG.TOOLS LIGHT CRAFT-BENCH HERO -->
 <section class="ent-hero-sc" id="hero" aria-label="Enterprise Industrial Procurement Platform">
   <div class="ent-container">
     <div class="ent-hero-grid">
-      <!-- LEFT: AUTHORITATIVE ENTERPRISE VALUE PROP & MCMASTER-STYLE COMMAND CONSOLE -->
+      <!-- LEFT: CRAFT-BENCH VALUE PROP & DESIGNENG COMMAND CONSOLE -->
       <div class="ent-hero-copy">
         <div class="ent-eyebrow">
           <span class="ent-pulse-live"></span>
@@ -177,21 +177,36 @@
         </div>
 
         <h1 class="ent-h1">
-          The precision MRO supply engine <br>for <span class="hl">high-uptime manufacturing.</span>
+          The precision MRO supply engine <br>for high-uptime 
+          <span class="os-underline-wrap">
+            <svg class="absolute h-0 w-0" aria-hidden="true" style="position:absolute;width:0;height:0">
+              <defs>
+                <filter id="hd-rough" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="4" result="n"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+                <filter id="hd-rough-soft" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="n2"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n2" scale="1.5" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+              </defs>
+            </svg>
+            <span class="relative inline-block whitespace-nowrap font-normal text-neutral-950">
+              manufacturing.
+              <svg class="os-underline-svg" viewBox="0 0 140 10" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M3,6 C40,3 100,3 137,5" stroke="#93C5FD" stroke-width="2.6" stroke-linecap="round" fill="none" filter="url(#hd-rough-soft)"></path>
+              </svg>
+            </span>
+            <span class="os-pill rotate-6">25-Min SLA</span>
+          </span>
         </h1>
 
         <p class="ent-sub">
           Direct factory stock for 10,000+ deep groove bearings, solenoid valves, transmission belts, and high-tensile fasteners. Quoted in 2 minutes, billed with verified GST, dispatched line-side across Neemrana in 25 minutes.
         </p>
 
-        <!-- HIGH-GRAPHICS ENTERPRISE SEARCH CONSOLE -->
+        <!-- DESIGNENG TECHNICAL SEARCH CONSOLE WITH CATEGORY FILTER PILLS -->
         <div class="ent-search-console">
-          <div class="ent-cat-tabs" role="tablist">
-            <button type="button" class="ent-cat-tab active" data-cat="all">All Lines (10,000+)</button>
-            <button type="button" class="ent-cat-tab" data-cat="Bearings">Bearings (SKF / FAG)</button>
-            <button type="button" class="ent-cat-tab" data-cat="Pneumatics">Pneumatics (Polymatic)</button>
-            <button type="button" class="ent-cat-tab" data-cat="Belts">Belts (Fenner / Gates)</button>
-            <button type="button" class="ent-cat-tab" data-cat="Fasteners">Fasteners (Unbrako 12.9)</button>
+          <div class="dt-filter-bar ent-cat-tabs" role="tablist">
+            <button type="button" class="dt-filter-pill active ent-cat-tab" data-cat="all"><span class="dt-dot"></span>All Lines (10,000+)</button>
+            <button type="button" class="dt-filter-pill ent-cat-tab" data-cat="Bearings"><span class="dt-dot"></span>Bearings (SKF / FAG)</button>
+            <button type="button" class="dt-filter-pill ent-cat-tab" data-cat="Pneumatics"><span class="dt-dot"></span>Pneumatics (Polymatic)</button>
+            <button type="button" class="dt-filter-pill ent-cat-tab" data-cat="Belts"><span class="dt-dot"></span>Belts (Fenner / Gates)</button>
+            <button type="button" class="dt-filter-pill ent-cat-tab" data-cat="Fasteners"><span class="dt-dot"></span>Fasteners (Unbrako 12.9)</button>
           </div>
 
           <div class="ent-search-bar">
@@ -220,7 +235,7 @@
             <i class="hgi-stroke hgi-arrow-right-01"></i>
           </a>
           <a class="ent-btn-ghost" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
-            <i class="hgi-stroke hgi-whatsapp" style="color:#22C55E"></i>
+            <i class="hgi-stroke hgi-whatsapp" style="color:#16A34A"></i>
             <span>WhatsApp BOQ (+91 72401 07540)</span>
           </a>
         </div>
@@ -234,128 +249,324 @@
         </div>
       </div>
 
-      <!-- RIGHT: HIGH-GRAPHICS HARDWARE SPEC INSPECTOR HUD (NO AI SLOP) -->
-      <div class="ent-hud-card">
-        <div class="ent-hud-header">
-          <div class="ent-hud-status">
-            <span class="ent-pulse-live"></span>
-            <span>SPEC INSPECTOR // LIVE SHELF</span>
-          </div>
-          <div class="ent-hud-segmented" role="tablist">
-            <button type="button" class="ent-seg-btn active" id="hudTabBearings">01 Bearings</button>
-            <button type="button" class="ent-seg-btn" id="hudTabPneumatics">02 Pneumatics</button>
-            <button type="button" class="ent-seg-btn" id="hudTabFasteners">03 Fasteners</button>
-          </div>
-        </div>
-
-        <div class="ent-hud-body">
-          <!-- Visual Showcase Plate -->
-          <div class="ent-hud-visual-box">
-            <div class="ent-hud-bg-grid"></div>
-            <span class="ent-hud-tag-badge" id="hudTagBadge">DIN 625-1 · C3 CLEARANCE</span>
-            <img src="assets/img/cat-p21.png" alt="Industrial Part Specimen" class="ent-hud-img" id="hudProductImg">
-            <span class="ent-hud-stock-badge" id="hudStockBadge"><i class="hgi-stroke hgi-tick-02"></i> 140 Units on Shelf</span>
-          </div>
-
-          <div class="ent-hud-title-row">
-            <h3 class="ent-hud-name" id="hudProductName">SKF 6205-2RS1 / C3 Deep Groove Ball Bearing</h3>
-            <span class="ent-hud-price" id="hudProductPrice">₹240 <small style="font-size:10px;color:#94A3B8;font-weight:600">+GST</small></span>
-          </div>
-
-          <!-- Precision Technical Specs Table -->
-          <div class="ent-spec-table" id="hudSpecTable">
-            <div class="ent-spec-row">
-              <span class="ent-spec-label">Dimensions (d × D × B)</span>
-              <span class="ent-spec-val" id="hudSpecDim">25.00 × 52.00 × 15.00 mm</span>
+      <!-- RIGHT: OPENSOURCEUI.IN SIGNATURE DIAGONAL STRIPED STAGE & SPEC INSPECTOR -->
+      <div class="os-striped-stage">
+        <div class="ent-hud-card">
+          <div class="ent-hud-header">
+            <div class="mac-dots">
+              <span class="mac-dot red"></span>
+              <span class="mac-dot yellow"></span>
+              <span class="mac-dot green"></span>
+              <span class="ent-hud-status" style="margin-left:6px">SPEC INSPECTOR // LIVE SHELF</span>
             </div>
-            <div class="ent-spec-row">
-              <span class="ent-spec-label">Limiting Speed</span>
-              <span class="ent-spec-val" id="hudSpecSpeed">15,000 RPM (Synthetic Polyurea)</span>
-            </div>
-            <div class="ent-spec-row">
-              <span class="ent-spec-label">Load Ratings (Dyn / Stat)</span>
-              <span class="ent-spec-val" id="hudSpecLoad">14.8 kN / 7.8 kN</span>
-            </div>
-            <div class="ent-spec-row">
-              <span class="ent-spec-label">SLA Line-Side Dispatch</span>
-              <span class="ent-spec-val" style="color:#CDE06A">25 Mins (Neemrana Hub Van)</span>
+            <div class="ent-hud-segmented" role="tablist">
+              <button type="button" class="ent-seg-btn active" id="hudTabBearings">01 Bearings</button>
+              <button type="button" class="ent-seg-btn" id="hudTabPneumatics">02 Pneumatics</button>
+              <button type="button" class="ent-seg-btn" id="hudTabFasteners">03 Fasteners</button>
             </div>
           </div>
 
-          <!-- Telemetry Switcher & Order Row -->
-          <div class="ent-hud-footer">
-            <a href="shop.html?q=6205" class="ent-btn-hud-order" id="hudOrderBtn">
-              <span>Order Line-Side</span>
-              <i class="hgi-stroke hgi-arrow-right-01"></i>
-            </a>
-            <button type="button" class="ent-btn-hud-radar" id="toggleTelemetryDrawer">
-              <i class="hgi-stroke hgi-radar"></i>
-              <span>Live Van Radar</span>
-            </button>
-          </div>
+          <div class="ent-hud-body">
+            <!-- Visual Showcase Plate -->
+            <div class="ent-hud-visual-box">
+              <div class="ent-hud-bg-grid"></div>
+              <span class="ent-hud-tag-badge" id="hudTagBadge">DIN 625-1 · C3 CLEARANCE</span>
+              <img src="assets/img/cat-p21.png" alt="Industrial Part Specimen" class="ent-hud-img" id="hudProductImg">
+              <span class="ent-hud-stock-badge" id="hudStockBadge"><i class="hgi-stroke hgi-tick-02"></i> 140 Units on Shelf</span>
+            </div>
 
-          <!-- COLLAPSIBLE TELEMETRY RADAR & LIVE DESK DRAWER (PRESERVES RADAR/CHAT JS) -->
-          <div class="ent-telemetry-drawer" id="telemetryDrawer">
-            <div class="hub-terminal" style="max-width:100%;margin:0;box-shadow:none;border-color:rgba(255,255,255,0.1)">
-              <div class="hub-terminal-head">
-                <div class="hub-win-dots">
-                  <span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span>
-                  <span class="hub-terminal-title">RIICO DISPATCH TELEMETRY</span>
-                </div>
-                <div class="hub-mode-tabs" role="tablist">
-                  <button class="hub-tab-btn active" id="tabBtnRadar" role="tab" aria-selected="true">
-                    <i class="hgi-stroke hgi-radar"></i>
-                    <span>Dispatch Radar</span>
-                  </button>
-                  <button class="hub-tab-btn" id="tabBtnChat" role="tab" aria-selected="false">
-                    <i class="hgi-stroke hgi-chat-round-dots"></i>
-                    <span>Counter Desk</span>
-                  </button>
-                </div>
+            <div class="ent-hud-title-row">
+              <h3 class="ent-hud-name" id="hudProductName">SKF 6205-2RS1 / C3 Deep Groove Ball Bearing</h3>
+              <span class="ent-hud-price" id="hudProductPrice">₹240 <small style="font-size:10px;color:#64748B;font-weight:600">+GST</small></span>
+            </div>
+
+            <!-- Precision Technical Specs Table -->
+            <div class="ent-spec-table" id="hudSpecTable">
+              <div class="ent-spec-row">
+                <span class="ent-spec-label">Dimensions (d × D × B)</span>
+                <span class="ent-spec-val" id="hudSpecDim">25.00 × 52.00 × 15.00 mm</span>
               </div>
+              <div class="ent-spec-row">
+                <span class="ent-spec-label">Limiting Speed</span>
+                <span class="ent-spec-val" id="hudSpecSpeed">15,000 RPM (Synthetic Polyurea)</span>
+              </div>
+              <div class="ent-spec-row">
+                <span class="ent-spec-label">Load Ratings (Dyn / Stat)</span>
+                <span class="ent-spec-val" id="hudSpecLoad">14.8 kN / 7.8 kN</span>
+              </div>
+              <div class="ent-spec-row">
+                <span class="ent-spec-label">SLA Line-Side Dispatch</span>
+                <span class="ent-spec-val" style="color:#1D4ED8;font-weight:800">25 Mins (Neemrana Hub Van)</span>
+              </div>
+            </div>
 
-              <!-- RADAR VIEW -->
-              <div class="hub-view-radar active" id="hubViewRadar" role="tabpanel">
-                <div class="radar-hud-bar">
-                  <div class="radar-stat"><span>Today Dispatched</span><b>48 Orders</b></div>
-                  <div class="radar-stat"><span>Avg Plant SLA</span><b style="color:#CDE06A">21 Mins</b></div>
-                  <div class="radar-stat"><span>Line Uptime</span><b>99.4%</b></div>
-                </div>
-                <div class="radar-canvas-wrap">
-                  <canvas id="dispatchRadarCanvas" width="380" height="170"></canvas>
-                </div>
-                <div class="radar-live-routes">
-                  <div class="route-row">
-                    <span class="dest"><i class="hgi-stroke hgi-truck-delivery"></i> Van #01 → Japanese Zone (Daikin Line)</span>
-                    <span class="eta">ETA 7 mins</span>
+            <!-- Telemetry Switcher & Order Row -->
+            <div class="ent-hud-footer">
+              <a href="shop.html?q=6205" class="ent-btn-hud-order" id="hudOrderBtn">
+                <span>Order Line-Side</span>
+                <i class="hgi-stroke hgi-arrow-right-01"></i>
+              </a>
+              <button type="button" class="ent-btn-hud-radar" id="toggleTelemetryDrawer">
+                <i class="hgi-stroke hgi-radar"></i>
+                <span>Live Van Radar</span>
+              </button>
+            </div>
+
+            <!-- COLLAPSIBLE TELEMETRY RADAR & LIVE DESK DRAWER -->
+            <div class="ent-telemetry-drawer" id="telemetryDrawer">
+              <div class="hub-terminal" style="max-width:100%;margin:0;box-shadow:none;border-color:#E2E8F0;background:#FFFFFF">
+                <div class="hub-terminal-head" style="background:#F8FAFC;border-bottom-color:#E2E8F0">
+                  <div class="hub-win-dots">
+                    <span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span>
+                    <span class="hub-terminal-title" style="color:#0F172A">RIICO DISPATCH TELEMETRY</span>
                   </div>
-                  <div class="route-row">
-                    <span class="dest"><i class="hgi-stroke hgi-truck-delivery"></i> Van #02 → Ghiloth Industrial (Havells)</span>
-                    <span class="eta">ETA 14 mins</span>
+                  <div class="hub-mode-tabs" role="tablist">
+                    <button class="hub-tab-btn active" id="tabBtnRadar" role="tab" aria-selected="true" style="color:#0F172A">
+                      <i class="hgi-stroke hgi-radar"></i>
+                      <span>Dispatch Radar</span>
+                    </button>
+                    <button class="hub-tab-btn" id="tabBtnChat" role="tab" aria-selected="false" style="color:#64748B">
+                      <i class="hgi-stroke hgi-chat-round-dots"></i>
+                      <span>Counter Desk</span>
+                    </button>
                   </div>
                 </div>
-              </div>
 
-              <!-- CHAT VIEW -->
-              <div class="hub-view-chat hidden" id="hubViewChat" role="tabpanel">
-                <div class="ht-msg bot">
-                  <span class="ht-label"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Neemrana)</span>
-                  <div class="ht-bubble">Namaste! Maintenance engineer on standby. What part code or breakdown do you need?</div>
+                <!-- RADAR VIEW -->
+                <div class="hub-view-radar active" id="hubViewRadar" role="tabpanel">
+                  <div class="radar-hud-bar" style="background:#F8FAFC;border-bottom-color:#E2E8F0">
+                    <div class="radar-stat"><span style="color:#64748B">Today Dispatched</span><b style="color:#0F172A">48 Orders</b></div>
+                    <div class="radar-stat"><span style="color:#64748B">Avg Plant SLA</span><b style="color:#1D4ED8">21 Mins</b></div>
+                    <div class="radar-stat"><span style="color:#64748B">Line Uptime</span><b style="color:#16A34A">99.4%</b></div>
+                  </div>
+                  <div class="radar-canvas-wrap" style="background:#FFFFFF">
+                    <canvas id="dispatchRadarCanvas" width="380" height="170"></canvas>
+                  </div>
+                  <div class="radar-live-routes" style="background:#F8FAFC;border-top-color:#E2E8F0">
+                    <div class="route-row">
+                      <span class="dest" style="color:#334155"><i class="hgi-stroke hgi-truck-delivery"></i> Van #01 → Japanese Zone (Daikin Line)</span>
+                      <span class="eta" style="color:#1D4ED8">ETA 7 mins</span>
+                    </div>
+                    <div class="route-row">
+                      <span class="dest" style="color:#334155"><i class="hgi-stroke hgi-truck-delivery"></i> Van #02 → Ghiloth Industrial (Havells)</span>
+                      <span class="eta" style="color:#1D4ED8">ETA 14 mins</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="ht-quick-prompts">
-                  <button type="button" class="ht-prompt-chip" data-ask="Check SKF 6205 Price">SKF 6205 Rate</button>
-                  <button type="button" class="ht-prompt-chip" data-ask="Polymatic Solenoid Stock?">Polymatic Stock</button>
-                  <button type="button" class="ht-prompt-chip" data-ask="Can you issue Net 30 GST Invoice?">Net 30 Credit</button>
-                </div>
-                <div class="ht-input-box">
-                  <input type="text" id="htChatInput" placeholder="Ask for part rate or availability..." autocomplete="off">
-                  <button type="button" id="htChatSend" title="Send message"><i class="hgi-stroke hgi-arrow-right-01"></i></button>
+
+                <!-- CHAT VIEW -->
+                <div class="hub-view-chat hidden" id="hubViewChat" role="tabpanel" style="background:#FFFFFF">
+                  <div class="ht-msg bot">
+                    <span class="ht-label" style="color:#1D4ED8"><i class="hgi-stroke hgi-headset"></i> Counter Sales Desk (RIICO Neemrana)</span>
+                    <div class="ht-bubble" style="background:#EFF6FF;color:#0F172A;border-color:#BFDBFE">Namaste! Maintenance engineer on standby. What part code or breakdown do you need?</div>
+                  </div>
+                  <div class="ht-quick-prompts">
+                    <button type="button" class="ht-prompt-chip" data-ask="Check SKF 6205 Price" style="background:#F8FAFC;color:#334155;border-color:#E2E8F0">SKF 6205 Rate</button>
+                    <button type="button" class="ht-prompt-chip" data-ask="Polymatic Solenoid Stock?" style="background:#F8FAFC;color:#334155;border-color:#E2E8F0">Polymatic Stock</button>
+                    <button type="button" class="ht-prompt-chip" data-ask="Can you issue Net 30 GST Invoice?" style="background:#F8FAFC;color:#334155;border-color:#E2E8F0">Net 30 Credit</button>
+                  </div>
+                  <div class="ht-input-box" style="background:#F8FAFC;border-top-color:#E2E8F0">
+                    <input type="text" id="htChatInput" placeholder="Ask for part rate or availability..." autocomplete="off" style="color:#0F172A">
+                    <button type="button" id="htChatSend" title="Send message" style="background:#1D4ED8;color:#FFFFFF"><i class="hgi-stroke hgi-arrow-right-01"></i></button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- OPENSOURCEUI.IN SIGNATURE 3-CARD STATS SECTION -->
+    <div class="os-stats-section">
+      <div class="os-stats-grid">
+        <!-- Card 1: Catalog Depth (Sparkline) -->
+        <article class="os-stat-card">
+          <div class="os-stat-head">
+            <span class="os-stat-pill-icon"><i class="hgi-stroke hgi-package"></i></span>
+            <span class="os-stat-tag">Direct Factory Stock</span>
+          </div>
+          <div class="os-stat-visual">
+            <svg viewBox="0 0 320 90" preserveAspectRatio="none" class="os-sparkline-svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
+              <path d="M0 75 L50 62 L110 65 L170 38 L240 45 L320 12 V90 H0 Z" fill="url(#sparkGrad)"></path>
+              <polyline points="0,75 50,62 110,65 170,38 240,45 320,12" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </div>
+          <div class="os-stat-foot">
+            <p class="os-stat-num">10,000+ <span style="font-size:14px;color:#16A34A;font-weight:700">SKUs</span></p>
+            <p class="os-stat-label">Bearings, Pneumatics, Belts &amp; Fasteners in shelf stock</p>
+          </div>
+        </article>
+
+        <!-- Card 2: Industrial Facilities (Avatar Stack & Histogram) -->
+        <article class="os-stat-card">
+          <div class="os-stat-head">
+            <span class="os-stat-pill-icon"><i class="hgi-stroke hgi-building-05"></i></span>
+            <span class="os-stat-tag">Neemrana Hub</span>
+          </div>
+          <div class="os-stat-visual">
+            <div class="os-avatar-stack">
+              <span class="os-avatar" title="Daikin Airconditioning">D</span>
+              <span class="os-avatar" title="Havells India">H</span>
+              <span class="os-avatar" title="Eicher Motors">E</span>
+              <span class="os-avatar" title="Hero MotoCorp">M</span>
+              <span class="os-avatar more" title="40+ Facilities">+</span>
+            </div>
+            <div class="os-histogram">
+              <span class="os-hist-bar" style="height:40%"></span>
+              <span class="os-hist-bar" style="height:60%"></span>
+              <span class="os-hist-bar" style="height:50%"></span>
+              <span class="os-hist-bar" style="height:75%"></span>
+              <span class="os-hist-bar" style="height:65%"></span>
+              <span class="os-hist-bar" style="height:85%"></span>
+              <span class="os-hist-bar active" style="height:100%"></span>
+            </div>
+          </div>
+          <div class="os-stat-foot">
+            <p class="os-stat-num">40+ <span style="font-size:14px;color:#2563EB;font-weight:700">Plants</span></p>
+            <p class="os-stat-label">Active monthly MRO contract facilities across RIICO &amp; Ghiloth</p>
+          </div>
+        </article>
+
+        <!-- Card 3: Rapid SLA (Speedometer/Clock) -->
+        <article class="os-stat-card">
+          <div class="os-stat-head">
+            <span class="os-stat-pill-icon"><i class="hgi-stroke hgi-delivery-truck-01"></i></span>
+            <span class="os-stat-tag">Line-Side SLA</span>
+          </div>
+          <div class="os-stat-visual">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <span style="font-size:12px;font-weight:700;color:#0F172A">Average Delivery Speed</span>
+              <span style="font-size:12px;font-weight:800;color:#16A34A;background:#DCFCE7;padding:2px 8px;border-radius:999px">99.4% On-Time</span>
+            </div>
+            <div style="height:8px;background:#F1F5F9;border-radius:999px;overflow:hidden;position:relative">
+              <div style="height:100%;width:88%;background:#1D4ED8;border-radius:999px"></div>
+            </div>
+          </div>
+          <div class="os-stat-foot">
+            <p class="os-stat-num">25 <span style="font-size:14px;color:#1D4ED8;font-weight:700">Mins SLA</span></p>
+            <p class="os-stat-label">Dedicated express delivery vans stationed at RIICO Neemrana</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGNENG.TOOLS CURATED INDUSTRIAL COMPONENT DIRECTORY -->
+<section class="de-catalog-sc" id="directory" aria-label="Curated Industrial Component Library">
+  <div class="ent-container">
+    <div class="de-catalog-head">
+      <div class="de-eyebrow">
+        <i class="hgi-stroke hgi-cpu"></i>
+        <span>ENGINEERED SPECIFICATION DIRECTORY // DESIGNENG COMPONENT SYSTEM</span>
+      </div>
+      <h2 class="de-title">Curated Industrial Components for Zero Downtime.</h2>
+      <p class="de-desc">Meticulously documented MRO components with verified DIN/ISO tolerances, dimensional drawings, shelf count, and direct line-side dispatch across Neemrana.</p>
+    </div>
+
+    <div class="de-card-grid">
+      <!-- Card 1: SKF Bearings -->
+      <article class="de-card">
+        <div class="de-card-preview">
+          <img src="assets/img/cat-p21.png" alt="SKF 6205 Deep Groove Ball Bearing" class="de-card-img" loading="lazy">
+          <div class="de-hover-actions">
+            <button type="button" class="de-action-btn hero-sku-chip" data-search="6205" title="Quick Search SKU"><i class="hgi-stroke hgi-search-01"></i></button>
+            <a href="https://wa.me/917240107540?text=Namaste%20SKF%206205%20rate%20chahiye" target="_blank" rel="noopener" class="de-action-btn" title="Instant WhatsApp Quote"><i class="hgi-stroke hgi-whatsapp" style="color:#16A34A"></i></a>
+          </div>
+          <a href="shop.html?q=6205" class="de-corner-arrow" title="View in Catalogue">↗</a>
+        </div>
+        <div class="de-card-body">
+          <div class="de-meta-row">
+            <span class="de-brand-pill">SKF · SWEDEN</span>
+            <span class="de-stock-status"><i class="hgi-stroke hgi-tick-02"></i> 140 on shelf</span>
+          </div>
+          <h3 class="de-part-name">SKF 6205-2RS1 Deep Groove Ball Bearing</h3>
+          <p class="de-part-spec">25×52×15 mm · DIN 625-1 · C3 Radial Clearance</p>
+          <div class="de-card-foot">
+            <span class="de-price">₹240 <small style="font-size:10px;color:#64748B">+GST</small></span>
+            <a href="shop.html?q=6205" class="de-order-link">Order Line-Side <i class="hgi-stroke hgi-arrow-right-01"></i></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: Polymatic Pneumatics -->
+      <article class="de-card">
+        <div class="de-card-preview">
+          <img src="assets/img/cat-p08.png" alt="Polymatic 5/2 Single Solenoid Valve" class="de-card-img" loading="lazy">
+          <div class="de-hover-actions">
+            <button type="button" class="de-action-btn hero-sku-chip" data-search="Polymatic 5/2" title="Quick Search SKU"><i class="hgi-stroke hgi-search-01"></i></button>
+            <a href="https://wa.me/917240107540?text=Namaste%20Polymatic%20valve%20rate%20chahiye" target="_blank" rel="noopener" class="de-action-btn" title="Instant WhatsApp Quote"><i class="hgi-stroke hgi-whatsapp" style="color:#16A34A"></i></a>
+          </div>
+          <a href="shop.html?q=Polymatic" class="de-corner-arrow" title="View in Catalogue">↗</a>
+        </div>
+        <div class="de-card-body">
+          <div class="de-meta-row">
+            <span class="de-brand-pill" style="background:#FEF3C7;color:#D97706">POLYMATIC · OEM</span>
+            <span class="de-stock-status"><i class="hgi-stroke hgi-tick-02"></i> 85 on shelf</span>
+          </div>
+          <h3 class="de-part-name">Polymatic 5/2 Way Solenoid Valve</h3>
+          <p class="de-part-spec">1/4" BSP · 24V DC / 220V AC · 1.5–8.0 Bar</p>
+          <div class="de-card-foot">
+            <span class="de-price">₹1,450 <small style="font-size:10px;color:#64748B">+GST</small></span>
+            <a href="shop.html?q=Polymatic" class="de-order-link">Order Line-Side <i class="hgi-stroke hgi-arrow-right-01"></i></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: Fenner Belts -->
+      <article class="de-card">
+        <div class="de-card-preview">
+          <img src="assets/img/cat-p16.png" alt="Fenner PowerPlus V-Belt" class="de-card-img" loading="lazy">
+          <div class="de-hover-actions">
+            <button type="button" class="de-action-btn hero-sku-chip" data-search="Fenner A46" title="Quick Search SKU"><i class="hgi-stroke hgi-search-01"></i></button>
+            <a href="https://wa.me/917240107540?text=Namaste%20Fenner%20belt%20rate%20chahiye" target="_blank" rel="noopener" class="de-action-btn" title="Instant WhatsApp Quote"><i class="hgi-stroke hgi-whatsapp" style="color:#16A34A"></i></a>
+          </div>
+          <a href="shop.html?q=Fenner" class="de-corner-arrow" title="View in Catalogue">↗</a>
+        </div>
+        <div class="de-card-body">
+          <div class="de-meta-row">
+            <span class="de-brand-pill" style="background:#FEE2E2;color:#DC2626">FENNER · DRIVE</span>
+            <span class="de-stock-status"><i class="hgi-stroke hgi-tick-02"></i> 220 on shelf</span>
+          </div>
+          <h3 class="de-part-name">Fenner PowerPlus A46 Industrial V-Belt</h3>
+          <p class="de-part-spec">IS 2494 · Anti-Static · Heat &amp; Oil Resistant</p>
+          <div class="de-card-foot">
+            <span class="de-price">₹320 <small style="font-size:10px;color:#64748B">+GST</small></span>
+            <a href="shop.html?q=Fenner" class="de-order-link">Order Line-Side <i class="hgi-stroke hgi-arrow-right-01"></i></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4: Unbrako Fasteners -->
+      <article class="de-card">
+        <div class="de-card-preview">
+          <img src="assets/img/cat-p20.png" alt="Unbrako 12.9 Socket Head Cap Screw" class="de-card-img" loading="lazy">
+          <div class="de-hover-actions">
+            <button type="button" class="de-action-btn hero-sku-chip" data-search="Unbrako M10" title="Quick Search SKU"><i class="hgi-stroke hgi-search-01"></i></button>
+            <a href="https://wa.me/917240107540?text=Namaste%20Unbrako%20bolts%20rate%20chahiye" target="_blank" rel="noopener" class="de-action-btn" title="Instant WhatsApp Quote"><i class="hgi-stroke hgi-whatsapp" style="color:#16A34A"></i></a>
+          </div>
+          <a href="shop.html?q=Unbrako" class="de-corner-arrow" title="View in Catalogue">↗</a>
+        </div>
+        <div class="de-card-body">
+          <div class="de-meta-row">
+            <span class="de-brand-pill" style="background:#F3E8FF;color:#7E22CE">UNBRAKO · 12.9</span>
+            <span class="de-stock-status"><i class="hgi-stroke hgi-tick-02"></i> 5,000 on shelf</span>
+          </div>
+          <h3 class="de-part-name">Unbrako Grade 12.9 Socket Head Screw</h3>
+          <p class="de-part-spec">M10×40 mm · DIN 912 / ISO 4762 · High-Tensile</p>
+          <div class="de-card-foot">
+            <span class="de-price">₹14.50 <small style="font-size:10px;color:#64748B">/pc +GST</small></span>
+            <a href="shop.html?q=Unbrako" class="de-order-link">Order Line-Side <i class="hgi-stroke hgi-arrow-right-01"></i></a>
+          </div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
