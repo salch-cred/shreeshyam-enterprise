@@ -75,11 +75,104 @@ const SSE = (() => {
     const grand = Math.round(sub + gst - discount);
     return { sub, gst, grand };
   }
+  /* Activity Logging & Auditing */
+  function logActivity(type, title, detail, meta = {}) {
+    try {
+      const a = JSON.parse(localStorage.getItem('sse_activities') || '[]');
+      const entry = {
+        id: 'ACT-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase(),
+        type: String(type || 'SYSTEM').toUpperCase(),
+        title: String(title || ''),
+        detail: String(detail || ''),
+        meta: meta || {},
+        time: new Date().toISOString()
+      };
+      a.unshift(entry);
+      localStorage.setItem('sse_activities', JSON.stringify(a.slice(0, 1000)));
+      return entry;
+    } catch { return null; }
+  }
+
+  function getActivities(filterType = '') {
+    try {
+      let a = JSON.parse(localStorage.getItem('sse_activities') || '[]');
+      if (!a.length) a = seedActivities();
+      if (!filterType || filterType === 'all') return a;
+      return a.filter(x => x.type === filterType.toUpperCase());
+    } catch { return []; }
+  }
+
+  function seedActivities() {
+    const samples = [
+      {
+        id: 'ACT-SYS-101',
+        type: 'BILL',
+        title: 'GST Tax Invoice SSE/25-26/0142 Generated',
+        detail: 'Daikin Airconditioning Plant 2 · ₹ 18,450 (UPI Settled)',
+        meta: { no: 'SSE/25-26/0142', customer: 'Daikin Airconditioning Plant 2', amount: 18450, mode: 'UPI' },
+        time: new Date(Date.now() - 18 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'ACT-SYS-102',
+        type: 'STOCK',
+        title: 'Stock Inward: +50 SKF 6205-2RSH Bearings',
+        detail: 'Warehouse Lake 1 Restock · Minimum buffer restored',
+        meta: { id: 'SKF-6205-2RS', delta: 50, reason: 'OEM Restock' },
+        time: new Date(Date.now() - 55 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'ACT-SYS-103',
+        type: 'PAYMENT',
+        title: 'Plant Credit Collection: ₹ 24,000 Received',
+        detail: 'Havells India Ltd (Neemrana Unit) · Net 30 Ledger Settlement',
+        meta: { customer: 'Havells India Ltd', amount: 24000, mode: 'NEFT' },
+        time: new Date(Date.now() - 2 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'ACT-SYS-104',
+        type: 'ORDER',
+        title: 'Web Inward Request Confirmed: ORD-8841',
+        detail: 'Mitsui Kinzoku Components · 12x Polymatic 5/2 Solenoid Valves',
+        meta: { id: 'ORD-8841', status: 'confirmed' },
+        time: new Date(Date.now() - 3.5 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'ACT-SYS-105',
+        type: 'BILL',
+        title: 'Estimate EST-9021 Issued for BOQ Clearance',
+        detail: 'Hero MotoCorp Ancillary · 40x Fenner V-Belts (₹ 14,280)',
+        meta: { no: 'EST-9021', customer: 'Hero MotoCorp Ancillary', amount: 14280, mode: 'Estimate' },
+        time: new Date(Date.now() - 5 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'ACT-SYS-106',
+        type: 'PRODUCT',
+        title: 'Price Matrix Updated: Bosch GWS 750-100 Angle Grinder',
+        detail: 'Wholesale adjusted to ₹ 2,350 · Retail ₹ 2,650 (GST 18%)',
+        meta: { name: 'Bosch GWS 750-100' },
+        time: new Date(Date.now() - 7 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'ACT-SYS-107',
+        type: 'STOCK',
+        title: 'Stock Dispatched: -8 Polymatic FRL Units',
+        detail: 'Invoice SSE/25-26/0141 · Dispatched to Japanese Zone 1',
+        meta: { delta: -8, reason: 'Sale Dispatch' },
+        time: new Date(Date.now() - 8.5 * 3600 * 1000).toISOString()
+      }
+    ];
+    try {
+      localStorage.setItem('sse_activities', JSON.stringify(samples));
+    } catch {}
+    return samples;
+  }
+
   function logStock(id, delta, reason) {
     try {
       const a = JSON.parse(localStorage.getItem('sse_stocklog') || '[]');
       a.push({ id, delta, reason, date: new Date().toISOString() });
       localStorage.setItem('sse_stocklog', JSON.stringify(a.slice(-2000)));
+      logActivity('STOCK', (delta > 0 ? 'Stock Added: +' : 'Stock Deducted: ') + Math.abs(delta) + ' units (' + id + ')', `Reason: ${reason}`, { id, delta, reason });
     } catch {}
   }
 
@@ -265,7 +358,7 @@ const SSE = (() => {
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);else initApp();
 
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, footer, updateNavBadge, initInsporaFeed, $ };
+  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, logActivity, getActivities, seedActivities, motion, footer, updateNavBadge, initInsporaFeed, initEventBedsHeader, $ };
 })();
 
 

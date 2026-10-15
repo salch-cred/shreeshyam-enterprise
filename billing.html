@@ -1,279 +1,1319 @@
-?<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Billing — Shree Shyam Enterprises</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Billing POS Counter — Shree Shyam Enterprises</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#1E3A8B">
+<meta name="theme-color" content="#0F172A">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261012a"><link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/styles.css?v=20261015a">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
-<body>
+<body style="padding-top:72px">
 <a class="skip" href="#main">Skip to content</a>
 <div class="grain no-print" aria-hidden="true"></div>
-<header class="island no-print"><div class="island-inner">
-<a class="brand" href="index.html"><span class="brand-mark">S</span><span>Shree Shyam<small>Billing counter</small></span></a>
-<nav class="navlinks"><a href="index.html">Site</a><a href="shop.html">Shop</a><a href="admin.html">Admin</a></nav>
-<span class="live"><i></i>Counter open</span>
-</div></header>
 
-<main id="main" class="admin-shell no-print">
-<div id="gate" class="gate-card rv in">
-<p class="eyebrow">Counter only</p>
-<h1 class="title" style="font-size:32px;line-height:36px">Open billing</h1>
-<p class="lead" style="font-size:15px">Every TAX bill cuts stock and updates the day book.</p>
-<div class="pinrow"><input id="pin" inputmode="numeric" type="password" autocomplete="off" placeholder="••••" aria-label="Billing PIN"></div>
-<span class="err" id="pinErr" style="color:#9A3412;font-size:13px;min-height:20px;display:block"></span>
-<button class="btn btn-primary" id="unlock" style="width:100%;justify-content:center"><i class="hgi-stroke hgi-lock"></i>Unlock</button>
+<!-- EVENTBEDS™ LUXURY FIXED HEADER (COUNTER DESK SPECIFICATION) -->
+<header class="site-header no-print">
+  <div class="site-header-inner">
+    <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
+      <div class="eventbeds-logo-icon">
+        <i class="hgi-stroke hgi-settings-01" style="font-size:20px"></i>
+      </div>
+      <div class="eventbeds-brand-text">
+        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
+        <span class="eventbeds-sub">Billing Counter POS · RIICO Hub</span>
+      </div>
+    </a>
+
+    <!-- Center Navigation Links -->
+    <nav class="eventbeds-nav-center" aria-label="Main Navigation">
+      <a href="index.html" class="eventbeds-nav-link">
+        <span>Overview</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="shop.html" class="eventbeds-nav-link">
+        <span>Catalogue</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="billing.html" class="eventbeds-nav-link active" style="color:#FFFFFF">
+        <span>Billing POS</span>
+        <span class="eb-nav-arrow" style="opacity:1;transform:none"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="admin.html" class="eventbeds-nav-link">
+        <span>Admin Console</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="admin.html#activity" class="eventbeds-nav-link">
+        <span>Activity Log</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="account.html" class="eventbeds-nav-link">
+        <span>Plant Credit</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+    </nav>
+
+    <!-- Right: Fast Action Suite -->
+    <div class="eventbeds-actions">
+      <span class="live" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#10B981;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700">
+        <i style="background:#10B981;box-shadow:0 0 8px #10B981"></i>
+        <span>Counter Live</span>
+      </span>
+
+      <a class="eventbeds-black-btn desktop" href="admin.html" style="height:38px;padding:0 16px;font-size:12.5px">
+        <div class="eb-btn-slider">
+          <span class="eb-btn-text">Admin Hub</span>
+          <span class="eb-btn-text hover">Switch View</span>
+        </div>
+      </a>
+
+      <!-- Menu Capsule Button -->
+      <button class="eventbeds-menu-btn" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <div class="eb-menu-text-wrap">
+          <span class="eb-menu-label open">Menu</span>
+          <span class="eb-menu-label close">Close</span>
+        </div>
+        <div class="eb-status-dots-box" aria-hidden="true">
+          <span class="eb-status-dot pulse-lime"></span>
+          <span class="eb-status-dot neutral"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- EVENTBEDS™ MOBILE DRAWER -->
+<div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
+  <div class="site-drawer-head">
+    <div class="eventbeds-brand">
+      <div class="eventbeds-logo-icon">
+        <i class="hgi-stroke hgi-settings-01" style="font-size:18px"></i>
+      </div>
+      <div class="eventbeds-brand-text">
+        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
+        <span class="eventbeds-sub">Counter Terminal</span>
+      </div>
+    </div>
+    <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
+  </div>
+
+  <div class="site-drawer-nav">
+    <a href="index.html" class="drawer-link-block">
+      <span>Home Overview</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="shop.html" class="drawer-link-block">
+      <span>Catalogue & Stock (10k+ SKU)</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="billing.html" class="drawer-link-block" style="color:#CDE06A">
+      <span>Billing POS Counter (Active)</span>
+      <span class="arrow-svg" style="color:#CDE06A"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="admin.html" class="drawer-link-block">
+      <span>Admin Console & Inventory</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="admin.html#activity" class="drawer-link-block">
+      <span>Activity & Audit Log</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="account.html" class="drawer-link-block">
+      <span>Plant Credit & Net 30 Ledger</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+  </div>
+
+  <div class="site-drawer-footer">
+    <a class="eventbeds-black-btn" style="width:100%;height:44px;font-size:13.5px" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20counter%20billing%20assistance%20chahiye" target="_blank" rel="noopener">
+      <div class="eb-btn-slider" style="height:20px;line-height:20px">
+        <span class="eb-btn-text" style="height:20px">WhatsApp Counter Desk</span>
+        <span class="eb-btn-text hover" style="height:20px">+91 72401 07540</span>
+      </div>
+    </a>
+    <div class="drawer-socials">
+      <a class="drawer-social-icon" href="tel:+917240107540" title="Call Shop Desk"><i class="hgi-stroke hgi-call"></i></a>
+      <a class="drawer-social-icon" href="mailto:shreeshyamenterprises7540@gmail.com" title="Email Dispatch"><i class="hgi-stroke hgi-mail-01"></i></a>
+      <span style="font-size:11px;color:#94A3B8;margin-left:auto;font-weight:600">RIICO Industrial Area · Counter 1</span>
+    </div>
+  </div>
 </div>
 
-<div id="billWrap" hidden>
-<div class="console-head">
-<div><p class="eyebrow">New bill</p>
-<h1 class="title" style="margin:0"><span id="invNo">Draft</span></h1></div>
-<span class="device"><i class="hgi-stroke hgi-calendar-01" style="font-size:16px"></i><span id="invDate"></span></span>
-</div>
+<main id="main" class="admin-shell no-print" style="max-width:1280px;margin:16px auto;padding:16px 20px">
+  
+  <!-- SECURITY PIN GATE TERMINAL -->
+  <div id="gate" class="auth-gate-terminal rv in">
+    <div class="gate-shield-icon">
+      <i class="hgi-stroke hgi-lock-key"></i>
+      <span class="gate-beacon-dot"></span>
+    </div>
+    <h1 class="gate-title">Billing Counter Terminal</h1>
+    <p class="gate-sub">Enter staff authorization PIN to access live GST Tax billing, day register, and automated inventory deduction.</p>
+    
+    <input id="pin" class="gate-pin-input" inputmode="numeric" type="password" maxlength="4" autocomplete="off" placeholder="••••" aria-label="Counter Billing PIN">
+    <span class="err" id="pinErr" style="color:#F87171;font-size:13px;min-height:20px;display:block;font-weight:700"></span>
 
-<div class="pos">
-<section aria-label="Add items">
-<div class="cmdbar">
-<label class="search"><i class="hgi-stroke hgi-search-01"></i><input id="bq" type="search" placeholder="Type to add — cylinder, valve, FRL, bearing…" aria-label="Search products"><kbd>/</kbd></label>
-<select id="slab" aria-label="Price slab" style="background:#173178;color:#fff;border:1px solid var(--line-dark);border-radius:999px;padding:8px 12px;font:inherit;font-size:14px"><option value="retail">Retail</option><option value="wholesale">Wholesale</option></select>
-</div>
-<div id="held" class="heldrow"></div>
-<div id="res" class="picklist"></div>
-</section>
+    <!-- Interactive Touchscreen Numpad -->
+    <div class="gate-numpad">
+      <button class="gate-num-btn" data-key="1">1</button>
+      <button class="gate-num-btn" data-key="2">2</button>
+      <button class="gate-num-btn" data-key="3">3</button>
+      <button class="gate-num-btn" data-key="4">4</button>
+      <button class="gate-num-btn" data-key="5">5</button>
+      <button class="gate-num-btn" data-key="6">6</button>
+      <button class="gate-num-btn" data-key="7">7</button>
+      <button class="gate-num-btn" data-key="8">8</button>
+      <button class="gate-num-btn" data-key="9">9</button>
+      <button class="gate-num-btn" data-key="C" style="color:#F87171">C</button>
+      <button class="gate-num-btn" data-key="0">0</button>
+      <button class="gate-num-btn" data-key="OK" style="background:#1D4ED8;color:#FFFFFF">OK</button>
+    </div>
 
-<section aria-label="Bill">
-<div class="billcard">
-<div class="field"><label for="cust">Customer</label><input id="cust" placeholder="Name, site, phone" autocomplete="off" list="custList"><datalist id="custList"></datalist></div>
-<div class="formgrid">
-<div class="field"><label for="cphone">Phone</label><input id="cphone" inputmode="tel" placeholder="98…" autocomplete="off"></div>
-<div class="field"><label for="cgstin">GSTIN (optional)</label><input id="cgstin" placeholder="27XXXXX0000X1Z5" autocomplete="off" style="text-transform:uppercase"></div>
-</div>
-<div id="lines"></div>
-<div class="formgrid" style="margin-top:12px">
-<div class="field"><label for="disc">Discount Rs</label><input id="disc" type="number" min="0" value="0"></div>
-<div class="field"><label for="paid">Received Rs</label><input id="paid" type="number" min="0" value="0"></div>
-</div>
-<div class="field"><label>Payment mode</label><div class="seg" id="modeSeg">
-<button data-m="UPI" aria-pressed="true">UPI</button><button data-m="Cash" aria-pressed="false">Cash</button><button data-m="Transfer" aria-pressed="false">Transfer</button><button data-m="Credit" aria-pressed="false">Credit</button>
-</div></div>
-<div class="totals" id="totals"></div>
-<div class="bactions">
-<p class="err" id="billErr" style="color:#9A3412;font-size:13px;min-height:20px;margin:4px 0"></p>
-<div style="display:flex;gap:10px;flex-wrap:wrap">
-<button class="btn btn-primary" id="save" style="flex:1;justify-content:center"><i class="hgi-stroke hgi-printer"></i>Save + Print</button>
-<button class="btn btn-ghost" id="est">Estimate</button>
-<button class="btn btn-ghost" id="hold">Hold</button>
-</div>
-</div>
-</div>
-</section>
-</div>
+    <button class="btn btn-primary" id="unlock" style="width:100%;height:48px;font-size:15px;justify-content:center;border-radius:12px;margin-top:8px">
+      <i class="hgi-stroke hgi-checkmark-circle-01"></i> Unlock POS Terminal
+    </button>
 
-<section class="daybook" aria-label="Today's counter">
-<div class="dbhead"><div><p class="eyebrow" style="margin:0">Day book</p><h2>Today at the counter</h2></div>
-<input id="dbq" type="search" placeholder="Search bills…" aria-label="Search bills"></div>
-<div class="statrow" id="dbStats" style="margin-top:12px">
-<div><strong id="dbN">0</strong><span>Bills today</span></div>
-<div><strong id="dbBilled">Rs 0</strong><span>Billed</span></div>
-<div><strong id="dbGot">Rs 0</strong><span>Received</span></div>
-<div><strong id="dbDue">Rs 0</strong><span>Udhaar</span></div>
-</div>
-<div id="dblist" class="dblist"></div>
-</section>
-</div>
+    <div class="gate-hint-row">
+      <span>Standard Operator PIN: <b>2580</b></span>
+      <button type="button" class="gate-quick-chip" id="quickPinBtn">Quick-Fill (2580)</button>
+    </div>
+  </div>
+
+  <!-- UPGRADED BILLING POS WORKSPACE -->
+  <div id="billWrap" hidden>
+    <!-- Top Meta Status & Fast Controls -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding:14px 20px;background:#0F172A;border-radius:18px;color:#FFFFFF;margin-bottom:20px;border:1px solid rgba(255,255,255,.1)">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#93C5FD">Active Tax Invoice</span>
+          <span class="pill ok" style="font-size:10px;padding:1px 8px">Ready</span>
+        </div>
+        <h1 style="margin:2px 0 0;font-size:24px;font-weight:800;letter-spacing:-.02em;color:#FFFFFF" id="invNo">Draft</h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:12.5px;color:#CBD5E1;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);padding:6px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14)">
+          <i class="hgi-stroke hgi-calendar-01" style="color:#60A5FA"></i>
+          <span id="invDate">Loading…</span>
+        </span>
+
+        <button class="btn btn-ghost" id="newDraftBtn" style="border-color:rgba(255,255,255,.2);color:#FFFFFF;padding:6px 14px;font-size:13px">
+          <i class="hgi-stroke hgi-plus-sign"></i> New Draft (F2)
+        </button>
+
+        <a class="btn btn-ghost" href="#daybook" style="border-color:rgba(255,255,255,.2);color:#FFFFFF;padding:6px 14px;font-size:13px">
+          <i class="hgi-stroke hgi-file-01"></i> Today's Register
+        </a>
+      </div>
+    </div>
+
+    <!-- Held Bills Strip (If any) -->
+    <div id="held" class="heldrow" style="margin-bottom:12px"></div>
+
+    <!-- Dual-Pane POS Interface -->
+    <div class="pos">
+      <!-- LEFT PANE: Search, Category Filters, Custom Item, Shelf Results -->
+      <section aria-label="Shelf Inventory">
+        <div class="pos-cmdbar">
+          <div class="pos-search-wrap">
+            <i class="hgi-stroke hgi-search-01"></i>
+            <input id="bq" type="search" placeholder="Search 10k+ SKUs… bearings, belts, FRL, fasteners" aria-label="Search shelf inventory">
+            <kbd style="border-color:rgba(255,255,255,.2);color:#CBD5E1">/</kbd>
+          </div>
+
+          <select id="slab" class="pos-slab-select" aria-label="Price slab">
+            <option value="wholesale">Wholesale Slab (OEM)</option>
+            <option value="retail">Retail Slab (Counter)</option>
+          </select>
+
+          <button class="btn btn-ghost" id="toggleCustomItemBtn" style="border-color:rgba(255,255,255,.25);color:#FFFFFF;padding:6px 12px;font-size:12.5px">
+            <i class="hgi-stroke hgi-plus-sign"></i> Custom SKU
+          </button>
+        </div>
+
+        <!-- Category Quick Filter Bar -->
+        <div class="pos-cat-bar" id="catBar">
+          <button class="pos-cat-chip active" data-cat="">All Categories</button>
+          <button class="pos-cat-chip" data-cat="Bearings">Bearings (SKF / NBC)</button>
+          <button class="pos-cat-chip" data-cat="V-Belts">V-Belts & Pulleys</button>
+          <button class="pos-cat-chip" data-cat="Pneumatics">Pneumatics (Polymatic)</button>
+          <button class="pos-cat-chip" data-cat="Fasteners">Fasteners (High Tensile)</button>
+          <button class="pos-cat-chip" data-cat="Electricals">Industrial Electricals</button>
+          <button class="pos-cat-chip" data-cat="Tools">Power Tools & Hand Tools</button>
+          <button class="pos-cat-chip" data-cat="Safety">Safety & MRO</button>
+        </div>
+
+        <!-- Custom Item On-the-Fly Adder (Hidden by default) -->
+        <div id="customItemPanel" class="pos-custom-bar" hidden>
+          <span style="font-size:12px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.05em">+ Custom Line Item:</span>
+          <input id="ciName" placeholder="Item name / Special Size" style="flex:1;min-width:180px">
+          <input id="ciHsn" placeholder="HSN (opt)" style="width:85px">
+          <input id="ciRate" type="number" min="0" placeholder="Rate ₹" style="width:90px">
+          <select id="ciGst" style="border:1px solid var(--line);border-radius:8px;padding:6px;font:inherit;font-size:13px">
+            <option value="18" selected>18% GST</option>
+            <option value="28">28% GST</option>
+            <option value="12">12% GST</option>
+            <option value="5">5% GST</option>
+            <option value="0">0% (Exempt)</option>
+          </select>
+          <button class="btn btn-primary" id="ciAddBtn" style="padding:6px 14px;font-size:13px">Add to Bill</button>
+        </div>
+
+        <!-- Picklist Shelf Results -->
+        <div id="res" class="picklist"></div>
+      </section>
+
+      <!-- RIGHT PANE: Customer Data, Cart Lines, Totals, Actions -->
+      <section aria-label="Tax Bill Draft">
+        <div class="billcard">
+          <!-- Customer & Firm Details -->
+          <div class="bill-cust-card">
+            <div class="field" style="margin-bottom:8px">
+              <label for="cust" style="font-size:12.5px;font-weight:700;color:#334155;display:flex;justify-content:space-between">
+                <span>Customer / Plant Firm</span>
+                <span style="color:#64748B;font-weight:500">Neemrana Hub Datalist</span>
+              </label>
+              <input id="cust" placeholder="e.g. Daikin Plant 2, Havells, Walk-in Tech" autocomplete="off" list="custList" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;font:inherit;font-size:14px;background:#FFFFFF">
+              <datalist id="custList"></datalist>
+            </div>
+
+            <div class="formgrid">
+              <div class="field" style="margin-bottom:0">
+                <label for="cphone" style="font-size:12px;font-weight:700;color:#334155">Phone (WhatsApp Bill)</label>
+                <input id="cphone" inputmode="tel" maxlength="10" placeholder="98XXXXXXXX" autocomplete="off" style="border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:100%;font:inherit;font-size:13.5px;background:#FFFFFF">
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label for="cgstin" style="font-size:12px;font-weight:700;color:#334155">Customer GSTIN (opt)</label>
+                <input id="cgstin" placeholder="08XXXXXXXXXX1ZX" autocomplete="off" maxlength="15" style="border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:100%;font:inherit;font-size:13.5px;text-transform:uppercase;background:#FFFFFF">
+              </div>
+            </div>
+          </div>
+
+          <!-- Bill Lines Container -->
+          <div id="lines" style="min-height:120px"></div>
+
+          <!-- Modifiers: Discount & Freight -->
+          <div class="formgrid" style="margin-top:14px;background:var(--bg-soft);padding:10px 12px;border-radius:12px;border:1px solid var(--line)">
+            <div class="field" style="margin-bottom:0">
+              <label for="disc" style="font-size:12px;font-weight:700;color:#475569">Discount (₹)</label>
+              <input id="disc" type="number" min="0" value="0" style="border:1px solid var(--line);border-radius:8px;padding:6px 10px;width:100%;font:inherit;font-size:13.5px;font-weight:700;background:#FFFFFF">
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label for="freight" style="font-size:12px;font-weight:700;color:#475569">Freight / Packing (₹)</label>
+              <input id="freight" type="number" min="0" value="0" style="border:1px solid var(--line);border-radius:8px;padding:6px 10px;width:100%;font:inherit;font-size:13.5px;font-weight:700;background:#FFFFFF">
+            </div>
+          </div>
+
+          <!-- Payment Mode Segmented Selector -->
+          <div style="margin-top:14px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#475569;margin-bottom:6px">Payment Mode</label>
+            <div class="seg" id="modeSeg">
+              <button data-m="UPI" aria-pressed="true">UPI QR</button>
+              <button data-m="Cash" aria-pressed="false">Cash</button>
+              <button data-m="Transfer" aria-pressed="false">NEFT / RTGS</button>
+              <button data-m="Credit" aria-pressed="false">Net 30 Udhaar</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Live UPI QR Box (Rendered when UPI is active) -->
+          <div id="upiPreviewBox" class="pos-upi-preview">
+            <img id="posQrImg" src="" alt="Dynamic UPI QR Code">
+            <div>
+              <b id="posQrAmt">Scan & Pay ₹ 0</b>
+              <span>UPI: <strong id="posQrId">shreeshyam@upi</strong></span>
+              <small style="color:#64748B;display:block;margin-top:4px">Zero gateway fee · Instant counter settlement</small>
+            </div>
+          </div>
+
+          <!-- Received Cash / Payment Input -->
+          <div style="margin-top:12px">
+            <label for="paid" style="font-size:12px;font-weight:700;color:#475569;display:flex;justify-content:space-between">
+              <span>Amount Received (₹)</span>
+              <button type="button" id="fullPaidBtn" style="border:0;background:none;color:var(--accent);font-weight:700;cursor:pointer;font-size:12px">Mark Full Paid</button>
+            </label>
+            <input id="paid" type="number" min="0" value="0" style="border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;width:100%;font:inherit;font-size:15px;font-weight:800;background:#FFFFFF">
+          </div>
+
+          <!-- Grand Totals Breakdown -->
+          <div class="totals" id="totals"></div>
+
+          <!-- Action Suite -->
+          <div class="bactions" style="margin-top:16px">
+            <p class="err" id="billErr" style="color:#B91C1C;font-size:12.5px;font-weight:700;min-height:18px;margin:4px 0"></p>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <button class="btn btn-primary" id="save" style="justify-content:center;height:44px;font-size:13.5px">
+                <i class="hgi-stroke hgi-printer"></i> Save & Print (TAX)
+              </button>
+              <button class="btn" id="saveWaBtn" style="background:#25D366;color:#FFFFFF;border-color:#25D366;justify-content:center;height:44px;font-size:13.5px">
+                <i class="hgi-stroke hgi-whatsapp"></i> Save & WhatsApp
+              </button>
+            </div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-ghost" id="est" style="flex:1;justify-content:center;font-size:12.5px" title="Issue quotation without cutting stock">
+                Estimate / Proforma
+              </button>
+              <button class="btn btn-ghost" id="hold" style="flex:1;justify-content:center;font-size:12.5px" title="Park current bill to resume later">
+                Hold Bill
+              </button>
+              <button class="btn btn-ghost" id="clearBillBtn" style="color:#B91C1C;border-color:#FCA5A5;font-size:12.5px" title="Discard draft">
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- DAY BOOK REGISTER (TODAY AT COUNTER) -->
+    <section class="daybook" id="daybook" aria-label="Today's Counter Day Book">
+      <div class="dbhead">
+        <div>
+          <span class="eyebrow" style="margin:0;color:var(--accent)">Daily Counter Audit</span>
+          <h2 style="font-size:24px;font-weight:800;color:#0F172A">Today at the Counter</h2>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <input id="dbq" type="search" placeholder="Search bills by no, plant, phone…" aria-label="Search bills" style="border:1px solid var(--line);border-radius:999px;padding:8px 16px;font:inherit;font-size:13.5px;min-width:240px">
+          <button class="btn btn-ghost" id="exportDaybookBtn" style="font-size:13px">
+            <i class="hgi-stroke hgi-download-01"></i> Export Daybook CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- 5 Metric KPI Row -->
+      <div class="act-metrics-grid" id="dbStats" style="margin-bottom:18px">
+        <div class="act-metric-card">
+          <div class="act-metric-icon blue"><i class="hgi-stroke hgi-receipt-01"></i></div>
+          <div class="act-metric-meta"><b id="dbN">0</b><span>Bills Today</span></div>
+        </div>
+        <div class="act-metric-card">
+          <div class="act-metric-icon green"><i class="hgi-stroke hgi-wallet-01"></i></div>
+          <div class="act-metric-meta"><b id="dbBilled">₹ 0</b><span>Total Billed</span></div>
+        </div>
+        <div class="act-metric-card">
+          <div class="act-metric-icon amber"><i class="hgi-stroke hgi-coins-01"></i></div>
+          <div class="act-metric-meta"><b id="dbCash">₹ 0</b><span>Cash in Drawer</span></div>
+        </div>
+        <div class="act-metric-card">
+          <div class="act-metric-icon purple"><i class="hgi-stroke hgi-smart-phone-01"></i></div>
+          <div class="act-metric-meta"><b id="dbGot">₹ 0</b><span>UPI & Transfer</span></div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs for Today's Daybook -->
+      <div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto">
+        <button class="pos-cat-chip active" data-dbfilter="all">All Bills</button>
+        <button class="pos-cat-chip" data-dbfilter="TAX">Tax Invoices Only</button>
+        <button class="pos-cat-chip" data-dbfilter="UPI">UPI Payments</button>
+        <button class="pos-cat-chip" data-dbfilter="Cash">Cash Payments</button>
+        <button class="pos-cat-chip" data-dbfilter="Credit">Udhaar (Pending)</button>
+        <button class="pos-cat-chip" data-dbfilter="EST">Estimates</button>
+      </div>
+
+      <!-- Itemized Daybook List -->
+      <div id="dblist" class="dblist"></div>
+    </section>
+  </div>
 </main>
 
+<!-- PRINT ENGINE: STANDARDIZED A4 GST TAX INVOICE -->
 <div id="printArea" aria-hidden="true"></div>
 <div class="toasts no-print" id="toasts" aria-live="polite"></div>
 
-<script src="assets/app.js?v=20261012a"></script>
+<script src="assets/app.js?v=20261015a"></script>
 <script>
-let ALL=[],cart=[],mode='UPI';const BILL_PIN='2580';
-const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
-  t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
-  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2600);};
-const invs=()=>{try{return JSON.parse(localStorage.getItem('sse_invoices')||'[]');}catch{return[];}};
-const today=()=>new Date().toISOString().slice(0,10);
-SSE.$('#unlock').onclick=()=>{if(SSE.$('#pin').value===BILL_PIN){sessionStorage.setItem('sse_bill','1');openBill();}
-  else{SSE.$('#pinErr').textContent='Wrong PIN.';const g=SSE.$('#gate');g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}};
-SSE.$('#pin').addEventListener('keydown',e=>{if(e.key==='Enter')SSE.$('#unlock').click()});
-if(sessionStorage.getItem('sse_bill')==='1')openBill();
-function openBill(){SSE.$('#gate').hidden=true;SSE.$('#billWrap').hidden=false;init();}
+let ALL = [], cart = [], mode = 'UPI', currentCategory = '', dbFilter = 'all';
+const BILL_PIN = '2580';
 
-async function init(){
-  ALL=await SSE.seed();
-  SSE.$('#invDate').textContent=new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  const seen={};SSE.$('#custList').innerHTML=invs().map(r=>r.customer).filter(c=>c&&!seen[c]&&(seen[c]=1)).slice(-30).map(c=>`<option value="${SSE.esc(c)}">`).join('');
-  SSE.$('#bq').oninput=draw;SSE.$('#slab').onchange=draw;
-  SSE.$('#bq').addEventListener('keydown',e=>{if(e.key==='Enter'){const first=SSE.$('#res').querySelector('button.add');if(first)first.click();}});
-  SSE.$('#disc').oninput=drawLines;SSE.$('#paid').oninput=drawLines;
-  SSE.$('#save').onclick=()=>save('TAX');SSE.$('#est').onclick=()=>save('EST');SSE.$('#hold').onclick=hold;
-  SSE.$('#dbq').oninput=daybook;
-  SSE.$('#modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    SSE.$('#modeSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
-    b.setAttribute('aria-pressed','true');mode=b.dataset.m;drawLines();});
-  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();SSE.$('#bq').focus();}});
-  draw();drawLines();held();daybook();SSE.tabs();
-}
-function draw(){
-  const q=SSE.$('#bq').value.toLowerCase(),slab=SSE.$('#slab').value;
-  const f=ALL.filter(p=>(p.name+' '+(p.brand||'')).toLowerCase().includes(q)).slice(0,9);
-  const box=SSE.$('#res');box.innerHTML='';
-  if(!q){box.innerHTML=`<div class="empty"><i class="hgi-stroke hgi-search-01"></i><b>Search the shelf</b><p>Industrial rates are quote-based — type the agreed rate on each line after adding. Enter adds the first match.</p></div>`;return;}
-  if(!f.length){box.innerHTML=`<div class="empty"><i class="hgi-stroke hgi-package-search"></i><b>Not on the shelf</b><p>Check spelling or add it from Admin.</p></div>`;return;}
-  f.forEach((p,i)=>{const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
-    const low=p.stock<=(p.min_stock||5);
-    const d=document.createElement('div');d.className='pick rowin';d.style.animationDelay=Math.min(i*40,320)+'ms';
-    d.innerHTML=`<img loading="lazy" src="${SSE.safeImg(p.image)}" alt="">
-    <div style="flex:1"><b>${SSE.esc(p.name)}</b><span>${SSE.esc(p.brand)} · Stock ${Number(p.stock)||0} ${low?'· <b style="color:#9A3412">Low</b>':''} · +${Number(p.gst_pct)||0}% GST</span></div>
-    <b>${rate?SSE.fmt(rate):"On request"}</b><button class="btn btn-amber add" style="padding:6px 12px;font-size:13px">Add</button>`;
-    d.querySelector('button').onclick=ev=>{ev.stopPropagation();addItem(p,rate);};
-    d.onclick=()=>d.querySelector('button').click();
-    box.appendChild(d);});
-}
-function addItem(p,rate){
-  const ex=cart.find(c=>c.id===p.id),nxt=(ex?ex.qty:0)+1;
-  if(nxt>(Number(p.stock)||0))toast('Only '+p.stock+' in stock — bill anyway with care','alert-01');
-  if(ex)ex.qty++;else cart.push({id:p.id,name:p.name,qty:1,rate,gst_pct:p.gst_pct,hsn:p.hsn||''});
-  SSE.$('#billErr').textContent='';drawLines();
-}
-function drawLines(){
-  const t=SSE.totals(cart,Number(SSE.$('#disc').value||0));
-  const paid=Math.max(0,Number(SSE.$('#paid').value||0));
-  const box=SSE.$('#lines');
-  if(!cart.length){box.innerHTML=`<div class="empty" style="padding:24px"><i class="hgi-stroke hgi-shopping-cart-01"></i><b>Bill is empty</b><p>Add items from the left.</p></div>`;}
-  else box.innerHTML=cart.map((c,i)=>`<div class="line">
-    <div style="flex:1;min-width:0"><b>${SSE.esc(c.name)}</b><span>GST ${c.gst_pct}%</span></div>
-    <div class="stepper"><button data-i="${i}" data-d="-1" aria-label="Decrease">−</button><b>${c.qty}</b><button data-i="${i}" data-d="1" aria-label="Increase">+</button></div>
-    <input class="ratein" type="number" min="0" value="${c.rate}" data-i="${i}" aria-label="Rate for ${SSE.esc(c.name)}">
-    <b style="min-width:86px;text-align:right">${SSE.fmt(c.qty*c.rate)}</b>
-    <button class="rm" data-i="${i}" aria-label="Remove line">×</button></div>`).join('');
-  box.querySelectorAll('.stepper button').forEach(b=>b.onclick=()=>{const c=cart[Number(b.dataset.i)];
-    c.qty=Math.max(1,c.qty+Number(b.dataset.d));drawLines();});
-  box.querySelectorAll('.ratein').forEach(r=>r.onchange=()=>{cart[Number(r.dataset.i)].rate=Math.max(0,Number(r.value)||0);drawLines();});
-  box.querySelectorAll('.rm').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.i),1);drawLines();});
-  const due=Math.max(0,t.grand-paid);
-  SSE.$('#totals').innerHTML=`<div><span>Subtotal</span><b>${SSE.fmt(t.sub)}</b></div>
-  <div><span>GST</span><b>${SSE.fmt(t.gst)}</b></div>
-  <div><span>Discount</span><b>—^' ${SSE.fmt(Number(SSE.$('#disc').value||0))}</b></div>
-  <div class="grand"><span>Total · ${SSE.esc(mode)}</span><b>${SSE.fmt(t.grand)}</b></div>
-  ${due>0?`<div class="due"><span>Balance to udhaar</span><b>${SSE.fmt(due)}</b></div>`:`<div class="due ok"><span>Settled</span><b>Fully paid</b></div>`}`;
-}
-function hold(){
-  if(!cart.length){SSE.$('#billErr').textContent='Nothing to hold — bill is empty.';return;}
-  try{const h=JSON.parse(localStorage.getItem('sse_held')||'[]');
-    h.push({id:'H'+Date.now(),customer:SSE.$('#cust').value.trim()||'Walk-in',items:cart,created:new Date().toISOString()});
-    localStorage.setItem('sse_held',JSON.stringify(h));}catch{}
-  cart=[];drawLines();held();toast('Bill held — resume anytime','inbox');
-}
-function held(){
-  let h=[];try{h=JSON.parse(localStorage.getItem('sse_held')||'[]');}catch{}
-  SSE.$('#held').innerHTML=h.map(x=>`<span class="heldchip">${SSE.esc(x.customer)} · ${x.items.reduce((a,c)=>a+c.qty,0)} pcs
-    <button class="go" data-id="${x.id}">Resume</button><button data-x="${x.id}" aria-label="Discard held bill">—-</button></span>`).join('');
-  SSE.$('#held').querySelectorAll('.go').forEach(b=>b.onclick=()=>{const all=JSON.parse(localStorage.getItem('sse_held')||'[]');
-    const it=all.find(x=>x.id===b.dataset.id);cart=it.items;SSE.$('#cust').value=it.customer==='Walk-in'?'':it.customer;
-    localStorage.setItem('sse_held',JSON.stringify(all.filter(x=>x.id!==b.dataset.id)));drawLines();held();});
-  SSE.$('#held').querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{const all=JSON.parse(localStorage.getItem('sse_held')||'[]');
-    localStorage.setItem('sse_held',JSON.stringify(all.filter(x=>x.id!==b.dataset.x)));held();});
-}
-function daybook(){
-  const q=(SSE.$('#dbq').value||'').toLowerCase();
-  const list=invs().filter(r=>(r.date||'').slice(0,10)===today()&&(!q||(r.no+' '+(r.customer||'')).toLowerCase().includes(q))).reverse();
-  const billed=list.filter(r=>r.type==='TAX').reduce((a,r)=>a+(r.grand||0),0);
-  const got=list.reduce((a,r)=>a+(r.paid||0),0);
-  SSE.$('#dbN').textContent=list.length;SSE.$('#dbBilled').textContent=SSE.fmt(billed);
-  SSE.$('#dbGot').textContent=SSE.fmt(got);SSE.$('#dbDue').textContent=SSE.fmt(list.reduce((a,r)=>a+(r.balance||0),0));
-  SSE.$('#dblist').innerHTML=list.length?list.map(r=>`<div class="dbrow">
-    <div><b>${SSE.esc(r.no)}</b> <span class="pill ${r.type==='TAX'?'info':'warn'}">${r.type}</span><small>${SSE.esc(r.customer||'Walk-in')} · ${SSE.fmt(r.grand)} · paid ${SSE.fmt(r.paid)}${r.balance?` · due ${SSE.fmt(r.balance)}`:''}</small></div>
-    <div><b>${SSE.fmt(r.grand)}</b></div>
-    <div class="rpr"><button class="btn btn-ghost rp" data-no="${SSE.esc(r.no)}"><i class="hgi-stroke hgi-printer"></i>Reprint</button></div></div>`).join('')
-    :`<div class="empty"><i class="hgi-stroke hgi-file-01"></i><b>No bills yet today</b><p>Saved bills land here with one tap reprint.</p></div>`;
-  SSE.$('#dblist').querySelectorAll('.rp').forEach(b=>b.onclick=()=>{
-    const r=invs().find(x=>x.no===b.dataset.no);if(!r)return;buildPrint(r);printNow();});
-}
-async function save(type){
-  if(!cart.length){SSE.$('#billErr').textContent='Add at least one item before saving.';return;}
-  SSE.$('#billErr').textContent='';
-  if(type==='TAX'&&!SSE.$('#cust').value.trim()&&!SSE.$('#cphone').value.trim()){
-    SSE.$('#billErr').textContent='Add a customer name or phone for a GST bill.';return;}
-  const t=SSE.totals(cart,Number(SSE.$('#disc').value||0));
-  const paid=Math.max(0,Number(SSE.$('#paid').value||0));
-  const no=type==='TAX'?SSE.seq():'EST-'+Date.now();
-  const rec={no,date:new Date().toISOString(),type,customer:SSE.$('#cust').value.trim(),phone:SSE.$('#cphone').value.trim(),
-    gstin:SSE.$('#cgstin').value.trim().toUpperCase(),mode,items:cart,sub:t.sub,gst:t.gst,disc:Number(SSE.$('#disc').value||0),
-    grand:t.grand,paid,balance:Math.max(0,t.grand-paid)};
-  try{const a=invs();a.push(rec);localStorage.setItem('sse_invoices',JSON.stringify(a));
-    if(rec.balance>0){const l=JSON.parse(localStorage.getItem('sse_ledger')||'[]');
-      l.push({no,customer:rec.customer||rec.phone||'Walk-in',total:rec.grand,paid:rec.paid,balance:rec.balance});localStorage.setItem('sse_ledger',JSON.stringify(l));}}catch{}
-  if(type==='TAX'){const all=await SSE.all();
-    for(const c of cart){const p=all.find(x=>x.id===c.id);if(p){p.stock-=c.qty;await SSE.put(p);SSE.logStock(p.id,-c.qty,no);}}
-    ALL=all;}
-  SSE.$('#invNo').textContent=no;
-  buildPrint(rec);printNow();
-  cart=[];SSE.$('#paid').value=0;SSE.$('#disc').value=0;drawLines();daybook();
-  toast((type==='TAX'?'Invoice ':'Estimate ')+no+' saved');
-}
-function printNow(){
-  const qr=SSE.$('#printArea').querySelector('img.qr');
-  let done=false;const go=()=>{if(done)return;done=true;setTimeout(()=>window.print(),200);};
-  if(qr){qr.onload=go;setTimeout(go,2500);}else go();
+const toast = (m, i = 'checkmark-circle-01') => {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;
+  SSE.$('#toasts').appendChild(t);
+  setTimeout(() => {
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 500);
+  }, 2600);
+};
+
+const invs = () => {
+  try { return JSON.parse(localStorage.getItem('sse_invoices') || '[]'); }
+  catch { return []; }
+};
+
+const today = () => new Date().toISOString().slice(0, 10);
+
+/* Unlock PIN Gate */
+function unlockGate() {
+  const val = SSE.$('#pin').value.trim();
+  if (val === BILL_PIN) {
+    sessionStorage.setItem('sse_bill', '1');
+    openBill();
+  } else {
+    SSE.$('#pinErr').textContent = 'Wrong PIN. Standard code is 2580.';
+    const g = SSE.$('#gate');
+    g.classList.remove('shake');
+    void g.offsetWidth;
+    g.classList.add('shake');
+  }
 }
 
-/* Amount in words, Indian numbering */
-function words(n){
-  const o=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
-  const ty=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
-  const two=x=>x<20?o[x]:ty[Math.floor(x/10)]+(x%10?' '+o[x%10]:'');
-  const three=x=>{const h=Math.floor(x/100),r=x%100;return(h?o[h]+' Hundred'+(r?' ':''):'')+(r?two(r):'');};
-  if(!n)return'Zero';
-  let s='',cr=Math.floor(n/1e7),lk=Math.floor(n%1e7/1e5),th=Math.floor(n%1e5/1e3),rest=n%1e3;
-  if(cr)s+=three(cr)+' Crore ';if(lk)s+=two(lk)+' Lakh ';if(th)s+=two(th)+' Thousand ';if(rest)s+=three(rest);
-  return(s+'Rupees Only').replace(/\s+/g,' ').trim();
+SSE.$('#unlock').onclick = unlockGate;
+SSE.$('#pin').addEventListener('keydown', e => {
+  if (e.key === 'Enter') unlockGate();
+});
+
+/* Numpad Support */
+document.querySelectorAll('.gate-num-btn').forEach(btn => {
+  btn.onclick = () => {
+    const k = btn.dataset.key;
+    const pinInp = SSE.$('#pin');
+    if (k === 'C') {
+      pinInp.value = '';
+    } else if (k === 'OK') {
+      unlockGate();
+    } else {
+      if (pinInp.value.length < 4) {
+        pinInp.value += k;
+        if (pinInp.value.length === 4) unlockGate();
+      }
+    }
+  };
+});
+
+SSE.$('#quickPinBtn').onclick = () => {
+  SSE.$('#pin').value = BILL_PIN;
+  unlockGate();
+};
+
+if (sessionStorage.getItem('sse_bill') === '1') {
+  openBill();
 }
-function buildPrint(r){
-  const c=SSE.content(),cgst=r.gst/2,sgst=r.gst-r.gst/2;
-  const upi=c.upi_id||'shreeshyam@upi';
-  const qr='https://api.qrserver.com/v1/create-qr-code/?size=140x140&data='+encodeURIComponent(`upi://pay?pa=${upi}&am=${r.grand}&tn=${r.no}`);
-  const hsn={};r.items.forEach(it=>{const k=(it.hsn||'—')+'|'+it.gst_pct;hsn[k]=hsn[k]||{hsn:it.hsn||'—',rate:it.gst_pct,tx:0,g:0};
-    const tx=it.qty*it.rate;hsn[k].tx+=tx;hsn[k].g+=tx*it.gst_pct/100;});
-  const rows=r.items.map((it,i)=>{const tx=it.qty*it.rate,g=tx*it.gst_pct/100;
-    return`<tr><td>${i+1}</td><td><b>${SSE.esc(it.name)}</b><br><span>HSN ${SSE.esc(it.hsn||'—')}</span></td>
-    <td class="r">${it.qty}</td><td class="r">${SSE.fmt(it.rate)}</td><td class="r">${SSE.fmt(tx)}</td>
-    <td class="r">${it.gst_pct}%</td><td class="r">${SSE.fmt(g)}</td><td class="r"><b>${SSE.fmt(tx+g)}</b></td></tr>`;}).join('');
-  const copy=(label,brk)=>`<div class="inv${brk?' brk':''}">
-    <div class="copy">${label}</div>
-    <div class="ihead"><div><h1>Shree Shyam Enterprises</h1>
-    <p>${SSE.esc(c.address||'Main Market Road')}${c.gstin&&c.gstin.indexOf('ADD')!==0?' · GSTIN '+SSE.esc(c.gstin):''} · ${SSE.esc(c.phone||'')}</p></div>
-    <div class="r"><h2>${r.type==='TAX'?'Tax Invoice':'Estimate'}</h2><p>${r.type==='TAX'?'':'Not a tax invoice'}</p></div></div>
-    <div class="imeta"><div><span>Bill no</span><b>${SSE.esc(r.no)}</b></div>
-    <div><span>Date</span><b>${new Date(r.date).toLocaleString('en-IN')}</b></div>
-    <div><span>Customer</span><b>${SSE.esc(r.customer||'Walk-in')}${r.phone?' · '+SSE.esc(r.phone):''}</b></div>
-    <div><span>Customer GSTIN</span><b>${SSE.esc(r.gstin||'—')}</b></div></div>
-    <table class="itbl"><thead><tr><th>#</th><th>Item</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Taxable</th><th class="r">GST</th><th class="r">GST Amt</th><th class="r">Amount</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="irow"><div class="ileft">
-      <p><span>Amount in words</span><b>${words(r.grand)}</b></p>
-      <table class="htbl"><thead><tr><th>HSN</th><th class="r">Rate</th><th class="r">Taxable</th><th class="r">CGST</th><th class="r">SGST</th></tr></thead><tbody>
-      ${Object.values(hsn).map(h=>`<tr><td>${SSE.esc(h.hsn)}</td><td class="r">${h.rate}%</td><td class="r">${SSE.fmt(h.tx)}</td><td class="r">${SSE.fmt(h.g/2)}</td><td class="r">${SSE.fmt(h.g-h.g/2)}</td></tr>`).join('')}</tbody></table>
-      <div class="qrbox"><img class="qr" src="${qr}" alt="UPI QR"><div><b>Pay ${SSE.fmt(r.grand)}</b><span>UPI ${SSE.esc(upi)} · ${SSE.esc(r.mode)}</span></div></div>
-    </div><div class="iright">
-      <div><span>Subtotal</span><b>${SSE.fmt(r.sub)}</b></div>
-      <div><span>Discount</span><b>—^' ${SSE.fmt(r.disc)}</b></div>
-      <div><span>CGST</span><b>${SSE.fmt(cgst)}</b></div>
-      <div><span>SGST</span><b>${SSE.fmt(sgst)}</b></div>
-      <div><span>Round off</span><b>${SSE.fmt(r.grand-(r.sub+r.gst-r.disc))}</b></div>
-      <div class="grand"><span>Total</span><b>${SSE.fmt(r.grand)}</b></div>
-      <div><span>Received</span><b>${SSE.fmt(r.paid)}</b></div>
-      <div><span>Balance</span><b>${SSE.fmt(r.balance)}</b></div>
-    </div></div>
-    <div class="ifoot"><div><span>Terms</span><p>Goods once sold will be taken back only in original pack within 7 days with bill. Tinted shades final sale. Interest 18% p.a. after due date. Disputes at local jurisdiction.</p></div>
-    <div class="sign"><span>For Shree Shyam Enterprises</span><b>Authorised signatory</b></div></div>
-  </div>`;
-  SSE.$('#printArea').innerHTML=r.type==='TAX'?copy('Original for Recipient',true)+copy('Duplicate for Supplier',false)
-    :copy('Estimate — valid 7 days',false);
+
+function openBill() {
+  SSE.$('#gate').hidden = true;
+  SSE.$('#billWrap').hidden = false;
+  init();
 }
-</script></body></html>
+
+async function init() {
+  ALL = await SSE.seed();
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // Seed sample customer datalist
+  const knownPlants = [
+    'Daikin Airconditioning India Pvt Ltd (Plant 2)',
+    'Havells India Ltd (Neemrana Lighting Unit)',
+    'Mitsui Kinzoku Components India',
+    'Hero MotoCorp Ancillary Unit 4',
+    'TPR Autoparts Manufacturing India',
+    'Mikuni India Pvt Ltd',
+    'Nissin Brake India Pvt Ltd',
+    'Walk-in Plant Maintenance Tech'
+  ];
+  const pastCusts = invs().map(r => r.customer).filter(Boolean);
+  const combined = [...new Set([...knownPlants, ...pastCusts])];
+  SSE.$('#custList').innerHTML = combined.map(c => `<option value="${SSE.esc(c)}">`).join('');
+
+  // Event Listeners
+  SSE.$('#bq').oninput = draw;
+  SSE.$('#slab').onchange = draw;
+  SSE.$('#bq').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const first = SSE.$('#res').querySelector('button.add');
+      if (first) first.click();
+    }
+  });
+
+  SSE.$('#disc').oninput = drawLines;
+  SSE.$('#freight').oninput = drawLines;
+  SSE.$('#paid').oninput = drawLines;
+
+  SSE.$('#save').onclick = () => save('TAX', false);
+  SSE.$('#saveWaBtn').onclick = () => save('TAX', true);
+  SSE.$('#est').onclick = () => save('EST', false);
+  SSE.$('#hold').onclick = hold;
+  SSE.$('#clearBillBtn').onclick = resetDraft;
+  SSE.$('#newDraftBtn').onclick = resetDraft;
+  SSE.$('#dbq').oninput = daybook;
+  SSE.$('#exportDaybookBtn').onclick = exportDaybookCSV;
+
+  // Category filter tabs
+  document.querySelectorAll('#catBar .pos-cat-chip').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#catBar .pos-cat-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = btn.dataset.cat || '';
+      draw();
+    };
+  });
+
+  // Daybook filter tabs
+  document.querySelectorAll('[data-dbfilter]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('[data-dbfilter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      dbFilter = btn.dataset.dbfilter || 'all';
+      daybook();
+    };
+  });
+
+  // Custom Line Item Toggle
+  SSE.$('#toggleCustomItemBtn').onclick = () => {
+    const p = SSE.$('#customItemPanel');
+    p.hidden = !p.hidden;
+    if (!p.hidden) SSE.$('#ciName').focus();
+  };
+
+  SSE.$('#ciAddBtn').onclick = () => {
+    const name = SSE.$('#ciName').value.trim();
+    const rate = Math.max(0, Number(SSE.$('#ciRate').value) || 0);
+    const gst_pct = Number(SSE.$('#ciGst').value) || 18;
+    const hsn = SSE.$('#ciHsn').value.trim() || '8483';
+    if (!name) { toast('Enter custom item name', 'alert-01'); return; }
+    cart.push({ id: 'CUSTOM-' + Date.now().toString(36), name, qty: 1, rate, gst_pct, hsn });
+    SSE.$('#ciName').value = '';
+    SSE.$('#ciRate').value = '';
+    SSE.$('#customItemPanel').hidden = true;
+    drawLines();
+    toast('Custom item added');
+  };
+
+  // Payment Mode Selector
+  SSE.$('#modeSeg').querySelectorAll('button').forEach(b => {
+    b.onclick = () => {
+      SSE.$('#modeSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      mode = b.dataset.m;
+      drawLines();
+    };
+  });
+
+  // Full Paid Shortcut
+  SSE.$('#fullPaidBtn').onclick = () => {
+    const t = SSE.totals(cart, Number(SSE.$('#disc').value || 0));
+    const freight = Math.max(0, Number(SSE.$('#freight').value || 0));
+    SSE.$('#paid').value = Math.max(0, t.grand + freight);
+    drawLines();
+  };
+
+  // Hotkey / for search
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      SSE.$('#bq').focus();
+    }
+    if (e.key === 'F2') {
+      e.preventDefault();
+      resetDraft();
+    }
+  });
+
+  // Customer phone autofill helper
+  SSE.$('#cphone').addEventListener('input', () => {
+    const p = SSE.$('#cphone').value.trim();
+    if (p.length === 10) {
+      const match = invs().find(i => i.phone === p);
+      if (match && match.customer && !SSE.$('#cust').value) {
+        SSE.$('#cust').value = match.customer;
+        if (match.gstin && !SSE.$('#cgstin').value) SSE.$('#cgstin').value = match.gstin;
+        toast('Customer auto-matched: ' + match.customer, 'user');
+      }
+    }
+  });
+
+  resetDraft();
+  draw();
+  held();
+  daybook();
+}
+
+function updateClock() {
+  SSE.$('#invDate').textContent = new Date().toLocaleString('en-IN', {
+    day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function resetDraft() {
+  cart = [];
+  SSE.$('#cust').value = '';
+  SSE.$('#cphone').value = '';
+  SSE.$('#cgstin').value = '';
+  SSE.$('#disc').value = 0;
+  SSE.$('#freight').value = 0;
+  SSE.$('#paid').value = 0;
+  SSE.$('#billErr').textContent = '';
+  const seqNo = 'SSE/25-26/' + String(Number(localStorage.getItem('sse_seq') || '142')).padStart(4, '0');
+  SSE.$('#invNo').textContent = seqNo + ' (Draft)';
+  drawLines();
+}
+
+/* Shelf Inventory Renderer */
+function draw() {
+  const q = (SSE.$('#bq').value || '').toLowerCase().trim();
+  const slab = SSE.$('#slab').value;
+
+  let f = ALL.filter(p => {
+    const matchesQ = !q || (p.name + ' ' + (p.brand || '') + ' ' + (p.category || '')).toLowerCase().includes(q);
+    const matchesCat = !currentCategory || (p.category || '').toLowerCase().includes(currentCategory.toLowerCase());
+    return matchesQ && matchesCat;
+  }).slice(0, 16);
+
+  const box = SSE.$('#res');
+  box.innerHTML = '';
+
+  if (!f.length) {
+    box.innerHTML = `
+      <div class="empty">
+        <i class="hgi-stroke hgi-package-search"></i>
+        <b>No matching item on counter shelf</b>
+        <p>Check spelling, pick another category, or add a custom line item.</p>
+        <button class="btn btn-primary" onclick="document.getElementById('toggleCustomItemBtn').click()" style="margin-top:10px">
+          + Add Custom Item
+        </button>
+      </div>`;
+    return;
+  }
+
+  f.forEach((p, i) => {
+    const rate = slab === 'wholesale' ? (p.rate_wholesale || p.rate_retail) : p.rate_retail;
+    const stock = Number(p.stock) || 0;
+    const low = stock <= (p.min_stock || 5);
+    const d = document.createElement('div');
+    d.className = 'pick rowin';
+    d.style.animationDelay = Math.min(i * 30, 240) + 'ms';
+    d.innerHTML = `
+      <img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}">
+      <div class="pick-info">
+        <h4 class="pick-title">${SSE.esc(p.name)}</h4>
+        <div class="pick-sub">
+          <span>${SSE.esc(p.brand || '-')}</span>
+          <span>·</span>
+          <span>${SSE.esc(p.category)}</span>
+          <span>·</span>
+          <span style="color:${low ? '#DC2626' : '#059669'};font-weight:700">
+            ${low ? '⚠ Low: ' : 'Stock: '} ${stock} ${p.unit || 'pcs'}
+          </span>
+          <span>·</span>
+          <span class="pill info" style="font-size:10.5px;padding:1px 6px">+${Number(p.gst_pct) || 18}% GST</span>
+        </div>
+      </div>
+      <div class="pick-rate">
+        <b>${rate ? SSE.fmt(rate) : 'On quote'}</b>
+        <small>${slab === 'wholesale' ? 'Wholesale' : 'Retail'}</small>
+      </div>
+      <button class="btn btn-amber add" style="padding:7px 14px;font-size:13px;border-radius:10px;font-weight:700">
+        + Add
+      </button>`;
+
+    d.querySelector('button.add').onclick = (ev) => {
+      ev.stopPropagation();
+      addItem(p, rate);
+    };
+    d.onclick = () => d.querySelector('button.add').click();
+    box.appendChild(d);
+  });
+}
+
+function addItem(p, rate) {
+  const ex = cart.find(c => c.id === p.id);
+  const nxt = (ex ? ex.qty : 0) + 1;
+  const stock = Number(p.stock) || 0;
+  if (nxt > stock && stock > 0) {
+    toast(`Stock warning: Only ${stock} on shelf! Billing anyway.`, 'alert-01');
+  }
+  if (ex) {
+    ex.qty++;
+  } else {
+    cart.push({
+      id: p.id,
+      name: p.name,
+      qty: 1,
+      rate: rate || 0,
+      gst_pct: p.gst_pct || 18,
+      hsn: p.hsn || '8483'
+    });
+  }
+  SSE.$('#billErr').textContent = '';
+  drawLines();
+}
+
+/* Active Bill Lines & Live Totals */
+function drawLines() {
+  const freight = Math.max(0, Number(SSE.$('#freight').value || 0));
+  const disc = Math.max(0, Number(SSE.$('#disc').value || 0));
+  const t = SSE.totals(cart, disc);
+  const grandTotal = Math.max(0, t.grand + freight);
+  const paid = Math.max(0, Number(SSE.$('#paid').value || 0));
+  const due = Math.max(0, grandTotal - paid);
+
+  const box = SSE.$('#lines');
+  if (!cart.length) {
+    box.innerHTML = `
+      <div class="empty" style="padding:28px 16px;border-radius:14px">
+        <i class="hgi-stroke hgi-shopping-cart-01" style="font-size:28px"></i>
+        <b style="font-size:15px">Tax bill is empty</b>
+        <p style="font-size:13px">Click "+ Add" on shelf items on the left or type a custom SKU.</p>
+      </div>`;
+  } else {
+    box.innerHTML = cart.map((c, i) => `
+      <div class="line">
+        <div style="flex:1;min-width:0">
+          <b>${SSE.esc(c.name)}</b>
+          <span>HSN ${SSE.esc(c.hsn || '—')} · GST ${c.gst_pct}%</span>
+        </div>
+        <div class="stepper">
+          <button data-i="${i}" data-d="-1" aria-label="Decrease">−</button>
+          <input type="number" min="1" value="${c.qty}" data-qty-i="${i}" style="width:34px;text-align:center;border:0;background:none;font:inherit;font-size:13px;font-weight:800">
+          <button data-i="${i}" data-d="1" aria-label="Increase">+</button>
+        </div>
+        <input class="ratein" type="number" min="0" value="${c.rate}" data-i="${i}" aria-label="Rate for ${SSE.esc(c.name)}">
+        <b style="min-width:82px;text-align:right">${SSE.fmt(c.qty * c.rate)}</b>
+        <button class="rm" data-i="${i}" aria-label="Remove line">×</button>
+      </div>`).join('');
+
+    box.querySelectorAll('.stepper button').forEach(b => {
+      b.onclick = () => {
+        const c = cart[Number(b.dataset.i)];
+        c.qty = Math.max(1, c.qty + Number(b.dataset.d));
+        drawLines();
+      };
+    });
+
+    box.querySelectorAll('[data-qty-i]').forEach(inp => {
+      inp.onchange = () => {
+        const c = cart[Number(inp.dataset.qtyI)];
+        c.qty = Math.max(1, Number(inp.value) || 1);
+        drawLines();
+      };
+    });
+
+    box.querySelectorAll('.ratein').forEach(r => {
+      r.onchange = () => {
+        cart[Number(r.dataset.i)].rate = Math.max(0, Number(r.value) || 0);
+        drawLines();
+      };
+    });
+
+    box.querySelectorAll('.rm').forEach(b => {
+      b.onclick = () => {
+        cart.splice(Number(b.dataset.i), 1);
+        drawLines();
+      };
+    });
+  }
+
+  // Live UPI QR code generator when UPI mode is picked
+  const upiBox = SSE.$('#upiPreviewBox');
+  if (mode === 'UPI' && grandTotal > 0) {
+    upiBox.style.display = 'flex';
+    const c = SSE.content();
+    const upiId = c.upi_id || 'shreeshyam@upi';
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=` + encodeURIComponent(`upi://pay?pa=${upiId}&pn=Shree%20Shyam%20Enterprises&am=${grandTotal}&cu=INR&tn=Counter%20Invoice`);
+    SSE.$('#posQrImg').src = qrUrl;
+    SSE.$('#posQrAmt').textContent = `Scan & Pay ${SSE.fmt(grandTotal)}`;
+    SSE.$('#posQrId').textContent = upiId;
+  } else {
+    upiBox.style.display = 'none';
+  }
+
+  // Totals Breakdown
+  SSE.$('#totals').innerHTML = `
+    <div><span>Taxable Subtotal</span><b>${SSE.fmt(t.sub)}</b></div>
+    <div><span>Total GST (CGST + SGST)</span><b>${SSE.fmt(t.gst)}</b></div>
+    ${disc > 0 ? `<div><span>Discount</span><b style="color:#DC2626">— ${SSE.fmt(disc)}</b></div>` : ''}
+    ${freight > 0 ? `<div><span>Freight / Packing</span><b>+ ${SSE.fmt(freight)}</b></div>` : ''}
+    <div class="grand">
+      <span>Net Payable (${SSE.esc(mode)})</span>
+      <b style="color:#1D4ED8">${SSE.fmt(grandTotal)}</b>
+    </div>
+    ${due > 0
+      ? `<div class="due"><span>Balance to Plant Credit (Udhaar)</span><b>${SSE.fmt(due)}</b></div>`
+      : `<div class="due ok"><span>Settlement</span><b>Full Settled (${SSE.fmt(paid)})</b></div>`}`;
+}
+
+/* Hold / Park Bill */
+function hold() {
+  if (!cart.length) {
+    SSE.$('#billErr').textContent = 'Cannot hold an empty bill. Add items first.';
+    return;
+  }
+  try {
+    const h = JSON.parse(localStorage.getItem('sse_held') || '[]');
+    const customer = SSE.$('#cust').value.trim() || 'Walk-in';
+    h.push({
+      id: 'H-' + Date.now().toString(36).toUpperCase(),
+      customer,
+      phone: SSE.$('#cphone').value.trim(),
+      gstin: SSE.$('#cgstin').value.trim(),
+      items: cart,
+      mode,
+      created: new Date().toISOString()
+    });
+    localStorage.setItem('sse_held', JSON.stringify(h));
+  } catch {}
+  resetDraft();
+  held();
+  toast('Bill held — resume anytime from top shelf', 'inbox');
+}
+
+function held() {
+  let h = [];
+  try { h = JSON.parse(localStorage.getItem('sse_held') || '[]'); } catch {}
+  const container = SSE.$('#held');
+  if (!h.length) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = `
+    <span style="font-size:12px;font-weight:800;color:#92400E;display:flex;align-items:center;gap:6px">
+      <i class="hgi-stroke hgi-pause-circle"></i> Held Bills (${h.length}):
+    </span>` + h.map(x => `
+    <span class="heldchip">
+      <b>${SSE.esc(x.customer)}</b> (${x.items.reduce((a, c) => a + c.qty, 0)} pcs)
+      <button class="go" data-id="${x.id}">Resume</button>
+      <button data-x="${x.id}" style="border:0;background:none;color:#B91C1C;cursor:pointer;font-weight:800">×</button>
+    </span>`).join('');
+
+  container.querySelectorAll('.go').forEach(b => {
+    b.onclick = () => {
+      const all = JSON.parse(localStorage.getItem('sse_held') || '[]');
+      const it = all.find(x => x.id === b.dataset.id);
+      if (!it) return;
+      cart = it.items;
+      SSE.$('#cust').value = it.customer === 'Walk-in' ? '' : it.customer;
+      SSE.$('#cphone').value = it.phone || '';
+      SSE.$('#cgstin').value = it.gstin || '';
+      if (it.mode) mode = it.mode;
+      localStorage.setItem('sse_held', JSON.stringify(all.filter(x => x.id !== b.dataset.id)));
+      drawLines();
+      held();
+      toast('Resumed bill for ' + it.customer);
+    };
+  });
+
+  container.querySelectorAll('[data-x]').forEach(b => {
+    b.onclick = () => {
+      const all = JSON.parse(localStorage.getItem('sse_held') || '[]');
+      localStorage.setItem('sse_held', JSON.stringify(all.filter(x => x.id !== b.dataset.x)));
+      held();
+      toast('Held bill discarded');
+    };
+  });
+}
+
+/* Daybook Renderer */
+function daybook() {
+  const q = (SSE.$('#dbq').value || '').toLowerCase().trim();
+  const list = invs().filter(r => {
+    const isToday = (r.date || '').slice(0, 10) === today();
+    const matchesQ = !q || (r.no + ' ' + (r.customer || '') + ' ' + (r.phone || '')).toLowerCase().includes(q);
+    const matchesFilter = dbFilter === 'all'
+      ? true
+      : dbFilter === 'Credit'
+      ? (r.balance > 0)
+      : (r.type === dbFilter || r.mode === dbFilter);
+    return isToday && matchesQ && matchesFilter;
+  }).reverse();
+
+  const allToday = invs().filter(r => (r.date || '').slice(0, 10) === today());
+  const billed = allToday.filter(r => r.type === 'TAX').reduce((a, r) => a + (r.grand || 0), 0);
+  const cashTotal = allToday.filter(r => r.mode === 'Cash').reduce((a, r) => a + (r.paid || 0), 0);
+  const upiTotal = allToday.filter(r => r.mode === 'UPI' || r.mode === 'Transfer').reduce((a, r) => a + (r.paid || 0), 0);
+
+  SSE.$('#dbN').textContent = allToday.length;
+  SSE.$('#dbBilled').textContent = SSE.fmt(billed);
+  SSE.$('#dbCash').textContent = SSE.fmt(cashTotal);
+  SSE.$('#dbGot').textContent = SSE.fmt(upiTotal);
+
+  const dblist = SSE.$('#dblist');
+  if (!list.length) {
+    dblist.innerHTML = `
+      <div class="empty" style="border-radius:14px">
+        <i class="hgi-stroke hgi-file-01"></i>
+        <b>No bills matching today's register</b>
+        <p>Invoices and estimates generated today land here with 1-click reprint and WhatsApp sharing.</p>
+      </div>`;
+    return;
+  }
+
+  dblist.innerHTML = list.map(r => `
+    <div class="dbrow">
+      <div style="flex:1;min-width:200px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <b>${SSE.esc(r.no)}</b>
+          <span class="pill ${r.type === 'TAX' ? 'ok' : 'info'}">${r.type}</span>
+          <span class="pill info" style="font-size:11px">${SSE.esc(r.mode || 'UPI')}</span>
+        </div>
+        <small style="color:var(--muted);display:block;margin-top:3px">
+          ${SSE.esc(r.customer || 'Walk-in')} · ${new Date(r.date).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} · ${r.items.length} items
+          ${r.phone ? ' · ' + SSE.esc(r.phone) : ''}
+        </small>
+      </div>
+
+      <div style="text-align:right">
+        <b style="font-size:16px;color:#0F172A">${SSE.fmt(r.grand)}</b>
+        <small style="display:block;color:${r.balance ? '#DC2626' : '#16A34A'};font-weight:700">
+          ${r.balance ? 'Due: ' + SSE.fmt(r.balance) : '✓ Settled'}
+        </small>
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost rp" data-no="${SSE.esc(r.no)}" style="padding:6px 12px;font-size:12.5px" title="Print Invoice">
+          <i class="hgi-stroke hgi-printer"></i> Print
+        </button>
+        <button class="btn btn-ghost wa-share" data-no="${SSE.esc(r.no)}" style="color:#059669;border-color:#A7F3D0;padding:6px 12px;font-size:12.5px" title="Share on WhatsApp">
+          <i class="hgi-stroke hgi-whatsapp"></i> Share
+        </button>
+      </div>
+    </div>`).join('');
+
+  dblist.querySelectorAll('.rp').forEach(b => {
+    b.onclick = () => {
+      const r = invs().find(x => x.no === b.dataset.no);
+      if (!r) return;
+      buildPrint(r);
+      printNow();
+    };
+  });
+
+  dblist.querySelectorAll('.wa-share').forEach(b => {
+    b.onclick = () => {
+      const r = invs().find(x => x.no === b.dataset.no);
+      if (!r) return;
+      openWhatsAppInvoice(r);
+    };
+  });
+}
+
+/* Save Bill, Deduct Stock, Record Activity & Print/Share */
+async function save(type, sendWhatsApp) {
+  if (!cart.length) {
+    SSE.$('#billErr').textContent = 'Add at least one item before saving.';
+    return;
+  }
+  SSE.$('#billErr').textContent = '';
+
+  const customer = SSE.$('#cust').value.trim() || 'Walk-in Customer';
+  const phone = SSE.$('#cphone').value.trim();
+  const gstin = SSE.$('#cgstin').value.trim().toUpperCase();
+
+  if (type === 'TAX' && !customer && !phone) {
+    SSE.$('#billErr').textContent = 'Please specify customer firm or phone for GST Tax Invoice.';
+    return;
+  }
+
+  const disc = Math.max(0, Number(SSE.$('#disc').value || 0));
+  const freight = Math.max(0, Number(SSE.$('#freight').value || 0));
+  const t = SSE.totals(cart, disc);
+  const grandTotal = Math.max(0, t.grand + freight);
+  const paid = Math.max(0, Number(SSE.$('#paid').value || 0));
+  const balance = Math.max(0, grandTotal - paid);
+
+  const no = type === 'TAX' ? SSE.seq() : ('EST-' + Date.now().toString(36).toUpperCase());
+
+  const rec = {
+    no,
+    date: new Date().toISOString(),
+    type,
+    customer,
+    phone,
+    gstin,
+    mode,
+    items: JSON.parse(JSON.stringify(cart)),
+    sub: t.sub,
+    gst: t.gst,
+    disc,
+    freight,
+    grand: grandTotal,
+    paid,
+    balance
+  };
+
+  try {
+    const a = invs();
+    a.push(rec);
+    localStorage.setItem('sse_invoices', JSON.stringify(a));
+
+    if (rec.balance > 0) {
+      const l = JSON.parse(localStorage.getItem('sse_ledger') || '[]');
+      l.push({
+        no,
+        customer: rec.customer,
+        phone: rec.phone,
+        total: rec.grand,
+        paid: rec.paid,
+        balance: rec.balance,
+        date: rec.date
+      });
+      localStorage.setItem('sse_ledger', JSON.stringify(l));
+    }
+  } catch (err) {
+    console.error('Invoice persistence error:', err);
+  }
+
+  // Stock deduction for TAX invoices
+  if (type === 'TAX') {
+    const all = await SSE.all();
+    for (const c of cart) {
+      const p = all.find(x => x.id === c.id);
+      if (p) {
+        p.stock -= c.qty;
+        await SSE.put(p);
+        SSE.logStock(p.id, -c.qty, `Sale: ${no} (${customer})`);
+      }
+    }
+    ALL = all;
+  }
+
+  // Audit activity log
+  SSE.logActivity(
+    'BILL',
+    `${type === 'TAX' ? 'GST Tax Invoice' : 'Quotation Estimate'} ${no} Generated`,
+    `${customer} · ${SSE.fmt(grandTotal)} (${mode}${balance > 0 ? ` · Due ${SSE.fmt(balance)}` : ' · Settled'})`,
+    { no, customer, grand: grandTotal, mode, balance }
+  );
+
+  SSE.$('#invNo').textContent = no;
+  buildPrint(rec);
+
+  if (sendWhatsApp) {
+    openWhatsAppInvoice(rec);
+    printNow();
+  } else {
+    printNow();
+  }
+
+  resetDraft();
+  draw();
+  daybook();
+  toast(`${type === 'TAX' ? 'Tax Invoice' : 'Estimate'} ${no} saved successfully`);
+}
+
+function openWhatsAppInvoice(r) {
+  const c = SSE.content();
+  const upi = c.upi_id || 'shreeshyam@upi';
+  const phone = (r.phone || '').replace(/\D/g, '');
+  const itemsText = r.items.map(it => `• ${it.name} x${it.qty} = ₹${(it.qty * it.rate).toLocaleString('en-IN')}`).join('%0A');
+  
+  let msg = `*Shree Shyam Enterprises — GST Tax Invoice*%0A` +
+            `*Bill No:* ${r.no}%0A` +
+            `*Date:* ${new Date(r.date).toLocaleDateString('en-IN')}%0A` +
+            `*Customer:* ${r.customer}%0A%0A` +
+            `*Items:*%0A${itemsText}%0A%0A` +
+            `*Taxable:* ₹${r.sub.toLocaleString('en-IN')}%0A` +
+            `*GST:* ₹${r.gst.toLocaleString('en-IN')}%0A` +
+            `*Total Payable:* ₹${r.grand.toLocaleString('en-IN')}%0A` +
+            `*Payment Mode:* ${r.mode} (Paid: ₹${r.paid.toLocaleString('en-IN')})%0A` +
+            (r.balance > 0 ? `*Balance Due (Udhaar):* ₹${r.balance.toLocaleString('en-IN')}%0A%0A` : `*Status:* Fully Settled ✓%0A%0A`) +
+            `*UPI Payment ID:* ${upi}%0A` +
+            `*Counter Contact:* +91 72401 07540%0A` +
+            `RIICO Industrial Area, Neemrana, Rajasthan`;
+
+  const targetUrl = phone ? `https://wa.me/91${phone}?text=${msg}` : `https://wa.me/917240107540?text=${msg}`;
+  window.open(targetUrl, '_blank');
+}
+
+function printNow() {
+  const qr = SSE.$('#printArea').querySelector('img.qr');
+  let done = false;
+  const go = () => {
+    if (done) return;
+    done = true;
+    setTimeout(() => window.print(), 200);
+  };
+  if (qr) {
+    qr.onload = go;
+    setTimeout(go, 2500);
+  } else {
+    go();
+  }
+}
+
+/* Indian Currency Words Helper */
+function words(n) {
+  const o = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+  const ty = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  const two = x => x < 20 ? o[x] : ty[Math.floor(x / 10)] + (x % 10 ? ' ' + o[x % 10] : '');
+  const three = x => {
+    const h = Math.floor(x / 100), r = x % 100;
+    return (h ? o[h] + ' Hundred' + (r ? ' ' : '') : '') + (r ? two(r) : '');
+  };
+  if (!n) return 'Zero';
+  let s = '', cr = Math.floor(n / 1e7), lk = Math.floor(n % 1e7 / 1e5), th = Math.floor(n % 1e5 / 1e3), rest = n % 1e3;
+  if (cr) s += three(cr) + ' Crore ';
+  if (lk) s += two(lk) + ' Lakh ';
+  if (th) s += two(th) + ' Thousand ';
+  if (rest) s += three(rest);
+  return (s + 'Rupees Only').replace(/\s+/g, ' ').trim();
+}
+
+/* Standard GST Tax Invoice Print Template */
+function buildPrint(r) {
+  const c = SSE.content();
+  const cgst = r.gst / 2;
+  const sgst = r.gst - cgst;
+  const upi = c.upi_id || 'shreeshyam@upi';
+  const qr = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=` + encodeURIComponent(`upi://pay?pa=${upi}&am=${r.grand}&tn=${r.no}`);
+
+  const hsn = {};
+  r.items.forEach(it => {
+    const k = (it.hsn || '8483') + '|' + it.gst_pct;
+    hsn[k] = hsn[k] || { hsn: it.hsn || '8483', rate: it.gst_pct, tx: 0, g: 0 };
+    const tx = it.qty * it.rate;
+    hsn[k].tx += tx;
+    hsn[k].g += tx * (it.gst_pct / 100);
+  });
+
+  const rows = r.items.map((it, i) => {
+    const tx = it.qty * it.rate;
+    const g = tx * (it.gst_pct / 100);
+    return `
+      <tr>
+        <td>${i + 1}</td>
+        <td><b>${SSE.esc(it.name)}</b><br><span style="font-size:10px;color:#555">HSN ${SSE.esc(it.hsn || '8483')}</span></td>
+        <td class="r">${it.qty}</td>
+        <td class="r">${SSE.fmt(it.rate)}</td>
+        <td class="r">${SSE.fmt(tx)}</td>
+        <td class="r">${it.gst_pct}%</td>
+        <td class="r">${SSE.fmt(g)}</td>
+        <td class="r"><b>${SSE.fmt(tx + g)}</b></td>
+      </tr>`;
+  }).join('');
+
+  const copy = (label, brk) => `
+    <div class="inv${brk ? ' brk' : ''}">
+      <div class="copy">${label}</div>
+      <div class="ihead">
+        <div>
+          <h1>Shree Shyam Enterprises</h1>
+          <p>Industrial & Project Suppliers · Authorized Polymatic & SKF Partner</p>
+          <p>Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705</p>
+          <p><b>GSTIN:</b> 08SJHPS7017F1ZK · <b>State:</b> 08-Rajasthan · <b>Phone:</b> +91 72401 07540</p>
+        </div>
+        <div class="r">
+          <h2>${r.type === 'TAX' ? 'TAX INVOICE' : 'QUOTATION ESTIMATE'}</h2>
+          <p style="font-size:11px;color:#555">${r.type === 'TAX' ? 'Supply under Section 31 of CGST Act' : 'Valid for 7 days · Non-Tax Bill'}</p>
+        </div>
+      </div>
+
+      <div class="imeta">
+        <div><span>Invoice No</span><b>${SSE.esc(r.no)}</b></div>
+        <div><span>Date & Time</span><b>${new Date(r.date).toLocaleString('en-IN')}</b></div>
+        <div><span>Buyer / Plant</span><b>${SSE.esc(r.customer || 'Walk-in')}${r.phone ? ' · ' + SSE.esc(r.phone) : ''}</b></div>
+        <div><span>Customer GSTIN</span><b>${SSE.esc(r.gstin || 'Unregistered Consumer')}</b></div>
+      </div>
+
+      <table class="itbl">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item Description</th>
+            <th class="r">Qty</th>
+            <th class="r">Rate</th>
+            <th class="r">Taxable Val</th>
+            <th class="r">GST %</th>
+            <th class="r">GST Amt</th>
+            <th class="r">Total</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+
+      <div class="irow">
+        <div class="ileft">
+          <p><span>Amount Chargeable (in words)</span><b style="font-size:12px">${words(r.grand)}</b></p>
+          
+          <table class="htbl">
+            <thead>
+              <tr>
+                <th>HSN/SAC</th>
+                <th class="r">Taxable</th>
+                <th class="r">CGST</th>
+                <th class="r">SGST</th>
+                <th class="r">Total Tax</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Object.values(hsn).map(h => `
+                <tr>
+                  <td>${SSE.esc(h.hsn)} (${h.rate}%)</td>
+                  <td class="r">${SSE.fmt(h.tx)}</td>
+                  <td class="r">${SSE.fmt(h.g / 2)}</td>
+                  <td class="r">${SSE.fmt(h.g / 2)}</td>
+                  <td class="r">${SSE.fmt(h.g)}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+
+          <div class="qrbox">
+            <img class="qr" src="${qr}" alt="UPI Dynamic QR">
+            <div>
+              <b>Scan to Pay: ${SSE.fmt(r.grand)}</b>
+              <span>UPI ID: <strong>${SSE.esc(upi)}</strong></span>
+              <small style="display:block;font-size:9.5px;color:#555">Bank: PNB Neemrana · A/c: 0451002100049281 · IFSC: PUNB0045100</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="iright">
+          <div><span>Taxable Subtotal</span><b>${SSE.fmt(r.sub)}</b></div>
+          <div><span>CGST (Central Tax)</span><b>${SSE.fmt(cgst)}</b></div>
+          <div><span>SGST (State Tax)</span><b>${SSE.fmt(sgst)}</b></div>
+          ${r.freight ? `<div><span>Freight / Packing</span><b>${SSE.fmt(r.freight)}</b></div>` : ''}
+          ${r.disc ? `<div><span>Discount</span><b>— ${SSE.fmt(r.disc)}</b></div>` : ''}
+          <div class="grand"><span>Invoice Total</span><b style="font-size:16px">${SSE.fmt(r.grand)}</b></div>
+          <div><span>Payment Received</span><b>${SSE.fmt(r.paid)}</b></div>
+          <div><span>Balance Due</span><b style="color:${r.balance ? '#B91C1C' : '#047857'}">${SSE.fmt(r.balance)}</b></div>
+        </div>
+      </div>
+
+      <div class="ifoot">
+        <div>
+          <span>Terms & Conditions:</span>
+          <p>1. Certified genuine industrial supply. Goods once sold will be taken back only in original sealed packaging within 7 days.<br>
+          2. Interest @18% p.a. applicable on credit balances unpaid after 30 days. Disputes subject to Neemrana / Alwar jurisdiction.</p>
+        </div>
+        <div class="sign">
+          <span>For Shree Shyam Enterprises</span>
+          <b>Authorised Signatory</b>
+        </div>
+      </div>
+    </div>`;
+
+  SSE.$('#printArea').innerHTML = r.type === 'TAX'
+    ? (copy('Original for Recipient', true) + copy('Duplicate for Supplier', false))
+    : copy('Commercial Quotation Estimate — Valid 7 Days', false);
+}
+
+function exportDaybookCSV() {
+  const list = invs().filter(r => (r.date || '').slice(0, 10) === today());
+  if (!list.length) {
+    toast('No bills today to export', 'alert-01');
+    return;
+  }
+  const q = s => `"${String(s ?? '').replace(/"/g, '""')}"`;
+  const csv = ['Invoice,Date,Type,Customer,Phone,Subtotal,GST,Total,Paid,Balance,Mode'].concat(
+    list.map(i => [i.no, (i.date || '').slice(0, 10), i.type, i.customer, i.phone, i.sub, i.gst, i.grand, i.paid, i.balance, i.mode].map(q).join(','))
+  ).join('\n');
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = `daybook-${today()}.csv`;
+  a.click();
+  toast('Daybook CSV exported successfully', 'download-01');
+}
+</script>
+</body>
+</html>

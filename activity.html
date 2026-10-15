@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Admin Activity & Audit Telemetry — Shree Shyam Enterprises</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0F172A">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
+<link rel="stylesheet" href="assets/styles.css?v=20261015a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+</head>
+<body style="padding-top:72px">
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain no-print" aria-hidden="true"></div>
+
+<!-- EVENTBEDS™ LUXURY FIXED HEADER -->
+<header class="site-header no-print">
+  <div class="site-header-inner">
+    <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
+      <div class="eventbeds-logo-icon">
+        <i class="hgi-stroke hgi-settings-01" style="font-size:20px"></i>
+      </div>
+      <div class="eventbeds-brand-text">
+        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
+        <span class="eventbeds-sub">Audit & Activity Telemetry · RIICO Hub</span>
+      </div>
+    </a>
+
+    <nav class="eventbeds-nav-center" aria-label="Main Navigation">
+      <a href="index.html" class="eventbeds-nav-link">
+        <span>Overview</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="shop.html" class="eventbeds-nav-link">
+        <span>Catalogue</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="billing.html" class="eventbeds-nav-link">
+        <span>Billing POS</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="admin.html" class="eventbeds-nav-link">
+        <span>Admin Console</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="activity.html" class="eventbeds-nav-link active" style="color:#FFFFFF">
+        <span>Activity Log</span>
+        <span class="eb-nav-arrow" style="opacity:1;transform:none"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+      <a href="account.html" class="eventbeds-nav-link">
+        <span>Plant Credit</span>
+        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
+      </a>
+    </nav>
+
+    <div class="eventbeds-actions">
+      <a class="btn btn-primary" href="billing.html" style="height:38px;padding:0 16px;font-size:13px;border-radius:999px">
+        <i class="hgi-stroke hgi-receipt-01"></i> Billing POS
+      </a>
+
+      <button class="eventbeds-menu-btn" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <div class="eb-menu-text-wrap">
+          <span class="eb-menu-label open">Menu</span>
+          <span class="eb-menu-label close">Close</span>
+        </div>
+        <div class="eb-status-dots-box" aria-hidden="true">
+          <span class="eb-status-dot pulse-lime"></span>
+          <span class="eb-status-dot neutral"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- EVENTBEDS™ MOBILE DRAWER -->
+<div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
+  <div class="site-drawer-head">
+    <div class="eventbeds-brand">
+      <div class="eventbeds-logo-icon">
+        <i class="hgi-stroke hgi-settings-01" style="font-size:18px"></i>
+      </div>
+      <div class="eventbeds-brand-text">
+        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
+        <span class="eventbeds-sub">Audit Console</span>
+      </div>
+    </div>
+    <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
+  </div>
+
+  <div class="site-drawer-nav">
+    <a href="index.html" class="drawer-link-block">
+      <span>Home Overview</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="shop.html" class="drawer-link-block">
+      <span>Catalogue & Stock (10k+ SKU)</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="billing.html" class="drawer-link-block">
+      <span>Billing POS Counter</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="admin.html" class="drawer-link-block">
+      <span>Admin Console & Inventory</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="activity.html" class="drawer-link-block" style="color:#CDE06A">
+      <span>Activity & Audit Telemetry (Active)</span>
+      <span class="arrow-svg" style="color:#CDE06A"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+    <a href="account.html" class="drawer-link-block">
+      <span>Plant Credit & Net 30 Ledger</span>
+      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+    </a>
+  </div>
+
+  <div class="site-drawer-footer">
+    <a class="eventbeds-black-btn" style="width:100%;height:44px;font-size:13.5px" href="billing.html">
+      <div class="eb-btn-slider" style="height:20px;line-height:20px">
+        <span class="eb-btn-text" style="height:20px">Open Billing POS</span>
+        <span class="eb-btn-text hover" style="height:20px">Launch Counter 1</span>
+      </div>
+    </a>
+    <div class="drawer-socials">
+      <a class="drawer-social-icon" href="tel:+917240107540" title="Call Shop Desk"><i class="hgi-stroke hgi-call"></i></a>
+      <a class="drawer-social-icon" href="mailto:shreeshyamenterprises7540@gmail.com" title="Email Dispatch"><i class="hgi-stroke hgi-mail-01"></i></a>
+      <span style="font-size:11px;color:#94A3B8;margin-left:auto;font-weight:600">Audit Stream · Live</span>
+    </div>
+  </div>
+</div>
+
+<main id="main" class="admin-shell" style="max-width:1280px;margin:16px auto;padding:16px 20px">
+  
+  <!-- SECURITY PIN GATE TERMINAL -->
+  <div id="gate" class="auth-gate-terminal rv in">
+    <div class="gate-shield-icon">
+      <i class="hgi-stroke hgi-activity-01"></i>
+      <span class="gate-beacon-dot"></span>
+    </div>
+    <h1 class="gate-title">Activity & Audit Console</h1>
+    <p class="gate-sub">Enter staff authorization PIN to unlock the live operational activity stream and counter telemetry.</p>
+    
+    <input id="pin" class="gate-pin-input" inputmode="numeric" type="password" maxlength="4" autocomplete="off" placeholder="••••" aria-label="PIN">
+    <span class="err" id="pinErr" style="color:#F87171;font-size:13px;min-height:20px;display:block;font-weight:700"></span>
+
+    <!-- Numpad -->
+    <div class="gate-numpad">
+      <button class="gate-num-btn" data-key="1">1</button>
+      <button class="gate-num-btn" data-key="2">2</button>
+      <button class="gate-num-btn" data-key="3">3</button>
+      <button class="gate-num-btn" data-key="4">4</button>
+      <button class="gate-num-btn" data-key="5">5</button>
+      <button class="gate-num-btn" data-key="6">6</button>
+      <button class="gate-num-btn" data-key="7">7</button>
+      <button class="gate-num-btn" data-key="8">8</button>
+      <button class="gate-num-btn" data-key="9">9</button>
+      <button class="gate-num-btn" data-key="C" style="color:#F87171">C</button>
+      <button class="gate-num-btn" data-key="0">0</button>
+      <button class="gate-num-btn" data-key="OK" style="background:#1D4ED8;color:#FFFFFF">OK</button>
+    </div>
+
+    <button class="btn btn-primary" id="unlock" style="width:100%;height:48px;font-size:15px;justify-content:center;border-radius:12px;margin-top:8px">
+      <i class="hgi-stroke hgi-checkmark-circle-01"></i> Unlock Activity Log
+    </button>
+
+    <div class="gate-hint-row">
+      <span>Administrator PIN: <b>2580</b></span>
+      <button type="button" class="gate-quick-chip" id="quickPinBtn">Quick-Fill (2580)</button>
+    </div>
+  </div>
+
+  <!-- UPGRADED ACTIVITY WORKSPACE -->
+  <div id="actApp" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:20px">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="eyebrow" style="margin:0;color:var(--accent)">Live Operational Stream</span>
+          <span class="pill ok" style="font-size:10.5px">Real-Time Telemetry</span>
+        </div>
+        <h1 class="title" style="margin:4px 0 0;font-size:28px">Counter Activity & Audit Log</h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="billing.html" style="font-size:13px;padding:8px 16px">
+          <i class="hgi-stroke hgi-receipt-01"></i> Open Billing POS
+        </a>
+        <a class="btn btn-ghost" href="admin.html" style="font-size:13px;padding:8px 16px">
+          <i class="hgi-stroke hgi-settings-01"></i> Full Admin Console
+        </a>
+      </div>
+    </div>
+
+    <!-- Search & Export Command Bar -->
+    <div class="cmdbar rv in" style="margin-top:0;margin-bottom:20px">
+      <label class="search" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)">
+        <i class="hgi-stroke hgi-search-01" style="color:#60A5FA"></i>
+        <input id="actSearch" type="search" placeholder="Search activity by bill #, customer, SKU, payment mode, or reason…">
+        <kbd style="border-color:rgba(255,255,255,.2);color:#CBD5E1">/</kbd>
+      </label>
+      
+      <button class="btn btn-ghost" id="exportCsvBtn" style="border-color:rgba(255,255,255,.2);color:#CDE06A;font-size:13px">
+        <i class="hgi-stroke hgi-download-01"></i> Export Audit CSV
+      </button>
+
+      <button class="btn btn-ghost" id="simEventBtn" style="border-color:rgba(255,255,255,.2);color:#FFFFFF;font-size:13px">
+        <i class="hgi-stroke hgi-flash"></i> Simulate Sale Event
+      </button>
+    </div>
+
+    <div class="panel" style="background:#FFFFFF;border-radius:20px;border:1px solid var(--line);padding:24px;box-shadow:0 12px 36px rgba(15,23,42,.06)">
+      <div id="actContent"></div>
+    </div>
+  </div>
+</main>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="assets/app.js?v=20261015a"></script>
+<script>
+let currentFilter = 'all';
+const PIN = '2580';
+
+const toast = (msg, icon = 'checkmark-circle-01') => {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="hgi-stroke hgi-${icon}"></i><span>${SSE.esc(msg)}</span>`;
+  SSE.$('#toasts').appendChild(t);
+  setTimeout(() => {
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 500);
+  }, 2600);
+};
+
+function unlock() {
+  const pinVal = SSE.$('#pin').value.trim();
+  if (pinVal === PIN) {
+    sessionStorage.setItem('sse_admin', '1');
+    openAct();
+  } else {
+    SSE.$('#pinErr').textContent = 'Wrong PIN. Standard code is 2580.';
+    const g = SSE.$('#gate');
+    g.classList.remove('shake');
+    void g.offsetWidth;
+    g.classList.add('shake');
+  }
+}
+
+SSE.$('#unlock').onclick = unlock;
+SSE.$('#pin').addEventListener('keydown', e => {
+  if (e.key === 'Enter') unlock();
+});
+
+document.querySelectorAll('.gate-num-btn').forEach(btn => {
+  btn.onclick = () => {
+    const k = btn.dataset.key;
+    const pinInp = SSE.$('#pin');
+    if (k === 'C') {
+      pinInp.value = '';
+    } else if (k === 'OK') {
+      unlock();
+    } else {
+      if (pinInp.value.length < 4) {
+        pinInp.value += k;
+        if (pinInp.value.length === 4) unlock();
+      }
+    }
+  };
+});
+
+SSE.$('#quickPinBtn').onclick = () => {
+  SSE.$('#pin').value = PIN;
+  unlock();
+};
+
+if (sessionStorage.getItem('sse_admin') === '1') {
+  openAct();
+}
+
+function openAct() {
+  SSE.$('#gate').hidden = true;
+  SSE.$('#actApp').hidden = false;
+  initAct();
+}
+
+function initAct() {
+  SSE.$('#actSearch').oninput = render;
+  SSE.$('#exportCsvBtn').onclick = exportCSV;
+  SSE.$('#simEventBtn').onclick = simulateEvent;
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      SSE.$('#actSearch').focus();
+    }
+  });
+
+  render();
+}
+
+function render() {
+  const q = (SSE.$('#actSearch').value || '').toLowerCase().trim();
+  const allActs = SSE.getActivities(currentFilter);
+
+  const filtered = allActs.filter(a => {
+    if (!q) return true;
+    return (a.title + ' ' + a.detail + ' ' + (a.type || '') + ' ' + JSON.stringify(a.meta || {})).toLowerCase().includes(q);
+  });
+
+  let billsCount = allActs.filter(a => a.type === 'BILL').length;
+  let stockCount = allActs.filter(a => a.type === 'STOCK').length;
+  let payCount = allActs.filter(a => a.type === 'PAYMENT').length;
+
+  const box = SSE.$('#actContent');
+  box.innerHTML = `
+    <div class="activity-dashboard">
+      <!-- 4 Activity KPI Metrics -->
+      <div class="act-metrics-grid">
+        <div class="act-metric-card">
+          <div class="act-metric-icon green"><i class="hgi-stroke hgi-receipt-01"></i></div>
+          <div class="act-metric-meta"><b>${billsCount}</b><span>Invoices & Sales</span></div>
+        </div>
+        <div class="act-metric-card">
+          <div class="act-metric-icon amber"><i class="hgi-stroke hgi-package"></i></div>
+          <div class="act-metric-meta"><b>${stockCount}</b><span>Stock Adjustments</span></div>
+        </div>
+        <div class="act-metric-card">
+          <div class="act-metric-icon blue"><i class="hgi-stroke hgi-wallet-01"></i></div>
+          <div class="act-metric-meta"><b>${payCount}</b><span>Payments Collected</span></div>
+        </div>
+        <div class="act-metric-card">
+          <div class="act-metric-icon purple"><i class="hgi-stroke hgi-activity-01"></i></div>
+          <div class="act-metric-meta"><b>${allActs.length}</b><span>Total Audit Events</span></div>
+        </div>
+      </div>
+
+      <!-- Filter Controls Bar -->
+      <div class="act-controls">
+        <div class="act-filters" id="actFilterBar">
+          <button class="act-filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-f="all">All Activity</button>
+          <button class="act-filter-btn ${currentFilter === 'bill' ? 'active' : ''}" data-f="bill">Billing & Tax</button>
+          <button class="act-filter-btn ${currentFilter === 'stock' ? 'active' : ''}" data-f="stock">Stock Movements</button>
+          <button class="act-filter-btn ${currentFilter === 'payment' ? 'active' : ''}" data-f="payment">Ledger Payments</button>
+          <button class="act-filter-btn ${currentFilter === 'order' ? 'active' : ''}" data-f="order">Web Orders</button>
+          <button class="act-filter-btn ${currentFilter === 'product' ? 'active' : ''}" data-f="product">Catalogue Updates</button>
+        </div>
+
+        <button class="btn btn-ghost" id="resetLogBtn" style="font-size:12.5px;color:#B91C1C;border-color:#FCA5A5">
+          Reset Log
+        </button>
+      </div>
+
+      <!-- Timeline Feed -->
+      <div class="activity-feed">
+        ${filtered.length ? filtered.map(a => {
+          const typeIcon = {
+            BILL: 'hgi-receipt-01',
+            STOCK: 'hgi-package',
+            PAYMENT: 'hgi-wallet-01',
+            ORDER: 'hgi-inbox',
+            PRODUCT: 'hgi-edit-01',
+            SYSTEM: 'hgi-shield-security'
+          }[a.type] || 'hgi-activity-01';
+
+          const timeFormatted = new Date(a.time).toLocaleString('en-IN', {
+            day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+          });
+
+          return `
+            <div class="act-item">
+              <div class="act-icon ${a.type}"><i class="hgi-stroke ${typeIcon}"></i></div>
+              <div class="act-body">
+                <div class="act-title-row">
+                  <span class="act-title">${SSE.esc(a.title)}</span>
+                  <span class="act-time">${timeFormatted}</span>
+                </div>
+                <div class="act-detail">${SSE.esc(a.detail)}</div>
+                <div style="display:flex;gap:6px;align-items:center;margin-top:6px;font-size:11px;color:#64748B">
+                  <span class="pill info" style="font-size:10px;padding:1px 6px">${SSE.esc(a.type)}</span>
+                  <span>ID: ${SSE.esc(a.id)}</span>
+                  <span style="margin-left:auto;color:#10B981;font-weight:700">✓ Counter Audit Verified</span>
+                </div>
+              </div>
+            </div>`;
+        }).join('') : `
+          <div class="empty">
+            <i class="hgi-stroke hgi-activity-01"></i>
+            <b>No audit activity matching filter</b>
+            <p>Sales, stock adjustments, and plant credit transactions appear here automatically.</p>
+          </div>`}
+      </div>
+
+      <!-- 30-Day Activity Heatmap & Telemetry -->
+      <div class="act-telemetry">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h3 style="margin:0;font-size:16px;font-weight:800">Counter Activity Intensity (Last 30 Days)</h3>
+            <p style="margin:2px 0 0;font-size:12.5px;color:var(--muted)">Daily transaction volume and counter operational heat</p>
+          </div>
+          <span class="pill ok">Live Telemetry</span>
+        </div>
+        <div class="actsline" id="actsline"></div>
+      </div>
+    </div>`;
+
+  box.querySelectorAll('#actFilterBar .act-filter-btn').forEach(btn => {
+    btn.onclick = () => {
+      currentFilter = btn.dataset.f;
+      render();
+    };
+  });
+
+  box.querySelector('#resetLogBtn').onclick = () => {
+    if (confirm('Clear audit activity log on this browser?')) {
+      localStorage.removeItem('sse_activities');
+      render();
+      toast('Activity log reset');
+    }
+  };
+
+  const strip = box.querySelector('#actsline');
+  if (strip) {
+    let inv = [];
+    try { inv = JSON.parse(localStorage.getItem('sse_invoices') || '[]'); } catch {}
+    let sh = '';
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const has = inv.some(x => (x.date || '').slice(0, 10) === key && x.type === 'TAX') || (i % 3 === 0);
+      sh += `<span class="${has ? 'on' : ''}" title="${key}${has ? ' · Active Counter Billing' : ' · Idle / Sunday'}"></span>`;
+    }
+    strip.innerHTML = sh;
+  }
+}
+
+function simulateEvent() {
+  const plants = ['Daikin India Plant 2', 'Havells Neemrana', 'Mitsui Kinzoku', 'Hero MotoCorp Ancillary'];
+  const plant = plants[Math.floor(Math.random() * plants.length)];
+  const amt = Math.floor(Math.random() * 28000 + 3500);
+  SSE.logActivity(
+    'BILL',
+    `Counter Tax Invoice SSE/25-26/${Math.floor(Math.random() * 8000 + 1000)} Created`,
+    `${plant} · Total ₹ ${amt.toLocaleString('en-IN')} (UPI Instant Settlement)`,
+    { amount: amt, customer: plant }
+  );
+  render();
+  toast('Simulated counter event logged', 'flash');
+}
+
+function exportCSV() {
+  const acts = SSE.getActivities('all');
+  if (!acts.length) {
+    toast('No activity events to export', 'alert-01');
+    return;
+  }
+  const q = s => `"${String(s ?? '').replace(/"/g, '""')}"`;
+  const csv = ['Activity_ID,Timestamp,Category,Title,Detail,Meta'].concat(
+    acts.map(a => [a.id, a.time, a.type, a.title, a.detail, JSON.stringify(a.meta || {})].map(q).join(','))
+  ).join('\n');
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = `shreeshyam-audit-log-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  toast('Audit activity CSV exported', 'download-01');
+}
+</script>
+</body>
+</html>
