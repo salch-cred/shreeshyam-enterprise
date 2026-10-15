@@ -4587,5 +4587,763 @@ footer.sfooter::before{content:"";position:absolute;top:0;left:0;right:0;height:
   }
 }
 
+/* ==========================================================
+   FIGMA COMMUNITY ENTERPRISE DESIGN SYSTEM ($10B TIER)
+   Inspired by Linear.app, Stripe Enterprise & McMaster-Carr
+   Engineered for High-Precision Industrial MRO Procurement
+   ========================================================== */
+
+:root {
+  --ent-bg: #070B14;
+  --ent-surface: #0E1526;
+  --ent-surface-hover: #141D33;
+  --ent-surface-elevated: #162038;
+  --ent-border: rgba(255, 255, 255, 0.09);
+  --ent-border-focus: rgba(99, 102, 241, 0.5);
+  --ent-primary: #4F46E5;
+  --ent-primary-light: #6366F1;
+  --ent-accent-lime: #CDE06A;
+  --ent-text-high: #F8FAFC;
+  --ent-text-med: #94A3B8;
+  --ent-text-low: #64748B;
+  --ent-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Hero Section Canvas */
+.ent-hero-sc {
+  position: relative;
+  background: var(--ent-bg);
+  color: var(--ent-text-high);
+  padding: 48px 0 64px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ent-border);
+}
+
+.ent-hero-sc::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 520px;
+  background: radial-gradient(ellipse at 50% 20%, rgba(99, 102, 241, 0.14) 0%, rgba(79, 70, 229, 0.05) 50%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ent-hero-sc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ent-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 2-Column Precision Grid */
+.ent-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Left Hero Copy & Command Console */
+.ent-hero-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.ent-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--ent-border);
+  border-radius: 9999px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ent-text-med);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.ent-pulse-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ent-accent-lime);
+  box-shadow: 0 0 8px var(--ent-accent-lime);
+  animation: entPulse 2s infinite ease-in-out;
+}
+
+@keyframes entPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.ent-h1 {
+  font-size: clamp(34px, 4.8vw, 56px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin: 0 0 18px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  max-width: 680px;
+  text-wrap: balance;
+}
+
+.ent-h1 span.hl {
+  background: linear-gradient(135deg, #A5B4FC 0%, #818CF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ent-sub {
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.55;
+  color: var(--ent-text-med);
+  max-width: 620px;
+  margin: 0 0 28px;
+  text-wrap: pretty;
+}
+
+/* High-Graphics Command Search Bar */
+.ent-search-console {
+  background: var(--ent-surface);
+  border: 1px solid var(--ent-border);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  margin-bottom: 24px;
+}
+
+.ent-cat-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ent-cat-tabs::-webkit-scrollbar { display: none; }
+
+.ent-cat-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ent-text-med);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s var(--ent-ease);
+}
+.ent-cat-tab:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.04);
+}
+.ent-cat-tab.active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #A5B4FC;
+}
+
+.ent-search-bar {
+  display: flex;
+  align-items: center;
+  background: #080D1A;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 6px 6px 6px 14px;
+  gap: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ent-search-bar:focus-within {
+  border-color: var(--ent-primary-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.ent-search-bar i {
+  color: #64748B;
+  font-size: 18px;
+  flex: none;
+}
+
+.ent-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-family: inherit;
+}
+.ent-search-bar input::placeholder {
+  color: #64748B;
+}
+
+.ent-search-btn {
+  background: var(--ent-primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s, transform 0.15s;
+  flex: none;
+}
+.ent-search-btn:hover {
+  background: #4338CA;
+  transform: translateY(-1px);
+}
+.ent-search-btn:active {
+  transform: scale(0.98);
+}
+
+.ent-sku-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.ent-sku-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-right: 2px;
+}
+.ent-sku-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #CBD5E1;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: monospace;
+}
+.ent-sku-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Call to Actions */
+.ent-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ent-btn-primary {
+  background: #FFFFFF;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s var(--ent-ease);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+}
+.ent-btn-primary:hover {
+  background: #F1F5F9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
+}
+
+.ent-btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+  border: 1px solid var(--ent-border);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s var(--ent-ease);
+}
+.ent-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Trust Proof Metrics */
+.ent-trust-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ent-trust-stars {
+  color: #FBBF24;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+.ent-trust-text {
+  font-size: 12.5px;
+  color: var(--ent-text-med);
+  margin: 0;
+}
+.ent-trust-text b {
+  color: #FFFFFF;
+}
+
+/* 2. Right Side: Precision Hardware Spec Inspector (HUD) */
+.ent-hud-card {
+  background: var(--ent-surface);
+  border: 1px solid var(--ent-border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.ent-hud-header {
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--ent-border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ent-hud-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #A5B4FC;
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
+.ent-hud-segmented {
+  display: flex;
+  gap: 4px;
+  background: #080D1A;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ent-seg-btn {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s var(--ent-ease);
+}
+.ent-seg-btn:hover {
+  color: #FFFFFF;
+}
+.ent-seg-btn.active {
+  background: var(--ent-primary);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+}
+
+.ent-hud-body {
+  padding: 20px;
+}
+
+.ent-hud-visual-box {
+  background: #080D1A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.ent-hud-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+.ent-hud-img {
+  max-height: 160px;
+  max-width: 80%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s var(--ent-ease);
+}
+.ent-hud-visual-box:hover .ent-hud-img {
+  transform: scale(1.04);
+}
+
+.ent-hud-tag-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #FFFFFF;
+  font-family: monospace;
+  z-index: 3;
+}
+
+.ent-hud-stock-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(205, 224, 106, 0.15);
+  border: 1px solid rgba(205, 224, 106, 0.3);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--ent-accent-lime);
+  z-index: 3;
+}
+
+.ent-hud-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.ent-hud-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.ent-hud-price {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ent-accent-lime);
+  font-family: monospace;
+}
+
+/* Engineering Specs Table */
+.ent-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ent-spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 11.5px;
+}
+.ent-spec-row:last-child {
+  border-bottom: none;
+}
+.ent-spec-label {
+  color: #64748B;
+  font-weight: 600;
+}
+.ent-spec-val {
+  color: #CBD5E1;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+/* Telemetry Switcher Bar */
+.ent-hud-footer {
+  display: flex;
+  gap: 10px;
+}
+.ent-btn-hud-order {
+  flex: 1;
+  background: var(--ent-primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+.ent-btn-hud-order:hover {
+  background: #4338CA;
+}
+.ent-btn-hud-radar {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--ent-border);
+  color: #CBD5E1;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.ent-btn-hud-radar:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* Collapsible Operations Telemetry Console */
+.ent-telemetry-drawer {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ent-telemetry-drawer.open {
+  display: block;
+}
+
+/* 3. High-Graphics Enterprise Client Bar */
+.ent-clients-strip {
+  background: #050811;
+  border-bottom: 1px solid var(--ent-border);
+  padding: 24px 0;
+}
+.ent-clients-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #64748B;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.ent-clients-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  opacity: 0.8;
+}
+.ent-client-item {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+.ent-client-item:hover {
+  color: #FFFFFF;
+}
+
+/* 4. Tagline Word-by-Word Scroll Reveal Section (B11 Mandatory) */
+.ent-tagline-sc {
+  background: #070B14;
+  padding: 80px 0;
+  text-align: center;
+  border-bottom: 1px solid var(--ent-border);
+}
+.ent-tagline-eyebrow {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #6366F1;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.ent-tagline-h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  max-width: 880px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.25);
+  text-wrap: balance;
+}
+.ent-tagline-h2 .w {
+  transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+}
+.ent-tagline-h2 .w.lit {
+  color: #FFFFFF;
+}
+
+/* 5. Four Enterprise Value Pillars ($10B Architectural Grid) */
+.ent-pillars-sc {
+  background: #0A0F1D;
+  padding: 80px 0;
+  border-bottom: 1px solid var(--ent-border);
+}
+.ent-pillars-head {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 52px;
+}
+.ent-pillars-head h2 {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  margin: 0 0 12px;
+}
+.ent-pillars-head p {
+  font-size: 15px;
+  color: #94A3B8;
+  line-height: 1.55;
+  margin: 0;
+}
+.ent-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.ent-pillar-card {
+  background: #0E1526;
+  border: 1px solid var(--ent-border);
+  border-radius: 20px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s var(--ent-ease), border-color 0.25s, box-shadow 0.25s;
+}
+.ent-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6);
+}
+.ent-pillar-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: #A5B4FC;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.ent-pillar-card h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+.ent-pillar-card p {
+  font-size: 13.5px;
+  color: #94A3B8;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Responsive Rules */
+@media (max-width: 1080px) {
+  .ent-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .ent-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .ent-hero-sc {
+    padding: 32px 0 48px;
+  }
+  .ent-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+  .ent-hud-body {
+    padding: 16px;
+  }
+  .ent-hud-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .ent-hud-segmented {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .ent-seg-btn {
+    flex: 1;
+    text-align: center;
+  }
+  .ent-search-btn span {
+    display: none;
+  }
+  .ent-clients-row {
+    gap: 20px;
+  }
+}
+
+
 
 
