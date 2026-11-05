@@ -18,7 +18,7 @@ misc.post('/orders', rateLimit(60 * 60 * 1000, 20), async (req, res, next) => {
 misc.get('/orders', auth(['admin']), async (req, res, next) => {
   try {
     const limit = Math.min(200, Math.max(1, Number(req.query.limit) || 100));
-    const rows = (await requireDb().query('SELECT id,source,text,status,created FROM orders ORDER BY created DESC LIMIT $1', [limit])).rows;
+    const rows = (await requireDb().query('SELECT id,source,text,status,phone,invoice_no,paid_at,created FROM orders ORDER BY created DESC LIMIT $1', [limit])).rows;
     res.json({ items: rows });
   } catch (e) { next(e); }
 });

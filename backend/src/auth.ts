@@ -2,8 +2,8 @@ import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { env, type Role } from './env.js';
 
-export function signToken(role: Role, extra: Record<string, unknown> = {}) {
-  return jwt.sign({ role, ...extra }, env.JWT_SECRET, { expiresIn: '12h', algorithm: 'HS256' });
+export function signToken(role: Role, extra: Record<string, unknown> = {}, expiresIn: '12h' | '30d' = '12h') {
+  return jwt.sign({ role, ...extra }, env.JWT_SECRET, { expiresIn, algorithm: 'HS256' });
 }
 
 export interface Authed extends Request {

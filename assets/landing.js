@@ -57,12 +57,22 @@ function goStep(i, focus) {
 function armFlow() {
   clearTimeout(timer);
   const run = !stopped && flowInView && !flowTabs.classList.contains('paused');
-  const ms = step === 0 ? 11000 : 6500;
+  const ms = step === 0 ? 11000 : 8000;
   flowTabs.classList.toggle('auto', !stopped);
   flowTabs.style.setProperty('--dur', ms + 'ms');
   if (run) timer = setTimeout(() => goStep(step + 1), ms);
 }
 const takeOver = () => { stopped = true; armFlow(); };
+// The wide phone leans slightly toward the pointer.
+if (!reduce && matchMedia('(hover:hover)').matches) $$('.fwide').forEach(box => {
+  const fold = $('.fold', box);
+  box.addEventListener('pointermove', e => {
+    const r = box.getBoundingClientRect();
+    fold.style.setProperty('--ty', ((e.clientX - r.left) / r.width - .5) * 7 + 'deg');
+    fold.style.setProperty('--tx', (.5 - (e.clientY - r.top) / r.height) * 5 + 'deg');
+  });
+  box.addEventListener('pointerleave', () => { fold.style.removeProperty('--ty'); fold.style.removeProperty('--tx'); });
+});
 let flowInView = false;
 tabs.forEach((t, i) => { t.onclick = () => { takeOver(); goStep(i); }; });
 flowTabs.addEventListener('keydown', e => {

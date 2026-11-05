@@ -1,10 +1,10 @@
 /* Checkout. With a backend configured it takes payment online. Without one the
    order goes to the shop on WhatsApp, which is how a static site reaches the counter. */
 const $ = SSE.$;
-const api = () => (localStorage.getItem('sse_api') || '').replace(/\/$/, '');
-let cart = SSE.getCart(), status = { gateway: 'none' }, method = 'upi';
+const api = SSE.api;
+let cart = SSE.getCart(), status = { gateway: 'none' }, method = 'upi', pending = null;
 
-const save = () => SSE.setCart(cart);
+const save = () => { pending = null; SSE.setCart(cart); };
 function totals() {
   let sub = 0, gst = 0;
   for (const it of cart) { const t = it.qty * (it.rate || 0); sub += t; gst += t * ((it.gst_pct ?? 18) / 100); }
@@ -42,8 +42,8 @@ function drawItems() {
     : 'A GST invoice with HSN comes with your order.';
 }
 function drawPay() {
-  const opts = [['upi', 'UPI', 'Pay from any UPI app once the order is confirmed.'], ['cod', 'Cash on delivery', 'Pay cash or UPI to the delivery van. RIICO belt orders.']];
-  if (status.gateway === 'cashfree') opts.push(['card', 'Card or netbanking', 'Secure checkout by Cashfree.']);
+  const opts = [['upi', 'UPI to the shop', 'Pay from any UPI app once the order is confirmed.'], ['cod', 'Cash on delivery', 'Pay cash or UPI to the delivery van. RIICO belt orders.']];
+  if (status.gateway === 'cashfree') opts.unshift(['card', 'Pay online', 'UPI, card or netbanking. Confirmed instantly, secured by Cashfree.']);
   $('#payPanel').innerHTML = opts.map(o => `<button type="button" data-m="${o[0]}" aria-pressed="${method === o[0]}"><b>${o[1]}</b><span>${o[2]}</span></button>`).join('');
   $('#payPanel').querySelectorAll('button').forEach(b => b.onclick = () => { method = b.dataset.m; drawPay(); });
 }
@@ -52,8 +52,18 @@ function done(o) {
   // Only a upi: link may become a button, whatever a server response contains.
   const link = /^upi:\/\/pay\?/.test(o.payLink || '') ? o.payLink : '';
   const pay = link || (o.method === 'upi' && t && upi ? `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent('Shree Shyam Enterprises')}&am=${t}&tn=${encodeURIComponent(o.id)}` : '');
+  const mark = '<svg class="okmark" viewBox="0 0 96 96" aria-hidden="true"><circle class="ok-pulse" cx="48" cy="48" r="44"/><circle class="ok-disc" cx="48" cy="48" r="44"/><circle class="ok-ring" cx="48" cy="48" r="44" pathLength="100"/><path class="ok-check" pathLength="100" d="M28 50l14 14 27-30"/></svg>';
   $('#stepDone').classList.add('on');
-  $('#coSide').innerHTML = `<div class="done"><div class="tick" aria-hidden="true">✓</div><h2>Order ${SSE.esc(o.id)}</h2>
+  if (o.paid) {
+    $('#coSide').innerHTML = `<div class="done paidok">${mark}<h2>Thank you</h2>
+      <p>We have received your payment of ${SSE.fmt(t)}.</p>
+      <dl class="done-bill">${o.invoice ? `<div><dt>Bill no.</dt><dd>${SSE.esc(o.invoice)}</dd></div>` : ''}<div><dt>Order</dt><dd>${SSE.esc(o.id)}</dd></div></dl>
+      <div class="btns">${o.invoice ? `<a class="btn" href="invoice.html?order=${encodeURIComponent(o.id)}">View and print bill</a>` : ''}<a class="btn line" href="shop.html">Back to catalogue</a></div></div>`;
+    document.querySelectorAll('.stepper, .co-rm').forEach(el => el.remove());
+    SSE.toast('Payment received');
+    return;
+  }
+  $('#coSide').innerHTML = `<div class="done">${mark}<h2>Order ${SSE.esc(o.id)}</h2>
     <p>${SSE.esc(o.note)}</p>
     <div class="btns">
       ${o.wa ? `<a class="btn" href="${o.wa}" target="_blank" rel="noopener">Send order on WhatsApp</a>` : ''}
@@ -64,11 +74,44 @@ function done(o) {
   SSE.toast(`Order ${o.id} placed`);
 }
 function record(o, items, phone, name) {
+  // status defaults to new; a confirmed online payment is recorded as paid.
   try {
     const a = JSON.parse(localStorage.getItem('sse_orders') || '[]');
-    a.push({ id: o.id, source: 'web', phone, name, items, total: o.grand, text: items.map(c => `${c.name} x ${c.qty}`).join(', '), created: new Date().toISOString(), status: 'new' });
+    a.push({ id: o.id, source: 'web', phone, name, items, total: o.grand, text: items.map(c => `${c.name} x ${c.qty}`).join(', '), created: new Date().toISOString(), status: o.status || 'new', invoice: o.invoice || '' });
     localStorage.setItem('sse_orders', JSON.stringify(a));
   } catch {}
+}
+// The Cashfree window only reports that it closed. Whether money arrived is asked from the server.
+const paidCheck = async id => (await fetch(api() + '/payments/verify/' + encodeURIComponent(id))).json();
+function loadCashfree() {
+  if (window.Cashfree) return Promise.resolve();
+  return new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://sdk.cashfree.com/js/v3/cashfree.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+}
+function paidDone(o, invoice) {
+  if (o.items) record({ id: o.orderId, grand: o.grand, status: 'paid', invoice }, o.items, o.phone, o.name);
+  try { localStorage.removeItem('sse_pay'); } catch {}
+  cart = []; save();
+  drawItems();
+  done({ id: o.orderId, grand: o.grand, paid: true, invoice });
+}
+async function payOnline(p) {
+  const err = $('#coErr'), btn = $('#coPay');
+  err.textContent = '';
+  btn.disabled = true;
+  try {
+    localStorage.setItem('sse_pay', JSON.stringify({ orderId: p.orderId, grand: p.grand, items: p.items, phone: p.phone, name: p.name }));
+    await loadCashfree();
+    const out = await Cashfree({ mode: p.cashfreeMode === 'production' ? 'production' : 'sandbox' }).checkout({ paymentSessionId: p.paymentSessionId, redirectTarget: '_modal' });
+    if (out?.redirect) return;
+    const v = await paidCheck(p.orderId);
+    if (v.status === 'paid') return paidDone(p, v.invoiceNo);
+    err.textContent = 'Payment did not go through. No money was taken for this order. You can try again.';
+    btn.textContent = 'Try payment again';
+  } catch {
+    err.textContent = 'Could not confirm the payment. If money left your account, call the counter with order ' + p.orderId + '.';
+    btn.textContent = 'Try payment again';
+  }
+  btn.disabled = false;
 }
 $('#coForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -87,20 +130,19 @@ $('#coForm').addEventListener('submit', async e => {
   localStorage.setItem('sse_cust', JSON.stringify({ name, phone, gst: gstin, address }));
 
   if (api()) {
+    if (pending) { await payOnline(pending); return; }
     try {
-      const r = await fetch(api() + '/payments/create-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: items.map(i => ({ id: i.id, qty: i.qty })), name, phone, address, gstin, method }) });
+      const r = await fetch(api() + '/payments/create-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: cart.map(c => ({ id: c.id, qty: c.qty, slab: c.slab === 'wholesale' ? 'wholesale' : 'retail' })), name, phone, address, gstin, method }) });
       const j = await r.json();
       if (!r.ok) { $('#coErr').textContent = j.error || 'Could not place the order. Try again.'; return; }
+      if (j.mode === 'cashfree') {
+        pending = { ...j, items, phone, name };
+        await payOnline(pending);
+        return;
+      }
       record({ id: j.orderId, grand: j.grand }, items, phone, name);
       cart = []; save();
-      if (j.mode === 'cashfree') {
-        await new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://sdk.cashfree.com/js/v3/cashfree.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
-        new Cashfree({ mode: 'production' }).checkout({
-          paymentSessionId: j.paymentSessionId, redirectTarget: '_modal',
-          onSuccess: () => done({ id: j.orderId, grand: j.grand, note: 'Payment received. Your invoice follows on WhatsApp.' }),
-          onFailure: () => { $('#coErr').textContent = 'Payment did not go through. Your order is saved, try paying again.'; },
-        });
-      } else if (j.mode === 'quote') done({ id: j.orderId, grand: 0, note: 'Order received. We confirm rates and the total before anything is dispatched.' });
+      if (j.mode === 'quote') done({ id: j.orderId, grand: 0, note: 'Order received. We confirm rates and the total before anything is dispatched.' });
       else done({ id: j.orderId, grand: j.grand, method, payLink: j.intent, note: j.mode === 'cod' ? `Pay ${SSE.fmt(j.grand)} to the delivery van. Your invoice follows on WhatsApp.` : `We confirm stock and your invoice follows on WhatsApp. Total ${SSE.fmt(j.grand)}.` });
     } catch { $('#coErr').textContent = 'Could not reach the shop. Check your connection.'; }
     return;
@@ -132,5 +174,16 @@ async function reprice() {
   if (c) { $('#coName').value = c.name || ''; $('#coPhone').value = c.phone || ''; $('#coGst').value = c.gst || ''; $('#coAddr').value = c.address || ''; }
   drawItems(); drawPay();
   await reprice();
-  if (api()) { try { status = await (await fetch(api() + '/payments/status')).json(); drawPay(); } catch {} }
+  if (api()) { try { status = await (await fetch(api() + '/payments/status')).json(); if (status.gateway === 'cashfree') method = 'card'; drawPay(); } catch {} }
+  // Back from a bank or in-app browser redirect.
+  const back = new URLSearchParams(location.search).get('order');
+  if (api() && back && /^SSE[0-9A-Z]+$/.test(back)) {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('sse_pay') || 'null'); } catch {}
+    try {
+      const v = await paidCheck(back);
+      if (v.status === 'paid') paidDone(saved?.orderId === back ? saved : { orderId: back, grand: v.grand }, v.invoiceNo);
+      else $('#coErr').textContent = 'That payment did not go through. Your cart is still here, so you can try again.';
+    } catch { $('#coErr').textContent = 'Could not confirm the payment. If money left your account, call the counter with order ' + back + '.'; }
+  }
 })();

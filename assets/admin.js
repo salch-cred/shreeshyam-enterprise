@@ -1,4 +1,4 @@
-/* Counter console: one PIN, billing and admin on the same page.
+/* Counter console: one password, billing and admin on the same page.
    Everything here runs on the shop computer. The site is static, so products,
    bills and the ledger live in this browser. Settings has backup and restore. */
 const $ = SSE.$, esc = SSE.esc, fmt = SSE.fmt, toast = m => SSE.toast(m);
@@ -6,67 +6,31 @@ const read = (k, d = []) => { try { return JSON.parse(localStorage.getItem(k)) ?
 // Writes throw when storage is full. Callers must see that, never swallow it.
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const invoices = () => read('sse_invoices');
-const SHOP = {
-  name: 'Shree Shyam Enterprises', tag: 'Industrial and Project Suppliers',
-  address: 'Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705',
-  phone: '+91 72401 07540, +91 98879 79884', email: 'shreeshyamenterprises7540@gmail.com', gstin: '08SJHPS7017F1ZK', state: '08',
-};
-const STATES = { '01': 'Jammu and Kashmir', '02': 'Himachal Pradesh', '03': 'Punjab', '04': 'Chandigarh', '05': 'Uttarakhand', '06': 'Haryana', '07': 'Delhi', '08': 'Rajasthan', '09': 'Uttar Pradesh', '10': 'Bihar', '11': 'Sikkim', '12': 'Arunachal Pradesh', '13': 'Nagaland', '14': 'Manipur', '15': 'Mizoram', '16': 'Tripura', '17': 'Meghalaya', '18': 'Assam', '19': 'West Bengal', '20': 'Jharkhand', '21': 'Odisha', '22': 'Chhattisgarh', '23': 'Madhya Pradesh', '24': 'Gujarat', '26': 'Dadra and Nagar Haveli and Daman and Diu', '27': 'Maharashtra', '29': 'Karnataka', '30': 'Goa', '31': 'Lakshadweep', '32': 'Kerala', '33': 'Tamil Nadu', '34': 'Puducherry', '35': 'Andaman and Nicobar Islands', '36': 'Telangana', '37': 'Andhra Pradesh', '38': 'Ladakh' };
 const GSTIN_RE = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/;
 
-/* PIN: PBKDF2 hash on this device, never the PIN itself, with growing lockouts.
-   It keeps staff and walk-ins out of this computer's console. Real server-side
-   access control needs the backend. */
-const ITER = 210000, ATTEMPTS = 5;
-const hex = b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('');
-const unhex = h => new Uint8Array(h.match(/../g).map(x => parseInt(x, 16)));
-async function hashPin(pin, saltHex) {
-  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveBits']);
-  return hex(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: unhex(saltHex), iterations: ITER }, key, 256));
-}
-async function setPin(pin) {
-  const salt = hex(crypto.getRandomValues(new Uint8Array(16)));
-  write('sse_pin', { salt, hash: await hashPin(pin, salt) });
-}
-const eq = (a, b) => { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return !d; };
-function gateMode() {
-  const first = !read('sse_pin', null);
-  $('#pin2Row').hidden = !first;
-  $('#gateTitle').textContent = first ? 'Set your PIN' : 'Counter console';
-  $('#gateSub').textContent = first ? 'Choose a PIN of at least 6 digits. It is stored as a hash on this computer only.' : 'Billing, stock, orders and the ledger. Staff only.';
-  $('#unlock').textContent = first ? 'Save' : 'Open';
-}
+/* The admin password lives in Vercel and is checked on the server, never stored here.
+   A connected backend checks it too and returns the token for online orders. */
+try { localStorage.removeItem('sse_pin'); localStorage.removeItem('sse_pin_fail'); } catch {}
 function refuse(msg) {
   $('#pinErr').textContent = msg;
   const g = $('#gateBox'); g.classList.remove('shake'); void g.offsetWidth; g.classList.add('shake');
 }
 $('#gateForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const pin = $('#pin').value, saved = read('sse_pin', null), lock = read('sse_pin_fail', { n: 0, until: 0 });
-  if (!crypto.subtle) return refuse('Open this page over https or on localhost.');
-  if (!saved) {
-    if (!/^[0-9]{6,12}$/.test(pin)) return refuse('Use 6 to 12 digits.');
-    if (pin !== $('#pin2').value) return refuse('The two PINs do not match.');
-    if (/^(\d)\1+$/.test(pin) || '0123456789012'.includes(pin) || '9876543210'.includes(pin)) return refuse('Too easy to guess. Choose another.');
-    await setPin(pin);
-  } else {
-    const wait = lock.until - Date.now();
-    if (wait > 0) return refuse(`Too many tries. Wait ${Math.ceil(wait / 1000)} seconds.`);
-    $('#unlock').disabled = true;
-    const ok = eq(await hashPin(pin, saved.salt), saved.hash);
-    $('#unlock').disabled = false;
-    if (!ok) {
-      const n = lock.n + 1, over = Math.max(0, n - ATTEMPTS + 1);
-      write('sse_pin_fail', { n, until: over ? Date.now() + 30000 * 2 ** (over - 1) : 0 });
-      return refuse(over ? `Wrong PIN. Locked for ${30 * 2 ** (over - 1)} seconds.` : 'Wrong PIN.');
-    }
-  }
-  localStorage.removeItem('sse_pin_fail');
-  $('#pin').value = $('#pin2').value = '';
-  sessionStorage.setItem('sse_admin', '1');
-  openConsole();
+  const password = $('#pin').value, url = SSE.api() ? SSE.api() + '/auth/login' : '/api/admin-login';
+  if (!password) return refuse('Enter the password.');
+  $('#unlock').disabled = true;
+  try {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) return refuse(j.error || 'Could not check the password. Try again.');
+    if (j.token) sessionStorage.setItem('sse_staff', j.token);
+    $('#pin').value = '';
+    sessionStorage.setItem('sse_admin', '1');
+    openConsole();
+  } catch { refuse('Could not reach the server. Check your connection.'); } finally { $('#unlock').disabled = false; }
 });
-function lockConsole() { sessionStorage.removeItem('sse_admin'); location.href = 'admin.html'; }
+function lockConsole() { sessionStorage.removeItem('sse_admin'); sessionStorage.removeItem('sse_staff'); location.href = 'admin.html'; }
 $('#lock').onclick = lockConsole;
 let idle;
 const bump = () => { clearTimeout(idle); idle = setTimeout(lockConsole, 15 * 60 * 1000); };
@@ -75,8 +39,8 @@ const bump = () => { clearTimeout(idle); idle = setTimeout(lockConsole, 15 * 60 
 const TITLES = {
   billing: ['Billing', 'Every tax bill cuts stock and updates the day book.'],
   products: ['Products', ''], stock: ['Stock', 'Reorders and recent moves.'],
-  orders: ['Orders', 'Orders saved on this computer.'], ledger: ['Ledger', 'Udhaar outstanding and money received.'],
-  reports: ['Reports', 'Billing over the last two weeks.'], content: ['Settings', 'Shop details, security and backups.'],
+  orders: ['Orders', 'Website orders and orders saved on this computer.'], ledger: ['Ledger', 'Udhaar outstanding and money received.'],
+  reports: ['Reports', 'Billing over the last two weeks.'], customers: ['Customers', 'Everyone with an account, with their history.'], content: ['Settings', 'Shop details and backups.'],
 };
 const tabs = [...document.querySelectorAll('#tabs button')];
 function ink() {
@@ -99,6 +63,7 @@ function show(t) {
   if (k === 'products') reload();
   if (k === 'stock') drawStock();
   if (k === 'orders') drawOrders();
+  if (k === 'customers') drawCustomers();
   if (k === 'content') drawContent();
   if (k === 'ledger') drawLedger();
   if (k === 'reports') drawReports();
@@ -140,11 +105,13 @@ async function reload() {
   TITLES.products[1] = `${ALL.length.toLocaleString('en-IN')} products on this computer.`;
   if (!$('#pane-products').hidden) $('#paneSub').textContent = TITLES.products[1];
   draw(); stats();
+  syncOnline().catch(() => {});
+  setInterval(() => syncOnline().catch(() => {}), 60000);
 }
 async function init() {
   ALL = await SSE.seed();
   await reload();
-  $('#ordN').textContent = read('sse_orders').filter(o => o.status === 'new').length;
+  $('#ordN').textContent = waiting();
   $('#aq').oninput = () => { pg = 1; draw(); };
   $('#aCat').onchange = () => { pg = 1; draw(); };
   $('#prevP').onclick = () => { pg = Math.max(1, pg - 1); draw(); };
@@ -382,19 +349,127 @@ async function drawStock() {
     + `<h3 style="margin-top:22px">Recent moves</h3><div class="tblwrap"><table class="tbl"><tbody>` +
     (log.map(l => `<tr><td>${esc(l.id)}</td><td class="mono">${Number(l.delta) > 0 ? '+' : ''}${Number(l.delta) || 0}</td><td>${esc(l.reason)}</td></tr>`).join('') || '<tr><td>No moves logged yet.</td></tr>') + '</tbody></table></div>';
 }
+/* Paid website orders land here from the backend, and each bill is filed once in this
+   browser's ledger with its stock cut, so reports and the day book include it. The staff
+   token lasts for this tab only. */
+const staffToken = () => sessionStorage.getItem('sse_staff') || '';
+const waiting = () => read('sse_orders').filter(o => o.status === 'new' || o.status === 'paid').length;
+async function staffGet(path) {
+  const r = await fetch(SSE.api() + path, { headers: { Authorization: 'Bearer ' + staffToken() } });
+  if (r.status === 401) sessionStorage.removeItem('sse_staff');
+  if (!r.ok) throw new Error('Could not load online orders');
+  return r.json();
+}
+async function staffPost(path, body) {
+  const r = await fetch(SSE.api() + path, { method: 'POST', headers: { Authorization: 'Bearer ' + staffToken(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || 'Could not save that');
+  return j;
+}
+async function syncOnline() {
+  if (!SSE.api() || !staffToken()) return 0;
+  const [orders, bills] = await Promise.all([staffGet('/orders?limit=200'), staffGet('/invoices/online')]);
+  const list = read('sse_orders'), filed = invoices(), moved = [];
+  for (const s of orders.items) {
+    let d = {};
+    try { d = JSON.parse(s.text); } catch { /* a plain text order */ }
+    const it = list.find(x => x.id === s.id), rows = d.items || [];
+    if (it) { if (it.status === 'new' && s.status === 'paid') it.status = 'paid'; it.invoice = s.invoice_no; it.quote = s.source === 'quote'; continue; }
+    list.push({ id: s.id, source: 'online', quote: s.source === 'quote', status: s.status, invoice: s.invoice_no, phone: s.phone, name: d.customer?.name || '', total: d.amount || 0, items: rows, created: s.created,
+      text: rows.length ? rows.map(c => `${c.name} x ${c.qty}`).join(', ') : s.text });
+  }
+  let fresh = 0;
+  for (const x of bills.items.slice().reverse()) {
+    if (filed.some(i => i.no === x.no)) continue;
+    filed.push(onlineBill(x)); fresh++;
+    for (const c of x.items) {
+      const p = ALL.find(q => q.id === c.id);
+      if (p) { p.stock = (Number(p.stock) || 0) - c.qty; moved.push(p); SSE.logStock(p.id, -c.qty, x.no); }
+    }
+  }
+  write('sse_orders', list);
+  write('sse_invoices', filed);
+  if (moved.length) await SSE.putMany(moved);
+  $('#ordN').textContent = waiting();
+  if (fresh) { toast(`${fresh} new paid order${fresh === 1 ? '' : 's'}`); stats(); }
+  if (!$('#pane-orders').hidden) drawOrders();
+  return fresh;
+}
+function onlineBar() {
+  if (!SSE.api()) return '';
+  return staffToken()
+    ? '<div class="panel-tools online-bar"><span>Online orders connected</span><button class="btn line sm" id="onlineSync">Refresh</button></div>'
+    : '<div class="panel-tools online-bar"><span>Session ended. Lock and sign in again to load online orders.</span></div>';
+}
+function bindOnline(el) {
+  const sync = el.querySelector('#onlineSync');
+  if (sync) sync.onclick = () => syncOnline().catch(x => toast(x.message));
+}
+/* Customers: everyone who signed in by SMS, read live from the backend. */
+const when = d => (d ? new Date(d).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Never');
+async function drawCustomers() {
+  const el = $('#pane-customers');
+  if (!SSE.api() || !staffToken()) {
+    el.innerHTML = `<div class="empty"><b>${SSE.api() ? 'Sign in again' : 'No customer accounts yet'}</b><p>${SSE.api() ? 'Lock the console and sign in again to load customers.' : 'Accounts are created by SMS sign-in, which starts once the backend is live.'}</p></div>`;
+    return;
+  }
+  el.innerHTML = '<div class="empty slim">Loading customers</div>';
+  try {
+    const { items } = await staffGet('/customers');
+    if (!items.length) { el.innerHTML = '<div class="empty"><b>No accounts yet</b><p>Customers appear here the first time they sign in with their mobile.</p></div>'; return; }
+    el.innerHTML = `<p class="hint">${items.length} account${items.length === 1 ? '' : 's'}</p><div class="tblwrap"><table class="tbl"><thead><tr><th>Customer</th><th>Joined</th><th>Last sign-in</th><th>Orders</th><th>Paid</th><th></th></tr></thead><tbody>` +
+      items.map(c => `<tr><td><b>${esc(c.name || 'Name not added')}</b><small>+91 ${esc(c.phone)}${c.gstin ? ' · ' + esc(c.gstin) : ''}</small></td><td>${when(c.created_at)}</td><td>${when(c.last_login)}</td><td>${Number(c.orders)}</td><td>${fmt(c.paid)}</td>
+        <td style="text-align:right"><button class="btn line sm hist" data-p="${esc(c.phone)}">History</button></td></tr>`).join('') + '</tbody></table></div>';
+    el.querySelectorAll('.hist').forEach(b => { b.onclick = () => drawHistory(b.dataset.p); });
+  } catch (x) { el.innerHTML = `<div class="empty"><b>Could not load customers</b><p>${esc(x.message)}</p></div>`; }
+}
+async function drawHistory(phone) {
+  const el = $('#pane-customers');
+  try {
+    const { customer: c, logins, orders } = await staffGet('/customers/' + encodeURIComponent(phone));
+    const ev = [{ at: c.created_at, t: 'Account created', d: '' }, ...logins.map(at => ({ at, t: 'Signed in', d: '' }))];
+    for (const o of orders) {
+      const list = o.items.map(i => `${i.name} x ${i.qty}`).join(', ');
+      ev.push({ at: o.created, t: `Order ${o.id}`, d: `${o.total ? fmt(o.total) + ' · ' : 'Rates to confirm · '}${list}` });
+      if (o.paid_at) ev.push({ at: o.paid_at, t: `Paid by ${o.mode === 'Online' ? 'online payment' : o.mode}`, d: `Bill ${o.invoice_no}`, ok: true });
+    }
+    ev.sort((a, b) => new Date(b.at) - new Date(a.at));
+    el.innerHTML = `<div class="panel-tools"><button class="btn line sm" id="histBack">All customers</button></div>
+      <div class="cust-card"><div><h3>${esc(c.name || 'Name not added')}</h3><p>+91 ${esc(c.phone)}${c.gstin ? ' · GSTIN ' + esc(c.gstin) : ''}</p>${c.address ? `<p>${esc(c.address)}</p>` : ''}</div>
+        <dl><div><dt>Joined</dt><dd>${when(c.created_at)}</dd></div><div><dt>Last sign-in</dt><dd>${when(c.last_login)}</dd></div><div><dt>Orders</dt><dd>${orders.length}</dd></div></dl></div>
+      <ol class="cust-time">${ev.map(e => `<li class="${e.ok ? 'ok' : ''}"><time>${when(e.at)}</time><b>${esc(e.t)}</b>${e.d ? `<span>${esc(e.d)}</span>` : ''}</li>`).join('')}</ol>`;
+    $('#histBack').onclick = drawCustomers;
+  } catch (x) { toast(x.message); }
+}
 function drawOrders() {
-  const el = $('#pane-orders'), o = read('sse_orders').slice().reverse();
-  if (!o.length) { el.innerHTML = '<div class="empty"><b>No orders here yet</b><p>Website orders reach you on WhatsApp. They appear here only if placed from this computer.</p></div>'; return; }
-  el.innerHTML = '<div class="tblwrap"><table class="tbl"><thead><tr><th>Order</th><th>Items</th><th>Status</th><th></th></tr></thead><tbody>' +
+  const el = $('#pane-orders'), o = read('sse_orders').slice().reverse().sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0));
+  if (!o.length) { el.innerHTML = onlineBar() + '<div class="empty"><b>No orders here yet</b><p>Website orders reach you on WhatsApp. They appear here only if placed from this computer, or once online orders are connected.</p></div>'; bindOnline(el); return; }
+  el.innerHTML = onlineBar() + '<div class="tblwrap"><table class="tbl"><thead><tr><th>Order</th><th>Items</th><th>Status</th><th></th></tr></thead><tbody>' +
     o.slice(0, 100).map(x => `<tr><td><b>${esc(x.id)}</b><small>${esc(x.name || '')} ${esc(x.phone || '')}</small></td><td>${esc((x.text || '').slice(0, 140))}</td>
-    <td><span class="pill ${x.status === 'new' ? 'warn' : x.status === 'delivered' ? 'ok' : 'info'}">${esc(x.status)}</span></td>
-    <td style="text-align:right">${x.status !== 'delivered' ? `<button class="btn line sm adv" data-id="${esc(x.id)}">Advance</button>` : ''}</td></tr>`).join('') + '</tbody></table></div>';
+    <td><span class="pill ${x.status === 'new' ? 'warn' : x.status === 'delivered' || x.status === 'paid' ? 'ok' : 'info'}">${esc(x.status)}</span>${x.invoice ? `<small>${esc(x.invoice)}</small>` : ''}</td>
+    <td style="text-align:right">${x.source === 'online' && x.total && !x.invoice && !x.quote && staffToken() ? `<span class="markpaid"><select aria-label="Paid by" data-id="${esc(x.id)}"><option>Cash</option><option>UPI</option><option>Transfer</option></select><button class="btn sm mp" data-id="${esc(x.id)}" data-total="${Number(x.total)}">Mark paid</button></span> ` : ''}${x.invoice ? `<button class="btn line sm rpo" data-no="${esc(x.invoice)}">Print bill</button> ` : ''}${x.status !== 'delivered' ? `<button class="btn line sm adv" data-id="${esc(x.id)}">Advance</button>` : ''}</td></tr>`).join('') + '</tbody></table></div>';
+  bindOnline(el);
+  // A bill is permanent, so the first press only asks.
+  el.querySelectorAll('.mp').forEach(b => {
+    b.onclick = async () => {
+      const mode = b.previousElementSibling.value;
+      if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = `Confirm ${fmt(b.dataset.total)} by ${mode}`; return; }
+      b.disabled = true;
+      try {
+        const j = await staffPost(`/orders/${encodeURIComponent(b.dataset.id)}/mark-paid`, { mode });
+        await syncOnline();
+        drawOrders();
+        toast(`Paid. Bill ${j.invoiceNo}`);
+      } catch (x) { toast(x.message); b.disabled = false; }
+    };
+  });
+  el.querySelectorAll('.rpo').forEach(b => { b.onclick = () => { const r = invoices().find(i => i.no === b.dataset.no); if (r) { buildPrint(r); setTimeout(() => window.print(), 250); } }; });
   el.querySelectorAll('.adv').forEach(b => {
     b.onclick = () => {
       const all = read('sse_orders'), it = all.find(x => x.id === b.dataset.id);
-      it.status = it.status === 'new' ? 'confirmed' : 'delivered';
+      it.status = it.status === 'new' || it.status === 'paid' ? 'confirmed' : 'delivered';
       write('sse_orders', all);
-      $('#ordN').textContent = all.filter(x => x.status === 'new').length;
+      $('#ordN').textContent = waiting();
       drawOrders(); toast('Order ' + it.status);
     };
   });
@@ -476,10 +551,6 @@ function drawContent() {
     <p class="hint" style="margin:0 0 12px">Bills, the ledger and products live only in this browser. Clearing browser data erases them. ${age === null ? 'No backup taken yet.' : age === 0 ? 'Last backup today.' : `Last backup ${age} day${age === 1 ? '' : 's'} ago.`}</p>
     <div class="panel-tools"><button class="btn" id="c_bak">Download backup</button>
     <label class="btn line" style="cursor:pointer">Restore<input type="file" id="c_res" accept=".json,application/json" hidden></label></div></section>
-  <section class="panel"><h3>Change PIN</h3>
-    <div class="field"><label for="c_p0">Current PIN</label><input id="c_p0" type="password" inputmode="numeric" autocomplete="off"></div>
-    <div class="field"><label for="c_p1">New PIN, 6 to 12 digits</label><input id="c_p1" type="password" inputmode="numeric" autocomplete="off"></div>
-    <button class="btn" id="c_pin">Change PIN</button></section>
   </div>`;
   $('#c_save').onclick = () => {
     SSE.saveContent({ ...SSE.content(), upi_id: $('#c_upi').value.trim() });
@@ -490,14 +561,6 @@ function drawContent() {
   };
   $('#c_bak').onclick = backup;
   $('#c_res').onchange = e => { if (e.target.files[0]) restore(e.target.files[0]); e.target.value = ''; };
-  $('#c_pin').onclick = async () => {
-    const s = read('sse_pin', null), p1 = $('#c_p1').value;
-    if (!eq(await hashPin($('#c_p0').value, s.salt), s.hash)) { toast('Current PIN is wrong'); return; }
-    if (!/^[0-9]{6,12}$/.test(p1)) { toast('Use 6 to 12 digits'); return; }
-    await setPin(p1);
-    $('#c_p0').value = $('#c_p1').value = '';
-    toast('PIN changed');
-  };
 }
 
 /* Billing counter */
@@ -577,15 +640,18 @@ const Billing = (() => {
       box.innerHTML = cart.map((c, i) => `<div class="bline"><div><b>${esc(c.name)}</b><span>${c.hsn ? 'HSN ' + esc(c.hsn) + ' · ' : ''}GST <select class="gstin" data-i="${i}" aria-label="GST rate">${GST_OK.map(g => `<option ${g === c.gst_pct ? 'selected' : ''}>${g}</option>`).join('')}</select>%</span></div>
         <div class="stepper"><button data-i="${i}" data-d="-1" aria-label="Decrease">−</button><b>${Number(c.qty)}</b><button data-i="${i}" data-d="1" aria-label="Increase">+</button></div>
         <input class="ratein" type="number" min="0" step="any" value="${Number(c.rate) || ''}" placeholder="Rate" data-i="${i}" aria-label="Rate for ${esc(c.name)}">
-        <em>${fmt(c.qty * c.rate)}</em><button class="rm" data-i="${i}" aria-label="Remove ${esc(c.name)}">×</button></div>`).join('');
+        <input class="discin" type="number" min="0" max="100" step="any" value="${Number(c.disc_pct) || ''}" placeholder="0" data-i="${i}" aria-label="Discount percent for ${esc(c.name)}">
+        <em>${fmt(SSE.lineValue(c))}</em><button class="rm" data-i="${i}" aria-label="Remove ${esc(c.name)}">×</button></div>`).join('');
       box.querySelectorAll('.stepper button').forEach(b => { b.onclick = () => { const c = cart[+b.dataset.i]; c.qty = Math.max(1, c.qty + +b.dataset.d); drawLines(); }; });
       box.querySelectorAll('.ratein').forEach(r => { r.onchange = () => { cart[+r.dataset.i].rate = Math.max(0, Number(r.value) || 0); drawLines(); }; });
+      box.querySelectorAll('.discin').forEach(r => { r.onchange = () => { cart[+r.dataset.i].disc_pct = Math.min(100, Math.max(0, Number(r.value) || 0)); drawLines(); }; });
       box.querySelectorAll('.gstin').forEach(r => { r.onchange = () => { cart[+r.dataset.i].gst_pct = Number(r.value); drawLines(); }; });
       box.querySelectorAll('.rm').forEach(b => { b.onclick = () => { cart.splice(+b.dataset.i, 1); drawLines(); }; });
     }
     const code = supplyCode($('#cgstin').value.trim().toUpperCase()), inter = code !== SHOP.state, due = Math.max(0, t.grand - paid);
     $('#totals').innerHTML = `<div><span>Taxable value</span><b>${fmt(t.taxable)}</b></div>
-      ${t.disc ? `<div><span>Includes discount</span><b>− ${fmt(t.disc)}</b></div>` : ''}
+      ${t.itemDisc ? `<div><span>Includes item discount</span><b>− ${fmt(t.itemDisc)}</b></div>` : ''}
+      ${t.disc ? `<div><span>Includes bill discount</span><b>− ${fmt(t.disc)}</b></div>` : ''}
       ${inter ? `<div><span>IGST</span><b>${fmt(t.gst)}</b></div>` : `<div><span>CGST</span><b>${fmt(t.gst / 2)}</b></div><div><span>SGST</span><b>${fmt(t.gst / 2)}</b></div>`}
       ${due > 0 && cart.length ? `<div class="due"><span>Balance to udhaar</span><b>${fmt(due)}</b></div>` : ''}`;
     $('#payTotal').textContent = fmt(t.grand);
@@ -644,7 +710,7 @@ const Billing = (() => {
     const code = supplyCode(gstin);
     const rec = {
       no: type === 'TAX' ? nextNo() : 'EST-' + Date.now(), date: new Date().toISOString(), type, customer, phone, gstin, address: $('#caddr').value.trim(), mode,
-      items: cart.map(c => ({ ...c })), sub: t.sub, disc: t.disc, taxable: t.taxable, gst: t.gst, keep: t.keep, round: t.round, grand: t.grand,
+      items: cart.map(c => ({ ...c })), gross: t.gross, itemDisc: t.itemDisc, sub: t.sub, disc: t.disc, taxable: t.taxable, gst: t.gst, keep: t.keep, round: t.round, grand: t.grand,
       supply: code, inter: code !== SHOP.state, paid, balance: Math.max(0, t.grand - paid),
     };
     // The bill must be safely stored before anything is printed or stock moves.
@@ -672,90 +738,4 @@ const Billing = (() => {
   return { start, refresh };
 })();
 
-/* Amount in words, Indian numbering */
-function words(n) {
-  const o = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-  const ty = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-  const two = x => (x < 20 ? o[x] : ty[Math.floor(x / 10)] + (x % 10 ? ' ' + o[x % 10] : ''));
-  const three = x => { const h = Math.floor(x / 100), r = x % 100; return (h ? o[h] + ' Hundred' + (r ? ' ' : '') : '') + (r ? two(r) : ''); };
-  if (!n) return 'Zero Rupees Only';
-  let s = '';
-  const cr = Math.floor(n / 1e7), lk = Math.floor(n % 1e7 / 1e5), th = Math.floor(n % 1e5 / 1e3), rest = n % 1e3;
-  if (cr) s += three(cr) + ' Crore ';
-  if (lk) s += two(lk) + ' Lakh ';
-  if (th) s += two(th) + ' Thousand ';
-  if (rest) s += three(rest);
-  return (s + ' Rupees Only').replace(/\s+/g, ' ').trim();
-}
-
-/* A4 tax invoice. Rows are paged by hand so each sheet keeps its header and
-   footer and the totals block never splits across pages. */
-const PAGE_ROWS = 24, LAST_ROWS = 11;
-function qrSvg(text) {
-  const q = qrcode(0, 'M');
-  q.addData(text); q.make();
-  return q.createSvgTag({ cellSize: 2, margin: 0, scalable: true });
-}
-function buildPrint(r) {
-  const c = SSE.content(), keep = r.keep ?? 1, inter = !!r.inter, code = r.supply || SHOP.state, isTax = r.type === 'TAX';
-  const upi = c.upi_id || '', taxable = r.taxable ?? r.sub;
-  const rows = r.items.map((it, i) => {
-    const tx = it.qty * it.rate * keep, g = tx * it.gst_pct / 100;
-    return `<tr><td class="c">${i + 1}</td><td class="item"><b>${esc(it.name)}</b>${it.hsn ? `<span>HSN ${esc(it.hsn)}</span>` : ''}</td>
-      <td class="r">${Number(it.qty)} ${esc(it.unit || 'nos')}</td><td class="r">${fmt(it.rate)}</td><td class="r">${fmt(tx)}</td>
-      <td class="r">${Number(it.gst_pct)}%</td><td class="r">${fmt(g)}</td><td class="r amt">${fmt(tx + g)}</td></tr>`;
-  });
-  const hsn = {};
-  r.items.forEach(it => {
-    const k = (it.hsn || '—') + '|' + it.gst_pct, tx = it.qty * it.rate * keep;
-    hsn[k] = hsn[k] || { hsn: it.hsn || '—', rate: it.gst_pct, tx: 0, g: 0 };
-    hsn[k].tx += tx; hsn[k].g += tx * it.gst_pct / 100;
-  });
-  const chunks = [], list = rows.slice();
-  while (list.length > LAST_ROWS) chunks.push(list.splice(0, Math.min(PAGE_ROWS, list.length > PAGE_ROWS ? PAGE_ROWS : list.length - 1)));
-  chunks.push(list);
-  const dt = new Date(r.date), date = dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
-  const pay = upi && isTax && r.balance > 0 ? `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(SHOP.name)}&am=${r.balance}&tn=${encodeURIComponent(r.no)}` : '';
-  const summary = `<div class="i-sum"><div class="i-left">
-      <p class="i-words"><span>Amount in words</span>${words(r.grand)}</p>
-      <table class="i-hsn"><thead><tr><th>HSN</th><th class="r">Taxable</th><th class="r">Rate</th>${inter ? '<th class="r">IGST</th>' : '<th class="r">CGST</th><th class="r">SGST</th>'}</tr></thead><tbody>
-      ${Object.values(hsn).slice(0, 5).map(h => `<tr><td>${esc(h.hsn)}</td><td class="r">${fmt(h.tx)}</td><td class="r">${Number(h.rate)}%</td>${inter ? `<td class="r">${fmt(h.g)}</td>` : `<td class="r">${fmt(h.g / 2)}</td><td class="r">${fmt(h.g / 2)}</td>`}</tr>`).join('')}</tbody></table>
-    </div><div class="i-right">
-      <div><span>Subtotal</span><b>${fmt(r.sub)}</b></div>
-      ${r.disc ? `<div><span>Discount</span><b>− ${fmt(r.disc)}</b></div><div><span>Taxable value</span><b>${fmt(taxable)}</b></div>` : ''}
-      ${inter ? `<div><span>IGST</span><b>${fmt(r.gst)}</b></div>` : `<div><span>CGST</span><b>${fmt(r.gst / 2)}</b></div><div><span>SGST</span><b>${fmt(r.gst / 2)}</b></div>`}
-      <div><span>Round off</span><b>${fmt(r.round ?? 0)}</b></div>
-      <div class="i-grand"><span>Total</span><b>${fmt(r.grand)}</b></div>
-      <div><span>Received (${esc(r.mode)})</span><b>${fmt(r.paid)}</b></div>
-      <div class="i-bal"><span>Balance due</span><b>${fmt(r.balance)}</b></div>
-    </div></div>
-    <div class="i-end">
-      <div class="i-terms"><span>Terms</span>Goods once sold are taken back only in original pack within 7 days with this bill. Warranty as per the maker. Interest at 18% a year after the due date. Disputes subject to local jurisdiction.</div>
-      ${pay ? `<div class="i-qr">${qrSvg(pay)}<span>Scan to pay ${fmt(r.balance)}<br>${esc(upi)}</span></div>` : ''}
-      <div class="i-sign"><span>For ${SHOP.name}</span><i></i><b>Authorised signatory</b></div>
-    </div>`;
-  const sheet = (label, c2, i, n) => `<section class="a4">
-    <header class="i-top">
-      <img src="assets/land/logo-full-ink.png" alt="">
-      <div class="i-shop"><b>${SHOP.name}</b><span>${SHOP.tag}</span><span>${SHOP.address}</span><span>${SHOP.phone}</span><span>${SHOP.email}</span></div>
-      <div class="i-title"><h1>${isTax ? 'Tax Invoice' : 'Estimate'}</h1><span>${esc(label)}</span><span class="mono">GSTIN ${SHOP.gstin}</span></div>
-    </header>
-    <div class="i-meta">
-      <div><span>${isTax ? 'Invoice no.' : 'Estimate no.'}</span><b class="mono">${esc(r.no)}</b></div>
-      <div><span>Date</span><b>${date}</b></div>
-      <div><span>Place of supply</span><b>${esc(STATES[code] || 'Rajasthan')} (${esc(code)})</b></div>
-      <div><span>Reverse charge</span><b>No</b></div>
-    </div>
-    ${i === 0 ? `<div class="i-party"><div><span>Bill to</span><b>${esc(r.customer || 'Walk-in customer')}</b>${r.address ? `<p>${esc(r.address)}</p>` : ''}${r.phone ? `<p>${esc(r.phone)}</p>` : ''}</div>
-      <div><span>Buyer GSTIN</span><b class="mono">${esc(r.gstin || 'Unregistered')}</b><p>${r.gstin ? esc(STATES[code] || '') : 'B2C supply'}</p></div></div>` : ''}
-    <table class="i-items"><thead><tr><th class="c">#</th><th>Item</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Taxable</th><th class="r">GST</th><th class="r">Tax</th><th class="r">Amount</th></tr></thead>
-    <tbody>${c2}</tbody></table>
-    ${i === n - 1 ? summary : '<p class="i-cont">Continued on the next sheet</p>'}
-    <footer class="i-foot"><span>${isTax ? 'This is a computer generated invoice' : 'Valid for 7 days. Not a tax invoice.'}</span><span class="mono">${esc(r.no)} · Sheet ${i + 1} of ${n}</span></footer>
-  </section>`;
-  const copy = label => chunks.map((c2, i) => sheet(label, c2.join(''), i, chunks.length)).join('');
-  $('#printArea').innerHTML = isTax ? copy('Original for recipient') + copy('Duplicate for supplier') : copy('Not a tax invoice');
-}
-
-gateMode();
-if (sessionStorage.getItem('sse_admin') === '1' && read('sse_pin', null)) openConsole();
+if (sessionStorage.getItem('sse_admin') === '1') openConsole();

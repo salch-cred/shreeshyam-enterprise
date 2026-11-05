@@ -64,9 +64,14 @@ billing.post('/invoices', auth(['admin', 'billing']), async (req, res, next) => 
   } catch (e) { next(e); }
 });
 
-// There is deliberately no customer "my invoices" route. Registration does not verify the
-// phone number, so matching bills on phone would let anyone read another plant's invoices.
-// Add it back only with OTP verification in place.
+// Paid online bills with everything the counter needs to file and reprint them.
+billing.get('/invoices/online', auth(['admin', 'billing']), async (_req, res, next) => {
+  try {
+    const rows = (await requireDb().query(
+      `SELECT no,order_id,date,customer,phone,gstin,address,mode,items,subtotal,gst,grand FROM invoices WHERE order_id<>'' ORDER BY date DESC LIMIT 200`)).rows;
+    res.json({ items: rows });
+  } catch (e) { next(e); }
+});
 
 billing.get('/invoices', auth(['admin', 'billing']), async (req, res, next) => {
   try {

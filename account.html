@@ -6,50 +6,122 @@
 <link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=52">
+<link rel="stylesheet" href="assets/site.css?v=59">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <title>Your account — Shree Shyam Enterprises</title>
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex">
 </head>
-<body class="acct on-dark" data-nav="dark" data-stage="account">
+<body class="acct">
 <a class="skip" href="#main">Skip to content</a>
-<canvas id="stage" aria-hidden="true"></canvas>
 <main id="main">
-  <section class="wrap acct-stage" id="authView">
-    <div></div>
-    <div>
-      <p class="eyebrow">Your account</p>
-      <h1>Save your plant details once.</h1>
-      <p class="lede">Checkout fills itself, and your orders and repeat lists stay in one place on this device.</p>
-      <form id="detailsForm" novalidate>
+  <section class="in" id="authView" hidden>
+    <aside class="in-side">
+      <div class="in-bearing" id="inBearing" aria-hidden="true"><canvas></canvas></div>
+      <div class="in-copy">
+        <h2>Every order under one number.</h2>
+        <ul>
+          <li><b>Repeat a list in one tap</b><span>Your last order goes straight back in the cart.</span></li>
+          <li><b>Checkout fills itself</b><span>Name, GSTIN and delivery address stay saved.</span></li>
+          <li><b>See what is happening</b><span>Rates, payment and dispatch in one place.</span></li>
+        </ul>
+      </div>
+    </aside>
+    <div class="in-main"><div class="in-box">
+      <form id="stepPhone" novalidate hidden>
+        <p class="eyebrow">Your account</p>
+        <h1>Sign in with your mobile</h1>
+        <p class="lede">We text you a 6 digit code. There is no password to remember.</p>
+        <div class="field"><label for="inPhone">Mobile number</label>
+          <div class="in-phone"><span>+91</span><input id="inPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national"></div>
+          <span class="err" id="inErr" role="alert"></span></div>
+        <button class="btn in-go" id="sendBtn" type="submit">Send code</button>
+      </form>
+
+      <form id="stepCode" novalidate hidden>
+        <p class="eyebrow">Check your messages</p>
+        <h1>Enter the code</h1>
+        <p class="lede">Sent to <b id="sentTo"></b> <button type="button" class="in-link" id="changeNo">Change</button></p>
+        <div class="otp" role="group" aria-label="6 digit code">
+          <input inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Digit 1">
+          <input inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Digit 2">
+          <input inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Digit 3">
+          <input inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Digit 4">
+          <input inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Digit 5">
+          <input inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Digit 6">
+        </div>
+        <span class="err" id="codeErr" role="alert"></span>
+        <button class="btn in-go" id="codeBtn" type="submit">Verify and sign in</button>
+        <button type="button" class="in-link in-again" id="resend" disabled>Send the code again</button>
+      </form>
+
+      <form id="stepName" novalidate hidden>
+        <p class="eyebrow">Number verified</p>
+        <h1>Who are we billing?</h1>
+        <p class="lede">This goes on your invoices. You can change it any time.</p>
+        <div class="field"><label for="nName">Plant or purchaser name</label><input id="nName" autocomplete="organization" maxlength="120"></div>
+        <div class="field"><label for="nGst">GSTIN (optional)</label><input id="nGst" maxlength="15" style="text-transform:uppercase" autocomplete="off"></div>
+        <span class="err" id="nErr" role="alert"></span>
+        <button class="btn in-go" type="submit">Continue</button>
+      </form>
+
+      <form id="detailsForm" novalidate hidden>
+        <p class="eyebrow">Your account</p>
+        <h1>Save your details once</h1>
+        <p class="lede">Checkout fills itself, and your orders stay listed here. Everything stays on this device.</p>
         <div class="field"><label for="aname">Plant or purchaser name</label><input id="aname" autocomplete="organization"><span class="err" id="nameErr"></span></div>
         <div class="grid2">
           <div class="field"><label for="aphone">Mobile</label><input id="aphone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digits" autocomplete="tel"><span class="err" id="phoneErr"></span></div>
           <div class="field"><label for="agst">GSTIN (optional)</label><input id="agst" maxlength="15" style="text-transform:uppercase" autocomplete="off"></div>
         </div>
         <div class="field"><label for="aaddr">Delivery address (optional)</label><textarea id="aaddr" rows="2"></textarea></div>
-        <button class="btn" type="submit">Save details</button>
+        <button class="btn in-go" type="submit">Save details</button>
       </form>
-    </div>
+    </div></div>
   </section>
 
-  <section class="wrap acct-me" id="meView" hidden>
-    <div class="acct-top">
-      <div><p class="eyebrow">Your account</p><h1 id="meName"></h1><p id="meLine"></p></div>
-      <div class="acct-actions">
-        <a class="btn" href="shop.html">Open the catalogue</a>
-        <a class="btn line" id="ledgerWa" target="_blank" rel="noopener">Ask for a statement</a>
-        <button class="btn line" id="editMe">Edit</button>
-        <button class="btn line" id="logout">Sign out</button>
+  <section class="acct-me" id="meView" hidden>
+    <div class="me-band"><div class="wrap">
+      <div class="me-top">
+        <div><p class="me-kicker">Your account</p><h1 id="meName"></h1><p id="meLine"></p></div>
+        <div class="acct-actions">
+          <a class="btn" href="shop.html">Open the catalogue</a>
+          <button class="btn line" id="logout">Sign out</button>
+        </div>
       </div>
+      <div class="me-stats" id="meStats"></div>
+    </div></div>
+    <div class="wrap me-grid">
+      <div><h2 class="me-h">Your orders</h2><div class="acct-orders" id="orders" aria-label="Your orders"></div></div>
+      <aside class="me-side">
+        <section class="me-card" id="meDetails">
+          <div class="me-card-head"><h2>Billing and delivery</h2><button class="in-link" id="editMe">Edit</button></div>
+          <dl><div><dt>Name</dt><dd id="dName"></dd></div><div><dt>GSTIN</dt><dd id="dGst"></dd></div><div><dt>Address</dt><dd id="dAddr"></dd></div></dl>
+        </section>
+        <form class="me-card" id="editForm" novalidate hidden>
+          <div class="me-card-head"><h2>Billing and delivery</h2></div>
+          <div class="field"><label for="eName">Plant or purchaser name</label><input id="eName" maxlength="120"></div>
+          <div class="field"><label for="eGst">GSTIN (optional)</label><input id="eGst" maxlength="15" style="text-transform:uppercase"></div>
+          <div class="field"><label for="eAddr">Delivery address</label><textarea id="eAddr" rows="3" maxlength="400"></textarea></div>
+          <span class="err" id="editErr" role="alert"></span>
+          <div class="me-form-btns"><button class="btn sm" type="submit">Save</button><button class="btn line sm" type="button" id="editCancel">Cancel</button></div>
+        </form>
+        <section class="me-card">
+          <h2>Need a statement?</h2>
+          <p>The counter sends your account statement on WhatsApp.</p>
+          <a class="btn line sm" id="ledgerWa" target="_blank" rel="noopener">Ask on WhatsApp</a>
+        </section>
+        <section class="me-card">
+          <h2>The counter</h2>
+          <p>Shop 191, RIICO Hanuman Market, Neemrana. Open 9 to 8.</p>
+          <a class="in-link" href="tel:+917240107540">+91 72401 07540</a>
+        </section>
+      </aside>
     </div>
-    <div class="acct-orders" id="orders" aria-label="Your orders"></div>
   </section>
 </main>
-<script src="assets/app.js?v=52"></script>
-<script src="assets/account.js?v=2"></script>
-<script type="module" src="assets/stage.js?v=8"></script>
+<script src="assets/app.js?v=56"></script>
+<script src="assets/account.js?v=4"></script>
 </body>
 </html>

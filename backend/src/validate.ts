@@ -49,13 +49,14 @@ export const ContentIn = z.object({
   address: z.string().max(300),
 }).partial().strict();
 
-export const RegisterIn = z.object({
-  name: z.string().min(2).max(80),
-  phone: z.string().regex(/^[0-9+\-\s]{10,15}$/, 'Valid phone required').transform((s) => s.replace(/[\s-]/g, '')),
-  password: z.string().min(8).max(72),
-});
+const Mobile = z.string().regex(/^[6-9][0-9]{9}$/);
 
-export const CustomerLoginIn = z.object({
-  phone: z.string().regex(/^[0-9+\-\s]{10,15}$/).transform((s) => s.replace(/[\s-]/g, '')),
-  password: z.string().min(1).max(72),
+export const OtpRequestIn = z.object({ phone: Mobile });
+
+export const OtpVerifyIn = z.object({ phone: Mobile, code: z.string().regex(/^[0-9]{6}$/) });
+
+export const ProfileIn = z.object({
+  name: z.string().trim().min(2).max(120),
+  gstin: z.string().trim().toUpperCase().regex(/^$|^[0-9A-Z]{15}$/).default(''),
+  address: z.string().trim().max(400).default(''),
 });

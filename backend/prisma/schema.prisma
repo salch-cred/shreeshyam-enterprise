@@ -33,8 +33,11 @@ model User {
   id           String   @id @default(cuid())
   name         String
   phone        String   @unique
-  passwordHash String   @map("password_hash")
+  passwordHash String   @default("") @map("password_hash")
+  gstin        String   @default("")
+  address      String   @default("")
   role         String   @default("customer")
+  lastLogin    DateTime? @map("last_login")
   createdAt    DateTime @default(now()) @map("created_at")
 
   @@map("users")
@@ -46,6 +49,10 @@ model Invoice {
   type     String   @default("TAX") // TAX | EST
   customer String   @default("")
   phone    String   @default("")
+  gstin    String   @default("")
+  address  String   @default("")
+  orderId  String   @default("") @map("order_id")
+  mode     String   @default("")
   items    Json
   subtotal Int      @default(0)
   discount Int      @default(0)
@@ -55,6 +62,7 @@ model Invoice {
   balance  Int      @default(0)
 
   @@index([date])
+  @@index([orderId])
   @@map("invoices")
 }
 
@@ -63,10 +71,37 @@ model Order {
   source  String   @default("web")
   text    String   @default("")
   status  String   @default("new")
+  phone   String   @default("")
+  invoiceNo String @default("") @map("invoice_no")
+  paidAt  DateTime? @map("paid_at")
   created DateTime @default(now())
 
   @@index([status])
+  @@index([phone])
   @@map("orders")
+}
+
+model LoginLog {
+  id    Int      @id @default(autoincrement())
+  phone String
+  at    DateTime @default(now())
+
+  @@index([phone, at])
+  @@map("login_log")
+}
+
+model OtpCode {
+  id       String   @id
+  phone    String
+  ip       String
+  codeHash String   @map("code_hash")
+  attempts Int      @default(0)
+  used     Boolean  @default(false)
+  created  DateTime @default(now())
+  expires  DateTime
+
+  @@index([phone, created])
+  @@map("otp_codes")
 }
 
 model StockLog {

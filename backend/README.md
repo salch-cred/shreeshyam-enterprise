@@ -6,7 +6,7 @@
 
 Routes:
 - `GET /health` — `{ok, db}` tells you if Postgres is wired
-- `POST /auth/login {pin}` → `{token, role}` (admin/billing JWT, 12h)
+- `POST /auth/login {password}` → `{token, role}` (admin JWT, 12h)
 - `GET /products?q&category&page&pageSize` — public, paginated to 100/page, edge cached
 - `POST /products` (admin) — upsert unlimited SKUs, Zod validated
 - `POST /products/:id/stock` (admin+billing) — stock move in a transaction + log

@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { authRoutes } from './routes/auth.js';
 import { billing } from './routes/billing.js';
+import { customer } from './routes/customer.js';
 import { misc } from './routes/misc.js';
 import { products } from './routes/products.js';
 import { env } from './env.js';
@@ -19,6 +20,7 @@ export function createApp() {
   app.get('/health', (_req, res) => res.json({ ok: true, db: Boolean(process.env.DATABASE_URL) }));
   app.use('/auth', authRoutes);
   app.use('/products', products);
+  app.use('/', customer);
   app.use('/', billing);
   app.use('/', misc);
   app.use('/', payments);

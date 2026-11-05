@@ -1,10 +1,13 @@
 /* SSE Store — unlimited products via IndexedDB (not 5MB localStorage).
    Public pages read paginated. Admin writes unlimited. Export shards for Vercel. */
+// The backend's public address. Empty keeps the site static, with orders going by WhatsApp.
+const API_URL = '';
 const SSE = (() => {
   const DB = 'sse_db', LS_FALLBACK = 'sse_products_fb';
   const PAGE = 48;
   let mem = [];
   const $ = (s, r=document) => r.querySelector(s);
+  const api = () => (localStorage.getItem('sse_api') || API_URL).replace(/\/$/, '');
 
   function idb() {
     return new Promise((res, rej) => {
@@ -114,14 +117,17 @@ const SSE = (() => {
     localStorage.setItem('sse_seq_fy', cur);
     return `SSE/${cur}/${String(v).padStart(4, '0')}`;
   };
-  // Discount comes off the taxable value before GST, shared across lines by value.
+  // A line can carry its own % off. A bill discount then comes off the taxable value
+  // before GST, shared across lines by value.
+  const lineValue = it => it.qty * it.rate * (1 - Math.min(Math.max(0, Number(it.disc_pct) || 0), 100) / 100);
   function totals(items, discount = 0) {
-    const sub = items.reduce((a, it) => a + it.qty * it.rate, 0);
+    const gross = items.reduce((a, it) => a + it.qty * it.rate, 0);
+    const sub = items.reduce((a, it) => a + lineValue(it), 0);
     const disc = Math.min(Math.max(0, Number(discount) || 0), sub);
     const keep = sub > 0 ? (sub - disc) / sub : 1;
-    const gst = items.reduce((a, it) => a + it.qty * it.rate * keep * ((Number(it.gst_pct) || 0) / 100), 0);
+    const gst = items.reduce((a, it) => a + lineValue(it) * keep * ((Number(it.gst_pct) || 0) / 100), 0);
     const taxable = sub - disc, exact = taxable + gst, grand = Math.round(exact);
-    return { sub, disc, taxable, gst, keep, grand, round: grand - exact };
+    return { gross, itemDisc: gross - sub, sub, disc, taxable, gst, keep, grand, round: grand - exact };
   }
   function logStock(id, delta, reason) {
     try {
@@ -318,7 +324,7 @@ const SSE = (() => {
   // Scripts sit at the end of body, so the page is parsed by now on every page.
   if (document.body) chrome(); else document.addEventListener('DOMContentLoaded', chrome);
 
-  return { hdr: SSE_HDR, all, put, putMany, del, clearProducts, localDate, fy, seed, catalog, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, updateNavBadge, getCart, setCart, cartCount, toast, wa, $ };
+  return { api, hdr: SSE_HDR, all, put, putMany, del, clearProducts, localDate, fy, seed, catalog, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, lineValue, logStock, motion, updateNavBadge, getCart, setCart, cartCount, toast, wa, $ };
 })();
 
 

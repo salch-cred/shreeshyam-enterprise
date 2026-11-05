@@ -11,6 +11,14 @@ import { createRequire } from 'node:module';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(process.argv[2] || join(ROOT, '.e2e'));
+process.env.ADMIN_PASSWORD = 'test-counter-1';
+const loginFn = createRequire(import.meta.url)(join(ROOT, 'api/admin-login.js'));
+// Runs the real Vercel function, with the two response helpers Vercel adds.
+const runLogin = (req, body) => new Promise(done => {
+  const out = { code: 0, json: null };
+  const res = { setHeader() {}, status(c) { out.code = c; return res; }, json(j) { out.json = j; done(out); } };
+  loginFn({ method: req.method, headers: req.headers, body }, res);
+});
 await mkdir(OUT, { recursive: true });
 const require = createRequire(process.env.E2E_NODE_PATH ? join(process.env.E2E_NODE_PATH, 'x.js') : import.meta.url);
 const { chromium } = require('playwright-core');
@@ -19,6 +27,12 @@ const vercel = JSON.parse(await readFile(join(ROOT, 'vercel.json'), 'utf8'));
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml' };
 const base = vercel.headers[0].headers.map(h => [h.key, h.value.replace('; upgrade-insecure-requests', '')]);
 const server = createServer(async (req, res) => {
+  if (req.url === '/api/admin-login') {
+    let raw = ''; for await (const c of req) raw += c;
+    const o = await runLogin(req, raw ? JSON.parse(raw) : {});
+    res.statusCode = o.code; res.setHeader('Content-Type', 'application/json');
+    return res.end(JSON.stringify(o.json));
+  }
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   if (p === '/') p = '/index.html';
   if (!extname(p)) p += '.html';                    // Vercel cleanUrls
@@ -43,7 +57,7 @@ const problems = [];
 function check(name, ok, detail = '') { results.push({ name, ok: !!ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${!ok && detail ? '  -> ' + detail : ''}`); }
 async function ctx({ gl = false, ...opts } = {}) {
   const c = await browser.newContext({ viewport: { width: 1280, height: 760 }, ...opts });
-  await c.route(/^https?:\/\/(?!127\.0\.0\.1|fonts\.g)/, r => { problems.push('external request: ' + r.request().url()); r.abort(); });
+  await c.route(/^https?:\/\/(?!127\.0\.0\.1|fonts\.g)/, r => { problems.push('external request: ' + r.request().url()); r.abort().catch(() => {}); });
   const page = await c.newPage();
   // Playwright's own waitForFunction evals strings, which this site's CSP rightly blocks.
   page.waitForFunction = async (fn, arg, opts = {}) => {
@@ -76,7 +90,7 @@ const money = s => Number(String(s).replace(/[^0-9.-]/g, ''));
   const robots = await (await fetch(SITE + '/robots.txt')).text();
   check('robots.txt hides admin', /Disallow: \/admin/.test(robots));
   const html = {};
-  for (const p of ['index', 'shop', 'checkout', 'account', 'admin', 'billing', 'privacy', 'terms', '404']) html[p] = await (await fetch(`${SITE}/${p}.html`)).text();
+  for (const p of ['index', 'shop', 'checkout', 'account', 'admin', 'billing', 'invoice', 'privacy', 'terms', '404']) html[p] = await (await fetch(`${SITE}/${p}.html`)).text();
   check('No inline scripts or handlers in any page', Object.values(html).every(h => !/<script>/.test(h) && !/\son[a-z]+="/.test(h)));
   check('No default PIN anywhere in the console', !/2580/.test(html.admin) && !/2580/.test(await (await fetch(SITE + '/assets/admin.js')).text()));
   check('Leftover paint-shop text is gone', !/tinted/i.test(html.terms + await (await fetch(SITE + '/assets/admin.js')).text()));
@@ -193,6 +207,146 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await c.close();
 }
 
+/* ---------- SMS sign-in and online payment, against a stand-in backend ---------- */
+{
+  const { c, page } = await ctx();
+  const API = 'https://api.test', log = [];
+  let paid = 'failed', me = { name: '', phone: '9876543210', gstin: '', address: '' };
+  await c.addInitScript(a => localStorage.setItem('sse_api', a), API);
+  await page.route(API + '/**', r => {
+    const url = new URL(r.request().url()), m = r.request().method();
+    const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': 'application/json' };
+    if (m === 'OPTIONS') return r.fulfill({ status: 204, headers });
+    const body = r.request().postDataJSON?.() || null, send = (j, status = 200) => r.fulfill({ status, headers, body: JSON.stringify(j) });
+    log.push(m + ' ' + url.pathname);
+    if (url.pathname === '/auth/otp/status') return send({ sms: true });
+    if (url.pathname === '/auth/otp/request') return send({ ok: true, retryIn: 45 });
+    if (url.pathname === '/auth/otp/verify') return body.code === '123456' ? send({ token: 'tok', user: me }) : send({ error: 'That code is wrong or has expired. Check it or ask for a new one.' }, 401);
+    if (url.pathname === '/me' && m === 'PUT') { me = { ...me, ...body }; return send(me); }
+    if (url.pathname === '/me') return send(me);
+    if (url.pathname === '/me/orders') return send({ items: [{ id: 'SSEAB12', status: 'paid', invoice: 'WEB/26-27/0001', created: '2026-11-01T10:00:00Z', total: 1180, items: [{ id: 'BR-BRG-6205', name: 'Bearing 6205', qty: 2 }] }] });
+    if (url.pathname === '/payments/status') return send({ gateway: 'cashfree', cashfreeMode: 'sandbox', upiId: 'shop@upi' });
+    if (url.pathname === '/payments/create-order') return send({ mode: 'cashfree', cashfreeMode: 'sandbox', orderId: 'SSEPAY1', paymentSessionId: 's1', grand: 1180 }, 201);
+    if (url.pathname.startsWith('/payments/verify/')) return send({ status: paid, grand: 1180, invoiceNo: paid === 'paid' ? 'WEB/26-27/0002' : '' });
+    if (url.pathname === '/payments/invoice/SSEPAY1') return send({ no: 'WEB/26-27/0002', date: '2026-11-05T10:00:00Z', customer: 'Test Plant', phone: '9876543210', gstin: '08ABCDE1234F1Z5', address: 'Plot 1, RIICO', items: [{ id: 'BR-BRG-6205', name: 'Ball bearing 6205 ZZ', qty: 1, rate: 1000, gst_pct: 18, hsn: '8482', unit: 'nos' }], grand: 1180 });
+    return send({ error: 'unexpected' }, 404);
+  });
+  await page.route('https://sdk.cashfree.com/**', r => r.fulfill({ contentType: 'text/javascript', body: 'window.__cf=0;window.Cashfree=o=>({checkout:async a=>{window.__cf++;window.__cfMode=o.mode;window.__cfSess=a.paymentSessionId;return {}}});' }));
+  await go(page, '/account.html');
+  await page.waitForSelector('#stepPhone:not([hidden])');
+  await page.fill('#inPhone', '12345');
+  await page.click('#sendBtn');
+  check('Sign-in refuses a short number', /10 digit/.test(await page.textContent('#inErr')));
+  await page.fill('#inPhone', '9876543210');
+  await page.click('#sendBtn');
+  await page.waitForSelector('#stepCode:not([hidden])');
+  check('Code screen shows the number and a resend timer', /98765 43210/.test(await page.textContent('#sentTo')) && await page.isDisabled('#resend'));
+  await page.locator('.otp input').first().focus();
+  await page.keyboard.type('111111');
+  await page.waitForFunction(() => /wrong/.test(document.querySelector('#codeErr').textContent));
+  check('Wrong code shows the reason and clears the boxes', await page.evaluate(() => [...document.querySelectorAll('.otp input')].every(i => !i.value)));
+  await page.evaluate(() => { const b = document.querySelector('.otp input'), d = new DataTransfer(); d.setData('text', '123456'); b.dispatchEvent(new ClipboardEvent('paste', { clipboardData: d, bubbles: true, cancelable: true })); });
+  await page.waitForSelector('#stepName:not([hidden])');
+  check('Pasted code signs in, and a new customer is asked for a name', await page.evaluate(() => localStorage.getItem('sse_token') === 'tok'));
+  await page.fill('#nName', 'Test Plant');
+  await page.click('#stepName button');
+  await page.waitForSelector('#meView:not([hidden])');
+  check('Account page shows the verified number and server orders', /Verified by SMS/.test(await page.textContent('#meLine')) && /Paid/.test(await page.textContent('#orders')) && /1,180/.test(await page.textContent('#orders')));
+  await page.click('#editMe');
+  await page.fill('#eGst', 'SHORT');
+  await page.click('#editForm [type=submit]');
+  check('Account refuses a bad GSTIN', /15 characters/.test(await page.textContent('#editErr')));
+  await page.fill('#eGst', '08ABCDE1234F1Z5');
+  await page.fill('#eAddr', 'Plot 1, RIICO');
+  await page.click('#editForm [type=submit]');
+  await page.waitForFunction(() => /08ABCDE1234F1Z5/.test(document.querySelector('#dGst').textContent));
+  check('Saved details reach the server and the page', me.gstin === '08ABCDE1234F1Z5' && log.includes('PUT /me'));
+
+  await page.evaluate(() => SSE.setCart([{ id: 'BR-BRG-6205', name: 'Bearing 6205', qty: 1, rate: 1000, gst_pct: 18, img: '' }]));
+  await go(page, '/checkout.html');
+  await page.waitForSelector('#payPanel [data-m=card]');
+  check('Checkout offers Pay online first and fills saved details', await page.getAttribute('#payPanel [data-m=card]', 'aria-pressed') === 'true' && await page.inputValue('#coAddr') === 'Plot 1, RIICO');
+  await page.click('#coPay');
+  await page.waitForFunction(() => /did not go through/.test(document.querySelector('#coErr').textContent));
+  check('A failed payment keeps the cart and offers a retry', await page.evaluate(() => SSE.getCart().length === 1 && window.__cf === 1 && window.__cfMode === 'sandbox') && /again/.test(await page.textContent('#coPay')));
+  paid = 'paid';
+  await page.click('#coPay');
+  await page.waitForSelector('.done');
+  check('Paid only after the server confirms, without a second order', await page.evaluate(() => SSE.getCart().length === 0 && window.__cf === 2) && log.filter(l => l.includes('create-order')).length === 1);
+  check('Paid order is recorded as paid', await page.evaluate(() => JSON.parse(localStorage.sse_orders).at(-1).status === 'paid'));
+  check('Thank-you screen shows the tick and bill number', /Thank you/.test(await page.textContent('.done h2')) && await page.locator('.okmark').count() === 1 && /WEB\/26-27\/0002/.test(await page.textContent('.done-bill')));
+  await page.click('.done .btn');
+  await page.waitForSelector('.a4');
+  check('Paid bill opens from its link with one original sheet', await page.locator('.a4').count() === 1 && /Paid online/.test(await page.textContent('.a4')) && /WEB\/26-27\/0002/.test(await page.textContent('#billNo')) && await page.isVisible('#billPrint'));
+  check('Paid bill totals are right and nothing is due', /1,180\.00/.test(await page.textContent('.i-grand')) && /0\.00/.test(await page.textContent('.i-bal')));
+  await page.pdf({ path: join(OUT, 'invoice-paid-online.pdf'), preferCSSPageSize: true, printBackground: true });
+  await go(page, '/invoice.html?order=SSENOPE1');
+  await page.waitForFunction(() => /not found/.test(document.querySelector('#billNo').textContent));
+  check('A wrong bill link says so', await page.locator('.a4').count() === 0);
+  await go(page, '/account.html');
+  await page.waitForSelector('#meView:not([hidden])');
+  check('Paid order on the account page links its bill', await page.locator('.acct-row a[href*="invoice.html?order=SSEAB12"]').count() === 1);
+  await page.click('#logout');
+  await page.waitForSelector('#stepPhone:not([hidden])');
+  check('Sign out removes the session', await page.evaluate(() => localStorage.getItem('sse_token') === null));
+  await c.close();
+}
+
+/* ---------- paid online orders reach the counter ---------- */
+{
+  const { c, page } = await ctx();
+  const API = 'https://api.test', order = { amount: 1180, customer: { name: 'Web Buyer', address: 'Plot 1' }, items: [{ id: 'BR-BRG-6205', name: 'Ball bearing 6205 ZZ', qty: 2, rate: 500, gst_pct: 18, hsn: '8482', unit: 'nos' }] };
+  let markedAs = '', cashDone = false;
+  await c.addInitScript(a => localStorage.setItem('sse_api', a), API);
+  await page.route(API + '/**', r => {
+    const u = new URL(r.request().url()).pathname, headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Content-Type': 'application/json' };
+    if (r.request().method() === 'OPTIONS') return r.fulfill({ status: 204, headers });
+    const send = (j, status = 200) => r.fulfill({ status, headers, body: JSON.stringify(j) });
+    if (u === '/auth/login') return r.request().postDataJSON().password === 'test-counter-1' ? send({ token: 'staff' }) : send({ error: 'Wrong password' }, 401);
+    if (u === '/orders/SSEWEB2/mark-paid' && r.request().method() === 'POST') { markedAs = r.request().postDataJSON().mode; return send({ status: 'paid', invoiceNo: 'WEB/26-27/0002' }); }
+    if (u === '/customers') return send({ items: [{ name: 'Web Buyer', phone: '9876543210', gstin: '', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z', orders: 2, paid: 1180 }] });
+    if (u === '/customers/9876543210') return send({ customer: { name: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z' }, logins: ['2026-11-05T10:00:00Z'], orders: [{ id: 'SSEWEB1', status: 'paid', created: '2026-11-05T10:01:00Z', paid_at: '2026-11-05T10:02:00Z', invoice_no: 'WEB/26-27/0001', mode: 'Online', total: 1180, items: [{ name: 'Ball bearing 6205 ZZ', qty: 2 }] }] });
+    if (u === '/orders') return send({ items: [{ id: 'SSEWEB1', source: 'checkout', status: 'paid', phone: '9876543210', invoice_no: 'WEB/26-27/0001', text: JSON.stringify(order), created: '2026-11-05T10:00:00Z' }, { id: 'SSEWEB2', source: 'checkout', status: markedAs ? 'paid' : 'new', phone: '9876543210', invoice_no: markedAs ? 'WEB/26-27/0002' : '', text: JSON.stringify({ ...order, method: 'cod' }), created: '2026-11-05T11:00:00Z' }] });
+    if (u === '/invoices/online') return send({ items: [...(markedAs ? [{ no: 'WEB/26-27/0002', order_id: 'SSEWEB2', mode: markedAs, date: '2026-11-05T11:05:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] : []), { no: 'WEB/26-27/0001', order_id: 'SSEWEB1', mode: 'Online', date: '2026-11-05T10:00:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] });
+    return send({ error: 'unexpected' }, 404);
+  });
+  await go(page, '/admin.html');
+  await page.waitForSelector('#gateForm');
+  await page.fill('#pin', 'wrong-password'); await page.click('#unlock');
+  await page.waitForFunction(() => /Wrong password/.test(document.querySelector('#pinErr').textContent));
+  await page.fill('#pin', 'test-counter-1'); await page.click('#unlock');
+  await page.waitForSelector('#app:not([hidden])');
+  await page.click('[data-t=orders]');
+  await page.waitForSelector('.rpo');
+  const before = await page.evaluate(() => JSON.parse(localStorage.sse_stocklog || '[]').filter(l => l.id === 'BR-BRG-6205').reduce((a, l) => a + l.delta, 0) + 100000);
+  check('Paid online order shows in admin with its bill', /WEB\/26-27\/0001/.test(await page.textContent('#pane-orders')) && /paid/.test(await page.textContent('#pane-orders')) && /^2$/.test(await page.textContent('#ordN')));
+  check('Paid bill is filed in the ledger with nothing due', await page.evaluate(() => { const i = JSON.parse(localStorage.sse_invoices).find(x => x.no === 'WEB/26-27/0001'); return i && i.grand === 1180 && i.balance === 0 && i.online; }));
+  check('Paid bill cuts counter stock once', await page.evaluate(() => JSON.parse(localStorage.sse_stocklog || '[]').filter(l => l.id === 'BR-BRG-6205').length) === 1);
+  await page.click('#onlineSync');
+  await page.waitForTimeout(400);
+  check('Syncing again files nothing twice', await page.evaluate(() => JSON.parse(localStorage.sse_invoices).filter(x => x.no === 'WEB/26-27/0001').length === 1 && JSON.parse(localStorage.sse_orders).length === 2 && JSON.parse(localStorage.sse_stocklog).length === 1));
+  await page.click('.rpo');
+  await page.waitForFunction(() => window.__printed === 1);
+  check('Admin reprints the paid bill as original and duplicate', await page.locator('.a4').count() === 2);
+  await page.selectOption('.markpaid select', 'UPI');
+  await page.click('.mp');
+  check('Mark paid asks once before it saves', /Confirm/.test(await page.textContent('.mp')) && !markedAs);
+  await page.click('.mp');
+  await page.waitForFunction(() => JSON.parse(localStorage.sse_invoices).some(x => x.no === 'WEB/26-27/0002'));
+  check('Mark paid records the mode and files the bill with nothing due', markedAs === 'UPI' && await page.evaluate(() => { const i = JSON.parse(localStorage.sse_invoices).find(x => x.no === 'WEB/26-27/0002'); return i.mode === 'UPI' && i.balance === 0 && i.paid === 1180; }));
+  await page.waitForFunction(() => !document.querySelector('.mp'));
+  check('A paid order has no Mark paid button left', await page.locator('.rpo').count() === 2);
+  await page.click('[data-t=customers]');
+  await page.waitForSelector('.hist');
+  check('Customers tab lists accounts with join time and totals', /Web Buyer/.test(await page.textContent('#pane-customers')) && /Oct 2026/.test(await page.textContent('#pane-customers')) && /1,180/.test(await page.textContent('#pane-customers')));
+  await page.click('.hist');
+  await page.waitForSelector('.cust-time');
+  check('History shows join, sign-in, order and paid times', await page.locator('.cust-time li').count() === 4 && /Account created/.test(await page.textContent('.cust-time')) && /Signed in/.test(await page.textContent('.cust-time')) && /Paid by online payment/.test(await page.textContent('.cust-time')));
+  await page.click('#histBack');
+  await page.waitForSelector('.hist');
+  await c.close();
+}
+
 /* ---------- customer buys ---------- */
 {
   const { c, page } = await ctx();
@@ -246,28 +400,26 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
 /* ---------- console security ---------- */
 const { c: admin, page } = await ctx({ acceptDownloads: true });
 page.on('dialog', d => d.accept());
-const PIN = '749163';
+const PIN = 'test-counter-1';
 {
   await go(page, '/admin.html');
   await page.waitForSelector('#gateForm');
-  check('First run forces a new PIN', /Set your PIN/.test(await page.textContent('#gateTitle')));
-  await page.fill('#pin', '2580'); await page.click('#unlock');
-  check('Old 4-digit PIN is refused', /6 to 12/.test(await page.textContent('#pinErr')));
-  await page.fill('#pin', '111111'); await page.fill('#pin2', '111111'); await page.click('#unlock');
-  check('Easy PIN is refused', /guess/.test(await page.textContent('#pinErr')));
-  await page.fill('#pin', PIN); await page.fill('#pin2', PIN); await page.click('#unlock');
-  await page.waitForSelector('#app:not([hidden])');
-  check('PIN is stored only as a hash', await page.evaluate(p => { const s = localStorage.getItem('sse_pin'); return !s.includes(p) && JSON.parse(s).hash.length === 64; }, PIN));
-  await page.click('#lock');
-  await page.waitForSelector('#gateForm');
-  for (let i = 0; i < 5; i++) { await page.fill('#pin', '000000'); await page.click('#unlock'); await page.waitForFunction(n => document.querySelector('#unlock').disabled === false, 0); await page.waitForTimeout(120); }
-  check('Five wrong tries lock the console', /Locked|Wait/.test(await page.textContent('#pinErr')));
-  await page.fill('#pin', PIN); await page.click('#unlock');
-  await page.waitForTimeout(300);
-  check('Correct PIN is refused during lockout', await page.isVisible('#gate'));
-  await page.evaluate(() => localStorage.removeItem('sse_pin_fail'));
+  check('Admin asks for a password, with no PIN setup', /Counter console/.test(await page.textContent('#gateTitle')) && await page.getAttribute('#pin', 'type') === 'password' && !(await page.locator('#pin2').count()));
+  await page.click('#unlock');
+  check('Empty password is refused', /Enter the password/.test(await page.textContent('#pinErr')));
+  await page.fill('#pin', 'wrong-password'); await page.click('#unlock');
+  await page.waitForFunction(() => /Wrong password/.test(document.querySelector('#pinErr').textContent));
+  check('Wrong password stays on the gate', await page.isVisible('#gate'));
   await page.fill('#pin', PIN); await page.click('#unlock');
   await page.waitForSelector('#app:not([hidden])');
+  check('Password is never stored in the browser', await page.evaluate(p => !JSON.stringify({ ...localStorage, ...sessionStorage }).includes(p), PIN));
+  const fn = async (password, ip) => runLogin({ method: 'POST', headers: { 'x-forwarded-for': ip } }, { password });
+  let g; for (let i = 0; i < 10; i++) g = await fn('nope-nope-nope', '9.9.9.9');
+  g = await fn(PIN, '9.9.9.9');
+  check('Login function locks out after ten wrong tries', g.code === 429, g);
+  const keep = process.env.ADMIN_PASSWORD; delete process.env.ADMIN_PASSWORD;
+  g = await fn('anything', '8.8.8.8'); process.env.ADMIN_PASSWORD = keep;
+  check('Login function refuses when no password is set', g.code === 503, g);
   await page.waitForSelector('.pick');
 }
 
@@ -381,6 +533,20 @@ async function line(name, rate) {
   check('Same-state bill shows CGST and SGST', await page.evaluate(() => /CGST/.test(document.querySelector('.i-right').textContent) && !/IGST/.test(document.querySelector('.i-right').textContent)));
   check('Original and duplicate copies print', await page.locator('.a4').count() === 2);
   await page.pdf({ path: join(OUT, 'invoice-same-state.pdf'), preferCSSPageSize: true, printBackground: true });
+  await page.evaluate(r => buildPrint({ ...r, gstin: '' }), inv);
+  check('Bill without a buyer GSTIN leaves the GSTIN box off', await page.locator('.i-party.solo').count() === 2 && !/Buyer GSTIN|Unregistered|B2C/.test(await page.textContent('#printArea')));
+  check('Bill without a buyer GSTIN still shows the shop GSTIN and tax', /GSTIN 08SJHPS7017F1ZK/.test(await page.textContent('#printArea')) && /CGST/.test(await page.textContent('.i-right')));
+  await page.pdf({ path: join(OUT, 'invoice-no-gstin.pdf'), preferCSSPageSize: true, printBackground: true });
+  check('One-sheet tax bill has no footer strip', await page.locator('.i-foot').count() === 0 && !/computer generated/i.test(await page.textContent('#printArea')));
+  check('Item discount comes off before GST', await page.evaluate(() => { const t = SSE.totals([{ qty: 2, rate: 1000, gst_pct: 18, disc_pct: 10 }, { qty: 1, rate: 500, gst_pct: 18 }], 100); return t.gross === 2500 && t.itemDisc === 200 && t.taxable === 2200 && Math.abs(t.gst - 396) < .001 && t.grand === 2596; }));
+  await page.evaluate(r => buildPrint({ ...r, gross: 1000, itemDisc: 100, disc: 0, sub: 900, taxable: 900, keep: 1, items: [{ ...r.items[0], rate: 1000, disc_pct: 10 }] }), inv);
+  check('Item discount prints a Disc column and a total line', /Disc/.test(await page.textContent('.i-items thead')) && /10%/.test(await page.textContent('.i-items tbody')) && /Item discount/.test(await page.textContent('.i-right')) && /900\.00/.test(await page.textContent('.i-items tbody')));
+  await page.waitForSelector('#res .pick');
+  await line('6205', 1000);
+  const dc = page.locator('.discin').last(); await dc.fill('10'); await dc.blur();
+  await page.waitForFunction(() => /₹ 1,062/.test(document.querySelector('#payTotal').textContent));
+  check('Discount box on a line updates the bill', /Includes item discount/.test(await page.textContent('#totals')) && /900/.test(await page.textContent('.bline em')));
+  await page.click('.bline .rm');
 
   await page.click('#typeSeg [data-b=EST]');
   await line('Polymatic', 500);
@@ -442,7 +608,7 @@ async function line(name, rate) {
   const path = await (await dl).path();
   const data = JSON.parse(await readFile(path, 'utf8'));
   check('Backup holds products and bills', data.products.length > 50 && JSON.parse(data.local.sse_invoices).length >= 3);
-  check('Backup never contains the PIN', !JSON.stringify(data).includes('sse_pin'));
+  check('Backup never contains the password', !JSON.stringify(data).includes(PIN));
   await page.evaluate(() => { localStorage.removeItem('sse_invoices'); });
   await writeFile(join(OUT, 'backup.json'), JSON.stringify(data));
   const nav = page.waitForEvent('load');
@@ -453,7 +619,7 @@ async function line(name, rate) {
   await page.setInputFiles('#c_res', { name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"app":"nope"}') }).catch(() => {});
   await page.click('#lock');
   await page.waitForSelector('#gateForm');
-  check('Lock returns to the PIN screen', await page.isVisible('#pin'));
+  check('Lock returns to the password screen', await page.isVisible('#pin'));
   await page.fill('#pin', PIN); await page.click('#unlock');
   await page.waitForSelector('#app:not([hidden])');
   await page.screenshot({ path: join(OUT, 'desktop-console.png') });
