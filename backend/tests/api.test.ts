@@ -10,10 +10,10 @@ import { join } from 'path';
 
 const req = createRequire(process.env.PGLITE_PATH ? join(process.env.PGLITE_PATH, 'x.js') : __filename);
 const SCHEMA = `
-CREATE TABLE products(id text PRIMARY KEY,name text NOT NULL,brand text NOT NULL DEFAULT '-',category text NOT NULL DEFAULT 'General',unit text NOT NULL DEFAULT 'pcs',hsn text NOT NULL DEFAULT '',image text NOT NULL DEFAULT '',rate_retail int NOT NULL,rate_wholesale int NOT NULL,gst_pct int NOT NULL DEFAULT 18,stock int NOT NULL DEFAULT 0,min_stock int NOT NULL DEFAULT 5,updated_at timestamp(3) NOT NULL);
+CREATE TABLE products(id text PRIMARY KEY,name text NOT NULL,brand text NOT NULL DEFAULT '-',category text NOT NULL DEFAULT 'General',unit text NOT NULL DEFAULT 'pcs',hsn text NOT NULL DEFAULT '',image text NOT NULL DEFAULT '',rate_retail double precision NOT NULL,rate_wholesale double precision NOT NULL,gst_pct int NOT NULL DEFAULT 18,stock int NOT NULL DEFAULT 0,min_stock int NOT NULL DEFAULT 5,updated_at timestamp(3) NOT NULL);
 CREATE TABLE users(id text PRIMARY KEY,name text NOT NULL,email text NOT NULL UNIQUE,phone text NOT NULL DEFAULT '',password_hash text NOT NULL DEFAULT '',gstin text NOT NULL DEFAULT '',address text NOT NULL DEFAULT '',role text NOT NULL DEFAULT 'customer',last_login timestamp(3),created_at timestamp(3) NOT NULL DEFAULT now());
 CREATE TABLE login_log(id serial PRIMARY KEY,email text NOT NULL,at timestamp(3) NOT NULL DEFAULT now());
-CREATE TABLE invoices(no text PRIMARY KEY,date timestamp(3) NOT NULL DEFAULT now(),type text NOT NULL DEFAULT 'TAX',customer text NOT NULL DEFAULT '',phone text NOT NULL DEFAULT '',gstin text NOT NULL DEFAULT '',address text NOT NULL DEFAULT '',order_id text NOT NULL DEFAULT '',mode text NOT NULL DEFAULT '',items jsonb NOT NULL,subtotal int NOT NULL DEFAULT 0,discount int NOT NULL DEFAULT 0,gst int NOT NULL DEFAULT 0,grand int NOT NULL DEFAULT 0,paid int NOT NULL DEFAULT 0,balance int NOT NULL DEFAULT 0);
+CREATE TABLE invoices(no text PRIMARY KEY,date timestamp(3) NOT NULL DEFAULT now(),type text NOT NULL DEFAULT 'TAX',customer text NOT NULL DEFAULT '',phone text NOT NULL DEFAULT '',gstin text NOT NULL DEFAULT '',address text NOT NULL DEFAULT '',order_id text NOT NULL DEFAULT '',mode text NOT NULL DEFAULT '',items jsonb NOT NULL,subtotal int NOT NULL DEFAULT 0,discount double precision NOT NULL DEFAULT 0,gst int NOT NULL DEFAULT 0,grand int NOT NULL DEFAULT 0,paid double precision NOT NULL DEFAULT 0,balance double precision NOT NULL DEFAULT 0);
 CREATE TABLE orders(id text PRIMARY KEY,source text NOT NULL DEFAULT 'web',text text NOT NULL DEFAULT '',status text NOT NULL DEFAULT 'new',phone text NOT NULL DEFAULT '',email text NOT NULL DEFAULT '',invoice_no text NOT NULL DEFAULT '',paid_at timestamp(3),created timestamp(3) NOT NULL DEFAULT now());
 CREATE TABLE otp_codes(id text PRIMARY KEY,email text NOT NULL,ip text NOT NULL,code_hash text NOT NULL,attempts int NOT NULL DEFAULT 0,used boolean NOT NULL DEFAULT false,created timestamp(3) NOT NULL DEFAULT now(),expires timestamp(3) NOT NULL);
 CREATE TABLE stock_log(id serial PRIMARY KEY,product_id text NOT NULL,delta int NOT NULL,reason text NOT NULL DEFAULT '',date timestamp(3) NOT NULL DEFAULT now());
@@ -89,11 +89,52 @@ async function main() {
   r = await call(`/products/${pid}`, { method: 'DELETE', token: admin });
   check('Admin can delete a product', r.status === 200, r);
 
+  // The database is the one record
+  r = await call('/products/catalog');
+  check('Website can read the whole catalogue', r.status === 200 && r.json.items.some((p: any) => p.id === 'A'), r);
+  r = await call('/products/bulk', { body: { products: [{ id: 'B1', name: 'Bulk part', rate_retail: 99.5, rate_wholesale: 90, gst_pct: 0, image: 'assets/land/p/p1.webp' }] } });
+  check('Bulk save needs a staff token', r.status === 401, r);
+  r = await call('/products/bulk', { body: { products: [{ id: 'B1', name: 'Bulk part', rate_retail: 99.5, rate_wholesale: 90, gst_pct: 0, image: 'assets/land/p/p1.webp' }, { id: 'B2', name: 'Second', rate_retail: 1, rate_wholesale: 1 }] }, token: admin });
+  check('Admin saves many products, with paise and 0% GST', r.status === 201 && (await q(`SELECT rate_retail,gst_pct FROM products WHERE id='B1'`))[0].rate_retail === 99.5, r);
+  r = await call('/products', { body: { name: 'Bad image', rate_retail: 1, rate_wholesale: 1, image: 'javascript:alert(1)' }, token: admin });
+  check('A dangerous image address is refused', r.status === 400, r);
+  await q(`DELETE FROM products WHERE id IN ('B1','B2')`);
+
   const items = [{ id: 'A', name: 'Priced part', qty: 2, rate: 1000, gst_pct: 18 }];
   r = await call('/invoices', { body: { items, customer: 'X', discount: 200, paid: 1000 }, token: bill });
   check('Bill: discount comes off before GST', r.status === 201 && r.json.grand === 2124 && r.json.gst === 324 && r.json.balance === 1124, r);
   check('Bill number uses this financial year', /^SSE\/\d\d-\d\d\/0001$/.test(r.json.no), r);
   check('Tax bill cut the stock', (await q(`SELECT stock FROM products WHERE id='A'`))[0].stock === 8);
+  const firstNo = r.json.no as string;
+  r = await call('/invoices', { body: { items: [{ ...items[0], qty: 1, disc_pct: 10, hsn: '8482', unit: 'pcs' }], customer: 'Y', gstin: '08ABCDE1234F1Z5', address: 'Plot 2', mode: 'Credit', paid: 62.5 }, token: bill });
+  check('Bill: a line discount comes off before GST, and paise are kept', r.status === 201 && r.json.grand === 1062 && r.json.balance === 999.5, r);
+  check('Next bill takes the next number', r.json.no === firstNo.replace(/0001$/, '0002'), r);
+  const udhaar = r.json.no as string;
+  await q(`UPDATE products SET stock = stock + 1 WHERE id='A'`);
+  const both = await Promise.all([1, 2, 3].map(() => call('/invoices', { body: { items, customer: 'Z', paid: 2360 }, token: bill })));
+  check('Bills saved at the same moment get different numbers', both.every((x) => x.status === 201) && new Set(both.map((x) => x.json.no)).size === 3, both.map((x) => x.json));
+  await q(`UPDATE products SET stock = 8 WHERE id='A'`);
+  r = await call('/invoices/payment', { body: { no: udhaar, amount: 500 } });
+  check('Recording a payment needs a staff token', r.status === 401, r);
+  r = await call('/invoices/payment', { body: { no: udhaar, amount: 500 }, token: bill });
+  check('Part payment reduces the balance', r.status === 200 && r.json.balance === 499.5 && r.json.paid === 562.5, r);
+  r = await call('/invoices/payment', { body: { no: udhaar, amount: 99999 }, token: bill });
+  check('Payment is capped at what is due', r.json.balance === 0 && r.json.paid === 1062, r);
+  r = await call('/invoices/payment', { body: { no: 'NOPE', amount: 1 }, token: bill });
+  check('Payment on an unknown bill is refused', r.status === 404, r);
+  r = await call('/invoices/all', { token: bill });
+  const saved = r.json.items?.find((i: any) => i.no === udhaar);
+  check('Saved bill keeps GSTIN, address, mode and line discount', saved?.gstin === '08ABCDE1234F1Z5' && saved.address === 'Plot 2' && saved.mode === 'Credit' && saved.items[0].disc_pct === 10, saved);
+  const old = { no: 'SSE/25-26/0007', date: '2025-06-01T10:00:00.000Z', type: 'TAX', customer: 'Old', phone: '', gstin: '', address: '', mode: 'Cash', items, discount: 0, grand: 2360, paid: 2360, balance: 0 };
+  r = await call('/invoices/import', { body: { bills: [old] } });
+  check('Bill upload needs a staff token', r.status === 401, r);
+  const stockNow = (await q(`SELECT stock FROM products WHERE id='A'`))[0].stock;
+  r = await call('/invoices/import', { body: { bills: [old] }, token: admin });
+  check('Old bills upload with their own number and date', r.status === 201 && r.json.added === 1 && String((await q(`SELECT date FROM invoices WHERE no=$1`, [old.no]))[0].date).includes('2025'), r);
+  r = await call('/invoices/import', { body: { bills: [old] }, token: admin });
+  check('Uploading twice adds nothing, and stock stays put', r.json.added === 0 && (await q(`SELECT stock FROM products WHERE id='A'`))[0].stock === stockNow, r);
+  r = await call('/stock-log', { token: bill });
+  check('Stock moves can be read back', r.status === 200 && r.json.items.length > 0, r);
   r = await call('/invoices', { body: { items, paid: 99999 }, token: bill });
   check('Received above the total is refused', r.status === 400, r);
   r = await call('/invoices', { body: { items, discount: 99999 }, token: bill });
@@ -243,12 +284,12 @@ async function main() {
   check('Customer can open the paid bill', r.status === 200 && r.json.no === invNo && r.json.grand === 1180 && r.json.items[0].rate === 1000, r);
   r = await call('/payments/invoice/SSE000000');
   check('Unknown bill is not found', r.status === 404, r);
-  r = await call('/invoices/online');
+  r = await call('/invoices/all');
   check('Online bills need a staff token', r.status === 401, r);
-  r = await call('/invoices/online', { token: cust });
+  r = await call('/invoices/all', { token: cust });
   check('Customers cannot list online bills', r.status === 403, r);
-  r = await call('/invoices/online', { token: admin });
-  check('Admin receives the paid bill in full', r.status === 200 && r.json.items[0].no === invNo && r.json.items[0].items.length === 1, r);
+  r = await call('/invoices/all', { token: admin });
+  check('Admin receives the paid bill in full', r.status === 200 && r.json.items.find((i: any) => i.no === invNo)?.items.length === 1, r);
   r = await call('/orders', { token: admin });
   check('Admin order list shows the bill number', r.json.items.find((o: any) => o.id === cfId)?.invoice_no === invNo, r);
   r = await call('/payments/verify/SSE000000');
@@ -276,6 +317,10 @@ async function main() {
   const quoteId = (await call('/payments/create-order', { body: { ...buyer, items: [{ id: 'Q', qty: 1 }] } })).json.orderId;
   r = await call(`/orders/${quoteId}/mark-paid`, { body: { mode: 'Cash' }, token: admin });
   check('A quote without rates cannot be marked paid', r.status === 409, r);
+  r = await call(`/orders/${quoteId}/status`, { body: { status: 'delivered' } });
+  check('Order status needs a staff token', r.status === 401, r);
+  r = await call(`/orders/${quoteId}/status`, { body: { status: 'delivered' }, token: admin });
+  check('Order status is saved', r.status === 200 && (await q('SELECT status FROM orders WHERE id=$1', [quoteId]))[0].status === 'delivered', r);
   r = await call('/orders/NOPE/mark-paid', { body: { mode: 'Cash' }, token: admin });
   check('Unknown order is not found', r.status === 404, r);
 

@@ -13,17 +13,15 @@ const { Pool } = require('pg');
   const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 2 });
   const cat = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'data', 'catalog-001.json'), 'utf8'));
 
+  // Seeding only fills gaps. Rates and stock changed in admin must never be overwritten.
   let n = 0;
   for (const p of cat.products) {
     await pool.query(
       `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock,updated_at)
        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())
-       ON CONFLICT(id) DO UPDATE SET name=EXCLUDED.name, brand=EXCLUDED.brand, category=EXCLUDED.category,
-       unit=EXCLUDED.unit, hsn=EXCLUDED.hsn, image=EXCLUDED.image, rate_retail=EXCLUDED.rate_retail,
-       rate_wholesale=EXCLUDED.rate_wholesale, gst_pct=EXCLUDED.gst_pct, stock=EXCLUDED.stock,
-       min_stock=EXCLUDED.min_stock, updated_at=NOW()`,
+       ON CONFLICT(id) DO NOTHING`,
       [p.id, p.name, p.brand, p.category, p.unit, p.hsn || '', p.image || '',
-       p.rate_retail || 0, p.rate_wholesale || 0, p.gst_pct || 18, p.stock || 0, p.min_stock || 5]);
+       p.rate_retail || 0, p.rate_wholesale || 0, p.gst_pct ?? 18, p.stock || 0, p.min_stock || 5]);
     n++;
   }
   for (const [k, v] of Object.entries(cat.content || {})) {

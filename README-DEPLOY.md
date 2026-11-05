@@ -18,7 +18,7 @@ The website works alone. Until the backend is connected, account details stay on
 Add the password before this version goes live. Without it nobody can open admin.
 To change the password, change it in Vercel and redeploy.
 
-Bills and products in admin stay in that browser. Take Settings, Backup often.
+Until the backend is connected, bills and products stay in that browser, so take Settings, Backup often.
 
 ## 2. Database: products go in here
 
@@ -32,10 +32,11 @@ npm run db:push
 npm run seed
 ```
 
-`db:push` creates the tables. `seed` loads every product in `data/catalog-001.json`.
-Run `seed` again whenever the catalogue changes. It updates products and adds no duplicates.
+`db:push` creates the tables. `seed` loads `data/catalog-001.json` once and only fills gaps, so it never overwrites rates or stock changed in admin.
 
-Online checkout reads rates from this database. A product at rate 0 goes out as a quote and cannot be paid online, so add rates in admin, export the catalogue, replace `data/catalog-001.json`, and seed again.
+After the backend is connected, the database is the record: admin saves products, rates, stock, bills, udhaar payments and order status there first, and the website reads products from it. A change shows on the website within about 20 seconds. If the database cannot be reached, admin refuses the save and says so.
+
+The first time you sign in to admin after connecting, a banner offers **Upload now**. Press it on the computer that holds your bills. On any other computer, choose **Use the database only**.
 
 ## 3. Backend
 

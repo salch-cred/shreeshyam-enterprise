@@ -139,8 +139,8 @@ async function settlePaid(id: string, mode = 'Online') {
     const no = prefix + String(last + 1).padStart(4, '0');
     const sub = d.items.reduce((a, it) => a + it.qty * it.rate, 0);
     await c.query(
-      `INSERT INTO invoices(no,type,customer,phone,gstin,address,order_id,mode,items,subtotal,discount,gst,grand,paid,balance) VALUES($1,'TAX',$2,$3,$4,$5,$6,$7,$8,$9,0,$10,$11,$11,0)`,
-      [no, d.customer.name, row.phone, d.customer.gstin || '', d.customer.address || '', id, mode, JSON.stringify(d.items), sub, d.amount - sub, d.amount]);
+      `INSERT INTO invoices(no,type,customer,phone,gstin,address,order_id,mode,items,subtotal,discount,gst,grand,paid,balance) VALUES($1,'TAX',$2,$3,$4,$5,$6,$7,$8,$9,0,$10,$11,$12,0)`,
+      [no, d.customer.name, row.phone, d.customer.gstin || '', d.customer.address || '', id, mode, JSON.stringify(d.items), sub, d.amount - sub, d.amount, d.amount]);
     for (const it of d.items) {
       await c.query('UPDATE products SET stock = stock - $2, updated_at=NOW() WHERE id=$1', [it.id, it.qty]);
       await c.query('INSERT INTO stock_log(product_id,delta,reason) VALUES($1,$2,$3)', [it.id, -it.qty, no]);

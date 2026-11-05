@@ -981,6 +981,13 @@ body.bill .a4{box-shadow:0 1px 2px rgba(24,36,48,.14),0 30px 60px -36px rgba(24,
 .cust-time b{display:block;font-weight:600;color:#182430}
 .cust-time span{display:block;font-size:14px;color:#46525e;overflow-wrap:anywhere}
 
+/* admin: the one-time move to the database */
+.db-banner{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;margin-bottom:14px;border-radius:12px;background:#fdecd8;color:#182430}
+.db-banner[hidden]{display:none}
+.db-banner b{font-weight:600}
+.db-banner p{margin-top:2px;font-size:14px;color:#46525e}
+.db-banner .panel-tools{margin:0}
+
 /* printed A4 invoice */
 @page{size:A4 portrait;margin:0}
 @media print{

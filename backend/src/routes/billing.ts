@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import type { Pool } from 'pg';
+import type { PoolClient } from 'pg';
 import { auth } from '../auth.js';
 import { requireDb, tx } from '../db.js';
-import { InvoiceIn } from '../validate.js';
+import { BillsIn, InvoiceIn, PaymentIn } from '../validate.js';
 
 // Indian financial year label: 1 April 2026 to 31 March 2027 is 26-27.
 export function financialYear(d = new Date()) {
@@ -11,27 +11,21 @@ export function financialYear(d = new Date()) {
   return `${String(y).slice(2)}-${String(y + 1).slice(2)}`;
 }
 
-// Race-safe numbering: Postgres sequence when the DBA ran sequence.sql,
-// else legacy MAX()+1 (two simultaneous bills could collide there — the
-// UNIQUE PK then rejects one with 500 instead of silently duplicating).
-async function nextInvoiceNo(p: Pool): Promise<string> {
-  const fy = financialYear();
-  try {
-    const r = await p.query(`SELECT $1 || LPAD(nextval('invoice_seq')::text,4,'0') n`, [`SSE/${fy}/`]);
-    return r.rows[0].n as string;
-  } catch {
-    const r = await p.query(
-      `SELECT $1 || LPAD((COALESCE(MAX((regexp_match(no,'([0-9]+)$'))[1])::int,0)+1)::text,4,'0') n FROM invoices WHERE type='TAX' AND no LIKE $2`,
-      [`SSE/${fy}/`, `SSE/${fy}/%`]);
-    return r.rows[0].n as string;
-  }
+// Numbers run on from the last bill, under a lock, so two counters never share one.
+async function nextInvoiceNo(c: PoolClient): Promise<string> {
+  await c.query('SELECT pg_advisory_xact_lock(7541)');
+  const prefix = `SSE/${financialYear()}/`;
+  const last = (await c.query(`SELECT COALESCE(MAX((regexp_match(no,'([0-9]+)$'))[1]::int),0) n FROM invoices WHERE no LIKE $1`, [prefix + '%'])).rows[0].n as number;
+  return prefix + String(last + 1).padStart(4, '0');
 }
 
-// Discount comes off the taxable value before GST, shared across lines by value.
-export function money(items: { qty: number; rate: number; gst_pct: number }[], discount: number) {
-  const sub = items.reduce((a, it) => a + it.qty * it.rate, 0);
+// A line can carry its own % off. A bill discount then comes off the taxable value
+// before GST, shared across lines by value. The counter's screen uses the same sums.
+export function money(items: { qty: number; rate: number; gst_pct: number; disc_pct?: number }[], discount: number) {
+  const net = (it: { qty: number; rate: number; disc_pct?: number }) => it.qty * it.rate * (1 - (it.disc_pct || 0) / 100);
+  const sub = items.reduce((a, it) => a + net(it), 0);
   const keep = sub > 0 ? Math.max(0, sub - discount) / sub : 1;
-  const gst = items.reduce((a, it) => a + it.qty * it.rate * keep * (it.gst_pct / 100), 0);
+  const gst = items.reduce((a, it) => a + net(it) * keep * (it.gst_pct / 100), 0);
   return { sub: Math.round(sub), gst: Math.round(gst), grand: Math.round(sub * keep + gst) };
 }
 
@@ -45,17 +39,15 @@ billing.post('/invoices', auth(['admin', 'billing']), async (req, res, next) => 
     if (b.discount > t.sub) return next(Object.assign(new Error('Discount is more than the bill value'), { status: 400 }));
     if (b.paid > t.grand) return next(Object.assign(new Error('Received amount is more than the bill total'), { status: 400 }));
     const balance = t.grand - b.paid;
-    // Numbered before the transaction: taking a second pooled connection while
-    // holding one can deadlock the pool under load, and a failed nextval would abort it.
-    const n = b.type === 'TAX' ? await nextInvoiceNo(requireDb()) : `EST-${Date.now()}`;
     const no = await tx(async (c) => {
+      const n = b.type === 'TAX' ? await nextInvoiceNo(c) : `EST-${Date.now()}`;
       await c.query(
-        'INSERT INTO invoices(no,type,customer,phone,items,subtotal,discount,gst,grand,paid,balance) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
-        [n, b.type, b.customer, b.phone, JSON.stringify(b.items), t.sub, b.discount, t.gst, t.grand, b.paid, balance]);
+        'INSERT INTO invoices(no,type,customer,phone,gstin,address,mode,items,subtotal,discount,gst,grand,paid,balance) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)',
+        [n, b.type, b.customer, b.phone, b.gstin, b.address, b.mode, JSON.stringify(b.items), t.sub, b.discount, t.gst, t.grand, b.paid, balance]);
       if (b.type === 'TAX') {
         for (const it of b.items) {
-          await c.query('UPDATE products SET stock = stock - $2, updated_at=NOW() WHERE id=$1', [it.id, it.qty]);
-          await c.query('INSERT INTO stock_log(product_id,delta,reason) VALUES($1,$2,$3)', [it.id, -it.qty, n]);
+          const r = await c.query('UPDATE products SET stock = stock - $2, updated_at=NOW() WHERE id=$1', [it.id, it.qty]);
+          if (r.rowCount) await c.query('INSERT INTO stock_log(product_id,delta,reason) VALUES($1,$2,$3)', [it.id, -it.qty, n]);
         }
       }
       return n;
@@ -64,11 +56,54 @@ billing.post('/invoices', auth(['admin', 'billing']), async (req, res, next) => 
   } catch (e) { next(e); }
 });
 
-// Paid online bills with everything the counter needs to file and reprint them.
-billing.get('/invoices/online', auth(['admin', 'billing']), async (_req, res, next) => {
+// Every recent bill in full, so the counter's ledger, reports and reprints match the database.
+billing.get('/invoices/all', auth(['admin', 'billing']), async (_req, res, next) => {
   try {
     const rows = (await requireDb().query(
-      `SELECT no,order_id,date,customer,phone,gstin,address,mode,items,subtotal,gst,grand FROM invoices WHERE order_id<>'' ORDER BY date DESC LIMIT 200`)).rows;
+      `SELECT no,order_id,type,date,customer,phone,gstin,address,mode,items,subtotal,discount,gst,grand,paid,balance FROM invoices ORDER BY date DESC LIMIT 1500`)).rows;
+    res.json({ items: rows });
+  } catch (e) { next(e); }
+});
+
+// Money received later against udhaar. The row is locked so two counters cannot both apply it.
+billing.post('/invoices/payment', auth(['admin', 'billing']), async (req, res, next) => {
+  try {
+    const { no, amount } = PaymentIn.parse(req.body);
+    const out = await tx(async (c) => {
+      const r = (await c.query('SELECT grand,paid,balance FROM invoices WHERE no=$1 FOR UPDATE', [no])).rows[0] as { grand: number; paid: number; balance: number } | undefined;
+      if (!r) return null;
+      const paid = r.paid + Math.min(amount, r.balance), balance = Math.max(0, r.grand - paid);
+      await c.query('UPDATE invoices SET paid=$2,balance=$3 WHERE no=$1', [no, paid, balance]);
+      return { paid, balance };
+    });
+    if (!out) return next(Object.assign(new Error('Bill not found'), { status: 404 }));
+    res.json(out);
+  } catch (e) { next(e); }
+});
+
+// One-time move of bills from a browser. Bills already here are left alone, and stock is
+// not touched because those sales are already counted in the products sent with them.
+billing.post('/invoices/import', auth(['admin']), async (req, res, next) => {
+  try {
+    const { bills } = BillsIn.parse(req.body);
+    let added = 0;
+    await tx(async (c) => {
+      for (const b of bills) {
+        const t = money(b.items, b.discount);
+        const r = await c.query(
+          `INSERT INTO invoices(no,type,date,customer,phone,gstin,address,mode,items,subtotal,discount,gst,grand,paid,balance)
+           VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT(no) DO NOTHING`,
+          [b.no, b.type, b.date, b.customer, b.phone, b.gstin, b.address, b.mode, JSON.stringify(b.items), t.sub, b.discount, t.gst, b.grand, b.paid, b.balance]);
+        added += r.rowCount || 0;
+      }
+    });
+    res.status(201).json({ added });
+  } catch (e) { next(e); }
+});
+
+billing.get('/stock-log', auth(['admin', 'billing']), async (_req, res, next) => {
+  try {
+    const rows = (await requireDb().query('SELECT product_id,delta,reason,date FROM stock_log ORDER BY id DESC LIMIT 40')).rows;
     res.json({ items: rows });
   } catch (e) { next(e); }
 });

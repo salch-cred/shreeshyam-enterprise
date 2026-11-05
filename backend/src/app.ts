@@ -15,7 +15,7 @@ export function createApp() {
   app.use(helmet());
   app.use(cors({ origin: env.CORS_ORIGIN.split(',').map((o) => o.trim()), maxAge: 86400 }));
   // The webhook route reads the raw body to check its signature, so JSON parsing skips it.
-  app.use((req, res, next) => (req.path === '/payments/webhook' ? next() : express.json({ limit: '256kb' })(req, res, next)));
+  app.use((req, res, next) => (req.path === '/payments/webhook' ? next() : express.json({ limit: /^\/(products|invoices\/import)/.test(req.path) ? '4mb' : '256kb' })(req, res, next)));
 
   app.get('/health', (_req, res) => res.json({ ok: true, db: Boolean(process.env.DATABASE_URL) }));
   app.use('/auth', authRoutes);

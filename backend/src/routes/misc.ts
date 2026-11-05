@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { auth } from '../auth.js';
 import { requireDb } from '../db.js';
 import { ContentIn, OrderIn } from '../validate.js';
@@ -20,6 +21,15 @@ misc.get('/orders', auth(['admin']), async (req, res, next) => {
     const limit = Math.min(200, Math.max(1, Number(req.query.limit) || 100));
     const rows = (await requireDb().query('SELECT id,source,text,status,phone,invoice_no,paid_at,created FROM orders ORDER BY created DESC LIMIT $1', [limit])).rows;
     res.json({ items: rows });
+  } catch (e) { next(e); }
+});
+
+misc.post('/orders/:id/status', auth(['admin']), async (req, res, next) => {
+  try {
+    const { status } = z.object({ status: z.enum(['confirmed', 'delivered']) }).parse(req.body);
+    const r = await requireDb().query('UPDATE orders SET status=$2 WHERE id=$1', [req.params.id, status]);
+    if (!r.rowCount) return next(Object.assign(new Error('Order not found'), { status: 404 }));
+    res.json({ ok: true });
   } catch (e) { next(e); }
 });
 

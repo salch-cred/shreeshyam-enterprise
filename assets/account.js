@@ -122,7 +122,7 @@ $('#detailsForm').addEventListener('submit', e => {
 });
 
 /* Signed in */
-const STATUS = { paid: ['Paid', 'ok'], packed: ['Packed', 'ok'], dispatched: ['Dispatched', 'ok'], done: ['Delivered', 'ok'] };
+const STATUS = { paid: ['Paid', 'ok'], confirmed: ['Confirmed', 'ok'], delivered: ['Delivered', 'ok'] };
 function orders(c) {
   const local = read('sse_orders', []).filter(o => !o.phone || o.phone === c.phone || (c.email && o.email === c.email)).reverse();
   const seen = new Set(serverOrders.map(o => o.id));

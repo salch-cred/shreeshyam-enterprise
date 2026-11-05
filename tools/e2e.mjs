@@ -306,7 +306,7 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   const { c, page } = await ctx();
   const API = 'https://api.test', order = { amount: 1180, customer: { name: 'Web Buyer', address: 'Plot 1' }, items: [{ id: 'BR-BRG-6205', name: 'Ball bearing 6205 ZZ', qty: 2, rate: 500, gst_pct: 18, hsn: '8482', unit: 'nos' }] };
   let markedAs = '', cashDone = false;
-  await c.addInitScript(a => localStorage.setItem('sse_api', a), API);
+  await c.addInitScript(a => { localStorage.setItem('sse_api', a); localStorage.setItem('sse_db_ready', '1'); }, API);
   await page.route(API + '/**', r => {
     const u = new URL(r.request().url()).pathname, headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Content-Type': 'application/json' };
     if (r.request().method() === 'OPTIONS') return r.fulfill({ status: 204, headers });
@@ -316,7 +316,9 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
     if (u === '/customers') return send({ items: [{ name: 'Web Buyer', email: 'buyer@example.com', phone: '9876543210', gstin: '', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z', orders: 2, paid: 1180 }] });
     if (u === '/customers/buyer%40example.com') return send({ customer: { name: 'Web Buyer', email: 'buyer@example.com', phone: '9876543210', gstin: '', address: 'Plot 1', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z' }, logins: ['2026-11-05T10:00:00Z'], orders: [{ id: 'SSEWEB1', status: 'paid', created: '2026-11-05T10:01:00Z', paid_at: '2026-11-05T10:02:00Z', invoice_no: 'WEB/26-27/0001', mode: 'Online', total: 1180, items: [{ name: 'Ball bearing 6205 ZZ', qty: 2 }] }] });
     if (u === '/orders') return send({ items: [{ id: 'SSEWEB1', source: 'checkout', status: 'paid', phone: '9876543210', invoice_no: 'WEB/26-27/0001', text: JSON.stringify(order), created: '2026-11-05T10:00:00Z' }, { id: 'SSEWEB2', source: 'checkout', status: markedAs ? 'paid' : 'new', phone: '9876543210', invoice_no: markedAs ? 'WEB/26-27/0002' : '', text: JSON.stringify({ ...order, method: 'cod' }), created: '2026-11-05T11:00:00Z' }] });
-    if (u === '/invoices/online') return send({ items: [...(markedAs ? [{ no: 'WEB/26-27/0002', order_id: 'SSEWEB2', mode: markedAs, date: '2026-11-05T11:05:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] : []), { no: 'WEB/26-27/0001', order_id: 'SSEWEB1', mode: 'Online', date: '2026-11-05T10:00:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] });
+    if (u === '/products/catalog') return send({ items: [{ id: 'BR-BRG-6205', name: 'Ball bearing 6205 ZZ', brand: 'SKF', category: 'Bearings', unit: 'nos', hsn: '8482', image: '', rate_retail: 200, rate_wholesale: 180, gst_pct: 18, stock: 38, min_stock: 5 }] });
+    if (u === '/stock-log') return send({ items: [{ product_id: 'BR-BRG-6205', delta: -2, reason: 'WEB/26-27/0001', date: '2026-11-05T10:02:00Z' }] });
+    if (u === '/invoices/all') return send({ items: [...(markedAs ? [{ no: 'WEB/26-27/0002', order_id: 'SSEWEB2', mode: markedAs, date: '2026-11-05T11:05:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] : []), { no: 'WEB/26-27/0001', order_id: 'SSEWEB1', mode: 'Online', date: '2026-11-05T10:00:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] });
     return send({ error: 'unexpected' }, 404);
   });
   await go(page, '/admin.html');
@@ -327,10 +329,9 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.waitForSelector('#app:not([hidden])');
   await page.click('[data-t=orders]');
   await page.waitForSelector('.rpo');
-  const before = await page.evaluate(() => JSON.parse(localStorage.sse_stocklog || '[]').filter(l => l.id === 'BR-BRG-6205').reduce((a, l) => a + l.delta, 0) + 100000);
   check('Paid online order shows in admin with its bill', /WEB\/26-27\/0001/.test(await page.textContent('#pane-orders')) && /paid/.test(await page.textContent('#pane-orders')) && /^2$/.test(await page.textContent('#ordN')));
   check('Paid bill is filed in the ledger with nothing due', await page.evaluate(() => { const i = JSON.parse(localStorage.sse_invoices).find(x => x.no === 'WEB/26-27/0001'); return i && i.grand === 1180 && i.balance === 0 && i.online; }));
-  check('Paid bill cuts counter stock once', await page.evaluate(() => JSON.parse(localStorage.sse_stocklog || '[]').filter(l => l.id === 'BR-BRG-6205').length) === 1);
+  check('Counter shows the stock and rates the database holds', await page.evaluate(async () => { const p = (await SSE.all()).find(x => x.id === 'BR-BRG-6205'); return p.stock === 38 && p.rate_retail === 200 && (await SSE.all()).length === 1; }));
   await page.click('#onlineSync');
   await page.waitForTimeout(400);
   check('Syncing again files nothing twice', await page.evaluate(() => JSON.parse(localStorage.sse_invoices).filter(x => x.no === 'WEB/26-27/0001').length === 1 && JSON.parse(localStorage.sse_orders).length === 2 && JSON.parse(localStorage.sse_stocklog).length === 1));
@@ -363,6 +364,80 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
   await page.waitForFunction(() => document.querySelector('.foot').classList.contains('in'));
   check('Footer keeps its full-width layout at the bottom of the page', await page.evaluate(() => { const f = document.querySelector('#foot'), w = f.clientWidth, parts = ['.foot-call', '.foot-top', '.foot-word', '.foot-end'].map(s => document.querySelector(s).getBoundingClientRect()); return getComputedStyle(f).display === 'block' && parts.every(r => r.left === 0 && Math.round(r.width) === w); }));
+  await c.close();
+}
+
+/* ---------- with a backend, admin saves to the database first ---------- */
+{
+  const { c, page } = await ctx({ acceptDownloads: true });
+  const API = 'https://api.test', calls = [], base = { id: 'BR-BRG-6205', name: 'Ball bearing 6205 ZZ', brand: 'SKF', category: 'Bearings', unit: 'nos', hsn: '8482', image: '', rate_retail: 500, rate_wholesale: 450, gst_pct: 18, stock: 40, min_stock: 5 };
+  let down = false;
+  const bills = [], stockOf = () => base.stock;
+  await c.addInitScript(a => localStorage.setItem('sse_api', a), API);
+  await page.route(API + '/**', r => {
+    const q = r.request(), u = new URL(q.url()).pathname, m = q.method(), headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': 'application/json' };
+    if (m === 'OPTIONS') return r.fulfill({ status: 204, headers });
+    const send = (j, status = 200) => r.fulfill({ status, headers, body: JSON.stringify(j) }), body = q.postDataJSON?.() || {};
+    if (m !== 'GET') calls.push(m + ' ' + u);
+    if (down && m !== 'GET') return r.abort().catch(() => {});
+    if (u === '/auth/login') return send({ token: 'staff' });
+    if (u === '/orders') return send({ items: [] });
+    if (u === '/products/catalog') return send({ items: [base] });
+    if (u === '/stock-log') return send({ items: [] });
+    if (u === '/invoices/all') return send({ items: bills });
+    if (u === '/products/bulk') { calls.bulk = body.products.length; return send({ saved: body.products.length }, 201); }
+    if (u === '/invoices/import') { bills.push(...body.bills); return send({ added: body.bills.length }, 201); }
+    if (u === '/products' && m === 'POST') { Object.assign(base, body.id === base.id ? body : {}); return send({ id: body.id }, 201); }
+    if (u.endsWith('/stock')) { base.stock += body.delta; return send({ ok: true }); }
+    if (u === '/invoices' && m === 'POST') { const no = 'SSE/26-27/0042', grand = 590; bills.push({ ...body, no, order_id: '', date: '2026-11-05T12:00:00Z', grand, balance: grand - body.paid }); return send({ no, grand, balance: grand - body.paid }, 201); }
+    if (u === '/invoices/payment') { const i = bills.find(x => x.no === body.no); i.paid += body.amount; i.balance -= body.amount; return send({ paid: i.paid, balance: i.balance }); }
+    return send({ error: 'unexpected' }, 404);
+  });
+  await go(page, '/admin.html');
+  await page.waitForSelector('#gateForm');
+  await page.fill('#pin', 'test-counter-1'); await page.click('#unlock');
+  await page.waitForSelector('#dbBanner:not([hidden])');
+  check('First sign-in offers the upload and pulls nothing over this browser', await page.evaluate(async () => (await SSE.all()).length > 50));
+  await page.click('#dbUp');
+  await page.waitForFunction(() => document.querySelector('#dbBanner').hidden);
+  check('Upload sends every product, then this browser follows the database', calls.bulk > 50 && await page.evaluate(async () => (await SSE.all()).length === 1));
+  await page.click('[data-t=products]');
+  await page.waitForSelector('.st');
+  await page.click('.st');
+  await page.fill('.paybox input', '5');
+  await page.click('.paybox .ok');
+  await page.waitForTimeout(300);
+  check('Stock change is saved to the database', calls.some(l => l.endsWith('/stock')) && stockOf() === 45);
+  await page.click('[data-t=billing]');
+  await page.waitForSelector('#res .pick');
+  check('Bill number waits for the database', /Number on save/.test(await page.textContent('#invNo')));
+  await page.fill('#bq', '6205'); await page.waitForSelector('#res .add'); await page.click('#res .add');
+  await page.fill('#cust', 'Test Plant');
+  down = true;
+  await page.click('#save');
+  await page.waitForFunction(() => /database/.test(document.querySelector('#billErr').textContent));
+  check('If the database cannot be reached, no bill is saved or printed', await page.evaluate(() => JSON.parse(localStorage.sse_invoices || '[]').length === 0 && window.__printed === 0));
+  down = false;
+  await page.fill('#paid', '100');
+  await page.click('#save');
+  await page.waitForFunction(() => window.__printed === 1);
+  check('The database gives the bill its number', await page.evaluate(() => JSON.parse(localStorage.sse_invoices).at(-1).no === 'SSE/26-27/0042') && bills.length === 1 && bills[0].mode.length > 0);
+  await page.click('[data-t=ledger]');
+  await page.waitForSelector('.rk');
+  await page.fill('.paybox input', '200');
+  await page.click('.rk');
+  await page.waitForFunction(() => /Due|settled/i.test(document.querySelector('#pane-ledger').textContent));
+  await page.waitForTimeout(200);
+  check('Udhaar payment is saved to the database', calls.includes('POST /invoices/payment') && bills[0].paid === 300);
+  await c.close();
+}
+{
+  const { c, page } = await ctx();
+  await c.addInitScript(() => localStorage.setItem('sse_api', 'https://api.test'));
+  await page.route('https://api.test/**', r => r.fulfill({ headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }, body: JSON.stringify({ items: [{ id: 'DB-1', name: 'Part from the database', brand: 'SKF', category: 'Bearings', unit: 'nos', hsn: '8482', image: '', rate_retail: 750, rate_wholesale: 700, gst_pct: 18, stock: 9, min_stock: 5 }] }) }));
+  await go(page, '/shop.html');
+  await page.waitForSelector('.card');
+  check('Website shows products and rates from the database', /Part from the database/.test(await page.textContent('.card')) && /750/.test(await page.textContent('.card')));
   await c.close();
 }
 

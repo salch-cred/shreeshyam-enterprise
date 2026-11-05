@@ -96,10 +96,10 @@ function buildPrint(r, opts = {}) {
   SSE.$('#printArea').innerHTML = !isTax ? copy('Not a tax invoice') : opts.single ? copy('Original for recipient') : copy('Original for recipient') + copy('Duplicate for supplier');
 }
 
-/* A bill from the backend, in the shape the counter's own bills use. */
+/* A bill from the database, in the shape the console and the print use. */
 function onlineBill(x) {
-  const t = SSE.totals(x.items, 0), code = STATES[(x.gstin || '').slice(0, 2)] ? x.gstin.slice(0, 2) : SHOP.state;
-  return { no: x.no, date: x.date, type: 'TAX', customer: x.customer, phone: x.phone, gstin: x.gstin, address: x.address, mode: x.mode || 'Online', online: true, orderId: x.order_id,
-    items: x.items, gross: t.gross, itemDisc: t.itemDisc, sub: t.sub, disc: 0, taxable: t.taxable, gst: t.gst, keep: t.keep, round: t.round, grand: t.grand,
-    supply: code, inter: code !== SHOP.state, paid: t.grand, balance: 0 };
+  const t = SSE.totals(x.items, x.discount || 0), code = STATES[(x.gstin || '').slice(0, 2)] ? x.gstin.slice(0, 2) : SHOP.state;
+  return { no: x.no, date: x.date, type: x.type || 'TAX', customer: x.customer, phone: x.phone, gstin: x.gstin, address: x.address, mode: x.mode || 'Online', online: !!x.order_id || x.order_id === undefined, orderId: x.order_id,
+    items: x.items, gross: t.gross, itemDisc: t.itemDisc, sub: t.sub, disc: t.disc, taxable: t.taxable, gst: t.gst, keep: t.keep, round: t.round, grand: x.grand ?? t.grand,
+    supply: code, inter: code !== SHOP.state, paid: x.paid ?? t.grand, balance: x.balance ?? 0 };
 }

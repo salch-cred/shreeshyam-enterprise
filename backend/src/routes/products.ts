@@ -1,9 +1,37 @@
 import { Router } from 'express';
 import { auth } from '../auth.js';
+import type { z } from 'zod';
 import { requireDb, tx } from '../db.js';
-import { ProductIn, StockMove } from '../validate.js';
+import { ProductIn, ProductsIn, StockMove } from '../validate.js';
 
 export const products = Router();
+
+const SAVE = `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock,updated_at)
+  VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())
+  ON CONFLICT(id) DO UPDATE SET name=EXCLUDED.name,brand=EXCLUDED.brand,category=EXCLUDED.category,
+  unit=EXCLUDED.unit,hsn=EXCLUDED.hsn,image=EXCLUDED.image,rate_retail=EXCLUDED.rate_retail,
+  rate_wholesale=EXCLUDED.rate_wholesale,gst_pct=EXCLUDED.gst_pct,stock=EXCLUDED.stock,min_stock=EXCLUDED.min_stock,
+  updated_at=NOW()`;
+const row = (id: string, b: z.infer<typeof ProductIn>) => [id, b.name, b.brand, b.category, b.unit, b.hsn, b.image, b.rate_retail, b.rate_wholesale, b.gst_pct, b.stock, b.min_stock];
+
+// The whole catalogue for the website and the counter. Short cache, so a new rate shows
+// within seconds and checkout always charges what the database holds.
+products.get('/catalog', async (_req, res, next) => {
+  try {
+    const rows = (await requireDb().query(
+      'SELECT id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock FROM products ORDER BY name')).rows;
+    res.set('Cache-Control', 'public, max-age=20');
+    res.json({ items: rows });
+  } catch (e) { next(e); }
+});
+
+products.post('/bulk', auth(['admin']), async (req, res, next) => {
+  try {
+    const list = ProductsIn.parse(req.body).products;
+    await tx(async (c) => { for (const b of list) await c.query(SAVE, row(b.id || `P-${Date.now().toString(36).toUpperCase()}`, b)); });
+    res.status(201).json({ saved: list.length });
+  } catch (e) { next(e); }
+});
 
 // Public catalogue — paginated, edge-cacheable. Unlimited SKUs via page/pageSize.
 products.get('/', async (req, res, next) => {
@@ -33,14 +61,7 @@ products.post('/', auth(['admin']), async (req, res, next) => {
     const b = ProductIn.parse(req.body);
     const p = requireDb();
     const id = b.id || `P-${Date.now().toString(36).toUpperCase()}`;
-    await p.query(
-      `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock,updated_at)
-       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())
-       ON CONFLICT(id) DO UPDATE SET name=EXCLUDED.name,brand=EXCLUDED.brand,category=EXCLUDED.category,
-       unit=EXCLUDED.unit,hsn=EXCLUDED.hsn,image=EXCLUDED.image,rate_retail=EXCLUDED.rate_retail,
-       rate_wholesale=EXCLUDED.rate_wholesale,gst_pct=EXCLUDED.gst_pct,stock=EXCLUDED.stock,min_stock=EXCLUDED.min_stock,
-       updated_at=NOW()`,
-      [id, b.name, b.brand, b.category, b.unit, b.hsn, b.image, b.rate_retail, b.rate_wholesale, b.gst_pct, b.stock, b.min_stock]);
+    await p.query(SAVE, row(id, b));
     res.status(201).json({ id });
   } catch (e) { next(e); }
 });

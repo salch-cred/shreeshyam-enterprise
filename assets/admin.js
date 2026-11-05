@@ -1,6 +1,6 @@
 /* Counter console: one password, billing and admin on the same page.
-   Everything here runs on the shop computer. The site is static, so products,
-   bills and the ledger live in this browser. Settings has backup and restore. */
+   With a backend connected the database is the record: every change is saved there first
+   and this browser keeps a copy. Without one, everything lives in this browser. */
 const $ = SSE.$, esc = SSE.esc, fmt = SSE.fmt, toast = m => SSE.toast(m);
 const read = (k, d = []) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 // Writes throw when storage is full. Callers must see that, never swallow it.
@@ -95,6 +95,35 @@ async function openConsole() {
 
 /* Products */
 let ALL = [], pg = 1, editing = null, photo = '';
+// Saves to the database, or does nothing when no backend is set. A failure throws, so the
+// caller stops before changing this browser and the two can never drift apart.
+async function db(path, body, method = 'POST') {
+  if (!SSE.api()) return null;
+  if (!sessionStorage.getItem('sse_staff')) throw new Error('Session ended. Lock and sign in again.');
+  let r;
+  try {
+    r = await fetch(SSE.api() + path, { method, headers: { Authorization: 'Bearer ' + sessionStorage.getItem('sse_staff'), 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+  } catch { throw new Error('Could not reach the database. Nothing was saved.'); }
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) sessionStorage.removeItem('sse_staff');
+  if (!r.ok) throw new Error(j.error || 'Could not save that. Nothing was changed.');
+  return j;
+}
+// The shape the database accepts, from whatever an older browser record holds.
+const dbProduct = p => ({ id: String(p.id).slice(0, 64), name: String(p.name).slice(0, 200), brand: String(p.brand || '-').slice(0, 80), category: String(p.category || 'General').slice(0, 80), unit: String(p.unit || 'pcs').slice(0, 16), hsn: String(p.hsn || '').slice(0, 16),
+  image: /^(assets\/[\w./-]+|https?:\/\/\S+|data:image\/(webp|png|jpeg);base64,\S+)$/.test(p.image || '') ? p.image : '', rate_retail: Math.max(0, Number(p.rate_retail) || 0), rate_wholesale: Math.max(0, Number(p.rate_wholesale) || 0),
+  gst_pct: [0, 5, 12, 18, 28].includes(Number(p.gst_pct)) ? Number(p.gst_pct) : 18, stock: Math.trunc(Number(p.stock)) || 0, min_stock: Math.max(0, Math.trunc(Number(p.min_stock ?? 5)) || 0) });
+// Bulk saves go in pieces small enough for one request, photos included.
+async function saveProducts(list) {
+  let pack = [], size = 0;
+  const send = async () => { if (pack.length) await db('/products/bulk', { products: pack }); pack = []; size = 0; };
+  for (const p of list.map(dbProduct)) {
+    const n = JSON.stringify(p).length;
+    if (size + n > 3_000_000 || pack.length === 400) await send();
+    pack.push(p); size += n;
+  }
+  await send();
+}
 async function reload() {
   ALL = await SSE.all();
   const cats = [...new Set(ALL.map(p => p.category))].sort();
@@ -159,6 +188,7 @@ function draw() {
         const q = Math.trunc(Number(inp.value));
         if (!q) { draw(); return; }
         const p = ALL.find(x => x.id === b.dataset.id);
+        try { await db(`/products/${encodeURIComponent(p.id)}/stock`, { delta: q, reason: 'admin' }); } catch (x) { toast(x.message); draw(); return; }
         p.stock = (Number(p.stock) || 0) + q;
         await SSE.put(p);
         SSE.logStock(p.id, q, 'admin');
@@ -240,6 +270,7 @@ function formProduct() {
 async function saveSheet(next) {
   const p = formProduct();
   if (p.name.length < 2) { toast('Enter the product name'); $('#fName').focus(); return; }
+  try { await db('/products', dbProduct(p)); } catch (x) { toast(x.message); return; }
   await SSE.put(p);
   await reload();
   toast('Saved ' + p.name);
@@ -250,6 +281,7 @@ $('#shSave').onclick = () => saveSheet(false);
 $('#shNext').onclick = () => saveSheet(true);
 $('#shDel').onclick = async () => {
   if (!editing || !confirm(`Delete ${editing.name}? Bills already saved are not changed.`)) return;
+  try { await db(`/products/${encodeURIComponent(editing.id)}`, null, 'DELETE'); } catch (x) { toast(x.message); return; }
   await SSE.del(editing.id);
   closeSheets(); await reload();
   toast('Product deleted');
@@ -334,9 +366,10 @@ $('#mnSave').onclick = async () => {
     const was = ids.get(p.id) || known.get(keyOf(p));
     return was ? { ...was, ...p, id: was.id, image: p.image || was.image } : { ...p, id: p.id || `P-${stamp}-${i}` };
   });
+  try { if (SSE.api()) await saveProducts(list); } catch (x) { toast(x.message); return; }
   try { await SSE.putMany(list); } catch { toast('Could not save. Storage may be full.'); return; }
   closeSheets(); await reload();
-  toast(`${list.length.toLocaleString('en-IN')} products saved. Export for website to publish them.`);
+  toast(`${list.length.toLocaleString('en-IN')} products saved.${SSE.api() ? '' : ' Export for website to publish them.'}`);
 };
 
 /* Stock, orders, ledger */
@@ -368,32 +401,65 @@ async function staffPost(path, body) {
 }
 async function syncOnline() {
   if (!SSE.api() || !staffToken()) return 0;
-  const [orders, bills] = await Promise.all([staffGet('/orders?limit=200'), staffGet('/invoices/online')]);
-  const list = read('sse_orders'), filed = invoices(), moved = [];
+  const orders = await staffGet('/orders?limit=200');
+  const list = read('sse_orders');
   for (const s of orders.items) {
     let d = {};
     try { d = JSON.parse(s.text); } catch { /* a plain text order */ }
     const it = list.find(x => x.id === s.id), rows = d.items || [];
-    if (it) { if (it.status === 'new' && s.status === 'paid') it.status = 'paid'; it.invoice = s.invoice_no; it.quote = s.source === 'quote'; continue; }
+    if (it) { it.status = s.status; it.invoice = s.invoice_no; it.quote = s.source === 'quote'; continue; }
     list.push({ id: s.id, source: 'online', quote: s.source === 'quote', status: s.status, invoice: s.invoice_no, phone: s.phone, name: d.customer?.name || '', total: d.amount || 0, items: rows, created: s.created,
       text: rows.length ? rows.map(c => `${c.name} x ${c.qty}`).join(', ') : s.text });
   }
-  let fresh = 0;
-  for (const x of bills.items.slice().reverse()) {
-    if (filed.some(i => i.no === x.no)) continue;
-    filed.push(onlineBill(x)); fresh++;
-    for (const c of x.items) {
-      const p = ALL.find(q => q.id === c.id);
-      if (p) { p.stock = (Number(p.stock) || 0) - c.qty; moved.push(p); SSE.logStock(p.id, -c.qty, x.no); }
-    }
-  }
   write('sse_orders', list);
-  write('sse_invoices', filed);
-  if (moved.length) await SSE.putMany(moved);
   $('#ordN').textContent = waiting();
-  if (fresh) { toast(`${fresh} new paid order${fresh === 1 ? '' : 's'}`); stats(); }
+  // Nothing is pulled over this browser's own data until it has been moved up or set aside.
+  if (!localStorage.getItem('sse_db_ready')) { dbBanner(); if (!$('#pane-orders').hidden) drawOrders(); return 0; }
+  const [cat, bills, log] = await Promise.all([staffGet('/products/catalog'), staffGet('/invoices/all'), staffGet('/stock-log')]);
+  const known = new Set(invoices().map(i => i.no));
+  const filed = bills.items.slice().reverse().map(onlineBill);
+  const fresh = filed.filter(i => i.online && !known.has(i.no)).length;
+  write('sse_invoices', filed);
+  write('sse_stocklog', log.items.slice().reverse().map(l => ({ id: l.product_id, delta: l.delta, reason: l.reason, date: l.date })));
+  await SSE.clearProducts();
+  await SSE.putMany(cat.items);
+  ALL = cat.items;
+  if (fresh && known.size) toast(`${fresh} new paid order${fresh === 1 ? '' : 's'}`);
+  stats();
   if (!$('#pane-orders').hidden) drawOrders();
+  if (!$('#pane-ledger').hidden) drawLedger();
+  if (!$('#pane-stock').hidden) drawStock();
+  if (!$('#pane-products').hidden) draw();
   return fresh;
+}
+/* The first sign-in on a browser: its bills and edits go up before anything comes down. */
+function dbBanner() {
+  const el = $('#dbBanner');
+  el.hidden = !!localStorage.getItem('sse_db_ready') || !SSE.api();
+  if (el.hidden) return;
+  const n = invoices().length;
+  el.innerHTML = `<div><b>Move this browser's data to the database</b><p>${n} bill${n === 1 ? '' : 's'} and ${ALL.length.toLocaleString('en-IN')} products are here. Do this once. Until then, this browser keeps showing its own copy.</p></div>
+    <div class="panel-tools"><button class="btn sm" id="dbUp">Upload now</button><button class="btn line sm" id="dbSkip">Use the database only</button></div>`;
+  $('#dbUp').onclick = async () => {
+    $('#dbUp').disabled = true;
+    try {
+      await saveProducts(await SSE.all());
+      const bills = invoices().map(i => ({ no: i.no, date: i.date, type: i.type, customer: String(i.customer || '').slice(0, 200), phone: String(i.phone || '').slice(0, 15), gstin: i.gstin || '', address: String(i.address || '').slice(0, 200), mode: i.mode || '',
+        items: i.items.map(c => ({ id: String(c.id), name: String(c.name).slice(0, 200), qty: c.qty, rate: c.rate, gst_pct: c.gst_pct, disc_pct: c.disc_pct || 0, hsn: c.hsn || '', unit: String(c.unit || 'nos').slice(0, 16) })),
+        discount: i.disc || 0, grand: i.grand, paid: i.paid || 0, balance: i.balance || 0 }));
+      for (let k = 0; k < bills.length; k += 150) await db('/invoices/import', { bills: bills.slice(k, k + 150) });
+      localStorage.setItem('sse_db_ready', '1');
+      await syncOnline();
+      dbBanner();
+      toast('Moved to the database');
+    } catch (x) { toast(x.message); $('#dbUp').disabled = false; }
+  };
+  $('#dbSkip').onclick = async () => {
+    if (!confirm('Replace what this browser shows with the database? Its own bills and edits will not be uploaded.')) return;
+    localStorage.setItem('sse_db_ready', '1');
+    await syncOnline().catch(x => toast(x.message));
+    dbBanner();
+  };
 }
 function onlineBar() {
   if (!SSE.api()) return '';
@@ -465,9 +531,11 @@ function drawOrders() {
   });
   el.querySelectorAll('.rpo').forEach(b => { b.onclick = () => { const r = invoices().find(i => i.no === b.dataset.no); if (r) { buildPrint(r); setTimeout(() => window.print(), 250); } }; });
   el.querySelectorAll('.adv').forEach(b => {
-    b.onclick = () => {
+    b.onclick = async () => {
       const all = read('sse_orders'), it = all.find(x => x.id === b.dataset.id);
-      it.status = it.status === 'new' || it.status === 'paid' ? 'confirmed' : 'delivered';
+      const next = it.status === 'new' || it.status === 'paid' ? 'confirmed' : 'delivered';
+      if (it.source === 'online') { try { await db(`/orders/${encodeURIComponent(it.id)}/status`, { status: next }); } catch (x) { toast(x.message); return; } }
+      it.status = next;
       write('sse_orders', all);
       $('#ordN').textContent = waiting();
       drawOrders(); toast('Order ' + it.status);
@@ -486,11 +554,12 @@ function drawLedger() {
     : '<div class="empty"><b>Nothing outstanding</b><p>Every bill is settled.</p></div>')
     + (shut.length ? '<h3 style="margin-top:20px">Recently settled</h3><div class="tblwrap"><table class="tbl"><tbody>' + shut.map(i => `<tr><td>${esc(i.no)}<small>${esc(i.customer || 'Walk-in')}</small></td><td style="text-align:right"><span class="pill ok">${fmt(i.grand)}</span></td></tr>`).join('') + '</tbody></table></div>' : '');
   el.querySelectorAll('.rk').forEach(b => {
-    b.onclick = () => {
+    b.onclick = async () => {
       const inp = [...el.querySelectorAll('input[data-no]')].find(x => x.dataset.no === b.dataset.no);
       const all = invoices(), r = all.find(x => x.no === b.dataset.no);
       const amt = Math.min(Math.max(0, Number(inp.value) || 0), r.balance || 0);
       if (!amt) return;
+      try { await db('/invoices/payment', { no: r.no, amount: amt }); } catch (x) { toast(x.message); return; }
       r.paid = (r.paid || 0) + amt;
       r.balance = Math.max(0, (r.grand || 0) - r.paid);
       write('sse_invoices', all);
@@ -537,6 +606,8 @@ async function restore(file) {
   await SSE.clearProducts();
   await SSE.putMany(d.products.filter(p => p && typeof p.id === 'string'));
   BACKUP_KEYS.forEach(k => { if (typeof d.local[k] === 'string') localStorage.setItem(k, d.local[k]); else localStorage.removeItem(k); });
+  // With a database, the restored copy goes up through the same one-time upload.
+  localStorage.removeItem('sse_db_ready');
   location.reload();
 }
 function drawContent() {
@@ -596,7 +667,7 @@ const Billing = (() => {
   }
   async function refresh() { shelf = await SSE.all(); drawHead(); drawShelf(); daybook(); }
   function drawHead() {
-    $('#invNo').textContent = type === 'TAX' ? nextNo() : 'Estimate';
+    $('#invNo').textContent = type !== 'TAX' ? 'Estimate' : SSE.api() ? 'Number on save' : nextNo();
     $('#invDate').textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     $('#save').textContent = type === 'TAX' ? 'Save and print' : 'Save estimate';
   }
@@ -714,10 +785,19 @@ const Billing = (() => {
       supply: code, inter: code !== SHOP.state, paid, balance: Math.max(0, t.grand - paid),
     };
     // The bill must be safely stored before anything is printed or stock moves.
+    if (SSE.api()) {
+      $('#save').disabled = true;
+      try {
+        const s = await db('/invoices', { type, customer, phone, gstin, address: rec.address, mode, discount: t.disc, paid,
+          items: rec.items.map(c => ({ id: String(c.id), name: c.name, qty: c.qty, rate: c.rate, gst_pct: c.gst_pct, disc_pct: Number(c.disc_pct) || 0, hsn: c.hsn || '', unit: c.unit || 'nos' })) });
+        rec.no = s.no;
+      } catch (x) { err.textContent = x.message; $('#save').disabled = false; return; }
+      $('#save').disabled = false;
+    }
     try { const a = invoices(); a.push(rec); write('sse_invoices', a); }
-    catch { err.textContent = 'Storage is full, this bill was not saved. Download a backup from Settings.'; return; }
+    catch { if (!SSE.api()) { err.textContent = 'Storage is full, this bill was not saved. Download a backup from Settings.'; return; } }
     if (type === 'TAX') {
-      SSE.seq();
+      if (!SSE.api()) SSE.seq();
       const all = await SSE.all(), moved = [];
       for (const c of cart) { const p = all.find(x => x.id === c.id); if (p) { p.stock = (Number(p.stock) || 0) - c.qty; moved.push(p); SSE.logStock(p.id, -c.qty, rec.no); } }
       if (moved.length) await SSE.putMany(moved);

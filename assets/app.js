@@ -166,6 +166,13 @@ const SSE = (() => {
   /* What customers see: the published catalogue, always fresh. Only the counter
      device overlays its own local edits (set when the console is unlocked). */
   async function catalog() {
+    if (api()) {
+      try {
+        const r = await fetch(api() + '/products/catalog', { cache: 'no-cache' });
+        const items = r.ok ? (await r.json()).items : [];
+        if (items?.length) return items;
+      } catch {}
+    }
     let pub = [];
     try {
       const r = await fetch('data/catalog-001.json', { cache: 'no-cache' });
