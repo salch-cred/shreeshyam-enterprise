@@ -221,7 +221,7 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
     log.push(m + ' ' + url.pathname);
     if (url.pathname === '/auth/otp/status') return send({ email: true });
     if (url.pathname === '/auth/otp/request') return send({ ok: true, retryIn: 45 });
-    if (url.pathname === '/auth/otp/verify') return body.code === '123456' ? send({ token: 'tok', user: me }) : send({ error: 'That code is wrong or has expired. Check it or ask for a new one.' }, 401);
+    if (url.pathname === '/auth/otp/verify') return body.code === '123456' ? (me = { ...me, phone: body.phone }, send({ token: 'tok', user: me })) : send({ error: 'That code is wrong or has expired. Check it or ask for a new one.' }, 401);
     if (url.pathname === '/me' && m === 'PUT') { me = { ...me, ...body }; return send(me); }
     if (url.pathname === '/me') return send(me);
     if (url.pathname === '/me/orders') return send({ items: [{ id: 'SSEAB12', status: 'paid', invoice: 'WEB/26-27/0001', created: '2026-11-01T10:00:00Z', total: 1180, items: [{ id: 'BR-BRG-6205', name: 'Bearing 6205', qty: 2 }] }] });
@@ -234,6 +234,10 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.route('https://sdk.cashfree.com/**', r => r.fulfill({ contentType: 'text/javascript', body: 'window.__cf=0;window.Cashfree=o=>({checkout:async a=>{window.__cf++;window.__cfMode=o.mode;window.__cfSess=a.paymentSessionId;return {}}});' }));
   await go(page, '/account.html');
   await page.waitForSelector('#stepEmail:not([hidden])');
+  await page.fill('#inEmail', 'Plant@Example.com');
+  await page.click('#sendBtn');
+  check('Sign-in needs a mobile number', /10 digit/.test(await page.textContent('#inPhoneErr')) && !log.some(l => l.includes('otp/request')));
+  await page.fill('#inPhone', '9876543210');
   await page.fill('#inEmail', 'not-an-email');
   await page.click('#sendBtn');
   check('Sign-in refuses a bad email', /email address/.test(await page.textContent('#inErr')));
@@ -249,9 +253,9 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.waitForSelector('#stepName:not([hidden])');
   check('Pasted code signs in, and a new customer is asked for a name', await page.evaluate(() => localStorage.getItem('sse_token') === 'tok'));
   await page.fill('#nName', 'Test Plant');
-  await page.fill('#nPhone', '9876543210');
   await page.click('#stepName button');
   await page.waitForSelector('#meView:not([hidden])');
+  check('Mobile from sign-in reaches the account', me.phone === '9876543210' && /98765 43210/.test(await page.textContent('#dPhone')));
   check('Account page shows the verified email and server orders', /plant@example\.com · Verified by email/.test(await page.textContent('#meLine')) && /Paid/.test(await page.textContent('#orders')) && /1,180/.test(await page.textContent('#orders')));
   await page.click('#editMe');
   await page.fill('#eGst', 'SHORT');
@@ -349,6 +353,16 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   check('History shows join, sign-in, order and paid times', await page.locator('.cust-time li').count() === 4 && /Account created/.test(await page.textContent('.cust-time')) && /Signed in/.test(await page.textContent('.cust-time')) && /Paid by online payment/.test(await page.textContent('.cust-time')));
   await page.click('#histBack');
   await page.waitForSelector('.hist');
+  await c.close();
+}
+
+/* ---------- footer stays one column once it scrolls in ---------- */
+{
+  const { c, page } = await ctx({ viewport: { width: 1440, height: 900 } });
+  await go(page, '/privacy.html');
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await page.waitForFunction(() => document.querySelector('.foot').classList.contains('in'));
+  check('Footer keeps its full-width layout at the bottom of the page', await page.evaluate(() => { const f = document.querySelector('#foot'), w = f.clientWidth, parts = ['.foot-call', '.foot-top', '.foot-word', '.foot-end'].map(s => document.querySelector(s).getBoundingClientRect()); return getComputedStyle(f).display === 'block' && parts.every(r => r.left === 0 && Math.round(r.width) === w); }));
   await c.close();
 }
 

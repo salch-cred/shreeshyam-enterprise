@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=60">
+<link rel="stylesheet" href="assets/site.css?v=61">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <title>Your account — Shree Shyam Enterprises</title>
@@ -16,7 +16,7 @@
 <body class="acct">
 <a class="skip" href="#main">Skip to content</a>
 <main id="main">
-  <section class="in" id="authView" hidden>
+  <section class="signin" id="authView" hidden>
     <aside class="in-side">
       <div class="in-bearing" id="inBearing" aria-hidden="true"><canvas></canvas></div>
       <div class="in-copy">
@@ -31,12 +31,15 @@
     <div class="in-main"><div class="in-box">
       <form id="stepEmail" novalidate hidden>
         <p class="eyebrow">Your account</p>
-        <h1>Sign in with your email</h1>
-        <p class="lede">We email you a 6 digit code. There is no password to remember.</p>
+        <h1>Sign in to your account</h1>
+        <p class="lede">Enter your mobile and email. We send a 6 digit code to your email, with no password to remember.</p>
+        <div class="field"><label for="inPhone">Mobile number</label>
+          <div class="in-phone"><span>+91</span><input id="inPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national" required></div>
+          <span class="err" id="inPhoneErr" role="alert"></span></div>
         <div class="field"><label for="inEmail">Email address</label>
-          <input id="inEmail" class="in-email" type="email" inputmode="email" maxlength="120" placeholder="you@company.com" autocomplete="email">
+          <input id="inEmail" class="in-email" type="email" inputmode="email" maxlength="120" placeholder="you@company.com" autocomplete="email" required>
           <span class="err" id="inErr" role="alert"></span></div>
-        <button class="btn in-go" id="sendBtn" type="submit">Send code</button>
+        <button class="btn in-go" id="sendBtn" type="submit">Send code to email</button>
       </form>
 
       <form id="stepCode" novalidate hidden>
@@ -61,7 +64,6 @@
         <h1>Who are we billing?</h1>
         <p class="lede">This goes on your invoices. You can change it any time.</p>
         <div class="field"><label for="nName">Plant or purchaser name</label><input id="nName" autocomplete="organization" maxlength="120"></div>
-        <div class="field"><label for="nPhone">Mobile, for delivery</label><input id="nPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digits" autocomplete="tel"></div>
         <div class="field"><label for="nGst">GSTIN (optional)</label><input id="nGst" maxlength="15" style="text-transform:uppercase" autocomplete="off"></div>
         <span class="err" id="nErr" role="alert"></span>
         <button class="btn in-go" type="submit">Continue</button>
@@ -124,6 +126,6 @@
   </section>
 </main>
 <script src="assets/app.js?v=56"></script>
-<script src="assets/account.js?v=5"></script>
+<script src="assets/account.js?v=6"></script>
 </body>
 </html>

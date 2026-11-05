@@ -433,7 +433,7 @@ button.ph-msg:hover{background:var(--stone)}
 
 /* single pane once the phone gets narrow */
 @container (max-width:560px){
-  .fold-screen{aspect-ratio:1.04}
+  .fold-screen{aspect-ratio:.94}
   .f-panes{grid-template-columns:1fr}
   .f-left{display:none}
   .f-crease{display:none}
@@ -499,4 +499,18 @@ button.ph-msg:hover{background:var(--stone)}
 }
 @container (max-width:560px){
   .f-ifoot{display:none}
+}
+
+/* On phones each step takes only its own height, and the note sits under the device. */
+@keyframes fstepin{from{opacity:0;transform:translateY(10px)}}
+@media (max-width:860px){
+  .flow .fstep{grid-area:auto;grid-template-rows:auto auto}
+  .flow .fstep:not(.on){display:none}
+  .flow .fstep.on{animation:fstepin .45s var(--ease) both}
+  .fart.fwide{padding-bottom:0}
+  .fart.fwide .fnote{position:static;justify-self:center;margin-top:12px}
+  .fold{box-shadow:inset 0 0 0 1.5px #55595f,inset 0 0 0 3px #17181b,0 16px 26px -18px rgba(24,36,48,.55)}
+}
+@media (max-width:860px) and (prefers-reduced-motion:reduce){
+  .flow .fstep.on{animation:none}
 }

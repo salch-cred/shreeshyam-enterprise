@@ -820,8 +820,8 @@ a,button{-webkit-tap-highlight-color:transparent}
 
 /* account: email sign-in and the signed-in page */
 body.acct{background:#fff;color:#182430}
-.in{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);min-height:100vh}
-.in[hidden]{display:none}
+.signin{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);min-height:100vh}
+.signin[hidden]{display:none}
 .in-side{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:96px clamp(28px,4.4vw,64px) clamp(32px,4vw,56px);background:#182430;color:#fff;overflow:hidden}
 .in-bearing{position:absolute;inset:60px 0 auto;height:calc(100% - 330px);min-height:280px}
 .in-bearing canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -902,7 +902,7 @@ body.acct{background:#fff;color:#182430}
 .me-form-btns{display:flex;gap:8px;margin-top:12px}
 .me-card .btn.line{background:#fff}
 @media (max-width:900px){
-  .in{grid-template-columns:1fr;min-height:0}
+  .signin{grid-template-columns:1fr;min-height:0}
   .in-side{display:none}
   .in-main{align-items:flex-start;padding:112px 20px 48px}
   .in-box{max-width:none}

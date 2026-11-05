@@ -57,7 +57,7 @@ customer.post('/auth/otp/request', rateLimit(15 * 60 * 1000, 8), async (req, res
 
 customer.post('/auth/otp/verify', rateLimit(15 * 60 * 1000, 20), async (req, res, next) => {
   try {
-    const { email, code } = OtpVerifyIn.parse(req.body);
+    const { email, phone, code } = OtpVerifyIn.parse(req.body);
     const p = requireDb();
     const wrong = () => next(fail('That code is wrong or has expired. Check it or ask for a new one.', 401));
     // The attempt is counted atomically before the compare, so parallel guesses cannot beat the limit.
@@ -72,8 +72,8 @@ customer.post('/auth/otp/verify', rateLimit(15 * 60 * 1000, 20), async (req, res
     if (!claimed.rowCount) return wrong();
 
     const u = (await p.query(
-      `INSERT INTO users(id,name,email,phone,password_hash,gstin,address,role) VALUES($1,'',$2,'','','','','customer')
-       ON CONFLICT(email) DO UPDATE SET email=EXCLUDED.email RETURNING id,name,email,phone,gstin,address`, [randomUUID(), email])).rows[0];
+      `INSERT INTO users(id,name,email,phone,password_hash,gstin,address,role) VALUES($1,'',$2,$3,'','','','customer')
+       ON CONFLICT(email) DO UPDATE SET phone=EXCLUDED.phone RETURNING id,name,email,phone,gstin,address`, [randomUUID(), email, phone])).rows[0];
     await p.query('UPDATE users SET last_login=now() WHERE id=$1', [u.id]);
     await p.query('INSERT INTO login_log(email,at) VALUES($1,now())', [u.email]);
     res.json({ token: signToken('customer', { email: u.email, sub: u.id }, '30d'), user: { name: u.name, email: u.email, phone: u.phone, gstin: u.gstin, address: u.address } });

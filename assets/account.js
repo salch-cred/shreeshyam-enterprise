@@ -9,8 +9,8 @@ const setCust = c => localStorage.setItem('sse_cust', JSON.stringify(c));
 const token = () => localStorage.getItem('sse_token') || '';
 const pretty = p => '+91 ' + p.slice(0, 5) + ' ' + p.slice(5);
 const STEPS = ['stepEmail', 'stepCode', 'stepName', 'detailsForm'];
-const validMobile = p => !p || /^[6-9]\d{9}$/.test(p);
-let mailOn = false, email = '', timer = 0, serverOrders = [];
+const validMobile = p => /^[6-9]\d{9}$/.test(p);
+let mailOn = false, email = '', mobile = '', timer = 0, serverOrders = [];
 
 async function call(path, opts = {}) {
   const headers = { ...(opts.body ? { 'Content-Type': 'application/json' } : {}), ...(token() ? { Authorization: 'Bearer ' + token() } : {}) };
@@ -62,10 +62,11 @@ async function sendCode() {
 }
 $('#stepEmail').addEventListener('submit', async e => {
   e.preventDefault();
-  const v = $('#inEmail').value.trim().toLowerCase(), btn = $('#sendBtn');
+  const v = $('#inEmail').value.trim().toLowerCase(), m = $('#inPhone').value.trim(), btn = $('#sendBtn');
+  $('#inPhoneErr').textContent = validMobile(m) ? '' : 'Enter your 10 digit mobile number';
   $('#inErr').textContent = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'Enter your email address';
-  if ($('#inErr').textContent) return;
-  email = v;
+  if ($('#inPhoneErr').textContent || $('#inErr').textContent) return;
+  email = v; mobile = m;
   btn.disabled = true;
   try { await sendCode(); } catch (x) { $('#inErr').textContent = x.message; }
   btn.disabled = false;
@@ -80,13 +81,13 @@ $('#stepCode').addEventListener('submit', async e => {
   if (code.length < 6) { $('#codeErr').textContent = 'Enter all 6 digits'; return; }
   btn.disabled = true;
   try {
-    const j = await call('/auth/otp/verify', { body: { email, code } });
+    const j = await call('/auth/otp/verify', { body: { email, phone: mobile, code } });
     localStorage.setItem('sse_token', j.token);
     clearInterval(timer);
     const was = cust();
-    setCust({ name: j.user.name || was?.name || '', email: j.user.email, phone: j.user.phone || was?.phone || '', gst: j.user.gstin || was?.gst || '', address: j.user.address || was?.address || '' });
+    setCust({ name: j.user.name || was?.name || '', email: j.user.email, phone: j.user.phone, gst: j.user.gstin || was?.gst || '', address: j.user.address || was?.address || '' });
     if (j.user.name) await show();
-    else { $('#nName').value = cust().name; $('#nPhone').value = cust().phone; $('#nGst').value = cust().gst; step('stepName'); }
+    else { $('#nName').value = cust().name; $('#nGst').value = cust().gst; step('stepName'); }
   } catch (x) {
     $('#codeErr').textContent = x.message;
     boxes().forEach(b => { b.value = ''; });
@@ -104,10 +105,10 @@ async function saveProfile(c) {
 }
 $('#stepName').addEventListener('submit', async e => {
   e.preventDefault();
-  const name = $('#nName').value.trim(), gst = $('#nGst').value.trim().toUpperCase(), phone = $('#nPhone').value.trim();
-  $('#nErr').textContent = name.length < 2 ? 'Enter a name for your bills' : !validMobile(phone) ? 'Enter a 10 digit mobile number' : validGst(gst) ? '' : 'A GSTIN has 15 characters';
+  const name = $('#nName').value.trim(), gst = $('#nGst').value.trim().toUpperCase();
+  $('#nErr').textContent = name.length < 2 ? 'Enter a name for your bills' : validGst(gst) ? '' : 'A GSTIN has 15 characters';
   if ($('#nErr').textContent) return;
-  try { await saveProfile({ ...cust(), name, phone, gst }); await show(); } catch (x) { $('#nErr').textContent = x.message; }
+  try { await saveProfile({ ...cust(), name, gst }); await show(); } catch (x) { $('#nErr').textContent = x.message; }
 });
 $('#detailsForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -179,7 +180,12 @@ async function show() {
   const has = !!(c && c.name && (c.phone || c.email)) && (!mailOn || !!token());
   $('#authView').hidden = has;
   $('#meView').hidden = !has;
-  if (!has) { step(mailOn ? 'stepEmail' : 'detailsForm'); art(); return; }
+  if (!has) {
+    if (mailOn && c) { $('#inPhone').value = c.phone || ''; $('#inEmail').value = c.email || ''; }
+    step(mailOn ? 'stepEmail' : 'detailsForm');
+    art();
+    return;
+  }
   drawMe(c);
   drawOrders(orders(c));
 }

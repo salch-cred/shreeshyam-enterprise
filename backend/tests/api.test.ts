@@ -122,7 +122,7 @@ async function main() {
   const mails = () => texts.filter((t) => t.url.includes('resend'));
   const lastCode = () => /\b(\d{6})\b/.exec(mails().at(-1)!.body.text)![1];
   const clearOtp = () => requireDb().query('DELETE FROM otp_codes');
-  const email = 'plant@example.com';
+  const email = 'plant@example.com', phone = '9000000001';
 
   r = await call('/auth/otp/status');
   check('Page can see email sign-in is on', r.json.email === true, r);
@@ -135,25 +135,29 @@ async function main() {
   r = await call('/auth/otp/request', { body: { email } });
   check('A second email within the cooldown is refused', r.status === 429 && mails().length === 1, r);
   const good = lastCode(), bad = good === '111111' ? '222222' : '111111';
-  r = await call('/auth/otp/verify', { body: { email, code: bad } });
+  r = await call('/auth/otp/verify', { body: { email, phone, code: bad } });
   check('A wrong code is refused', r.status === 401, r);
-  r = await call('/auth/otp/verify', { body: { email: 'other@example.com', code: good } });
+  r = await call('/auth/otp/verify', { body: { email: 'other@example.com', phone, code: good } });
   check('A code does not work for another address', r.status === 401, r);
-  await q(`UPDATE otp_codes SET expires = now() - interval '1 minute'`);
   r = await call('/auth/otp/verify', { body: { email, code: good } });
+  check('Signing in needs a mobile number', r.status === 400, r);
+  r = await call('/auth/otp/verify', { body: { email, phone: '12345', code: good } });
+  check('Signing in refuses a bad mobile number', r.status === 400, r);
+  await q(`UPDATE otp_codes SET expires = now() - interval '1 minute'`);
+  r = await call('/auth/otp/verify', { body: { email, phone, code: good } });
   check('An expired code is refused', r.status === 401, r);
   await q(`UPDATE otp_codes SET expires = now() + interval '5 minutes', attempts = 5`);
-  r = await call('/auth/otp/verify', { body: { email, code: good } });
+  r = await call('/auth/otp/verify', { body: { email, phone, code: good } });
   check('Five wrong guesses burn the code, even for the right one', r.status === 401, r);
   await q(`UPDATE otp_codes SET attempts = 0`);
-  r = await call('/auth/otp/verify', { body: { email, code: good } });
-  check('The right code signs in and creates the customer', r.status === 200 && r.json.user.email === email && r.json.user.name === '', r);
+  r = await call('/auth/otp/verify', { body: { email, phone, code: good } });
+  check('The right code signs in and saves the mobile', r.status === 200 && r.json.user.email === email && r.json.user.phone === phone && r.json.user.name === '', r);
   const cust = r.json.token as string;
-  r = await call('/auth/otp/verify', { body: { email, code: good } });
+  r = await call('/auth/otp/verify', { body: { email, phone, code: good } });
   check('A code works only once', r.status === 401, r);
   await clearOtp();
   await call('/auth/otp/request', { body: { email } });
-  r = await call('/auth/otp/verify', { body: { email, code: lastCode() } });
+  r = await call('/auth/otp/verify', { body: { email, phone, code: lastCode() } });
   check('Signing in again keeps the same customer', r.status === 200 && (await q('SELECT count(*)::int c FROM users WHERE email=$1', [email]))[0].c === 1, r);
   await clearOtp();
   mailDown = true;
@@ -171,7 +175,7 @@ async function main() {
   r = await call('/auth/register', { body: { name: 'Plant', phone: '9000000001', password: 'longenough1' } });
   check('Password sign-up no longer exists', r.status === 404, r);
 
-  r = await call('/me', { method: 'PUT', token: cust, body: { name: 'Plant', gstin: 'bad', address: '' } });
+  r = await call('/me', { method: 'PUT', token: cust, body: { name: 'Plant', phone, gstin: 'bad', address: '' } });
   check('A bad GSTIN is refused', r.status === 400, r);
   r = await call('/me', { method: 'PUT', token: cust, body: { name: 'Test Plant', phone: '9000000001', gstin: '08abcde1234f1z5', address: 'Plot 1' } });
   check('Customer can save their details', r.status === 200 && r.json.gstin === '08ABCDE1234F1Z5', r);
