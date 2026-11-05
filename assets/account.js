@@ -1,4 +1,4 @@
-/* Sign-in is by SMS code once the backend is connected, and the phone number in the
+/* Sign-in is by emailed code once the backend is connected, and the address in the
    session is then proven. Without a backend the details stay on this device and this
    page does not pretend to verify anyone. */
 const $ = SSE.$;
@@ -8,8 +8,9 @@ const cust = () => read('sse_cust', null);
 const setCust = c => localStorage.setItem('sse_cust', JSON.stringify(c));
 const token = () => localStorage.getItem('sse_token') || '';
 const pretty = p => '+91 ' + p.slice(0, 5) + ' ' + p.slice(5);
-const STEPS = ['stepPhone', 'stepCode', 'stepName', 'detailsForm'];
-let smsOn = false, phone = '', timer = 0, serverOrders = [];
+const STEPS = ['stepEmail', 'stepCode', 'stepName', 'detailsForm'];
+const validMobile = p => !p || /^[6-9]\d{9}$/.test(p);
+let mailOn = false, email = '', timer = 0, serverOrders = [];
 
 async function call(path, opts = {}) {
   const headers = { ...(opts.body ? { 'Content-Type': 'application/json' } : {}), ...(token() ? { Authorization: 'Bearer ' + token() } : {}) };
@@ -24,7 +25,7 @@ function step(id) {
   if (f && innerWidth > 820) f.focus();
 }
 
-/* The code boxes accept typing, paste and the phone's own SMS autofill. */
+/* The code boxes accept typing, paste and the browser's own one-time-code autofill. */
 const boxes = () => [...document.querySelectorAll('.otp input')];
 const codeNow = () => boxes().map(b => b.value).join('');
 function fill(from, text) {
@@ -52,19 +53,19 @@ function countdown(s) {
   timer = setInterval(tick, 1000);
 }
 async function sendCode() {
-  const j = await call('/auth/otp/request', { body: { phone } });
-  $('#sentTo').textContent = pretty(phone);
+  const j = await call('/auth/otp/request', { body: { email } });
+  $('#sentTo').textContent = email;
   boxes().forEach(b => { b.value = ''; });
   $('#codeErr').textContent = '';
   step('stepCode');
   countdown(j.retryIn || 45);
 }
-$('#stepPhone').addEventListener('submit', async e => {
+$('#stepEmail').addEventListener('submit', async e => {
   e.preventDefault();
-  const v = $('#inPhone').value.trim(), btn = $('#sendBtn');
-  $('#inErr').textContent = /^[6-9]\d{9}$/.test(v) ? '' : 'Enter your 10 digit mobile number';
+  const v = $('#inEmail').value.trim().toLowerCase(), btn = $('#sendBtn');
+  $('#inErr').textContent = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'Enter your email address';
   if ($('#inErr').textContent) return;
-  phone = v;
+  email = v;
   btn.disabled = true;
   try { await sendCode(); } catch (x) { $('#inErr').textContent = x.message; }
   btn.disabled = false;
@@ -72,20 +73,20 @@ $('#stepPhone').addEventListener('submit', async e => {
 $('#resend').onclick = async () => {
   try { await sendCode(); SSE.toast('A new code is on its way'); } catch (x) { $('#codeErr').textContent = x.message; }
 };
-$('#changeNo').onclick = () => { clearInterval(timer); step('stepPhone'); };
+$('#changeNo').onclick = () => { clearInterval(timer); step('stepEmail'); };
 $('#stepCode').addEventListener('submit', async e => {
   e.preventDefault();
   const code = codeNow(), btn = $('#codeBtn');
   if (code.length < 6) { $('#codeErr').textContent = 'Enter all 6 digits'; return; }
   btn.disabled = true;
   try {
-    const j = await call('/auth/otp/verify', { body: { phone, code } });
+    const j = await call('/auth/otp/verify', { body: { email, code } });
     localStorage.setItem('sse_token', j.token);
     clearInterval(timer);
     const was = cust();
-    setCust({ name: j.user.name || was?.name || '', phone: j.user.phone, gst: j.user.gstin || was?.gst || '', address: j.user.address || was?.address || '' });
+    setCust({ name: j.user.name || was?.name || '', email: j.user.email, phone: j.user.phone || was?.phone || '', gst: j.user.gstin || was?.gst || '', address: j.user.address || was?.address || '' });
     if (j.user.name) await show();
-    else { $('#nName').value = cust().name; $('#nGst').value = cust().gst; step('stepName'); }
+    else { $('#nName').value = cust().name; $('#nPhone').value = cust().phone; $('#nGst').value = cust().gst; step('stepName'); }
   } catch (x) {
     $('#codeErr').textContent = x.message;
     boxes().forEach(b => { b.value = ''; });
@@ -96,17 +97,17 @@ $('#stepCode').addEventListener('submit', async e => {
 const validGst = g => !g || /^[0-9A-Z]{15}$/.test(g);
 async function saveProfile(c) {
   if (token()) {
-    const u = await call('/me', { method: 'PUT', body: { name: c.name, gstin: c.gst, address: c.address } });
-    c = { name: u.name, phone: u.phone, gst: u.gstin, address: u.address };
+    const u = await call('/me', { method: 'PUT', body: { name: c.name, phone: c.phone, gstin: c.gst, address: c.address } });
+    c = { name: u.name, email: u.email, phone: u.phone, gst: u.gstin, address: u.address };
   }
   setCust(c);
 }
 $('#stepName').addEventListener('submit', async e => {
   e.preventDefault();
-  const name = $('#nName').value.trim(), gst = $('#nGst').value.trim().toUpperCase();
-  $('#nErr').textContent = name.length < 2 ? 'Enter a name for your bills' : validGst(gst) ? '' : 'A GSTIN has 15 characters';
+  const name = $('#nName').value.trim(), gst = $('#nGst').value.trim().toUpperCase(), phone = $('#nPhone').value.trim();
+  $('#nErr').textContent = name.length < 2 ? 'Enter a name for your bills' : !validMobile(phone) ? 'Enter a 10 digit mobile number' : validGst(gst) ? '' : 'A GSTIN has 15 characters';
   if ($('#nErr').textContent) return;
-  try { await saveProfile({ ...cust(), name, gst }); await show(); } catch (x) { $('#nErr').textContent = x.message; }
+  try { await saveProfile({ ...cust(), name, phone, gst }); await show(); } catch (x) { $('#nErr').textContent = x.message; }
 });
 $('#detailsForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -122,7 +123,7 @@ $('#detailsForm').addEventListener('submit', e => {
 /* Signed in */
 const STATUS = { paid: ['Paid', 'ok'], packed: ['Packed', 'ok'], dispatched: ['Dispatched', 'ok'], done: ['Delivered', 'ok'] };
 function orders(c) {
-  const local = read('sse_orders', []).filter(o => !o.phone || o.phone === c.phone).reverse();
+  const local = read('sse_orders', []).filter(o => !o.phone || o.phone === c.phone || (c.email && o.email === c.email)).reverse();
   const seen = new Set(serverOrders.map(o => o.id));
   return [...serverOrders, ...local.filter(o => !seen.has(o.id))]
     .sort((a, b) => new Date(b.created || 0) - new Date(a.created || 0));
@@ -156,34 +157,35 @@ function drawOrders(list) {
 }
 function drawMe(c) {
   $('#meName').textContent = c.name;
-  $('#meLine').textContent = pretty(c.phone) + (token() ? ' · Verified by SMS' : ' · Saved on this device');
+  $('#meLine').textContent = token() ? `${c.email} · Verified by email` : `${pretty(c.phone)} · Saved on this device`;
   $('#dName').textContent = c.name;
+  $('#dPhone').textContent = c.phone ? pretty(c.phone) : 'Not added';
   $('#dGst').textContent = c.gst || 'Not added';
   $('#dAddr').textContent = c.address || 'Not added';
-  $('#ledgerWa').href = SSE.wa('Namaste, mujhe account statement chahiye. Mobile: ' + c.phone);
+  $('#ledgerWa').href = SSE.wa('Namaste, mujhe account statement chahiye. ' + (c.phone ? 'Mobile: ' + c.phone : 'Email: ' + c.email));
 }
 async function show() {
   let c = cust();
   if (token()) {
     try {
       const [u, o] = await Promise.all([call('/me'), call('/me/orders')]);
-      c = { name: u.name, phone: u.phone, gst: u.gstin, address: u.address };
+      c = { name: u.name, email: u.email, phone: u.phone, gst: u.gstin, address: u.address };
       setCust(c);
       serverOrders = o.items;
     } catch (x) {
       if (x.status === 401) localStorage.removeItem('sse_token');
     }
   }
-  const has = !!(c && c.phone && c.name) && (!smsOn || !!token());
+  const has = !!(c && c.name && (c.phone || c.email)) && (!mailOn || !!token());
   $('#authView').hidden = has;
   $('#meView').hidden = !has;
-  if (!has) { step(smsOn ? 'stepPhone' : 'detailsForm'); art(); return; }
+  if (!has) { step(mailOn ? 'stepEmail' : 'detailsForm'); art(); return; }
   drawMe(c);
   drawOrders(orders(c));
 }
 $('#editMe').onclick = () => {
   const c = cust();
-  $('#eName').value = c.name; $('#eGst').value = c.gst || ''; $('#eAddr').value = c.address || '';
+  $('#eName').value = c.name; $('#ePhone').value = c.phone || ''; $('#eGst').value = c.gst || ''; $('#eAddr').value = c.address || '';
   $('#editErr').textContent = '';
   $('#meDetails').hidden = true; $('#editForm').hidden = false;
   $('#eName').focus();
@@ -191,11 +193,11 @@ $('#editMe').onclick = () => {
 $('#editCancel').onclick = () => { $('#meDetails').hidden = false; $('#editForm').hidden = true; };
 $('#editForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const name = $('#eName').value.trim(), gst = $('#eGst').value.trim().toUpperCase();
-  $('#editErr').textContent = name.length < 2 ? 'Enter a name' : validGst(gst) ? '' : 'A GSTIN has 15 characters';
+  const name = $('#eName').value.trim(), gst = $('#eGst').value.trim().toUpperCase(), phone = $('#ePhone').value.trim();
+  $('#editErr').textContent = name.length < 2 ? 'Enter a name' : !validMobile(phone) ? 'Enter a 10 digit mobile number' : validGst(gst) ? '' : 'A GSTIN has 15 characters';
   if ($('#editErr').textContent) return;
   try {
-    await saveProfile({ ...cust(), name, gst, address: $('#eAddr').value.trim() });
+    await saveProfile({ ...cust(), name, phone, gst, address: $('#eAddr').value.trim() });
     $('#editCancel').click();
     drawMe(cust());
     SSE.toast('Details saved');
@@ -219,6 +221,6 @@ function art() {
   })).catch(() => box.remove());
 }
 (async function init() {
-  if (api) { try { smsOn = (await call('/auth/otp/status')).sms; } catch {} }
+  if (api) { try { mailOn = (await call('/auth/otp/status')).email; } catch {} }
   await show();
 })();

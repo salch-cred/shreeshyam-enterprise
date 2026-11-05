@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=59">
+<link rel="stylesheet" href="assets/site.css?v=60">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <title>Checkout — Shree Shyam Enterprises</title>
@@ -36,6 +36,7 @@
           <div class="field"><label for="coPhone">Mobile</label><input id="coPhone" inputmode="numeric" pattern="[6-9][0-9]{9}" required autocomplete="tel" maxlength="10" placeholder="10 digits"><span class="err"></span></div>
           <div class="field"><label for="coGst">GSTIN (optional)</label><input id="coGst" maxlength="15" style="text-transform:uppercase" autocomplete="off"></div>
         </div>
+        <div class="field"><label for="coEmail">Email, for your bill</label><input id="coEmail" type="email" inputmode="email" maxlength="120" autocomplete="email" placeholder="you@company.com"><span class="err" id="coEmailErr"></span></div>
         <div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" rows="3" required placeholder="Plot, RIICO area, city, pincode"></textarea><span class="err"></span></div>
         <h2 style="margin-top:6px">Payment</h2>
         <div class="pay" id="payPanel"></div>
@@ -50,6 +51,6 @@
   </div>
 </main>
 <script src="assets/app.js?v=56"></script>
-<script src="assets/checkout.js?v=5"></script>
+<script src="assets/checkout.js?v=7"></script>
 </body>
 </html>

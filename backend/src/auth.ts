@@ -8,7 +8,7 @@ export function signToken(role: Role, extra: Record<string, unknown> = {}, expir
 
 export interface Authed extends Request {
   role?: Role;
-  phone?: string;
+  email?: string;
 }
 
 export function auth(required: Role[]) {
@@ -17,10 +17,10 @@ export function auth(required: Role[]) {
     const token = h.startsWith('Bearer ') ? h.slice(7) : '';
     if (!token) return next(Object.assign(new Error('Missing token'), { status: 401 }));
     try {
-      const p = jwt.verify(token, env.JWT_SECRET, { algorithms: ['HS256'] }) as { role: Role; phone?: string };
+      const p = jwt.verify(token, env.JWT_SECRET, { algorithms: ['HS256'] }) as { role: Role; email?: string };
       if (!required.includes(p.role)) return next(Object.assign(new Error('Forbidden'), { status: 403 }));
       req.role = p.role;
-      req.phone = p.phone;
+      req.email = p.email;
       next();
     } catch {
       next(Object.assign(new Error('Invalid token'), { status: 401 }));

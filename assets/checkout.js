@@ -124,15 +124,18 @@ $('#coForm').addEventListener('submit', async e => {
     if (bad) ok = false;
   });
   if (!ok) return;
-  const name = $('#coName').value.trim(), phone = $('#coPhone').value.trim(), address = $('#coAddr').value.trim(), gstin = $('#coGst').value.trim().toUpperCase();
+  const name = $('#coName').value.trim(), phone = $('#coPhone').value.trim(), address = $('#coAddr').value.trim(), gstin = $('#coGst').value.trim().toUpperCase(), email = $('#coEmail').value.trim().toLowerCase();
+  const goodMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  $('#coEmailErr').textContent = (email && !goodMail) || (method === 'card' && !goodMail) ? 'Enter your email so we can send the bill' : '';
+  if ($('#coEmailErr').textContent) return;
   const items = cart.map(c => ({ id: c.id, name: c.name, qty: c.qty, rate: c.rate || 0, gst_pct: c.gst_pct ?? 18, img: c.img }));
   const t = totals();
-  localStorage.setItem('sse_cust', JSON.stringify({ name, phone, gst: gstin, address }));
+  localStorage.setItem('sse_cust', JSON.stringify({ ...(JSON.parse(localStorage.getItem('sse_cust') || 'null') || {}), name, phone, email, gst: gstin, address }));
 
   if (api()) {
     if (pending) { await payOnline(pending); return; }
     try {
-      const r = await fetch(api() + '/payments/create-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: cart.map(c => ({ id: c.id, qty: c.qty, slab: c.slab === 'wholesale' ? 'wholesale' : 'retail' })), name, phone, address, gstin, method }) });
+      const r = await fetch(api() + '/payments/create-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: cart.map(c => ({ id: c.id, qty: c.qty, slab: c.slab === 'wholesale' ? 'wholesale' : 'retail' })), name, phone, email, address, gstin, method }) });
       const j = await r.json();
       if (!r.ok) { $('#coErr').textContent = j.error || 'Could not place the order. Try again.'; return; }
       if (j.mode === 'cashfree') {
@@ -171,7 +174,7 @@ async function reprice() {
 }
 (async function init() {
   const c = (() => { try { return JSON.parse(localStorage.getItem('sse_cust') || 'null'); } catch { return null; } })();
-  if (c) { $('#coName').value = c.name || ''; $('#coPhone').value = c.phone || ''; $('#coGst').value = c.gst || ''; $('#coAddr').value = c.address || ''; }
+  if (c) { $('#coName').value = c.name || ''; $('#coPhone').value = c.phone || ''; $('#coEmail').value = c.email || ''; $('#coGst').value = c.gst || ''; $('#coAddr').value = c.address || ''; }
   drawItems(); drawPay();
   await reprice();
   if (api()) { try { status = await (await fetch(api() + '/payments/status')).json(); if (status.gateway === 'cashfree') method = 'card'; drawPay(); } catch {} }

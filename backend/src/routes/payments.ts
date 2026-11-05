@@ -6,7 +6,7 @@ import { env } from '../env.js';
 import { requireDb, tx } from '../db.js';
 import { rateLimit } from '../ratelimit.js';
 import { financialYear } from './billing.js';
-import { alertOwner } from '../sms.js';
+import { alertOwner, sendBill } from '../mail.js';
 
 export const payments = Router();
 
@@ -73,10 +73,10 @@ payments.post('/payments/create-order', rateLimit(60 * 60 * 1000, 30), async (re
 
     // Rates on request: the order is saved for the counter and nothing is charged.
     if (toQuote || grand < 1) {
-      await p.query('INSERT INTO orders(id,source,text,phone) VALUES($1,$2,$3,$4)', [orderId, 'quote', record, b.phone]);
+      await p.query('INSERT INTO orders(id,source,text,phone,email) VALUES($1,$2,$3,$4,$5)', [orderId, 'quote', record, b.phone, b.email.toLowerCase()]);
       return res.status(201).json({ mode: 'quote', orderId, sub, gst, grand, toQuote });
     }
-    await p.query('INSERT INTO orders(id,source,text,phone) VALUES($1,$2,$3,$4)', [orderId, 'checkout', record, b.phone]);
+    await p.query('INSERT INTO orders(id,source,text,phone,email) VALUES($1,$2,$3,$4,$5)', [orderId, 'checkout', record, b.phone, b.email.toLowerCase()]);
 
     // Cash on delivery — no gateway, collect on dispatch. Belt area only note on UI.
     if (b.method === 'cod') return res.status(201).json({ mode: 'cod', orderId, sub, gst, grand });
@@ -130,9 +130,9 @@ type Item = { id: string; name: string; qty: number; rate: number; gst_pct: numb
 async function settlePaid(id: string, mode = 'Online') {
   const out = await tx(async (c) => {
     await c.query('SELECT pg_advisory_xact_lock(7540)');
-    const row = (await c.query('SELECT text,phone,invoice_no FROM orders WHERE id=$1 FOR UPDATE', [id])).rows[0] as { text: string; phone: string; invoice_no: string } | undefined;
+    const row = (await c.query('SELECT text,phone,email,invoice_no FROM orders WHERE id=$1 FOR UPDATE', [id])).rows[0] as { text: string; phone: string; email: string; invoice_no: string } | undefined;
     if (!row) return null;
-    if (row.invoice_no) return { no: row.invoice_no, fresh: false, grand: 0 };
+    if (row.invoice_no) return { no: row.invoice_no, fresh: false, grand: 0, name: '', email: '' };
     const d = JSON.parse(row.text) as { amount: number; items: Item[]; customer: { name: string; gstin?: string; address?: string } };
     const prefix = `WEB/${financialYear()}/`;
     const last = (await c.query(`SELECT COALESCE(MAX((regexp_match(no,'([0-9]+)$'))[1]::int),0) n FROM invoices WHERE no LIKE $1`, [prefix + '%'])).rows[0].n as number;
@@ -146,10 +146,13 @@ async function settlePaid(id: string, mode = 'Online') {
       await c.query('INSERT INTO stock_log(product_id,delta,reason) VALUES($1,$2,$3)', [it.id, -it.qty, no]);
     }
     await c.query(`UPDATE orders SET status='paid',invoice_no=$2,paid_at=now() WHERE id=$1`, [id, no]);
-    return { no, fresh: true, grand: d.amount };
+    return { no, fresh: true, grand: d.amount, name: d.customer.name, email: row.email };
   });
-  // The counter marked it paid by hand, so the owner already knows.
-  if (out?.fresh && mode === 'Online') await alertOwner(out.no, out.grand);
+  if (out?.fresh) {
+    // The counter marked it paid by hand, so the owner already knows.
+    if (mode === 'Online') await alertOwner(out.no, out.grand, out.name);
+    if (out.email) await sendBill(out.email, id, out.no, out.grand);
+  }
   return out?.no || '';
 }
 

@@ -17,13 +17,11 @@ const Env = z.object({
   CASHFREE_ENV: z.enum(['sandbox', 'production']).default('sandbox'),
   // This API's public address, so Cashfree can reach the webhook.
   PUBLIC_API_URL: z.string().default(''),
-  // Optional: set both to turn on SMS sign-in. The template must be DLT approved.
-  MSG91_AUTH_KEY: z.string().default(''),
-  MSG91_TEMPLATE_ID: z.string().default(''),
-  // Optional: text the owner on every paid order. The template carries ##invoice## and ##amount##.
-  MSG91_OWNER_TEMPLATE_ID: z.string().default(''),
-  OWNER_PHONE: z.string().regex(/^$|^[6-9][0-9]{9}$/).default(''),
-  OTP_DAILY_CAP: z.coerce.number().int().min(1).default(300),
+  // Optional: turns on email sign-in, bills by email and owner alerts.
+  RESEND_API_KEY: z.string().default(''),
+  MAIL_FROM: z.string().default('Shree Shyam Enterprises <noreply@shreeshyamhardware.site>'),
+  OWNER_EMAIL: z.string().default(''),
+  OTP_DAILY_CAP: z.coerce.number().int().min(1).default(60),
 });
 
 export const env = Env.parse(process.env);

@@ -405,28 +405,28 @@ function bindOnline(el) {
   const sync = el.querySelector('#onlineSync');
   if (sync) sync.onclick = () => syncOnline().catch(x => toast(x.message));
 }
-/* Customers: everyone who signed in by SMS, read live from the backend. */
+/* Customers: everyone who signed in by email, read live from the backend. */
 const when = d => (d ? new Date(d).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Never');
 async function drawCustomers() {
   const el = $('#pane-customers');
   if (!SSE.api() || !staffToken()) {
-    el.innerHTML = `<div class="empty"><b>${SSE.api() ? 'Sign in again' : 'No customer accounts yet'}</b><p>${SSE.api() ? 'Lock the console and sign in again to load customers.' : 'Accounts are created by SMS sign-in, which starts once the backend is live.'}</p></div>`;
+    el.innerHTML = `<div class="empty"><b>${SSE.api() ? 'Sign in again' : 'No customer accounts yet'}</b><p>${SSE.api() ? 'Lock the console and sign in again to load customers.' : 'Accounts are created by email sign-in, which starts once the backend is live.'}</p></div>`;
     return;
   }
   el.innerHTML = '<div class="empty slim">Loading customers</div>';
   try {
     const { items } = await staffGet('/customers');
-    if (!items.length) { el.innerHTML = '<div class="empty"><b>No accounts yet</b><p>Customers appear here the first time they sign in with their mobile.</p></div>'; return; }
+    if (!items.length) { el.innerHTML = '<div class="empty"><b>No accounts yet</b><p>Customers appear here the first time they sign in with their email.</p></div>'; return; }
     el.innerHTML = `<p class="hint">${items.length} account${items.length === 1 ? '' : 's'}</p><div class="tblwrap"><table class="tbl"><thead><tr><th>Customer</th><th>Joined</th><th>Last sign-in</th><th>Orders</th><th>Paid</th><th></th></tr></thead><tbody>` +
-      items.map(c => `<tr><td><b>${esc(c.name || 'Name not added')}</b><small>+91 ${esc(c.phone)}${c.gstin ? ' · ' + esc(c.gstin) : ''}</small></td><td>${when(c.created_at)}</td><td>${when(c.last_login)}</td><td>${Number(c.orders)}</td><td>${fmt(c.paid)}</td>
-        <td style="text-align:right"><button class="btn line sm hist" data-p="${esc(c.phone)}">History</button></td></tr>`).join('') + '</tbody></table></div>';
+      items.map(c => `<tr><td><b>${esc(c.name || 'Name not added')}</b><small>${esc(c.email)}${c.phone ? ' · +91 ' + esc(c.phone) : ''}${c.gstin ? ' · ' + esc(c.gstin) : ''}</small></td><td>${when(c.created_at)}</td><td>${when(c.last_login)}</td><td>${Number(c.orders)}</td><td>${fmt(c.paid)}</td>
+        <td style="text-align:right"><button class="btn line sm hist" data-p="${esc(c.email)}">History</button></td></tr>`).join('') + '</tbody></table></div>';
     el.querySelectorAll('.hist').forEach(b => { b.onclick = () => drawHistory(b.dataset.p); });
   } catch (x) { el.innerHTML = `<div class="empty"><b>Could not load customers</b><p>${esc(x.message)}</p></div>`; }
 }
-async function drawHistory(phone) {
+async function drawHistory(email) {
   const el = $('#pane-customers');
   try {
-    const { customer: c, logins, orders } = await staffGet('/customers/' + encodeURIComponent(phone));
+    const { customer: c, logins, orders } = await staffGet('/customers/' + encodeURIComponent(email));
     const ev = [{ at: c.created_at, t: 'Account created', d: '' }, ...logins.map(at => ({ at, t: 'Signed in', d: '' }))];
     for (const o of orders) {
       const list = o.items.map(i => `${i.name} x ${i.qty}`).join(', ');
@@ -435,7 +435,7 @@ async function drawHistory(phone) {
     }
     ev.sort((a, b) => new Date(b.at) - new Date(a.at));
     el.innerHTML = `<div class="panel-tools"><button class="btn line sm" id="histBack">All customers</button></div>
-      <div class="cust-card"><div><h3>${esc(c.name || 'Name not added')}</h3><p>+91 ${esc(c.phone)}${c.gstin ? ' · GSTIN ' + esc(c.gstin) : ''}</p>${c.address ? `<p>${esc(c.address)}</p>` : ''}</div>
+      <div class="cust-card"><div><h3>${esc(c.name || 'Name not added')}</h3><p>${esc(c.email)}${c.phone ? ' · +91 ' + esc(c.phone) : ''}${c.gstin ? ' · GSTIN ' + esc(c.gstin) : ''}</p>${c.address ? `<p>${esc(c.address)}</p>` : ''}</div>
         <dl><div><dt>Joined</dt><dd>${when(c.created_at)}</dd></div><div><dt>Last sign-in</dt><dd>${when(c.last_login)}</dd></div><div><dt>Orders</dt><dd>${orders.length}</dd></div></dl></div>
       <ol class="cust-time">${ev.map(e => `<li class="${e.ok ? 'ok' : ''}"><time>${when(e.at)}</time><b>${esc(e.t)}</b>${e.d ? `<span>${esc(e.d)}</span>` : ''}</li>`).join('')}</ol>`;
     $('#histBack').onclick = drawCustomers;

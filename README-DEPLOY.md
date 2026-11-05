@@ -5,7 +5,7 @@ Two Vercel projects come from this one repo:
 | Project | Root Directory | What it runs |
 |---|---|---|
 | Website | repo root | Pages, plus the admin password check in `api/admin-login.js` |
-| Backend | `backend` | SMS sign-in, Cashfree, paid bills, customers |
+| Backend | `backend` | Email sign-in, Cashfree, paid bills, customers |
 
 The website works alone. Until the backend is connected, account details stay on the device and orders go by WhatsApp.
 
@@ -53,10 +53,8 @@ Online checkout reads rates from this database. A product at rate 0 goes out as 
 | `CASHFREE_APP_ID` | From Cashfree |
 | `CASHFREE_SECRET_KEY` | From Cashfree |
 | `CASHFREE_ENV` | `sandbox`, later `production` |
-| `MSG91_AUTH_KEY` | From MSG91 |
-| `MSG91_TEMPLATE_ID` | Approved OTP template |
-| `MSG91_OWNER_TEMPLATE_ID` | Approved owner alert template |
-| `OWNER_PHONE` | 10 digit mobile for payment alerts |
+| `RESEND_API_KEY` | From Resend |
+| `OWNER_EMAIL` | Gets an email on every online payment |
 
 3. Put the backend address in `API_URL` at the top of `assets/app.js`, push, and redeploy the website.
 
@@ -72,19 +70,16 @@ After later updates that change the tables, run `npm run db:push` again.
 
 The webhook address is sent with each order from `PUBLIC_API_URL`.
 
-## 5. SMS
+## 5. Email
 
-Every business SMS in India needs DLT registration.
+Sign-in codes, paid bills and owner alerts go through Resend.
 
-1. Register as a Principal Entity on a DLT portal such as Jio or Airtel, using your GST papers.
-2. Get a sender ID approved.
-3. Get two templates approved. In MSG91 they carry `##otp##`, and `##invoice##` with `##amount##`:
-   - `{#var#} is your Shree Shyam Enterprises login code. It expires in 5 minutes.`
-   - `Payment received. Bill {#var#}, amount Rs {#var#}. Shree Shyam Enterprises`
-4. In MSG91, add the DLT details and create both templates. Copy the auth key and template IDs into Vercel.
-5. Recharge MSG91, then test with your own number.
+1. Sign up at resend.com and add `shreeshyamhardware.site` as a domain.
+2. Add the DNS records Resend shows at your domain provider, and wait for it to say Verified.
+3. Create an API key and put it in `RESEND_API_KEY`.
+4. Set `OWNER_EMAIL` to the inbox that should get payment alerts, and turn on notifications for it on your phone.
 
-Sign-in codes are capped at 4 an hour per number and 300 a day in total, so a bot cannot empty the balance. Change the daily cap with `OTP_DAILY_CAP`.
+Sign-in codes are capped at 4 an hour per address and 60 a day in total, which leaves room for bills and alerts in the free plan's 100 emails a day. Change the cap with `OTP_DAILY_CAP`.
 
 ## Costs
 
@@ -95,8 +90,7 @@ Check each provider's page before paying, since prices change.
 | Neon database | Free plan |
 | Cashfree | No setup fee. 0% offer up to Rs 20 lakh for eligible new merchants, then 1.95% plus GST |
 | Direct UPI to your own ID | No gateway fee, confirmed by hand with Mark paid |
-| DLT | About Rs 5,900 |
-| MSG91 | About Rs 0.25 per SMS on the smallest listed pack, plus GST |
+| Resend email | Free plan: 3,000 emails a month, 100 a day |
 | Vercel | Hobby is non-commercial only, so this shop needs a paid plan |
 
 ## Unlimited products

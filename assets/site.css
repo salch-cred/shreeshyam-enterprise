@@ -818,7 +818,7 @@ em{font-style:normal}
 
 a,button{-webkit-tap-highlight-color:transparent}
 
-/* account: SMS sign-in and the signed-in page */
+/* account: email sign-in and the signed-in page */
 body.acct{background:#fff;color:#182430}
 .in{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);min-height:100vh}
 .in[hidden]{display:none}
@@ -841,6 +841,7 @@ body.acct{background:#fff;color:#182430}
 .in-phone:focus-within{border-color:#182430;box-shadow:0 0 0 3px rgba(24,36,48,.1)}
 .in-phone span{display:flex;align-items:center;padding:0 14px;background:#f3f4f6;border-right:1px solid #d9dde2;font:600 17px var(--sans);color:#182430}
 .field .in-phone input{flex:1;min-width:0;height:54px;border:0;border-radius:0;background:#fff;font:500 19px var(--sans);letter-spacing:.02em;box-shadow:none;outline:0}
+.in-box .in-email{height:54px;font-size:17px}
 .in-go{display:flex;width:100%;min-height:52px;justify-content:center;align-items:center;margin-top:18px;background:var(--action);color:#fff;font-size:16px}
 .in-go:hover{background:#a8370a;color:#fff}
 .in-go:disabled{opacity:.6;cursor:wait}

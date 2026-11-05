@@ -49,14 +49,15 @@ export const ContentIn = z.object({
   address: z.string().max(300),
 }).partial().strict();
 
-const Mobile = z.string().regex(/^[6-9][0-9]{9}$/);
+export const Email = z.string().trim().toLowerCase().max(120).pipe(z.email());
 
-export const OtpRequestIn = z.object({ phone: Mobile });
+export const OtpRequestIn = z.object({ email: Email });
 
-export const OtpVerifyIn = z.object({ phone: Mobile, code: z.string().regex(/^[0-9]{6}$/) });
+export const OtpVerifyIn = z.object({ email: Email, code: z.string().regex(/^[0-9]{6}$/) });
 
 export const ProfileIn = z.object({
   name: z.string().trim().min(2).max(120),
+  phone: z.string().trim().regex(/^$|^[6-9][0-9]{9}$/).default(''),
   gstin: z.string().trim().toUpperCase().regex(/^$|^[0-9A-Z]{15}$/).default(''),
   address: z.string().trim().max(400).default(''),
 });

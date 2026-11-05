@@ -11,11 +11,11 @@ import { join } from 'path';
 const req = createRequire(process.env.PGLITE_PATH ? join(process.env.PGLITE_PATH, 'x.js') : __filename);
 const SCHEMA = `
 CREATE TABLE products(id text PRIMARY KEY,name text NOT NULL,brand text NOT NULL DEFAULT '-',category text NOT NULL DEFAULT 'General',unit text NOT NULL DEFAULT 'pcs',hsn text NOT NULL DEFAULT '',image text NOT NULL DEFAULT '',rate_retail int NOT NULL,rate_wholesale int NOT NULL,gst_pct int NOT NULL DEFAULT 18,stock int NOT NULL DEFAULT 0,min_stock int NOT NULL DEFAULT 5,updated_at timestamp(3) NOT NULL);
-CREATE TABLE users(id text PRIMARY KEY,name text NOT NULL,phone text NOT NULL UNIQUE,password_hash text NOT NULL DEFAULT '',gstin text NOT NULL DEFAULT '',address text NOT NULL DEFAULT '',role text NOT NULL DEFAULT 'customer',last_login timestamp(3),created_at timestamp(3) NOT NULL DEFAULT now());
-CREATE TABLE login_log(id serial PRIMARY KEY,phone text NOT NULL,at timestamp(3) NOT NULL DEFAULT now());
+CREATE TABLE users(id text PRIMARY KEY,name text NOT NULL,email text NOT NULL UNIQUE,phone text NOT NULL DEFAULT '',password_hash text NOT NULL DEFAULT '',gstin text NOT NULL DEFAULT '',address text NOT NULL DEFAULT '',role text NOT NULL DEFAULT 'customer',last_login timestamp(3),created_at timestamp(3) NOT NULL DEFAULT now());
+CREATE TABLE login_log(id serial PRIMARY KEY,email text NOT NULL,at timestamp(3) NOT NULL DEFAULT now());
 CREATE TABLE invoices(no text PRIMARY KEY,date timestamp(3) NOT NULL DEFAULT now(),type text NOT NULL DEFAULT 'TAX',customer text NOT NULL DEFAULT '',phone text NOT NULL DEFAULT '',gstin text NOT NULL DEFAULT '',address text NOT NULL DEFAULT '',order_id text NOT NULL DEFAULT '',mode text NOT NULL DEFAULT '',items jsonb NOT NULL,subtotal int NOT NULL DEFAULT 0,discount int NOT NULL DEFAULT 0,gst int NOT NULL DEFAULT 0,grand int NOT NULL DEFAULT 0,paid int NOT NULL DEFAULT 0,balance int NOT NULL DEFAULT 0);
-CREATE TABLE orders(id text PRIMARY KEY,source text NOT NULL DEFAULT 'web',text text NOT NULL DEFAULT '',status text NOT NULL DEFAULT 'new',phone text NOT NULL DEFAULT '',invoice_no text NOT NULL DEFAULT '',paid_at timestamp(3),created timestamp(3) NOT NULL DEFAULT now());
-CREATE TABLE otp_codes(id text PRIMARY KEY,phone text NOT NULL,ip text NOT NULL,code_hash text NOT NULL,attempts int NOT NULL DEFAULT 0,used boolean NOT NULL DEFAULT false,created timestamp(3) NOT NULL DEFAULT now(),expires timestamp(3) NOT NULL);
+CREATE TABLE orders(id text PRIMARY KEY,source text NOT NULL DEFAULT 'web',text text NOT NULL DEFAULT '',status text NOT NULL DEFAULT 'new',phone text NOT NULL DEFAULT '',email text NOT NULL DEFAULT '',invoice_no text NOT NULL DEFAULT '',paid_at timestamp(3),created timestamp(3) NOT NULL DEFAULT now());
+CREATE TABLE otp_codes(id text PRIMARY KEY,email text NOT NULL,ip text NOT NULL,code_hash text NOT NULL,attempts int NOT NULL DEFAULT 0,used boolean NOT NULL DEFAULT false,created timestamp(3) NOT NULL DEFAULT now(),expires timestamp(3) NOT NULL);
 CREATE TABLE stock_log(id serial PRIMARY KEY,product_id text NOT NULL,delta int NOT NULL,reason text NOT NULL DEFAULT '',date timestamp(3) NOT NULL DEFAULT now());
 CREATE TABLE content(key text PRIMARY KEY,value jsonb NOT NULL);
 INSERT INTO products(id,name,rate_retail,rate_wholesale,gst_pct,stock,updated_at) VALUES('A','Priced part',1000,900,18,10,now()),('Q','Quote part',0,0,18,10,now());
@@ -41,7 +41,7 @@ async function main() {
   await sock.start();
   Object.assign(process.env, {
     DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:54329/postgres?sslmode=disable', JWT_SECRET: JWT,
-    ADMIN_PASSWORD: 'counter-pass-1', UPI_ID: 'test@upi', CASHFREE_SECRET_KEY: '', MSG91_AUTH_KEY: 'msg-key', MSG91_TEMPLATE_ID: 'tpl', MSG91_OWNER_TEMPLATE_ID: 'tpl-owner', OWNER_PHONE: '9887979884', OTP_DAILY_CAP: '300', CORS_ORIGIN: 'https://shreeshyamhardware.site',
+    ADMIN_PASSWORD: 'counter-pass-1', UPI_ID: 'test@upi', CASHFREE_SECRET_KEY: '', RESEND_API_KEY: 're_key', OWNER_EMAIL: 'owner@example.com', OTP_DAILY_CAP: '60', CORS_ORIGIN: 'https://shreeshyamhardware.site',
   });
   const { createApp } = await import('../src/app.js');
   const { tx, requireDb } = await import('../src/db.js');
@@ -104,14 +104,14 @@ async function main() {
   await tx(async (c) => { await c.query(`INSERT INTO orders(id) VALUES('ROLLME')`); throw new Error('boom'); }).catch(() => {});
   check('A failed transaction rolls back fully', (await q('SELECT count(*)::int c FROM orders'))[0].c === before);
 
-  // SMS sign-in. Outbound calls are captured, so no real text or payment is ever sent.
+  // Email sign-in. Outbound calls are captured, so no real email or payment is ever sent.
   const realFetch = globalThis.fetch, texts: { url: string; body: any; headers: any }[] = [];
-  let smsDown = false, cf: { create?: any; order?: any } = {};
+  let mailDown = false, cf: { create?: any; order?: any } = {};
   globalThis.fetch = (async (u: any, o: any = {}) => {
     const url = String(u);
-    if (url.includes('msg91.com')) {
+    if (url.includes('resend.com')) {
       texts.push({ url, body: JSON.parse(o.body), headers: o.headers });
-      return new Response(JSON.stringify({ type: smsDown ? 'error' : 'success' }), { status: smsDown ? 400 : 200 });
+      return new Response(JSON.stringify({ id: 'm1' }), { status: mailDown ? 500 : 200 });
     }
     if (url.includes('cashfree.com')) {
       texts.push({ url, body: o.body ? JSON.parse(o.body) : null, headers: o.headers });
@@ -119,60 +119,61 @@ async function main() {
     }
     return realFetch(u, o);
   }) as typeof fetch;
-  const lastCode = () => texts.filter((t) => t.url.includes('msg91')).at(-1)!.body.recipients[0].otp as string;
+  const mails = () => texts.filter((t) => t.url.includes('resend'));
+  const lastCode = () => /\b(\d{6})\b/.exec(mails().at(-1)!.body.text)![1];
   const clearOtp = () => requireDb().query('DELETE FROM otp_codes');
-  const phone = '9000000001';
+  const email = 'plant@example.com';
 
   r = await call('/auth/otp/status');
-  check('Page can see SMS sign-in is on', r.json.sms === true, r);
-  r = await call('/auth/otp/request', { body: { phone: '1234567890' } });
-  check('A non Indian mobile number is refused', r.status === 400, r);
-  r = await call('/auth/otp/request', { body: { phone } });
-  check('A code is texted through MSG91', r.status === 200 && texts.length === 1 && /^[0-9]{6}$/.test(lastCode()) && texts[0].body.recipients[0].mobiles === '91' + phone && texts[0].headers.authkey === 'msg-key', r);
+  check('Page can see email sign-in is on', r.json.email === true, r);
+  r = await call('/auth/otp/request', { body: { email: 'not-an-email' } });
+  check('A bad email address is refused', r.status === 400, r);
+  r = await call('/auth/otp/request', { body: { email: ' Plant@Example.com ' } });
+  check('A code is emailed through Resend, in lower case', r.status === 200 && mails().length === 1 && /^[0-9]{6}$/.test(lastCode()) && mails()[0].body.to[0] === email && mails()[0].headers.Authorization === 'Bearer re_key', r);
   check('The code never comes back to the browser', !JSON.stringify(r.json).includes(lastCode()));
   check('The code is stored only as a hash', !(await q('SELECT code_hash FROM otp_codes'))[0].code_hash.includes(lastCode()));
-  r = await call('/auth/otp/request', { body: { phone } });
-  check('A second text within the cooldown is refused', r.status === 429 && texts.length === 1, r);
+  r = await call('/auth/otp/request', { body: { email } });
+  check('A second email within the cooldown is refused', r.status === 429 && mails().length === 1, r);
   const good = lastCode(), bad = good === '111111' ? '222222' : '111111';
-  r = await call('/auth/otp/verify', { body: { phone, code: bad } });
+  r = await call('/auth/otp/verify', { body: { email, code: bad } });
   check('A wrong code is refused', r.status === 401, r);
-  r = await call('/auth/otp/verify', { body: { phone: '9000000002', code: good } });
-  check('A code does not work for another number', r.status === 401, r);
+  r = await call('/auth/otp/verify', { body: { email: 'other@example.com', code: good } });
+  check('A code does not work for another address', r.status === 401, r);
   await q(`UPDATE otp_codes SET expires = now() - interval '1 minute'`);
-  r = await call('/auth/otp/verify', { body: { phone, code: good } });
+  r = await call('/auth/otp/verify', { body: { email, code: good } });
   check('An expired code is refused', r.status === 401, r);
   await q(`UPDATE otp_codes SET expires = now() + interval '5 minutes', attempts = 5`);
-  r = await call('/auth/otp/verify', { body: { phone, code: good } });
+  r = await call('/auth/otp/verify', { body: { email, code: good } });
   check('Five wrong guesses burn the code, even for the right one', r.status === 401, r);
   await q(`UPDATE otp_codes SET attempts = 0`);
-  r = await call('/auth/otp/verify', { body: { phone, code: good } });
-  check('The right code signs in and creates the customer', r.status === 200 && r.json.user.phone === phone && r.json.user.name === '', r);
+  r = await call('/auth/otp/verify', { body: { email, code: good } });
+  check('The right code signs in and creates the customer', r.status === 200 && r.json.user.email === email && r.json.user.name === '', r);
   const cust = r.json.token as string;
-  r = await call('/auth/otp/verify', { body: { phone, code: good } });
+  r = await call('/auth/otp/verify', { body: { email, code: good } });
   check('A code works only once', r.status === 401, r);
   await clearOtp();
-  await call('/auth/otp/request', { body: { phone } });
-  r = await call('/auth/otp/verify', { body: { phone, code: lastCode() } });
-  check('Signing in again keeps the same customer', r.status === 200 && (await q('SELECT count(*)::int c FROM users WHERE phone=$1', [phone]))[0].c === 1, r);
+  await call('/auth/otp/request', { body: { email } });
+  r = await call('/auth/otp/verify', { body: { email, code: lastCode() } });
+  check('Signing in again keeps the same customer', r.status === 200 && (await q('SELECT count(*)::int c FROM users WHERE email=$1', [email]))[0].c === 1, r);
   await clearOtp();
-  smsDown = true;
-  r = await call('/auth/otp/request', { body: { phone } });
-  check('A failed text leaves no live code behind', r.status === 502 && !(await q('SELECT 1 FROM otp_codes')).length, r);
-  smsDown = false;
-  await q(`INSERT INTO otp_codes(id,phone,ip,code_hash,created,expires) SELECT 'p'||g,$1,'x','x',now() - interval '10 minutes',now() FROM generate_series(1,4) g`, [phone]);
-  r = await call('/auth/otp/request', { body: { phone } });
-  check('Four texts in an hour stops a fifth', r.status === 429 && /hour/.test(r.json.error), r);
+  mailDown = true;
+  r = await call('/auth/otp/request', { body: { email } });
+  check('A failed email leaves no live code behind', r.status === 502 && !(await q('SELECT 1 FROM otp_codes')).length, r);
+  mailDown = false;
+  await q(`INSERT INTO otp_codes(id,email,ip,code_hash,created,expires) SELECT 'p'||g,$1,'x','x',now() - interval '10 minutes',now() FROM generate_series(1,4) g`, [email]);
+  r = await call('/auth/otp/request', { body: { email } });
+  check('Four emails in an hour stops a fifth', r.status === 429 && /hour/.test(r.json.error), r);
   await clearOtp();
-  await q(`INSERT INTO otp_codes(id,phone,ip,code_hash,created,expires) SELECT 'd'||g,'9'||g,'x','x',now() - interval '2 hours',now() FROM generate_series(1,300) g`);
-  r = await call('/auth/otp/request', { body: { phone } });
-  check('The daily cap protects the SMS balance', r.status === 429, r);
+  await q(`INSERT INTO otp_codes(id,email,ip,code_hash,created,expires) SELECT 'd'||g,'d'||g,'x','x',now() - interval '2 hours',now() FROM generate_series(1,60) g`);
+  r = await call('/auth/otp/request', { body: { email } });
+  check('The daily cap protects the email allowance', r.status === 429, r);
   await clearOtp();
-  r = await call('/auth/register', { body: { name: 'Plant', phone, password: 'longenough1' } });
+  r = await call('/auth/register', { body: { name: 'Plant', phone: '9000000001', password: 'longenough1' } });
   check('Password sign-up no longer exists', r.status === 404, r);
 
   r = await call('/me', { method: 'PUT', token: cust, body: { name: 'Plant', gstin: 'bad', address: '' } });
   check('A bad GSTIN is refused', r.status === 400, r);
-  r = await call('/me', { method: 'PUT', token: cust, body: { name: 'Test Plant', gstin: '08abcde1234f1z5', address: 'Plot 1' } });
+  r = await call('/me', { method: 'PUT', token: cust, body: { name: 'Test Plant', phone: '9000000001', gstin: '08abcde1234f1z5', address: 'Plot 1' } });
   check('Customer can save their details', r.status === 200 && r.json.gstin === '08ABCDE1234F1Z5', r);
   r = await call('/me', { token: cust });
   check('Details come back', r.status === 200 && r.json.name === 'Test Plant', r);
@@ -180,11 +181,11 @@ async function main() {
   check('Details need a token', r.status === 401, r);
   r = await call('/me/orders', { token: signToken('admin') });
   check('Order history is for customers only', r.status === 403, r);
-  r = await call('/payments/create-order', { body: { ...buyer, phone, items: [{ id: 'A', qty: 2 }] } });
+  r = await call('/payments/create-order', { body: { ...buyer, email: ' PLANT@example.com'.trim(), items: [{ id: 'A', qty: 2 }] } });
   const own = r.json.orderId as string;
-  await call('/payments/create-order', { body: { ...buyer, phone: '9000000077', items: [{ id: 'A', qty: 1 }] } });
+  await call('/payments/create-order', { body: { ...buyer, email: 'other@example.com', items: [{ id: 'A', qty: 1 }] } });
   r = await call('/me/orders', { token: cust });
-  check('History shows only this number’s orders', r.status === 200 && r.json.items.length === 1 && r.json.items[0].id === own && r.json.items[0].total === 2360, r);
+  check('History shows only this account’s orders', r.status === 200 && r.json.items.length === 1 && r.json.items[0].id === own && r.json.items[0].total === 2360, r);
   r = await call('/payments/create-order', { body: { ...buyer, items: [{ id: 'A', qty: 1, slab: 'wholesale' }] } });
   check('Wholesale rate comes from the database', r.json.grand === 1062, r);
 
@@ -227,9 +228,9 @@ async function main() {
   cf.order = { order_status: 'PAID', order_amount: 1180 };
   r = await call('/payments/verify/' + cfId);
   check('Gateway confirmation marks the order paid', r.json.status === 'paid' && (await q('SELECT status FROM orders WHERE id=$1', [cfId]))[0].status === 'paid', r);
-  const invNo = r.json.invoiceNo as string, ownerTexts = () => texts.filter((t) => t.body?.template_id === 'tpl-owner');
+  const invNo = r.json.invoiceNo as string, ownerTexts = () => mails().filter((t) => t.body.to[0] === 'owner@example.com');
   check('Payment raises a bill in the online series', /^WEB\/\d\d-\d\d\/0001$/.test(invNo), r);
-  check('Owner gets one SMS with the bill and amount', ownerTexts().length === 1 && ownerTexts()[0].body.recipients[0].invoice === invNo && ownerTexts()[0].body.recipients[0].amount === '1180' && ownerTexts()[0].body.recipients[0].mobiles === '919887979884', ownerTexts());
+  check('Owner gets one email with the bill and amount', ownerTexts().length === 1 && ownerTexts()[0].body.subject.includes(invNo) && ownerTexts()[0].body.subject.includes('1180') && ownerTexts()[0].body.html.includes('Test Plant'), ownerTexts());
   const stockAfter = (await q(`SELECT stock FROM products WHERE id='A'`))[0].stock;
   r = await call('/payments/verify/' + cfId);
   check('Checking again changes nothing', r.json.invoiceNo === invNo && (await q('SELECT count(*)::int c FROM invoices WHERE order_id=$1', [cfId]))[0].c === 1 && ownerTexts().length === 1 && (await q(`SELECT stock FROM products WHERE id='A'`))[0].stock === stockAfter, r);
@@ -259,7 +260,9 @@ async function main() {
   r = await call(`/orders/${own}/mark-paid`, { body: { mode: 'Cash' }, token: admin });
   const offNo = r.json.invoiceNo as string;
   check('Admin marks an offline order paid and it gets a bill', r.status === 200 && /^WEB\//.test(offNo) && offNo !== invNo, r);
-  check('Offline payment sends no owner SMS', ownerTexts().length === smsBefore);
+  check('Offline payment sends no owner email', ownerTexts().length === smsBefore);
+  const billMail = mails().filter((t) => t.body.to[0] === email).at(-1)!;
+  check('Customer gets the bill link by email', billMail.body.subject.includes(offNo) && billMail.body.text.includes('/invoice?order=' + own), billMail.body);
   r = await call(`/orders/${own}/mark-paid`, { body: { mode: 'UPI' }, token: admin });
   check('Pressing paid twice makes no second bill', r.json.invoiceNo === offNo && (await q('SELECT count(*)::int c FROM invoices WHERE order_id=$1', [own]))[0].c === 1, r);
   r = await call('/payments/invoice/' + own);
@@ -277,17 +280,17 @@ async function main() {
   r = await call('/customers', { token: cust });
   check('Customers cannot read the list', r.status === 403, r);
   r = await call('/customers', { token: admin });
-  const row = r.json.items?.find((c: any) => c.phone === phone);
+  const row = r.json.items?.find((c: any) => c.email === email);
   check('Admin sees account holders with totals and join time', r.status === 200 && row?.name === 'Test Plant' && row.orders === 1 && row.paid === 2360 && row.created_at && row.last_login, r);
-  r = await call(`/customers/${phone}`, { token: admin });
+  r = await call(`/customers/${encodeURIComponent(email)}`, { token: admin });
   check('Customer history has sign-ins and paid times', r.status === 200 && r.json.logins.length === 2 && r.json.orders[0].paid_at && r.json.orders[0].mode === 'Cash' && r.json.orders[0].items.length === 1 && !('text' in r.json.orders[0]), r);
-  r = await call('/customers/9000000055', { token: admin });
+  r = await call('/customers/nobody%40example.com', { token: admin });
   check('Unknown customer is not found', r.status === 404, r);
 
   cf.create = { message: 'refused' };
   r = await call('/payments/create-order', { body: { ...buyer, method: 'card', items: [{ id: 'A', qty: 1 }] } });
   check('Gateway refusal gives a plain error', r.status === 502, r);
-  env.CASHFREE_APP_ID = ''; env.CASHFREE_SECRET_KEY = ''; env.OWNER_PHONE = '';
+  env.CASHFREE_APP_ID = ''; env.CASHFREE_SECRET_KEY = ''; env.OWNER_EMAIL = '';
   globalThis.fetch = realFetch;
 
   // webhook

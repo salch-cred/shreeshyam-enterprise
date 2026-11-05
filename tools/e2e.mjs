@@ -211,7 +211,7 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
 {
   const { c, page } = await ctx();
   const API = 'https://api.test', log = [];
-  let paid = 'failed', me = { name: '', phone: '9876543210', gstin: '', address: '' };
+  let paid = 'failed', me = { name: '', email: 'plant@example.com', phone: '', gstin: '', address: '' };
   await c.addInitScript(a => localStorage.setItem('sse_api', a), API);
   await page.route(API + '/**', r => {
     const url = new URL(r.request().url()), m = r.request().method();
@@ -219,7 +219,7 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
     if (m === 'OPTIONS') return r.fulfill({ status: 204, headers });
     const body = r.request().postDataJSON?.() || null, send = (j, status = 200) => r.fulfill({ status, headers, body: JSON.stringify(j) });
     log.push(m + ' ' + url.pathname);
-    if (url.pathname === '/auth/otp/status') return send({ sms: true });
+    if (url.pathname === '/auth/otp/status') return send({ email: true });
     if (url.pathname === '/auth/otp/request') return send({ ok: true, retryIn: 45 });
     if (url.pathname === '/auth/otp/verify') return body.code === '123456' ? send({ token: 'tok', user: me }) : send({ error: 'That code is wrong or has expired. Check it or ask for a new one.' }, 401);
     if (url.pathname === '/me' && m === 'PUT') { me = { ...me, ...body }; return send(me); }
@@ -233,14 +233,14 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   });
   await page.route('https://sdk.cashfree.com/**', r => r.fulfill({ contentType: 'text/javascript', body: 'window.__cf=0;window.Cashfree=o=>({checkout:async a=>{window.__cf++;window.__cfMode=o.mode;window.__cfSess=a.paymentSessionId;return {}}});' }));
   await go(page, '/account.html');
-  await page.waitForSelector('#stepPhone:not([hidden])');
-  await page.fill('#inPhone', '12345');
+  await page.waitForSelector('#stepEmail:not([hidden])');
+  await page.fill('#inEmail', 'not-an-email');
   await page.click('#sendBtn');
-  check('Sign-in refuses a short number', /10 digit/.test(await page.textContent('#inErr')));
-  await page.fill('#inPhone', '9876543210');
+  check('Sign-in refuses a bad email', /email address/.test(await page.textContent('#inErr')));
+  await page.fill('#inEmail', 'Plant@Example.com');
   await page.click('#sendBtn');
   await page.waitForSelector('#stepCode:not([hidden])');
-  check('Code screen shows the number and a resend timer', /98765 43210/.test(await page.textContent('#sentTo')) && await page.isDisabled('#resend'));
+  check('Code screen shows the address and a resend timer', /plant@example\.com/.test(await page.textContent('#sentTo')) && await page.isDisabled('#resend'));
   await page.locator('.otp input').first().focus();
   await page.keyboard.type('111111');
   await page.waitForFunction(() => /wrong/.test(document.querySelector('#codeErr').textContent));
@@ -249,9 +249,10 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.waitForSelector('#stepName:not([hidden])');
   check('Pasted code signs in, and a new customer is asked for a name', await page.evaluate(() => localStorage.getItem('sse_token') === 'tok'));
   await page.fill('#nName', 'Test Plant');
+  await page.fill('#nPhone', '9876543210');
   await page.click('#stepName button');
   await page.waitForSelector('#meView:not([hidden])');
-  check('Account page shows the verified number and server orders', /Verified by SMS/.test(await page.textContent('#meLine')) && /Paid/.test(await page.textContent('#orders')) && /1,180/.test(await page.textContent('#orders')));
+  check('Account page shows the verified email and server orders', /plant@example\.com · Verified by email/.test(await page.textContent('#meLine')) && /Paid/.test(await page.textContent('#orders')) && /1,180/.test(await page.textContent('#orders')));
   await page.click('#editMe');
   await page.fill('#eGst', 'SHORT');
   await page.click('#editForm [type=submit]');
@@ -265,7 +266,11 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.evaluate(() => SSE.setCart([{ id: 'BR-BRG-6205', name: 'Bearing 6205', qty: 1, rate: 1000, gst_pct: 18, img: '' }]));
   await go(page, '/checkout.html');
   await page.waitForSelector('#payPanel [data-m=card]');
-  check('Checkout offers Pay online first and fills saved details', await page.getAttribute('#payPanel [data-m=card]', 'aria-pressed') === 'true' && await page.inputValue('#coAddr') === 'Plot 1, RIICO');
+  check('Checkout offers Pay online first and fills saved details', await page.getAttribute('#payPanel [data-m=card]', 'aria-pressed') === 'true' && await page.inputValue('#coAddr') === 'Plot 1, RIICO' && await page.inputValue('#coEmail') === 'plant@example.com');
+  await page.fill('#coEmail', '');
+  await page.click('#coPay');
+  check('Paying online needs an email for the bill', /email/.test(await page.textContent('#coEmailErr')) && !log.some(l => l.includes('create-order')));
+  await page.fill('#coEmail', 'plant@example.com');
   await page.click('#coPay');
   await page.waitForFunction(() => /did not go through/.test(document.querySelector('#coErr').textContent));
   check('A failed payment keeps the cart and offers a retry', await page.evaluate(() => SSE.getCart().length === 1 && window.__cf === 1 && window.__cfMode === 'sandbox') && /again/.test(await page.textContent('#coPay')));
@@ -287,7 +292,7 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
   await page.waitForSelector('#meView:not([hidden])');
   check('Paid order on the account page links its bill', await page.locator('.acct-row a[href*="invoice.html?order=SSEAB12"]').count() === 1);
   await page.click('#logout');
-  await page.waitForSelector('#stepPhone:not([hidden])');
+  await page.waitForSelector('#stepEmail:not([hidden])');
   check('Sign out removes the session', await page.evaluate(() => localStorage.getItem('sse_token') === null));
   await c.close();
 }
@@ -304,8 +309,8 @@ if (!process.env.E2E_QUICK) for (const [label, vp] of [['desktop', { width: 1280
     const send = (j, status = 200) => r.fulfill({ status, headers, body: JSON.stringify(j) });
     if (u === '/auth/login') return r.request().postDataJSON().password === 'test-counter-1' ? send({ token: 'staff' }) : send({ error: 'Wrong password' }, 401);
     if (u === '/orders/SSEWEB2/mark-paid' && r.request().method() === 'POST') { markedAs = r.request().postDataJSON().mode; return send({ status: 'paid', invoiceNo: 'WEB/26-27/0002' }); }
-    if (u === '/customers') return send({ items: [{ name: 'Web Buyer', phone: '9876543210', gstin: '', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z', orders: 2, paid: 1180 }] });
-    if (u === '/customers/9876543210') return send({ customer: { name: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z' }, logins: ['2026-11-05T10:00:00Z'], orders: [{ id: 'SSEWEB1', status: 'paid', created: '2026-11-05T10:01:00Z', paid_at: '2026-11-05T10:02:00Z', invoice_no: 'WEB/26-27/0001', mode: 'Online', total: 1180, items: [{ name: 'Ball bearing 6205 ZZ', qty: 2 }] }] });
+    if (u === '/customers') return send({ items: [{ name: 'Web Buyer', email: 'buyer@example.com', phone: '9876543210', gstin: '', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z', orders: 2, paid: 1180 }] });
+    if (u === '/customers/buyer%40example.com') return send({ customer: { name: 'Web Buyer', email: 'buyer@example.com', phone: '9876543210', gstin: '', address: 'Plot 1', created_at: '2026-10-01T09:30:00Z', last_login: '2026-11-05T10:00:00Z' }, logins: ['2026-11-05T10:00:00Z'], orders: [{ id: 'SSEWEB1', status: 'paid', created: '2026-11-05T10:01:00Z', paid_at: '2026-11-05T10:02:00Z', invoice_no: 'WEB/26-27/0001', mode: 'Online', total: 1180, items: [{ name: 'Ball bearing 6205 ZZ', qty: 2 }] }] });
     if (u === '/orders') return send({ items: [{ id: 'SSEWEB1', source: 'checkout', status: 'paid', phone: '9876543210', invoice_no: 'WEB/26-27/0001', text: JSON.stringify(order), created: '2026-11-05T10:00:00Z' }, { id: 'SSEWEB2', source: 'checkout', status: markedAs ? 'paid' : 'new', phone: '9876543210', invoice_no: markedAs ? 'WEB/26-27/0002' : '', text: JSON.stringify({ ...order, method: 'cod' }), created: '2026-11-05T11:00:00Z' }] });
     if (u === '/invoices/online') return send({ items: [...(markedAs ? [{ no: 'WEB/26-27/0002', order_id: 'SSEWEB2', mode: markedAs, date: '2026-11-05T11:05:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] : []), { no: 'WEB/26-27/0001', order_id: 'SSEWEB1', mode: 'Online', date: '2026-11-05T10:00:00Z', customer: 'Web Buyer', phone: '9876543210', gstin: '', address: 'Plot 1', items: order.items, grand: 1180 }] });
     return send({ error: 'unexpected' }, 404);

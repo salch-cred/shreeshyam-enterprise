@@ -32,7 +32,8 @@ model Product {
 model User {
   id           String   @id @default(cuid())
   name         String
-  phone        String   @unique
+  email        String   @unique
+  phone        String   @default("")
   passwordHash String   @default("") @map("password_hash")
   gstin        String   @default("")
   address      String   @default("")
@@ -72,27 +73,28 @@ model Order {
   text    String   @default("")
   status  String   @default("new")
   phone   String   @default("")
+  email   String   @default("")
   invoiceNo String @default("") @map("invoice_no")
   paidAt  DateTime? @map("paid_at")
   created DateTime @default(now())
 
   @@index([status])
-  @@index([phone])
+  @@index([email])
   @@map("orders")
 }
 
 model LoginLog {
   id    Int      @id @default(autoincrement())
-  phone String
+  email String
   at    DateTime @default(now())
 
-  @@index([phone, at])
+  @@index([email, at])
   @@map("login_log")
 }
 
 model OtpCode {
   id       String   @id
-  phone    String
+  email    String
   ip       String
   codeHash String   @map("code_hash")
   attempts Int      @default(0)
@@ -100,7 +102,7 @@ model OtpCode {
   created  DateTime @default(now())
   expires  DateTime
 
-  @@index([phone, created])
+  @@index([email, created])
   @@map("otp_codes")
 }
 

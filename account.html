@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=59">
+<link rel="stylesheet" href="assets/site.css?v=60">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <title>Your account — Shree Shyam Enterprises</title>
@@ -20,7 +20,7 @@
     <aside class="in-side">
       <div class="in-bearing" id="inBearing" aria-hidden="true"><canvas></canvas></div>
       <div class="in-copy">
-        <h2>Every order under one number.</h2>
+        <h2>Every order under one account.</h2>
         <ul>
           <li><b>Repeat a list in one tap</b><span>Your last order goes straight back in the cart.</span></li>
           <li><b>Checkout fills itself</b><span>Name, GSTIN and delivery address stay saved.</span></li>
@@ -29,20 +29,20 @@
       </div>
     </aside>
     <div class="in-main"><div class="in-box">
-      <form id="stepPhone" novalidate hidden>
+      <form id="stepEmail" novalidate hidden>
         <p class="eyebrow">Your account</p>
-        <h1>Sign in with your mobile</h1>
-        <p class="lede">We text you a 6 digit code. There is no password to remember.</p>
-        <div class="field"><label for="inPhone">Mobile number</label>
-          <div class="in-phone"><span>+91</span><input id="inPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national"></div>
+        <h1>Sign in with your email</h1>
+        <p class="lede">We email you a 6 digit code. There is no password to remember.</p>
+        <div class="field"><label for="inEmail">Email address</label>
+          <input id="inEmail" class="in-email" type="email" inputmode="email" maxlength="120" placeholder="you@company.com" autocomplete="email">
           <span class="err" id="inErr" role="alert"></span></div>
         <button class="btn in-go" id="sendBtn" type="submit">Send code</button>
       </form>
 
       <form id="stepCode" novalidate hidden>
-        <p class="eyebrow">Check your messages</p>
+        <p class="eyebrow">Check your email</p>
         <h1>Enter the code</h1>
-        <p class="lede">Sent to <b id="sentTo"></b> <button type="button" class="in-link" id="changeNo">Change</button></p>
+        <p class="lede">Sent to <b id="sentTo"></b> <button type="button" class="in-link" id="changeNo">Change</button><br>Not there? Check spam.</p>
         <div class="otp" role="group" aria-label="6 digit code">
           <input inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Digit 1">
           <input inputmode="numeric" autocomplete="off" maxlength="6" aria-label="Digit 2">
@@ -57,10 +57,11 @@
       </form>
 
       <form id="stepName" novalidate hidden>
-        <p class="eyebrow">Number verified</p>
+        <p class="eyebrow">Email verified</p>
         <h1>Who are we billing?</h1>
         <p class="lede">This goes on your invoices. You can change it any time.</p>
         <div class="field"><label for="nName">Plant or purchaser name</label><input id="nName" autocomplete="organization" maxlength="120"></div>
+        <div class="field"><label for="nPhone">Mobile, for delivery</label><input id="nPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digits" autocomplete="tel"></div>
         <div class="field"><label for="nGst">GSTIN (optional)</label><input id="nGst" maxlength="15" style="text-transform:uppercase" autocomplete="off"></div>
         <span class="err" id="nErr" role="alert"></span>
         <button class="btn in-go" type="submit">Continue</button>
@@ -97,11 +98,12 @@
       <aside class="me-side">
         <section class="me-card" id="meDetails">
           <div class="me-card-head"><h2>Billing and delivery</h2><button class="in-link" id="editMe">Edit</button></div>
-          <dl><div><dt>Name</dt><dd id="dName"></dd></div><div><dt>GSTIN</dt><dd id="dGst"></dd></div><div><dt>Address</dt><dd id="dAddr"></dd></div></dl>
+          <dl><div><dt>Name</dt><dd id="dName"></dd></div><div><dt>Mobile</dt><dd id="dPhone"></dd></div><div><dt>GSTIN</dt><dd id="dGst"></dd></div><div><dt>Address</dt><dd id="dAddr"></dd></div></dl>
         </section>
         <form class="me-card" id="editForm" novalidate hidden>
           <div class="me-card-head"><h2>Billing and delivery</h2></div>
           <div class="field"><label for="eName">Plant or purchaser name</label><input id="eName" maxlength="120"></div>
+          <div class="field"><label for="ePhone">Mobile</label><input id="ePhone" type="tel" inputmode="numeric" maxlength="10"></div>
           <div class="field"><label for="eGst">GSTIN (optional)</label><input id="eGst" maxlength="15" style="text-transform:uppercase"></div>
           <div class="field"><label for="eAddr">Delivery address</label><textarea id="eAddr" rows="3" maxlength="400"></textarea></div>
           <span class="err" id="editErr" role="alert"></span>
@@ -122,6 +124,6 @@
   </section>
 </main>
 <script src="assets/app.js?v=56"></script>
-<script src="assets/account.js?v=4"></script>
+<script src="assets/account.js?v=5"></script>
 </body>
 </html>
