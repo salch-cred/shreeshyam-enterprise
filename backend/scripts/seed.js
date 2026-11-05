@@ -16,8 +16,8 @@ const { Pool } = require('pg');
   let n = 0;
   for (const p of cat.products) {
     await pool.query(
-      `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock)
-       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+      `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock,updated_at)
+       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())
        ON CONFLICT(id) DO UPDATE SET name=EXCLUDED.name, brand=EXCLUDED.brand, category=EXCLUDED.category,
        unit=EXCLUDED.unit, hsn=EXCLUDED.hsn, image=EXCLUDED.image, rate_retail=EXCLUDED.rate_retail,
        rate_wholesale=EXCLUDED.rate_wholesale, gst_pct=EXCLUDED.gst_pct, stock=EXCLUDED.stock,

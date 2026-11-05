@@ -2,21 +2,22 @@ import { Router } from 'express';
 import { auth } from '../auth.js';
 import { requireDb } from '../db.js';
 import { ContentIn, OrderIn } from '../validate.js';
+import { rateLimit } from '../ratelimit.js';
 
 export const misc = Router();
 
-misc.post('/orders', async (req, res, next) => {
+misc.post('/orders', rateLimit(60 * 60 * 1000, 20), async (req, res, next) => {
   try {
     const b = OrderIn.parse(req.body);
     const id = `W${Date.now()}`;
-    await requireDb().query('INSERT INTO orders(id,source,text) VALUES($1,$2,$3)', [id, b.source, b.text.slice(0, 1000)]);
+    await requireDb().query('INSERT INTO orders(id,source,text) VALUES($1,$2,$3)', [id, 'web', b.text]);
     res.status(201).json({ id });
   } catch (e) { next(e); }
 });
 
 misc.get('/orders', auth(['admin']), async (req, res, next) => {
   try {
-    const limit = Math.min(200, Math.max(1, Number(req.query.limit || 100)));
+    const limit = Math.min(200, Math.max(1, Number(req.query.limit) || 100));
     const rows = (await requireDb().query('SELECT id,source,text,status,created FROM orders ORDER BY created DESC LIMIT $1', [limit])).rows;
     res.json({ items: rows });
   } catch (e) { next(e); }

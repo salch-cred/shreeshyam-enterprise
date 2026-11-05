@@ -4,8 +4,8 @@
  "description": "Industrial and project suppliers: bearings, belts, fasteners, pneumatics, tools and electricals. Neemrana, Rajasthan.",
  "start_url": "/index.html",
  "display": "standalone",
- "background_color": "#FFFFFF",
- "theme_color": "#1E3A8B",
+ "background_color": "#182430",
+ "theme_color": "#182430",
  "icons": [
   {
    "src": "/assets/icons/icon-192.png",

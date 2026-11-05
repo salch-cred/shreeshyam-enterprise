@@ -2,1300 +2,207 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Admin & Counter Console — Shree Shyam Enterprises</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Counter console — Shree Shyam Enterprises</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#0F172A">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261015c">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=52">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
-<body style="padding-top:72px">
-<a class="skip" href="#main">Skip to content</a>
-<div class="grain no-print" aria-hidden="true"></div>
+<body class="console" data-chrome="none" data-stage="gate">
 
-<!-- EVENTBEDS™ LUXURY FIXED HEADER (ADMIN & CONSOLE SPECIFICATION) -->
-<header class="site-header no-print">
-  <div class="site-header-inner">
-    <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
-      <div class="eventbeds-logo-icon">
-        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
+<div class="gate on-dark no-print" id="gate">
+  <canvas id="stage" aria-hidden="true"></canvas>
+  <div class="gate-box" id="gateBox">
+    <img src="assets/land/logo-full-ink.png" alt="Shree Shyam Enterprises" width="652" height="760">
+    <h1 id="gateTitle">Counter console</h1>
+    <p id="gateSub">Billing, stock, orders and the ledger. Staff only.</p>
+    <form id="gateForm" autocomplete="off">
+      <div class="pinrow">
+        <input id="pin" inputmode="numeric" type="password" autocomplete="off" aria-label="Counter PIN" placeholder="PIN">
+        <button id="unlock" type="submit">Open</button>
       </div>
-      <div class="eventbeds-brand-text">
-        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
-        <span class="eventbeds-sub">Admin ERP & Console · Neemrana</span>
+      <div class="pinrow" id="pin2Row" style="margin-top:8px" hidden>
+        <input id="pin2" inputmode="numeric" type="password" autocomplete="off" aria-label="Repeat PIN" placeholder="Repeat PIN">
       </div>
-    </a>
-
-    <!-- Center Navigation Links -->
-    <nav class="eventbeds-nav-center" aria-label="Main Navigation">
-      <a href="index.html" class="eventbeds-nav-link">
-        <span>Overview</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="shop.html" class="eventbeds-nav-link">
-        <span>Catalogue</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="billing.html" class="eventbeds-nav-link">
-        <span>Billing POS</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="admin.html" class="eventbeds-nav-link active" style="color:#FFFFFF">
-        <span>Admin Console</span>
-        <span class="eb-nav-arrow" style="opacity:1;transform:none"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="admin.html#activity" id="navActivityLink" class="eventbeds-nav-link">
-        <span>Activity Log</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="account.html" class="eventbeds-nav-link">
-        <span>Plant Credit</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-    </nav>
-
-    <!-- Right: Fast Action Suite -->
-    <div class="eventbeds-actions">
-      <a class="btn btn-primary" href="billing.html" style="height:38px;padding:0 16px;font-size:13px;border-radius:999px">
-        <i class="hgi-stroke hgi-receipt-01"></i> Billing POS
-      </a>
-
-      <!-- Menu Capsule Button -->
-      <button class="eventbeds-menu-btn" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
-        <div class="eb-menu-text-wrap">
-          <span class="eb-menu-label open">Menu</span>
-          <span class="eb-menu-label close">Close</span>
-        </div>
-        <div class="eb-status-dots-box" aria-hidden="true">
-          <span class="eb-status-dot pulse-lime"></span>
-          <span class="eb-status-dot neutral"></span>
-        </div>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- EVENTBEDS™ MOBILE DRAWER -->
-<div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
-  <div class="site-drawer-head">
-    <div class="eventbeds-brand">
-      <div class="eventbeds-logo-icon">
-        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
-      </div>
-      <div class="eventbeds-brand-text">
-        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
-        <span class="eventbeds-sub">Admin Console</span>
-      </div>
-    </div>
-    <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
-  </div>
-
-  <div class="site-drawer-nav">
-    <a href="index.html" class="drawer-link-block">
-      <span>Home Overview</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="shop.html" class="drawer-link-block">
-      <span>Catalogue & Stock (10k+ SKU)</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="billing.html" class="drawer-link-block">
-      <span>Billing POS Counter</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="admin.html" class="drawer-link-block" style="color:#CDE06A">
-      <span>Admin Console (Active)</span>
-      <span class="arrow-svg" style="color:#CDE06A"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="admin.html#activity" class="drawer-link-block">
-      <span>Live Activity & Audit Feed</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="account.html" class="drawer-link-block">
-      <span>Plant Credit & Net 30 Ledger</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-  </div>
-
-  <div class="site-drawer-footer">
-    <a class="eventbeds-black-btn" style="width:100%;height:44px;font-size:13.5px" href="billing.html">
-      <div class="eb-btn-slider" style="height:20px;line-height:20px">
-        <span class="eb-btn-text" style="height:20px">Open Billing POS</span>
-        <span class="eb-btn-text hover" style="height:20px">Launch Counter 1</span>
-      </div>
-    </a>
-    <div class="drawer-socials">
-      <a class="drawer-social-icon" href="tel:+917240107540" title="Call Shop Desk"><i class="hgi-stroke hgi-call"></i></a>
-      <a class="drawer-social-icon" href="mailto:shreeshyamenterprises7540@gmail.com" title="Email Dispatch"><i class="hgi-stroke hgi-mail-01"></i></a>
-      <span style="font-size:11px;color:#94A3B8;margin-left:auto;font-weight:600">Enterprise Edition · v2.5</span>
-    </div>
+    </form>
+    <p class="gate-err" id="pinErr" role="alert"></p>
+    <a href="index.html" class="gate-back">Back to the website</a>
   </div>
 </div>
 
-<main id="main" class="admin-shell" style="max-width:1280px;margin:16px auto;padding:16px 20px">
-  
-  <!-- SECURITY PIN GATE TERMINAL -->
-  <div id="gate" class="auth-gate-terminal rv in">
-    <div class="gate-shield-icon">
-      <i class="hgi-stroke hgi-shield-security"></i>
-      <span class="gate-beacon-dot"></span>
-    </div>
-    <h1 class="gate-title">Admin Management Console</h1>
-    <p class="gate-sub">Enter administrator authorization PIN to access inventory management, audit telemetry, orders, and plant credit ledger.</p>
-    
-    <input id="pin" class="gate-pin-input" inputmode="numeric" type="password" maxlength="4" autocomplete="off" placeholder="••••" aria-label="Admin PIN">
-    <span class="err" id="pinErr" style="color:#F87171;font-size:13px;min-height:20px;display:block;font-weight:700"></span>
-
-    <!-- Interactive Touchscreen Numpad -->
-    <div class="gate-numpad">
-      <button class="gate-num-btn" data-key="1">1</button>
-      <button class="gate-num-btn" data-key="2">2</button>
-      <button class="gate-num-btn" data-key="3">3</button>
-      <button class="gate-num-btn" data-key="4">4</button>
-      <button class="gate-num-btn" data-key="5">5</button>
-      <button class="gate-num-btn" data-key="6">6</button>
-      <button class="gate-num-btn" data-key="7">7</button>
-      <button class="gate-num-btn" data-key="8">8</button>
-      <button class="gate-num-btn" data-key="9">9</button>
-      <button class="gate-num-btn" data-key="C" style="color:#F87171">C</button>
-      <button class="gate-num-btn" data-key="0">0</button>
-      <button class="gate-num-btn" data-key="OK" style="background:#1D4ED8;color:#FFFFFF">OK</button>
-    </div>
-
-    <button class="btn btn-primary" id="unlock" style="width:100%;height:48px;font-size:15px;justify-content:center;border-radius:12px;margin-top:8px">
-      <i class="hgi-stroke hgi-checkmark-circle-01"></i> Unlock Admin Console
-    </button>
-
-    <div class="gate-hint-row">
-      <span>Default Administrator PIN: <b>2580</b></span>
-      <button type="button" class="gate-quick-chip" id="quickPinBtn">Quick-Fill (2580)</button>
-    </div>
-  </div>
-
-  <!-- UPGRADED ADMIN APP WORKSPACE -->
-  <div id="app" hidden>
-    
-    <!-- Top Meta Status & Fast Controls -->
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:20px">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="eyebrow" style="margin:0;color:var(--accent)">Counter Operations & ERP</span>
-          <span class="pill ok" style="font-size:10.5px"><span class="live-beacon"></span> IndexedDB Online</span>
-        </div>
-        <h1 class="title" style="margin:4px 0 0;font-size:28px">Namaste, Sethji</h1>
+<div id="app" hidden>
+  <header class="ops no-print">
+    <div class="ops-top">
+      <a class="ops-brand" href="index.html" target="_blank" rel="noopener" aria-label="Open the website">
+        <img src="assets/land/logo-mark-ink.png" alt="" width="640" height="579">
+        <span><b>SHREE SHYAM</b><small>COUNTER CONSOLE</small></span>
+      </a>
+      <div class="ops-tabs" id="tabs" role="tablist" aria-label="Console sections">
+        <span class="ops-ink" id="ink" aria-hidden="true"></span>
+        <button role="tab" aria-selected="true" data-t="billing">Billing</button>
+        <button role="tab" aria-selected="false" data-t="products">Products</button>
+        <button role="tab" aria-selected="false" data-t="stock">Stock</button>
+        <button role="tab" aria-selected="false" data-t="orders">Orders<span class="ops-n" id="ordN">0</span></button>
+        <button role="tab" aria-selected="false" data-t="ledger">Ledger</button>
+        <button role="tab" aria-selected="false" data-t="reports">Reports</button>
+        <button role="tab" aria-selected="false" data-t="content">Settings</button>
       </div>
-
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <a class="btn btn-primary" href="billing.html" style="font-size:13px;padding:8px 16px">
-          <i class="hgi-stroke hgi-receipt-01"></i> Open Counter POS
-        </a>
-        <button class="btn btn-amber" id="addP" style="font-size:13px;padding:8px 16px">
-          <i class="hgi-stroke hgi-plus-sign"></i> Add Product
-        </button>
+      <div class="ops-meta">
+        <span class="mono" id="clock"></span>
+        <button id="lock">Lock</button>
       </div>
     </div>
-
-    <!-- 4 High-Impact KPI Metric Cards -->
-    <div class="statrow rv in" id="stats" style="margin-top:0">
-      <div>
-        <strong data-count id="stRev">₹ 0</strong>
-        <span>Total Billed on Counter</span>
-      </div>
-      <div>
-        <strong data-count id="stBills">0</strong>
-        <span>Tax Invoices Generated</span>
-      </div>
-      <div>
-        <strong data-count id="stDue" style="color:#B91C1C">₹ 0</strong>
-        <span>Plant Credit Outstanding</span>
-      </div>
-      <div>
-        <strong data-count id="stLow">0</strong>
-        <span>Items Below Min Buffer</span>
+    <div class="ops-head">
+      <div><h1 id="paneTitle">Billing</h1><p id="paneSub"></p></div>
+      <div class="ops-tools" id="prodTools" hidden>
+        <button class="btn" id="addP">Add product</button>
+        <button class="btn line" id="addMany">Add many</button>
+        <button class="btn line" id="expJ">Export for website</button>
       </div>
     </div>
-
-    <!-- Universal Command Bar -->
-    <div class="cmdbar rv in" style="margin-top:16px">
-      <label class="search" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)">
-        <i class="hgi-stroke hgi-search-01" style="color:#60A5FA"></i>
-        <input id="aq" type="search" placeholder="Quick search inventory, SKU, plant, or audit log…" aria-label="Search products and logs">
-        <kbd style="border-color:rgba(255,255,255,.2);color:#CBD5E1">/</kbd>
-      </label>
-      
-      <button class="btn btn-ghost" id="expJ" style="border-color:rgba(255,255,255,.2);color:#FFFFFF;font-size:13px">
-        <i class="hgi-stroke hgi-download-01"></i> Export JSON
-      </button>
-
-      <label class="btn btn-ghost" style="border-color:rgba(255,255,255,.2);color:#FFFFFF;cursor:pointer;font-size:13px">
-        <i class="hgi-stroke hgi-upload-01"></i> Import CSV
-        <input type="file" id="csv" accept=".csv" hidden>
-      </label>
-
-      <button class="btn btn-ghost" id="expAuditBtn" style="border-color:rgba(255,255,255,.2);color:#CDE06A;font-size:13px">
-        <i class="hgi-stroke hgi-file-01"></i> Audit CSV
-      </button>
-    </div>
-
-    <!-- Upgraded Tab Navigation -->
-    <div class="tabs" role="tablist" id="tabs">
-      <button aria-selected="true" data-t="activity" role="tab">
-        <i class="hgi-stroke hgi-activity-01"></i> Activity & Audit <span class="pill info" id="actN">0</span>
-      </button>
-      <button aria-selected="false" data-t="products" role="tab">
-        <i class="hgi-stroke hgi-package"></i> Products & Shelf
-      </button>
-      <button aria-selected="false" data-t="stock" role="tab">
-        <i class="hgi-stroke hgi-chart-01"></i> Stock Health <span class="pill bad" id="lowN" style="display:none">0</span>
-      </button>
-      <button aria-selected="false" data-t="orders" role="tab">
-        <i class="hgi-stroke hgi-inbox"></i> Web Orders <span class="pill info" id="ordN">0</span>
-      </button>
-      <button aria-selected="false" data-t="ledger" role="tab">
-        <i class="hgi-stroke hgi-wallet-01"></i> Plant Credit Ledger
-      </button>
-      <button aria-selected="false" data-t="reports" role="tab">
-        <i class="hgi-stroke hgi-file-01"></i> Reports & GSTR
-      </button>
-      <button aria-selected="false" data-t="content" role="tab">
-        <i class="hgi-stroke hgi-edit-01"></i> Website Settings
-      </button>
-    </div>
-
-    <!-- Main Dynamic Tab Panel -->
-    <div class="panel" id="panel" style="background:#FFFFFF;border-radius:20px;border:1px solid var(--line);padding:24px;box-shadow:0 12px 36px rgba(15,23,42,.06);margin-top:12px">
-      
-      <!-- SKELETON LOADER -->
-      <div id="skel" hidden>
-        <div class="skelrow"></div>
-        <div class="skelrow"></div>
-        <div class="skelrow"></div>
-      </div>
-
-      <!-- TAB 1: UPGRADED ACTIVITY & AUDIT LOG -->
-      <div id="pane-activity"></div>
-
-      <!-- TAB 2: PRODUCTS CATALOGUE -->
-      <div id="pane-products" hidden>
-        <div class="tblwrap">
-          <table class="tbl">
-            <thead>
-              <tr>
-                <th>Product Description</th>
-                <th>Category</th>
-                <th>Retail Rate</th>
-                <th>Wholesale Rate</th>
-                <th>Current Stock</th>
-                <th style="text-align:right">Stock Move</th>
-              </tr>
-            </thead>
-            <tbody id="rows"></tbody>
-          </table>
-        </div>
-        <div class="pager" style="margin-top:16px">
-          <button class="btn btn-ghost" id="prevP" style="font-size:13px">Prev</button>
-          <span id="pgInfo" style="font-weight:700"></span>
-          <button class="btn btn-ghost" id="nextP" style="font-size:13px">Next</button>
-        </div>
-      </div>
-
-      <!-- TAB 3: STOCK HEALTH -->
-      <div id="pane-stock" hidden></div>
-
-      <!-- TAB 4: ORDERS & DISPATCH -->
-      <div id="pane-orders" hidden></div>
-
-      <!-- TAB 5: PLANT CREDIT LEDGER -->
-      <div id="pane-ledger" hidden></div>
-
-      <!-- TAB 6: REPORTS & GSTR -->
-      <div id="pane-reports" hidden></div>
-
-      <!-- TAB 7: STORE SETTINGS -->
-      <div id="pane-content" hidden></div>
-    </div>
-  </div>
-</main>
-
-<!-- SLIDE-OVER PRODUCT EDITOR -->
-<div class="scrim" id="scrim"></div>
-<aside class="sheet" id="sheet" aria-label="Product editor">
-  <header>
-    <div>
-      <p class="spec" style="margin:0;color:var(--accent)">Inventory Item</p>
-      <h2 id="shTitle" style="margin:4px 0 0;font-size:20px">New Product</h2>
-    </div>
-    <button class="btn btn-ghost" id="shClose" aria-label="Close editor" style="width:36px;height:36px;padding:0;display:grid;place-items:center">
-      <i class="hgi-stroke hgi-cancel-01"></i>
-    </button>
   </header>
-  <div class="body">
-    <img class="imgprev" id="fPrev" alt="Product image preview">
-    <div class="formgrid" style="margin-top:14px">
-      <div class="field full">
-        <label for="fName" style="font-size:12.5px;font-weight:700">Product Name</label>
-        <input id="fName" placeholder="e.g. SKF 6205 Deep Groove Ball Bearing" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
+
+  <main class="main no-print" id="main">
+    <div class="stats" id="stats">
+      <div><strong id="stRev">₹ 0</strong><span>Billed this year</span></div>
+      <div><strong id="stBills">0</strong><span>Tax bills</span></div>
+      <div><strong id="stDue">₹ 0</strong><span>Udhaar outstanding</span></div>
+      <div><strong id="stLow">0</strong><span>Below minimum</span></div>
+    </div>
+
+    <!-- BILLING -->
+    <div id="pane-billing">
+      <div class="pos">
+        <section class="shelf" aria-label="Add items">
+          <div class="shelf-tools">
+            <input class="searchbox" id="bq" type="search" placeholder="Search the shelf, Enter adds the first" aria-label="Search products" autocomplete="off">
+            <select id="slab" class="selectbox" aria-label="Rate type"><option value="retail">Retail</option><option value="wholesale">Wholesale</option></select>
+          </div>
+          <div id="held" class="heldrow"></div>
+          <div id="res" class="picks"></div>
+        </section>
+
+        <section class="ticket" aria-label="Bill">
+          <div class="ticket-head">
+            <div class="seg" id="typeSeg" aria-label="Bill type">
+              <button data-b="TAX" aria-pressed="true">Tax invoice</button><button data-b="EST" aria-pressed="false">Estimate</button>
+            </div>
+            <div class="ticket-no"><b id="invNo"></b><span id="invDate"></span></div>
+          </div>
+          <div class="ticket-body">
+            <div class="grid2">
+              <div class="field full"><label for="cust">Bill to</label><input id="cust" placeholder="Customer or plant name" autocomplete="off" list="custList" maxlength="120"><datalist id="custList"></datalist></div>
+              <div class="field"><label for="cphone">Phone</label><input id="cphone" inputmode="tel" autocomplete="off" maxlength="15"></div>
+              <div class="field"><label for="cgstin">GSTIN</label><input id="cgstin" autocomplete="off" maxlength="15" style="text-transform:uppercase"><span class="err" id="gstinNote"></span></div>
+              <div class="field full"><label for="caddr">Address</label><input id="caddr" autocomplete="off" maxlength="200"></div>
+            </div>
+            <div class="lines-head" aria-hidden="true"><span>Item</span><span>Qty</span><span>Rate</span><span>Amount</span></div>
+            <div id="lines"></div>
+            <div class="grid2 ticket-money">
+              <div class="field"><label for="disc">Discount ₹</label><input id="disc" type="number" min="0" step="any" value="0"></div>
+              <div class="field"><label for="paid">Received ₹</label><input id="paid" type="number" min="0" step="any" placeholder="Full amount"></div>
+            </div>
+            <div class="seg" id="modeSeg" aria-label="Payment mode">
+              <button data-m="UPI" aria-pressed="true">UPI</button><button data-m="Cash" aria-pressed="false">Cash</button><button data-m="Transfer" aria-pressed="false">Transfer</button><button data-m="Credit" aria-pressed="false">Credit</button>
+            </div>
+            <div class="totals" id="totals"></div>
+            <p class="bill-err" id="billErr" role="alert"></p>
+          </div>
+          <div class="paybar">
+            <div><small id="payLabel">Total</small><b id="payTotal">₹ 0</b></div>
+            <div class="paybar-act">
+              <button class="btn line" id="hold">Hold</button>
+              <button class="btn" id="save">Save and print</button>
+            </div>
+          </div>
+        </section>
       </div>
-      <div class="field">
-        <label for="fBrand" style="font-size:12.5px;font-weight:700">Brand / OEM</label>
-        <input id="fBrand" placeholder="SKF, Fenner, Bosch, Polymatic" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
+
+      <section class="panel daybook" aria-label="Day book">
+        <div class="dbhead">
+          <div><h3>Day book</h3><p class="db-sum" id="dbSum"></p></div>
+          <input class="searchbox" id="dbq" type="search" placeholder="Search today's bills" aria-label="Search bills">
+        </div>
+        <div id="dblist"></div>
+      </section>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="panel" id="pane-products" hidden>
+      <div class="panel-tools">
+        <input class="searchbox" id="aq" type="search" placeholder="Search name, make or part ID" aria-label="Search products">
+        <select id="aCat" class="selectbox" aria-label="Filter by category"><option value="">All categories</option></select>
       </div>
-      <div class="field">
-        <label for="fCat" style="font-size:12.5px;font-weight:700">Category</label>
-        <input id="fCat" placeholder="Bearings" list="catList" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-        <datalist id="catList"></datalist>
-      </div>
-      <div class="field">
-        <label for="fUnit" style="font-size:12.5px;font-weight:700">Unit of Measurement</label>
-        <select id="fUnit" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-          <option>pcs</option><option>kg</option><option>pack</option><option>set</option><option>box</option><option>coil</option><option>m</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="fHsn" style="font-size:12.5px;font-weight:700">HSN Code</label>
-        <input id="fHsn" placeholder="8482" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field">
-        <label for="fRet" style="font-size:12.5px;font-weight:700">Retail Rate (₹)</label>
-        <input id="fRet" type="number" min="0" value="100" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field">
-        <label for="fWho" style="font-size:12.5px;font-weight:700">Wholesale Rate (₹)</label>
-        <input id="fWho" type="number" min="0" value="90" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field">
-        <label for="fGst" style="font-size:12.5px;font-weight:700">GST %</label>
-        <select id="fGst" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-          <option>18</option><option>28</option><option>12</option><option>5</option><option>0</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="fStock" style="font-size:12.5px;font-weight:700">Stock on Shelf</label>
-        <input id="fStock" type="number" value="10" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field">
-        <label for="fMin" style="font-size:12.5px;font-weight:700">Minimum Buffer Level</label>
-        <input id="fMin" type="number" min="0" value="5" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field full">
-        <label for="fImg" style="font-size:12.5px;font-weight:700">Image URL</label>
-        <input id="fImg" placeholder="https://..." style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
+      <div class="tblwrap"><table class="tbl"><thead><tr><th>Product</th><th class="hide-sm">Category</th><th>Retail</th><th class="hide-sm">Wholesale</th><th>Stock</th><th style="text-align:right">Move</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div class="pager"><button class="btn line sm" id="prevP">Prev</button><span id="pgInfo"></span><button class="btn line sm" id="nextP">Next</button></div>
+      <p class="hint">Products and rates here stay on this computer. To show them on the website, use Export for website and replace <span class="mono">data/catalog-001.json</span>, then redeploy.</p>
+    </div>
+    <div class="panel" id="pane-stock" hidden></div>
+    <div class="panel" id="pane-orders" hidden></div>
+    <div class="panel" id="pane-ledger" hidden></div>
+    <div class="panel" id="pane-reports" hidden></div>
+    <div id="pane-content" hidden></div>
+  </main>
+</div>
+
+<div class="scrim no-print" id="scrim"></div>
+
+<aside class="drawer no-print" id="sheet" aria-label="Product editor">
+  <div class="sheet-head"><h2 id="shTitle">New product</h2><button class="sheet-x" id="shClose" aria-label="Close">×</button></div>
+  <div class="sheet-body">
+    <label class="photo">
+      <img class="imgprev" id="fPrev" alt="Product photo preview">
+      <span class="btn line sm">Upload photo</span>
+      <input type="file" id="fFile" accept="image/png,image/jpeg,image/webp" hidden>
+    </label>
+    <div class="grid2">
+      <div class="field full"><label for="fName">Name</label><input id="fName" maxlength="200"></div>
+      <div class="field"><label for="fBrand">Make</label><input id="fBrand" maxlength="80"></div>
+      <div class="field"><label for="fCat">Category</label><input id="fCat" list="catList" maxlength="80"><datalist id="catList"></datalist></div>
+      <div class="field"><label for="fUnit">Unit</label><select id="fUnit"><option>nos</option><option>pcs</option><option>kg</option><option>box</option><option>set</option><option>pack</option><option>m</option><option>roll</option></select></div>
+      <div class="field"><label for="fHsn">HSN</label><input id="fHsn" maxlength="10" inputmode="numeric"></div>
+      <div class="field"><label for="fRet">Retail ₹ (0 = on request)</label><input id="fRet" type="number" min="0" step="any" value="0"></div>
+      <div class="field"><label for="fWho">Wholesale ₹</label><input id="fWho" type="number" min="0" step="any" value="0"></div>
+      <div class="field"><label for="fGst">GST %</label><select id="fGst"><option>0</option><option>5</option><option>12</option><option selected>18</option><option>28</option></select></div>
+      <div class="field"><label for="fStock">Stock</label><input id="fStock" type="number" value="0"></div>
+      <div class="field"><label for="fMin">Minimum</label><input id="fMin" type="number" min="0" value="5"></div>
+      <div class="field full"><label for="fImg">Or image link</label><input id="fImg" placeholder="https://"></div>
     </div>
   </div>
-  <footer>
-    <button class="btn btn-ghost" id="shCancel">Cancel</button>
-    <button class="btn btn-primary" id="shSave">
-      <i class="hgi-stroke hgi-checkmark-circle-01"></i> Save Product
-    </button>
-  </footer>
+  <div class="sheet-foot">
+    <button class="btn line sm danger" id="shDel" hidden>Delete</button>
+    <button class="btn line" id="shNext">Save, add another</button>
+    <button class="btn" id="shSave">Save</button>
+  </div>
 </aside>
 
-<div class="toasts" id="toasts" aria-live="polite"></div>
-
-<script src="assets/app.js?v=20261015b"></script>
-<script>
-let ALL = [], pg = 1, editing = null, currentActFilter = 'all';
-const PIN = '2580';
-
-const toast = (msg, icon = 'checkmark-circle-01') => {
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.innerHTML = `<i class="hgi-stroke hgi-${icon}"></i><span>${SSE.esc(msg)}</span>`;
-  SSE.$('#toasts').appendChild(t);
-  setTimeout(() => {
-    t.classList.add('out');
-    setTimeout(() => t.remove(), 500);
-  }, 2600);
-};
-
-/* Security Gate Controller */
-function unlockAdmin() {
-  const pinVal = SSE.$('#pin').value.trim();
-  if (pinVal === PIN) {
-    sessionStorage.setItem('sse_admin', '1');
-    openAdmin();
-  } else {
-    SSE.$('#pinErr').textContent = 'Incorrect PIN. Default code is 2580.';
-    const g = SSE.$('#gate');
-    g.classList.remove('shake');
-    void g.offsetWidth;
-    g.classList.add('shake');
-  }
-}
-
-SSE.$('#unlock').onclick = unlockAdmin;
-SSE.$('#pin').addEventListener('keydown', e => {
-  if (e.key === 'Enter') unlockAdmin();
-});
-
-document.querySelectorAll('.gate-num-btn').forEach(btn => {
-  btn.onclick = () => {
-    const k = btn.dataset.key;
-    const pinInp = SSE.$('#pin');
-    if (k === 'C') {
-      pinInp.value = '';
-    } else if (k === 'OK') {
-      unlockAdmin();
-    } else {
-      if (pinInp.value.length < 4) {
-        pinInp.value += k;
-        if (pinInp.value.length === 4) unlockAdmin();
-      }
-    }
-  };
-});
-
-SSE.$('#quickPinBtn').onclick = () => {
-  SSE.$('#pin').value = PIN;
-  unlockAdmin();
-};
-
-if (sessionStorage.getItem('sse_admin') === '1') {
-  openAdmin();
-}
-
-function openAdmin() {
-  SSE.$('#gate').hidden = true;
-  SSE.$('#app').hidden = false;
-  init();
-}
-
-/* Tab Switching System */
-const tabs = [...document.querySelectorAll('#tabs button')];
-function showTab(t) {
-  tabs.forEach(x => x.setAttribute('aria-selected', String(x === t)));
-  ['activity', 'products', 'stock', 'orders', 'ledger', 'reports', 'content'].forEach(k => {
-    const pane = SSE.$('#pane-' + k);
-    if (pane) pane.hidden = (k !== t.dataset.t);
-  });
-
-  const p = SSE.$('#panel');
-  p.classList.remove('panel-anim');
-  void p.offsetWidth;
-  p.classList.add('panel-anim');
-
-  if (t.dataset.t === 'activity') drawActivity();
-  if (t.dataset.t === 'products') draw();
-  if (t.dataset.t === 'stock') drawStock();
-  if (t.dataset.t === 'orders') drawOrders();
-  if (t.dataset.t === 'ledger') drawLedger();
-  if (t.dataset.t === 'reports') drawReports();
-  if (t.dataset.t === 'content') drawContent();
-}
-
-tabs.forEach(b => b.onclick = () => showTab(b));
-
-// Deep linking support via location.hash
-function checkHashRoute() {
-  const hash = (location.hash || '').replace('#', '').toLowerCase();
-  const targetTab = tabs.find(b => b.dataset.t === hash);
-  if (targetTab) {
-    showTab(targetTab);
-  } else {
-    showTab(tabs[0]);
-  }
-}
-window.addEventListener('hashchange', checkHashRoute);
-
-async function init() {
-  ALL = await SSE.seed();
-  const cats = [...new Set(ALL.map(p => p.category))];
-  SSE.$('#catList').innerHTML = cats.map(c => `<option value="${SSE.esc(c)}">`).join('');
-
-  stats();
-  checkHashRoute();
-
-  const orders = JSON.parse(localStorage.getItem('sse_orders') || '[]') || [];
-  const newOrders = orders.filter(o => o.status === 'new').length;
-  SSE.$('#ordN').textContent = newOrders;
-
-  const lowCount = ALL.filter(p => p.stock <= (p.min_stock || 5)).length;
-  if (lowCount > 0) {
-    SSE.$('#lowN').textContent = lowCount;
-    SSE.$('#lowN').style.display = 'inline-flex';
-  }
-
-  SSE.$('#aq').oninput = () => {
-    const curTab = document.querySelector('#tabs button[aria-selected="true"]')?.dataset.t;
-    if (curTab === 'activity') drawActivity();
-    else { pg = 1; draw(); }
-  };
-
-  SSE.$('#prevP').onclick = () => { pg = Math.max(1, pg - 1); draw(); };
-  SSE.$('#nextP').onclick = () => { pg++; draw(); };
-  SSE.$('#addP').onclick = () => sheet();
-
-  SSE.$('#expJ').onclick = async () => {
-    const all = await SSE.all();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify({ products: all }, null, 2)], { type: 'application/json' }));
-    a.download = `shreeshyam-catalog-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    toast('Catalogue exported (JSON)');
-  };
-
-  SSE.$('#expAuditBtn').onclick = exportAuditCSV;
-
-  SSE.$('#csv').onchange = e => {
-    const f = e.target.files[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = async () => {
-      let n2 = 0;
-      for (const ln of String(r.result).split('\n').slice(1)) {
-        const c = ln.split(',');
-        if (c.length < 4) continue;
-        await SSE.put({
-          id: (c[0] || '').trim() || 'P-' + Date.now().toString(36) + n2,
-          name: c[1].trim(),
-          category: (c[2] || 'General').trim(),
-          brand: '-', unit: 'pcs', hsn: '',
-          rate_retail: Number(c[3]) || 0,
-          rate_wholesale: Number(c[4]) || Number(c[3]) || 0,
-          gst_pct: Number(c[5]) || 18,
-          stock: Number(c[6]) || 0,
-          min_stock: 5, image: ''
-        });
-        n2++;
-      }
-      ALL = await SSE.all();
-      SSE.logActivity('PRODUCT', `Bulk CSV Import: +${n2} SKUs`, `Imported from ${f.name} into IndexedDB`);
-      draw();
-      stats();
-      toast(n2 + ' products imported from CSV');
-    };
-    r.readAsText(f);
-  };
-
-  document.addEventListener('keydown', e => {
-    if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
-      e.preventDefault();
-      SSE.$('#aq').focus();
-    }
-  });
-}
-
-/* KPI Counter Stats */
-function stats() {
-  let inv = [];
-  try { inv = JSON.parse(localStorage.getItem('sse_invoices') || '[]'); } catch {}
-  const rev = inv.reduce((a, i) => a + (i.grand || 0), 0);
-  const due = inv.reduce((a, i) => a + (i.balance || 0), 0);
-  const low = ALL.filter(p => p.stock <= (p.min_stock || 5)).length;
-
-  count(SSE.$('#stRev'), rev, true);
-  count(SSE.$('#stBills'), inv.length, false);
-  count(SSE.$('#stDue'), due, true);
-  count(SSE.$('#stLow'), low, false);
-}
-
-function count(el, to, money) {
-  const t0 = performance.now(), d = 800;
-  const step = t => {
-    const k = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - k, 3);
-    const v = Math.round(to * e);
-    el.textContent = money ? '₹ ' + v.toLocaleString('en-IN') : v.toLocaleString('en-IN');
-    if (k < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-
-/* ========================================================
-   UPGRADED ACTIVITY & AUDIT DASHBOARD
-   ======================================================== */
-function drawActivity() {
-  const el = SSE.$('#pane-activity');
-  const q = (SSE.$('#aq').value || '').toLowerCase().trim();
-  const allActs = SSE.getActivities(currentActFilter);
-
-  const filtered = allActs.filter(a => {
-    if (!q) return true;
-    return (a.title + ' ' + a.detail + ' ' + (a.type || '') + ' ' + JSON.stringify(a.meta || {})).toLowerCase().includes(q);
-  });
-
-  SSE.$('#actN').textContent = allActs.length;
-
-  let billsCount = allActs.filter(a => a.type === 'BILL').length;
-  let stockCount = allActs.filter(a => a.type === 'STOCK').length;
-  let payCount = allActs.filter(a => a.type === 'PAYMENT').length;
-
-  el.innerHTML = `
-    <div class="activity-dashboard">
-      <!-- 4 Activity KPI Metrics -->
-      <div class="act-metrics-grid">
-        <div class="act-metric-card">
-          <div class="act-metric-icon green"><i class="hgi-stroke hgi-receipt-01"></i></div>
-          <div class="act-metric-meta"><b>${billsCount}</b><span>Invoices & Sales</span></div>
-        </div>
-        <div class="act-metric-card">
-          <div class="act-metric-icon amber"><i class="hgi-stroke hgi-package"></i></div>
-          <div class="act-metric-meta"><b>${stockCount}</b><span>Stock Adjustments</span></div>
-        </div>
-        <div class="act-metric-card">
-          <div class="act-metric-icon blue"><i class="hgi-stroke hgi-wallet-01"></i></div>
-          <div class="act-metric-meta"><b>${payCount}</b><span>Payments Collected</span></div>
-        </div>
-        <div class="act-metric-card">
-          <div class="act-metric-icon purple"><i class="hgi-stroke hgi-activity-01"></i></div>
-          <div class="act-metric-meta"><b>${allActs.length}</b><span>Total Audit Events</span></div>
-        </div>
-      </div>
-
-      <!-- Filter Controls & Actions Bar -->
-      <div class="act-controls">
-        <div class="act-filters" id="actFilterBar">
-          <button class="act-filter-btn ${currentActFilter === 'all' ? 'active' : ''}" data-actfilter="all">All Activity</button>
-          <button class="act-filter-btn ${currentActFilter === 'bill' ? 'active' : ''}" data-actfilter="bill">Billing & Tax</button>
-          <button class="act-filter-btn ${currentActFilter === 'stock' ? 'active' : ''}" data-actfilter="stock">Stock Movements</button>
-          <button class="act-filter-btn ${currentActFilter === 'payment' ? 'active' : ''}" data-actfilter="payment">Ledger Payments</button>
-          <button class="act-filter-btn ${currentActFilter === 'order' ? 'active' : ''}" data-actfilter="order">Web Orders</button>
-          <button class="act-filter-btn ${currentActFilter === 'product' ? 'active' : ''}" data-actfilter="product">Catalogue Updates</button>
-        </div>
-
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" id="simActBtn" style="font-size:12.5px" title="Simulate a real-time sale to test audit telemetry">
-            <i class="hgi-stroke hgi-flash"></i> Simulate Event
-          </button>
-          <button class="btn btn-ghost" id="clearActBtn" style="font-size:12.5px;color:#B91C1C;border-color:#FCA5A5">
-            Reset Log
-          </button>
-        </div>
-      </div>
-
-      <!-- Activity Timeline Feed -->
-      <div class="activity-feed">
-        ${filtered.length ? filtered.map(a => {
-          const typeIcon = {
-            BILL: 'hgi-receipt-01',
-            STOCK: 'hgi-package',
-            PAYMENT: 'hgi-wallet-01',
-            ORDER: 'hgi-inbox',
-            PRODUCT: 'hgi-edit-01',
-            SYSTEM: 'hgi-shield-security'
-          }[a.type] || 'hgi-activity-01';
-
-          const timeFormatted = new Date(a.time).toLocaleString('en-IN', {
-            day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
-          });
-
-          return `
-            <div class="act-item" data-type="${SSE.esc(a.type)}">
-              <div class="act-icon ${a.type}"><i class="hgi-stroke ${typeIcon}"></i></div>
-              <div class="act-body">
-                <div class="act-title-row">
-                  <span class="act-title">${SSE.esc(a.title)}</span>
-                  <span class="act-time">${timeFormatted}</span>
-                </div>
-                <div class="act-detail">${SSE.esc(a.detail)}</div>
-                <div style="display:flex;gap:6px;align-items:center;margin-top:6px;font-size:11px;color:#64748B">
-                  <span class="pill info" style="font-size:10px;padding:1px 6px">${SSE.esc(a.type)}</span>
-                  <span>ID: ${SSE.esc(a.id)}</span>
-                  <span style="margin-left:auto;color:#10B981;font-weight:700">✓ Verified Counter Audit</span>
-                </div>
-              </div>
-            </div>`;
-        }).join('') : `
-          <div class="empty">
-            <i class="hgi-stroke hgi-activity-01"></i>
-            <b>No audit activity matching filter</b>
-            <p>Every sale, stock update, and customer payment appears here with instant traceability.</p>
-          </div>`}
-      </div>
-
-      <!-- 30-Day Activity Heatmap & Telemetry -->
-      <div class="act-telemetry">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <h3 style="margin:0;font-size:16px;font-weight:800">Counter Activity Intensity (Last 30 Days)</h3>
-            <p style="margin:2px 0 0;font-size:12.5px;color:var(--muted)">Daily transaction volume and counter operational heat</p>
-          </div>
-          <span class="pill ok"><span class="live-beacon"></span> Live Telemetry</span>
-        </div>
-        <div class="actsline" id="actsline"></div>
-      </div>
-    </div>`;
-
-  // Bind filter buttons
-  el.querySelectorAll('#actFilterBar .act-filter-btn').forEach(btn => {
-    btn.onclick = () => {
-      currentActFilter = btn.dataset.actfilter;
-      drawActivity();
-    };
-  });
-
-  // Simulate counter event
-  el.querySelector('#simActBtn').onclick = () => {
-    const plants = ['Daikin Unit 2', 'Havells Neemrana', 'Mitsui Kinzoku', 'Hero Ancillary'];
-    const plant = plants[Math.floor(Math.random() * plants.length)];
-    const amt = Math.floor(Math.random() * 25000 + 4000);
-    SSE.logActivity(
-      'BILL',
-      `Counter Tax Invoice SSE/25-26/${Math.floor(Math.random() * 8000 + 1000)} Created`,
-      `${plant} · Total ₹ ${amt.toLocaleString('en-IN')} (UPI Instant Settlement)`,
-      { amount: amt, customer: plant }
-    );
-    drawActivity();
-    stats();
-    toast('Live counter activity logged', 'flash');
-  };
-
-  // Clear logs
-  el.querySelector('#clearActBtn').onclick = () => {
-    if (confirm('Clear audit activity log on this browser?')) {
-      localStorage.removeItem('sse_activities');
-      drawActivity();
-      toast('Activity log reset');
-    }
-  };
-
-  // Draw 30-day strip
-  const strip = el.querySelector('#actsline');
-  if (strip) {
-    let inv = [];
-    try { inv = JSON.parse(localStorage.getItem('sse_invoices') || '[]'); } catch {}
-    let sh = '';
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const key = d.toISOString().slice(0, 10);
-      const has = inv.some(x => (x.date || '').slice(0, 10) === key && x.type === 'TAX') || (i % 3 === 0);
-      sh += `<span class="${has ? 'on' : ''}" title="${key}${has ? ' · Active Counter Billing' : ' · Idle / Sunday'}"></span>`;
-    }
-    strip.innerHTML = sh;
-  }
-}
-
-function exportAuditCSV() {
-  const acts = SSE.getActivities('all');
-  if (!acts.length) {
-    toast('No activity events to export', 'alert-01');
-    return;
-  }
-  const q = s => `"${String(s ?? '').replace(/"/g, '""')}"`;
-  const csv = ['Activity_ID,Timestamp,Category,Title,Detail,Meta'].concat(
-    acts.map(a => [a.id, a.time, a.type, a.title, a.detail, JSON.stringify(a.meta || {})].map(q).join(','))
-  ).join('\n');
-
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-  a.download = `shreeshyam-audit-log-${new Date().toISOString().slice(0, 10)}.csv`;
-  a.click();
-  toast('Audit activity CSV exported', 'download-01');
-}
-
-/* Products Shelf Table */
-function draw() {
-  const q = (SSE.$('#aq').value || '').toLowerCase().trim();
-  const f = SSE.filter(ALL, q, '');
-  const items = SSE.page(f, pg);
-
-  SSE.$('#pgInfo').textContent = `Page ${pg} · ${f.length.toLocaleString('en-IN')} Products`;
-  const tb = SSE.$('#rows');
-
-  if (!items.length) {
-    tb.innerHTML = '';
-    SSE.$('#pane-products').querySelector('.tblwrap').hidden = true;
-    return;
-  }
-
-  SSE.$('#pane-products').querySelector('.tblwrap').hidden = false;
-  tb.innerHTML = items.map((p, i) => {
-    const low = p.stock <= (p.min_stock || 5);
-    return `
-      <tr class="rowin" style="animation-delay:${Math.min(i * 30, 240)}ms">
-        <td>
-          <b>${SSE.esc(p.name)}</b><br>
-          <span style="color:var(--muted);font-size:12px">
-            SKU: ${SSE.esc(p.id)} · ${SSE.esc(p.brand || '-')} · GST ${Number(p.gst_pct) || 18}%
-          </span>
-        </td>
-        <td><span class="pill info" style="font-size:11.5px">${SSE.esc(p.category)}</span></td>
-        <td><b>${p.rate_retail ? SSE.fmt(p.rate_retail) : 'On quote'}</b></td>
-        <td>${p.rate_wholesale ? SSE.fmt(p.rate_wholesale) : '—'}</td>
-        <td>
-          <b>${Number(p.stock) || 0} ${p.unit || 'pcs'}</b>
-          <span class="pill ${low ? 'bad' : 'ok'}" style="font-size:11px;margin-left:6px">
-            ${low ? 'Low Buffer' : 'OK'}
-          </span>
-        </td>
-        <td style="text-align:right;white-space:nowrap">
-          <button class="btn btn-ghost ed" data-id="${SSE.esc(p.id)}" style="padding:5px 12px;font-size:12.5px">Edit</button>
-          <button class="btn btn-ghost st" data-id="${SSE.esc(p.id)}" style="padding:5px 12px;font-size:12.5px;color:var(--accent)">+ Stock</button>
-        </td>
-      </tr>`;
-  }).join('');
-
-  tb.querySelectorAll('.ed').forEach(b => {
-    b.onclick = () => sheet(ALL.find(x => x.id === b.dataset.id));
-  });
-
-  tb.querySelectorAll('.st').forEach(b => {
-    b.onclick = () => {
-      const cell = b.parentElement;
-      b.disabled = true;
-      cell.innerHTML = `
-        <span style="display:inline-flex;gap:6px;align-items:center">
-          <input type="number" value="10" aria-label="Quantity to add" style="width:72px;border:1.5px solid var(--accent);border-radius:8px;padding:5px 8px;font:inherit;font-size:13px;font-weight:700">
-          <button class="btn btn-primary ok" style="padding:5px 10px;font-size:12px">Apply</button>
-        </span>`;
-      const inp = cell.querySelector('input');
-      inp.focus();
-      inp.select();
-
-      cell.querySelector('.ok').onclick = async () => {
-        const qVal = Number(inp.value);
-        if (!qVal) { draw(); return; }
-        const all = await SSE.all();
-        const p = all.find(x => x.id === b.dataset.id);
-        p.stock += qVal;
-        await SSE.put(p);
-        SSE.logStock(p.id, qVal, 'Admin Shelf Adjustment');
-        ALL = all;
-        draw();
-        stats();
-        toast((qVal > 0 ? '+' : '') + qVal + ' stock applied to ' + p.name);
-      };
-    };
-  });
-}
-
-/* Slide-Over Product Sheet */
-function sheet(p) {
-  editing = p || null;
-  SSE.$('#shTitle').textContent = p ? 'Edit Product SKU' : 'New Product SKU';
-  const g = id => SSE.$('#' + id);
-
-  g('fName').value = p?.name || '';
-  g('fBrand').value = p?.brand || '';
-  g('fCat').value = p?.category || '';
-  g('fUnit').value = p?.unit || 'pcs';
-  g('fHsn').value = p?.hsn || '8483';
-  g('fRet').value = p?.rate_retail ?? 100;
-  g('fWho').value = p?.rate_wholesale ?? 90;
-  g('fGst').value = String(p?.gst_pct ?? 18);
-  g('fStock').value = p?.stock ?? 10;
-  g('fMin').value = p?.min_stock ?? 5;
-  g('fImg').value = p?.image || '';
-
-  updPrev();
-  SSE.$('#scrim').classList.add('open');
-  SSE.$('#sheet').classList.add('open');
-  g('fName').focus();
-}
-
-function updPrev() {
-  SSE.$('#fPrev').src = SSE.safeImg(SSE.$('#fImg').value || 'assets/img/cat-p21.png');
-}
-SSE.$('#fImg').addEventListener('input', updPrev);
-
-function closeSheet() {
-  SSE.$('#scrim').classList.remove('open');
-  SSE.$('#sheet').classList.remove('open');
-}
-SSE.$('#shClose').onclick = closeSheet;
-SSE.$('#shCancel').onclick = closeSheet;
-SSE.$('#scrim').onclick = closeSheet;
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeSheet();
-});
-
-SSE.$('#shSave').onclick = async () => {
-  const g = id => SSE.$('#' + id).value.trim();
-  if (!g('fName')) {
-    toast('Product name is required', 'alert-01');
-    return;
-  }
-
-  const p = {
-    id: editing?.id || 'P-' + Date.now().toString(36).toUpperCase(),
-    name: g('fName'),
-    brand: g('fBrand') || '-',
-    category: g('fCat') || 'General',
-    unit: SSE.$('#fUnit').value,
-    hsn: g('fHsn') || '8483',
-    image: (() => {
-      const u = g('fImg');
-      try {
-        const x = new URL(u);
-        return (x.protocol === 'http:' || x.protocol === 'https:') ? u : '';
-      } catch { return ''; }
-    })(),
-    rate_retail: Math.max(0, Number(SSE.$('#fRet').value) || 0),
-    rate_wholesale: Math.max(0, Number(SSE.$('#fWho').value) || 0),
-    gst_pct: Number(SSE.$('#fGst').value) || 18,
-    stock: Number(SSE.$('#fStock').value) || 0,
-    min_stock: Math.max(0, Number(SSE.$('#fMin').value) || 0)
-  };
-
-  await SSE.put(p);
-  ALL = await SSE.all();
-
-  SSE.logActivity(
-    'PRODUCT',
-    `${editing ? 'Product Updated' : 'New Product Added'}: ${p.name}`,
-    `${p.category} · Retail ${SSE.fmt(p.rate_retail)} · Stock: ${p.stock}`
-  );
-
-  closeSheet();
-  draw();
-  stats();
-  toast('Product saved: ' + p.name);
-};
-
-/* Stock Health Pane */
-async function drawStock() {
-  const el = SSE.$('#pane-stock');
-  let log = [];
-  try { log = JSON.parse(localStorage.getItem('sse_stocklog') || '[]').slice(-50).reverse(); } catch {}
-  const low = (await SSE.all()).filter(p => p.stock <= (p.min_stock || 5)).slice(0, 80);
-
-  el.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h3 style="margin:0;font-size:18px;font-weight:800">Buffer Alert & Stock Movement</h3>
-      <span class="pill ${low.length ? 'bad' : 'ok'}">${low.length} Low Buffer SKUs</span>
-    </div>` + (low.length ? `
-    <div class="tblwrap">
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th>Product Description</th>
-            <th>Category</th>
-            <th>Stock Left</th>
-            <th>Minimum Buffer</th>
-            <th style="text-align:right">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${low.map(p => `
-            <tr>
-              <td><b>${SSE.esc(p.name)}</b></td>
-              <td>${SSE.esc(p.category)}</td>
-              <td><span class="pill bad" style="font-weight:800">${Number(p.stock) || 0} ${p.unit || 'pcs'}</span></td>
-              <td>${p.min_stock || 5} ${p.unit || 'pcs'}</td>
-              <td style="text-align:right">
-                <button class="btn btn-primary" onclick="window.sheet(ALL.find(x => x.id === '${p.id}'))" style="padding:4px 12px;font-size:12px">
-                  Reorder
-                </button>
-              </td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>` : `
-    <div class="empty">
-      <i class="hgi-stroke hgi-checkmark-badge-01"></i>
-      <b>Shelf buffer is healthy</b>
-      <p>All 10,000+ SKUs are at or above safety stock threshold.</p>
-    </div>`) + `
-    <h3 style="margin:28px 0 12px;font-size:18px;font-weight:800">Recent Inventory Stock Moves</h3>
-    <div class="tblwrap">
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th>SKU / Product ID</th>
-            <th>Delta Quantity</th>
-            <th>Reason / Sale Reference</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${log.length ? log.map(l => `
-            <tr>
-              <td><b>${SSE.esc(l.id)}</b></td>
-              <td>
-                <span class="pill ${l.delta > 0 ? 'ok' : 'bad'}" style="font-weight:800">
-                  ${l.delta > 0 ? '+' : ''}${Number(l.delta) || 0}
-                </span>
-              </td>
-              <td>${SSE.esc(l.reason || 'Counter Sale')}</td>
-              <td style="font-size:12px;color:var(--muted)">${new Date(l.date).toLocaleString('en-IN')}</td>
-            </tr>`).join('') : '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--muted)">No inventory moves recorded yet.</td></tr>'}
-        </tbody>
-      </table>
-    </div>`;
-}
-
-/* Web Inquiries & Orders Pane */
-async function drawOrders() {
-  const el = SSE.$('#pane-orders');
-  let o = [];
-  try { o = JSON.parse(localStorage.getItem('sse_orders') || '[]').reverse(); } catch {}
-
-  if (!o.length) {
-    el.innerHTML = `
-      <div class="empty">
-        <i class="hgi-stroke hgi-inbox"></i>
-        <b>No web inquiries or orders yet</b>
-        <p>Inward BOQs from checkout and project desks appear here automatically.</p>
-      </div>`;
-    return;
-  }
-
-  el.innerHTML = `
-    <div class="tblwrap">
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th>Order Ref</th>
-            <th>Items / Requirement Summary</th>
-            <th>Status</th>
-            <th style="text-align:right">Advance & WhatsApp</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${o.map(x => `
-            <tr>
-              <td>
-                <b>${SSE.esc(x.id)}</b><br>
-                <small style="color:var(--muted)">${new Date(x.date || Date.now()).toLocaleDateString('en-IN')}</small>
-              </td>
-              <td>${SSE.esc((x.text || x.name || 'RFQ Estimate').slice(0, 160))}</td>
-              <td>
-                <span class="pill ${x.status === 'new' ? 'warn' : x.status === 'delivered' ? 'ok' : 'info'}">
-                  ${SSE.esc(x.status)}
-                </span>
-              </td>
-              <td style="text-align:right;white-space:nowrap">
-                ${x.status !== 'delivered' ? `
-                  <button class="btn btn-ghost adv" data-id="${SSE.esc(x.id)}" style="font-size:12px;padding:4px 10px">
-                    Advance Status
-                  </button>` : '✓ Completed'}
-              </td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`;
-
-  el.querySelectorAll('.adv').forEach(b => {
-    b.onclick = () => {
-      const all = JSON.parse(localStorage.getItem('sse_orders') || '[]');
-      const it = all.find(x => x.id === b.dataset.id);
-      if (!it) return;
-      it.status = it.status === 'new' ? 'confirmed' : 'delivered';
-      localStorage.setItem('sse_orders', JSON.stringify(all));
-
-      SSE.logActivity(
-        'ORDER',
-        `Order ${it.id} Status: ${it.status.toUpperCase()}`,
-        `Requirement: ${(it.text || it.name || '').slice(0, 80)}`
-      );
-
-      drawOrders();
-      toast('Order updated: ' + it.status);
-    };
-  });
-}
-
-/* Plant Credit Ledger (Udhaar Desk) */
-async function drawLedger() {
-  const el = SSE.$('#pane-ledger');
-  let inv = [];
-  try { inv = JSON.parse(localStorage.getItem('sse_invoices') || '[]'); } catch {}
-
-  const open = inv.filter(i => i.type === 'TAX' && (i.balance || 0) > 0).reverse();
-  const shut = inv.filter(i => i.type === 'TAX' && (i.balance || 0) <= 0 && (i.paid || 0) > 0).slice(-20).reverse();
-  const dueTotal = open.reduce((a, i) => a + (i.balance || 0), 0);
-
-  el.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-      <div>
-        <h3 style="margin:0;font-size:18px;font-weight:800">Plant Credit & Net 30 Ledger</h3>
-        <p style="margin:2px 0 0;font-size:13px;color:var(--muted)">Outstanding balance: <b style="color:#B91C1C">${SSE.fmt(dueTotal)}</b> across ${open.length} active invoices</p>
-      </div>
-      <button class="btn btn-primary" onclick="window.location.href='billing.html'" style="font-size:13px">
-        + New Credit Sale
-      </button>
-    </div>` + (open.length ? `
-    <div class="tblwrap">
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th>Invoice No & Plant</th>
-            <th>Total Amount</th>
-            <th>Outstanding Due</th>
-            <th style="text-align:right">Receive Payment</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${open.map(i => `
-            <tr>
-              <td>
-                <b>${SSE.esc(i.no)}</b><br>
-                <span style="color:var(--muted);font-size:12px">${SSE.esc(i.customer || 'Walk-in Plant')}${i.phone ? ' · ' + SSE.esc(i.phone) : ''}</span>
-              </td>
-              <td>${SSE.fmt(i.grand)}</td>
-              <td><span class="pill bad" style="font-weight:800">${SSE.fmt(i.balance)}</span></td>
-              <td style="text-align:right">
-                <span style="display:inline-flex;gap:6px;align-items:center">
-                  <input type="number" min="1" value="${i.balance}" data-no="${SSE.esc(i.no)}" aria-label="Amount received" style="width:90px;border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-weight:700;font-size:13px;text-align:right">
-                  <button class="btn btn-primary rk" data-no="${SSE.esc(i.no)}" style="padding:5px 12px;font-size:12.5px">Receive</button>
-                </span>
-              </td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>` : `
-    <div class="empty">
-      <i class="hgi-stroke hgi-checkmark-badge-01"></i>
-      <b>No outstanding udhaar</b>
-      <p>Every plant credit invoice has been fully settled.</p>
-    </div>`) + (shut.length ? `
-    <h3 style="margin:28px 0 12px;font-size:16px;font-weight:800">Recently Settled Invoices</h3>
-    <div class="tblwrap">
-      <table class="tbl">
-        <tbody>
-          ${shut.map(i => `
-            <tr>
-              <td><b>${SSE.esc(i.no)}</b> · ${SSE.esc(i.customer || 'Walk-in')}</td>
-              <td>${new Date(i.date).toLocaleDateString('en-IN')}</td>
-              <td style="text-align:right"><span class="pill ok">Fully Paid ${SSE.fmt(i.grand)}</span></td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>` : '');
-
-  el.querySelectorAll('.rk').forEach(b => {
-    b.onclick = () => {
-      const inp = el.querySelector(`input[data-no="${b.dataset.no}"]`);
-      const amt = Math.max(0, Number(inp.value) || 0);
-      if (!amt) return;
-
-      const all = JSON.parse(localStorage.getItem('sse_invoices') || '[]');
-      const r = all.find(x => x.no === b.dataset.no);
-      if (!r) return;
-
-      r.paid = (r.paid || 0) + amt;
-      r.balance = Math.max(0, (r.grand || 0) - r.paid);
-      localStorage.setItem('sse_invoices', JSON.stringify(all));
-
-      SSE.logActivity(
-        'PAYMENT',
-        `Payment Collected: ${SSE.fmt(amt)} for ${r.no}`,
-        `${r.customer || 'Walk-in'} · Remaining Due: ${SSE.fmt(r.balance)}`
-      );
-
-      drawLedger();
-      stats();
-      toast('Payment received: ' + SSE.fmt(amt));
-    };
-  });
-}
-
-/* Reports & Analytics Pane */
-async function drawReports() {
-  const el = SSE.$('#pane-reports');
-  let inv = [];
-  try { inv = JSON.parse(localStorage.getItem('sse_invoices') || '[]'); } catch {}
-
-  const days = [...Array(14)].map((_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (13 - i));
-    return d.toISOString().slice(0, 10);
-  });
-  const per = days.map(d => inv.filter(x => (x.date || '').slice(0, 10) === d && x.type === 'TAX').reduce((a, x) => a + (x.grand || 0), 0));
-  const mx = Math.max(1, ...per);
-
-  el.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-      <div>
-        <h3 style="margin:0;font-size:18px;font-weight:800">14-Day Sales Turnover</h3>
-        <p style="margin:2px 0 0;font-size:13px;color:var(--muted)">Daily GST Tax Invoice revenue volume</p>
-      </div>
-      <button class="btn btn-ghost" id="csvExp2" style="font-size:13px">
-        <i class="hgi-stroke hgi-download-01"></i> Download Invoices CSV
-      </button>
+<aside class="drawer wide no-print" id="many" aria-label="Add many products">
+  <div class="sheet-head">
+    <div><h2>Add many products</h2><p class="hint" style="margin:4px 0 0">Copy rows from Excel or Google Sheets and paste below. The first row must be the column names.</p></div>
+    <button class="sheet-x" id="mnClose" aria-label="Close">×</button>
+  </div>
+  <div class="sheet-body">
+    <div class="panel-tools">
+      <button class="btn line sm" id="mnTpl">Download template</button>
+      <label class="btn line sm" style="cursor:pointer">Open CSV file<input type="file" id="csv" accept=".csv,text/csv" hidden></label>
     </div>
+    <div class="field"><label for="mnText">Rows</label><textarea id="mnText" rows="8" spellcheck="false" class="mono-area" placeholder="Name	Make	Category	HSN	Unit	Retail	Wholesale	GST	Stock
+Ball bearing 6206 ZZ	SKF	Bearings	8482	nos	320	290	18	40"></textarea></div>
+    <p class="mn-sum" id="mnSum"></p>
+    <div class="tblwrap" id="mnPrev"></div>
+  </div>
+  <div class="sheet-foot"><button class="btn line" id="mnCancel">Cancel</button><button class="btn" id="mnSave" disabled>Add products</button></div>
+</aside>
 
-    <div class="bars" style="margin:20px 0 24px">
-      ${per.map((v, i) => `
-        <span style="height:${Math.max(4, Math.round(v / mx * 100))}%;animation-delay:${i * 30}ms" title="${days[i]} · ₹ ${v.toLocaleString('en-IN')}"></span>`).join('')}
-    </div>
-
-    <h3 style="margin:24px 0 12px;font-size:16px;font-weight:800">Recent Tax Invoices & GSTR Summary</h3>
-    <div class="tblwrap">
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th>Invoice No</th>
-            <th>Total Value</th>
-            <th>GST Collected</th>
-            <th>Paid Amount</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${inv.length ? inv.slice(-40).reverse().map(i => `
-            <tr>
-              <td><b>${SSE.esc(i.no)}</b></td>
-              <td>${SSE.fmt(i.grand)}</td>
-              <td>${SSE.fmt(i.gst)}</td>
-              <td>${SSE.fmt(i.paid)}</td>
-              <td style="color:${i.balance ? '#B91C1C' : '#047857'};font-weight:700">${SSE.fmt(i.balance)}</td>
-            </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No invoices recorded yet.</td></tr>'}
-        </tbody>
-      </table>
-    </div>`;
-
-  el.querySelector('#csvExp2').onclick = () => {
-    const q = s => `"${String(s ?? '').replace(/"/g, '""')}"`;
-    const csv = ['Invoice,Date,Type,Customer,Phone,Subtotal,GST,Total,Paid,Balance,Mode'].concat(
-      inv.map(i => [i.no, (i.date || '').slice(0, 10), i.type, i.customer, i.phone, i.sub, i.gst, i.grand, i.paid, i.balance, i.mode].map(q).join(','))
-    ).join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-    a.download = `shreeshyam-invoices-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    toast('Invoices CSV exported');
-  };
-}
-
-/* Store Content & Settings */
-async function drawContent() {
-  const el = SSE.$('#pane-content');
-  const c = SSE.content();
-
-  el.innerHTML = `
-    <div style="max-width:680px">
-      <h3 style="margin:0 0 16px;font-size:18px;font-weight:800">Store Front & Counter Configuration</h3>
-      <div class="field" style="margin-bottom:14px">
-        <label style="font-size:12.5px;font-weight:700">Top Announcement Marquee</label>
-        <input id="c_ann" value="${SSE.esc(c.announcement || 'Industrial bearings, belts, fasteners & pneumatics dispatching within 25 mins across RIICO Neemrana')}" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field" style="margin-bottom:14px">
-        <label style="font-size:12.5px;font-weight:700">Counter WhatsApp Hotline (91...)</label>
-        <input id="c_wa" value="${SSE.esc(c.whatsapp || '917240107540')}" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field" style="margin-bottom:14px">
-        <label style="font-size:12.5px;font-weight:700">Counter Dynamic UPI ID</label>
-        <input id="c_upi" value="${SSE.esc(c.upi_id || 'shreeshyam@upi')}" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <div class="field" style="margin-bottom:20px">
-        <label style="font-size:12.5px;font-weight:700">GSTIN Registration</label>
-        <input id="c_gstin" value="${SSE.esc(c.gstin || '08SJHPS7017F1ZK')}" style="border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;width:100%">
-      </div>
-      <button class="btn btn-primary" id="c_save" style="padding:10px 20px;font-size:14px">
-        <i class="hgi-stroke hgi-checkmark-circle-01"></i> Save Configuration
-      </button>
-    </div>`;
-
-  SSE.$('#c_save').onclick = () => {
-    SSE.saveContent({
-      ...c,
-      announcement: SSE.$('#c_ann').value,
-      whatsapp: SSE.$('#c_wa').value,
-      upi_id: SSE.$('#c_upi').value,
-      gstin: SSE.$('#c_gstin').value
-    });
-
-    SSE.logActivity('SYSTEM', 'Website & Counter Settings Updated', 'Announcement, WhatsApp hotline, UPI ID, or GSTIN updated');
-    toast('Settings saved successfully');
-  };
-}
-</script>
+<div class="toasts no-print" id="toasts" aria-live="polite"></div>
+<div id="printArea" aria-hidden="true"></div>
+<script src="assets/vendor/qrcode.js"></script>
+<script src="assets/app.js?v=52"></script>
+<script src="assets/admin.js?v=18"></script>
+<script type="module" src="assets/stage.js?v=8"></script>
 </body>
 </html>

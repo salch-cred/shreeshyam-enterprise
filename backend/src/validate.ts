@@ -21,8 +21,8 @@ export const StockMove = z.object({
 });
 
 export const InvoiceItem = z.object({
-  id: z.string(),
-  name: z.string(),
+  id: z.string().min(1).max(64),
+  name: z.string().min(1).max(200),
   qty: z.number().int().min(1).max(10000),
   rate: z.number().int().min(0),
   gst_pct: z.number().min(0).max(28),
@@ -39,15 +39,20 @@ export const InvoiceIn = z.object({
 
 export const OrderIn = z.object({
   text: z.string().min(1).max(1000),
-  source: z.string().max(20).default('web'),
 });
 
-export const ContentIn = z.record(z.unknown());
+export const ContentIn = z.object({
+  announcement: z.string().max(300),
+  whatsapp: z.string().regex(/^[0-9]{10,15}$/),
+  upi_id: z.string().max(80),
+  phone: z.string().max(30),
+  address: z.string().max(300),
+}).partial().strict();
 
 export const RegisterIn = z.object({
   name: z.string().min(2).max(80),
   phone: z.string().regex(/^[0-9+\-\s]{10,15}$/, 'Valid phone required').transform((s) => s.replace(/[\s-]/g, '')),
-  password: z.string().min(6).max(72),
+  password: z.string().min(8).max(72),
 });
 
 export const CustomerLoginIn = z.object({

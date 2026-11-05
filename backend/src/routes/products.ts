@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { auth } from '../auth.js';
-import { requireDb } from '../db.js';
+import { requireDb, tx } from '../db.js';
 import { ProductIn, StockMove } from '../validate.js';
 
 export const products = Router();
@@ -10,8 +10,8 @@ products.get('/', async (req, res, next) => {
   try {
     const q = String(req.query.q || '');
     const cat = String(req.query.category || '');
-    const page = Math.max(1, Number(req.query.page || 1));
-    const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize || 48)));
+    const page = Math.max(1, Math.floor(Number(req.query.page)) || 1);
+    const pageSize = Math.min(100, Math.max(1, Math.floor(Number(req.query.pageSize)) || 48));
     const p = requireDb();
     const where: string[] = [];
     const args: unknown[] = [];
@@ -34,8 +34,8 @@ products.post('/', auth(['admin']), async (req, res, next) => {
     const p = requireDb();
     const id = b.id || `P-${Date.now().toString(36).toUpperCase()}`;
     await p.query(
-      `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock)
-       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+      `INSERT INTO products(id,name,brand,category,unit,hsn,image,rate_retail,rate_wholesale,gst_pct,stock,min_stock,updated_at)
+       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())
        ON CONFLICT(id) DO UPDATE SET name=EXCLUDED.name,brand=EXCLUDED.brand,category=EXCLUDED.category,
        unit=EXCLUDED.unit,hsn=EXCLUDED.hsn,image=EXCLUDED.image,rate_retail=EXCLUDED.rate_retail,
        rate_wholesale=EXCLUDED.rate_wholesale,gst_pct=EXCLUDED.gst_pct,stock=EXCLUDED.stock,min_stock=EXCLUDED.min_stock,
@@ -45,16 +45,25 @@ products.post('/', auth(['admin']), async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+products.delete('/:id', auth(['admin']), async (req, res, next) => {
+  try {
+    const r = await requireDb().query('DELETE FROM products WHERE id=$1', [req.params.id]);
+    if (!r.rowCount) return next(Object.assign(new Error('No such product'), { status: 404 }));
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
 products.post('/:id/stock', auth(['admin', 'billing']), async (req, res, next) => {
   try {
     const { delta, reason } = StockMove.parse(req.body);
-    const p = requireDb();
-    await p.query('BEGIN');
-    await p.query('UPDATE products SET stock = stock + $2, updated_at=NOW() WHERE id=$1', [req.params.id, delta]);
-    await p.query('INSERT INTO stock_log(product_id,delta,reason) VALUES($1,$2,$3)', [req.params.id, delta, reason]);
-    await p.query('COMMIT');
+    const changed = await tx(async (c) => {
+      const r = await c.query('UPDATE products SET stock = stock + $2, updated_at=NOW() WHERE id=$1', [req.params.id, delta]);
+      if (r.rowCount) await c.query('INSERT INTO stock_log(product_id,delta,reason) VALUES($1,$2,$3)', [req.params.id, delta, reason]);
+      return r.rowCount;
+    });
+    if (!changed) return next(Object.assign(new Error('No such product'), { status: 404 }));
     res.json({ ok: true });
-  } catch (e) { try { await requireDb().query('ROLLBACK'); } catch {} next(e); }
+  } catch (e) { next(e); }
 });
 
 products.get('/low', auth(['admin']), async (_req, res, next) => {

@@ -35,14 +35,39 @@ const SSE = (() => {
       });
     } catch { const a = await all(); const i = a.findIndex(x => x.id === p.id); if (i >= 0) a[i] = p; else a.push(p); localStorage.setItem(LS_FALLBACK, JSON.stringify(a)); }
   }
+  // One transaction for a whole import, so thousands of rows stay fast and all-or-nothing.
+  async function putMany(list) {
+    const db = await idb();
+    await new Promise((res, rej) => {
+      const tx = db.transaction('products', 'readwrite'), st = tx.objectStore('products');
+      list.forEach(p => st.put(p));
+      tx.oncomplete = res; tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error);
+    });
+  }
+  async function del(id) {
+    const db = await idb();
+    await new Promise((res, rej) => {
+      const tx = db.transaction('products', 'readwrite');
+      tx.objectStore('products').delete(id);
+      tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+    });
+  }
+  async function clearProducts() {
+    const db = await idb();
+    await new Promise((res, rej) => {
+      const tx = db.transaction('products', 'readwrite');
+      tx.objectStore('products').clear();
+      tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+    });
+  }
   async function seed() {
     const have = await all();
     if (have.length) return have;
     try {
       const r = await fetch('data/catalog-001.json');
       const j = await r.json();
-      for (const p of j.products) await put(p);
-      localStorage.setItem('sse_content', JSON.stringify(j.content));
+      await putMany(j.products);
+      if (j.content) localStorage.setItem('sse_content', JSON.stringify(j.content));
       return j.products;
     } catch { return []; }
   }
@@ -52,8 +77,22 @@ const SSE = (() => {
   // Escape anything rendered via innerHTML: product names (admin/CSV import),
   // order text (public form), customer names. Prevents stored XSS.
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  // Product images are admin-pasted URLs — allow http(s) only, else placeholder.
-  const safeImg = u => { try { const x = new URL(u, location.href); if (x.protocol === 'http:' || x.protocol === 'https:') return x.href; } catch {} return 'assets/img/cat-p21.png'; };
+  // Product images come from admin input and imports: site paths, http(s) and
+  // uploaded photos only. Anything else, such as javascript:, gets the placeholder.
+  const PLACEHOLDER = 'assets/img/plc-tools.svg';
+  const safeImg = u => {
+    if (!u) return PLACEHOLDER;
+    if (/^data:image\/(webp|png|jpeg);base64,[a-z0-9+/=]+$/i.test(u)) return u;
+    try { const x = new URL(u, location.href); if (x.protocol === 'http:' || x.protocol === 'https:') return esc(x.href); } catch {}
+    return PLACEHOLDER;
+  };
+  // Broken product image: swap for the placeholder without inline handlers, which the CSP blocks.
+  document.addEventListener('error', e => {
+    const t = e.target;
+    if (t.tagName !== 'IMG') return;
+    if (t.classList.contains('mir')) t.remove();
+    else if (!t.src.endsWith(PLACEHOLDER)) t.src = PLACEHOLDER;
+  }, true);
 
   function filter(list, q, cat) {
     q = (q || '').toLowerCase();
@@ -64,379 +103,222 @@ const SSE = (() => {
   function page(list, n) { return list.slice((n - 1) * PAGE, n * PAGE); }
 
   /* Billing helpers */
+  // Calendar date in the shop's own timezone. toISOString() is UTC and flips at 5:30 am IST.
+  const localDate = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const fy = (d = new Date()) => { const y = d.getFullYear() - (d.getMonth() < 3 ? 1 : 0); return `${String(y).slice(2)}-${String(y + 1).slice(2)}`; };
+  // GST invoice numbers run consecutively within a financial year.
   const seq = () => {
-    const k = 'sse_seq', v = Number(localStorage.getItem(k) || '1');
-    localStorage.setItem(k, String(v + 1));
-    const fy = '25-26'; return `SSE/${fy}/${String(v).padStart(4, '0')}`;
+    const cur = fy(), kept = localStorage.getItem('sse_seq_fy');
+    const v = kept === cur || !kept ? Number(localStorage.getItem('sse_seq') || '1') : 1;
+    localStorage.setItem('sse_seq', String(v + 1));
+    localStorage.setItem('sse_seq_fy', cur);
+    return `SSE/${cur}/${String(v).padStart(4, '0')}`;
   };
+  // Discount comes off the taxable value before GST, shared across lines by value.
   function totals(items, discount = 0) {
-    let sub = 0, gst = 0;
-    for (const it of items) { const t = it.qty * it.rate; sub += t; gst += t * (it.gst_pct / 100); }
-    const grand = Math.round(sub + gst - discount);
-    return { sub, gst, grand };
+    const sub = items.reduce((a, it) => a + it.qty * it.rate, 0);
+    const disc = Math.min(Math.max(0, Number(discount) || 0), sub);
+    const keep = sub > 0 ? (sub - disc) / sub : 1;
+    const gst = items.reduce((a, it) => a + it.qty * it.rate * keep * ((Number(it.gst_pct) || 0) / 100), 0);
+    const taxable = sub - disc, exact = taxable + gst, grand = Math.round(exact);
+    return { sub, disc, taxable, gst, keep, grand, round: grand - exact };
   }
-  /* Activity Logging & Auditing */
-  function logActivity(type, title, detail, meta = {}) {
-    try {
-      const a = JSON.parse(localStorage.getItem('sse_activities') || '[]');
-      const entry = {
-        id: 'ACT-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase(),
-        type: String(type || 'SYSTEM').toUpperCase(),
-        title: String(title || ''),
-        detail: String(detail || ''),
-        meta: meta || {},
-        time: new Date().toISOString()
-      };
-      a.unshift(entry);
-      localStorage.setItem('sse_activities', JSON.stringify(a.slice(0, 1000)));
-      return entry;
-    } catch { return null; }
-  }
-
-  function getActivities(filterType = '') {
-    try {
-      let a = JSON.parse(localStorage.getItem('sse_activities') || '[]');
-      if (!a.length) a = seedActivities();
-      if (!filterType || filterType === 'all') return a;
-      return a.filter(x => x.type === filterType.toUpperCase());
-    } catch { return []; }
-  }
-
-  function seedActivities() {
-    const samples = [
-      {
-        id: 'ACT-SYS-101',
-        type: 'BILL',
-        title: 'GST Tax Invoice SSE/25-26/0142 Generated',
-        detail: 'Daikin Airconditioning Plant 2 · ₹ 18,450 (UPI Settled)',
-        meta: { no: 'SSE/25-26/0142', customer: 'Daikin Airconditioning Plant 2', amount: 18450, mode: 'UPI' },
-        time: new Date(Date.now() - 18 * 60 * 1000).toISOString()
-      },
-      {
-        id: 'ACT-SYS-102',
-        type: 'STOCK',
-        title: 'Stock Inward: +50 SKF 6205-2RSH Bearings',
-        detail: 'Warehouse Lake 1 Restock · Minimum buffer restored',
-        meta: { id: 'SKF-6205-2RS', delta: 50, reason: 'OEM Restock' },
-        time: new Date(Date.now() - 55 * 60 * 1000).toISOString()
-      },
-      {
-        id: 'ACT-SYS-103',
-        type: 'PAYMENT',
-        title: 'Plant Credit Collection: ₹ 24,000 Received',
-        detail: 'Havells India Ltd (Neemrana Unit) · Net 30 Ledger Settlement',
-        meta: { customer: 'Havells India Ltd', amount: 24000, mode: 'NEFT' },
-        time: new Date(Date.now() - 2 * 3600 * 1000).toISOString()
-      },
-      {
-        id: 'ACT-SYS-104',
-        type: 'ORDER',
-        title: 'Web Inward Request Confirmed: ORD-8841',
-        detail: 'Mitsui Kinzoku Components · 12x Polymatic 5/2 Solenoid Valves',
-        meta: { id: 'ORD-8841', status: 'confirmed' },
-        time: new Date(Date.now() - 3.5 * 3600 * 1000).toISOString()
-      },
-      {
-        id: 'ACT-SYS-105',
-        type: 'BILL',
-        title: 'Estimate EST-9021 Issued for BOQ Clearance',
-        detail: 'Hero MotoCorp Ancillary · 40x Fenner V-Belts (₹ 14,280)',
-        meta: { no: 'EST-9021', customer: 'Hero MotoCorp Ancillary', amount: 14280, mode: 'Estimate' },
-        time: new Date(Date.now() - 5 * 3600 * 1000).toISOString()
-      },
-      {
-        id: 'ACT-SYS-106',
-        type: 'PRODUCT',
-        title: 'Price Matrix Updated: Bosch GWS 750-100 Angle Grinder',
-        detail: 'Wholesale adjusted to ₹ 2,350 · Retail ₹ 2,650 (GST 18%)',
-        meta: { name: 'Bosch GWS 750-100' },
-        time: new Date(Date.now() - 7 * 3600 * 1000).toISOString()
-      },
-      {
-        id: 'ACT-SYS-107',
-        type: 'STOCK',
-        title: 'Stock Dispatched: -8 Polymatic FRL Units',
-        detail: 'Invoice SSE/25-26/0141 · Dispatched to Japanese Zone 1',
-        meta: { delta: -8, reason: 'Sale Dispatch' },
-        time: new Date(Date.now() - 8.5 * 3600 * 1000).toISOString()
-      }
-    ];
-    try {
-      localStorage.setItem('sse_activities', JSON.stringify(samples));
-    } catch {}
-    return samples;
-  }
-
   function logStock(id, delta, reason) {
     try {
       const a = JSON.parse(localStorage.getItem('sse_stocklog') || '[]');
       a.push({ id, delta, reason, date: new Date().toISOString() });
       localStorage.setItem('sse_stocklog', JSON.stringify(a.slice(-2000)));
-      logActivity('STOCK', (delta > 0 ? 'Stock Added: +' : 'Stock Deducted: ') + Math.abs(delta) + ' units (' + id + ')', `Reason: ${reason}`, { id, delta, reason });
     } catch {}
   }
 
-  /* Reveal + tagline (single observer, no scroll listeners) */
+  /* Reveal (single observer, no scroll listeners) */
   function motion() {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
     document.querySelectorAll('.rv').forEach(el => io.observe(el));
-    const words = document.querySelectorAll('.tagline .w');
-    if (!words.length) return;
-    const wio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); wio.unobserve(e.target); } }), { threshold: .6, rootMargin: '0px 0px -40% 0px' });
-    words.forEach((w, i) => { w.style.transitionDelay = (i * 40) + 'ms'; wio.observe(w); });
   }
 
-  /* Update mobile bottom navigation cart badge & active states */
+  /* Cart is a shared list in localStorage, used by the catalogue, checkout and account pages. */
+  const getCart = () => { try { return JSON.parse(localStorage.getItem('sse_cart') || '[]'); } catch { return []; } };
+  const setCart = c => { localStorage.setItem('sse_cart', JSON.stringify(c)); updateNavBadge(); };
+  const cartCount = () => getCart().reduce((a, c) => a + (Number(c.qty) || 0), 0);
   function updateNavBadge() {
-    try {
-      const cart = JSON.parse(localStorage.getItem('sse_cart') || '[]');
-      const count = cart.reduce((a, c) => a + (Number(c.qty) || 0), 0);
-      const badges = document.querySelectorAll('.nav-badge, [data-nav-badge]');
-      badges.forEach(b => {
-        if (count > 0) {
-          b.textContent = count;
-          b.style.display = 'inline-flex';
-        } else {
-          b.textContent = '0';
-          b.style.display = 'none';
-        }
-      });
-    } catch {}
+    const n = cartCount();
+    document.querySelectorAll('[data-nav-badge]').forEach(b => { b.textContent = n; b.hidden = !n; });
+    document.dispatchEvent(new CustomEvent('sse:cart', { detail: n }));
   }
 
-  /* Enterprise footer — clean corporate layout without mobile bottom nav buttons */
-  function footer(){
-    const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
-    if(path.includes('admin')||path.includes('bill'))return;
-    const c=SSE.content();
-    let f=document.querySelector('footer.sfooter');
-    if(!f){f=document.createElement('footer');f.className='sfooter';document.body.appendChild(f);}
-    const yr=new Date().getFullYear();
-    f.innerHTML=`<div class="wrap cols">
-    <div class="fbrand"><a class="brand" href="index.html" style="filter:invert(0)"><span class="brand-mark">S</span><span style="color:#fff">Shree Shyam<small style="color:#8FA5D4">Industrial & Project Suppliers</small></span></a>
-    <p>Bearings, belts, fasteners, pneumatics, tools and industrial electricals for plants that cannot stop. Authorized Polymatic Pneumatic distributor since 2009.</p>
-    </div>
-    <div><h5>Catalogue</h5><a href="shop.html">All items</a><a href="checkout.html">Checkout</a><a href="index.html#bulk">Project desk</a><a href="account.html">Your account</a></div>
-    <div><h5>Reach us</h5><a href="tel:+917240107540">72401 07540</a><a href="tel:+9188797979884">98879 79884</a><a href="https://wa.me/917240107540">WhatsApp us</a><a href="mailto:shreeshyamenterprises7540@gmail.com">Email</a></div>
-    <div><h5>Counter</h5><span>Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705</span><span>Open 9 to 8 · all days</span><span>GSTIN ${SSE.esc(c.gstin||'08SJHPS7017F1ZK')}</span></div>
-    </div>
-    <div class="wrap legal"><span>© ${yr} Shree Shyam Enterprises · Industrial & Project Suppliers</span>
-    <span class="lgl"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="sitemap.xml">Sitemap</a></span></div>
-    <div class="giant" aria-hidden="true">SHREE SHYAM</div>`;
-    updateNavBadge();
-    initLiquidNav();
-  }
-
-  /* WhatsApp-style swappable liquid glass bottom navigation */
-  function initLiquidNav() {
-    const nav = document.querySelector('.mtabs');
-    if (!nav || nav.__sse_swapped__) return;
-    nav.__sse_swapped__ = true;
-    const links = Array.from(nav.querySelectorAll('a'));
-    if (!links.length) return;
-
-    let startX = 0, startY = 0;
-    nav.addEventListener('touchstart', e => {
-      startX = e.changedTouches[0].screenX;
-      startY = e.changedTouches[0].screenY;
-    }, { passive: true });
-
-    nav.addEventListener('touchend', e => {
-      const diffX = e.changedTouches[0].screenX - startX;
-      const diffY = e.changedTouches[0].screenY - startY;
-      if (Math.abs(diffX) > 42 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
-        const currentIdx = links.findIndex(a => a.classList.contains('on'));
-        if (currentIdx !== -1) {
-          if (diffX < 0 && currentIdx < links.length - 1) {
-            links[currentIdx + 1].click();
-          } else if (diffX > 0 && currentIdx > 0) {
-            links[currentIdx - 1].click();
-          }
-        }
-      }
-    }, { passive: true });
-
-    // Global Cmd+K / Ctrl+K search shortcut (Figma / Webflow pattern)
-    window.addEventListener('keydown', e => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        const qInput = document.getElementById('q');
-        if (qInput) {
-          qInput.focus();
-          qInput.select();
-        } else {
-          window.location.href = 'shop.html';
-        }
-      }
-    });
-  }
-
-  /* Inspora.design live category filter tab handler */
-  function initInsporaFeed() {
-    const tabs = document.querySelectorAll('#insporaTabs .inspora-tab-btn');
-    const cards = document.querySelectorAll('#insporaFeed .inspora-card');
-    if (!tabs.length || !cards.length) return;
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const filter = tab.getAttribute('data-filter') || 'all';
-
-        cards.forEach(card => {
-          const cat = card.getAttribute('data-category');
-          if (filter === 'all' || cat === filter) {
-            card.style.display = 'block';
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(12px)';
-            requestAnimationFrame(() => {
-              card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-            });
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-  }
-
-  /* Global Smooth Frosted Toast Notification */
-  function toast(msg, icon = 'checkmark-circle-01', duration = 2600) {
-    let container = document.getElementById('toasts');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'toasts';
-      container.className = 'toasts';
-      document.body.appendChild(container);
-    }
+  function toast(msg) {
+    let box = $('#toasts');
+    if (!box) { box = document.createElement('div'); box.id = 'toasts'; box.className = 'toasts no-print'; box.setAttribute('aria-live', 'polite'); document.body.appendChild(box); }
     const t = document.createElement('div');
     t.className = 'toast';
-    t.innerHTML = `<i class="hgi-stroke hgi-${icon}"></i><span>${esc(msg)}</span>`;
-    container.appendChild(t);
-    setTimeout(() => {
-      t.classList.add('out');
-      setTimeout(() => t.remove(), 350);
-    }, duration);
-    return t;
+    t.textContent = msg;
+    box.appendChild(t);
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 2600);
   }
 
-  /* Smooth Clipboard Copy with Feedback */
-  async function copyText(text, label = 'Copied to clipboard!') {
+  /* What customers see: the published catalogue, always fresh. Only the counter
+     device overlays its own local edits (set when the console is unlocked). */
+  async function catalog() {
+    let pub = [];
     try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      }
-      toast(label, 'copy-01');
-      return true;
-    } catch {
-      toast('Copied: ' + text, 'copy-01');
-      return false;
-    }
+      const r = await fetch('data/catalog-001.json', { cache: 'no-cache' });
+      const j = await r.json();
+      pub = j.products || [];
+      if (j.content && !localStorage.getItem('sse_content')) localStorage.setItem('sse_content', JSON.stringify(j.content));
+    } catch { return all(); }
+    if (localStorage.getItem('sse_counter') !== '1') return pub;
+    const local = await all();
+    const map = new Map(pub.map(p => [p.id, p]));
+    local.forEach(p => map.set(p.id, p));
+    return [...map.values()];
   }
 
-  /* EventBeds™ Luxury Header Menu and Drawer Controller */
-  function initEventBedsHeader() {
-    const menuBtn = document.getElementById('menuBtn');
-    const drawer = document.getElementById('mmenu');
-    const drawerClose = document.getElementById('drawerClose');
+  const WA_NUMBER = '917240107540';
+  const wa = text => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
 
-    if (!menuBtn || !drawer) return;
+  /* Shared header and footer for every customer page */
+  const quoteLink = wa('Namaste, mujhe industrial parts quote chahiye');
+  const LINKS = [['Home', 'index.html'], ['Catalogue', 'shop.html'], ['Range', 'index.html#lake'], ['Contact', 'index.html#bulk']];
+  function chrome() {
+    if (document.body.dataset.chrome === 'none') return;
+    const path = (location.pathname.split('/').pop() || 'index').replace('.html', '').toLowerCase() || 'index';
+    const onLink = LINKS.findIndex(l => l[1] === path + '.html');
+    document.body.insertAdjacentHTML('afterbegin', `<header class="hdr no-print" id="hdr">
+      <div class="hdr-bar">
+        <a class="hdr-brand" href="index.html" aria-label="Shree Shyam Enterprises, home">
+          <span class="hdr-logo"><img src="assets/land/logo-mark-ink.png" alt="" width="640" height="579"></span>
+          <span class="hdr-word"><b>SHREE SHYAM</b><small>ENTERPRISES</small></span>
+        </a>
+        <nav class="hdr-nav" aria-label="Main"><span class="hdr-ink" aria-hidden="true"></span>
+          ${LINKS.map((l, i) => `<a href="${l[1]}" class="hdr-link${i === onLink ? ' is-on' : ''}">${l[0]}</a>`).join('')}
+        </nav>
+        <div class="hdr-act">
+          <a class="hdr-ghost" href="account.html">Account</a>
+          <a class="hdr-cart" href="checkout.html" aria-label="Cart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.4l2.3 11h10.4l2-8H6.3"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg><span class="hdr-count" data-nav-badge hidden>0</span></a>
+          <a class="hdr-cta" href="${quoteLink}" target="_blank" rel="noopener">Get a quote</a>
+          <button class="hdr-burger" id="hdrMenu" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i></button>
+        </div>
+      </div>
+    </header>
+    <div class="mnav no-print" id="mnav" hidden>
+      <img class="mnav-mark" src="assets/land/logo-mark-ink.png" alt="" aria-hidden="true">
+      <div class="mnav-grid">
+        <nav aria-label="Mobile">
+          ${[...LINKS, ['Your account', 'account.html'], ['Cart', 'checkout.html']].map((l, i) => `<a href="${l[1]}" style="--i:${i}"${l[1] === path + '.html' ? ' class="is-on" aria-current="page"' : ''}><span>${String(i + 1).padStart(2, '0')}</span><b>${l[0]}</b><i aria-hidden="true">→</i></a>`).join('')}
+        </nav>
+        <aside class="mnav-side">
+          <p>On the shelf</p>
+          <div class="mnav-shelf">
+            ${[['Pneumatics', 'assets/land/p/p13.webp', 'polymatic'], ['Bearings', 'assets/land/pdf/bearings.webp', 'bearing'], ['Belts', 'assets/land/pdf/belts.webp', 'belt'], ['Valves', 'assets/land/p/p12.webp', 'valve']].map(t => `<a href="shop.html?q=${t[2]}"><img src="${t[1]}" alt="" loading="lazy"><span>${t[0]}</span></a>`).join('')}
+          </div>
+          <div class="mnav-card"><b>The counter</b><span>Shop 191, RIICO Hanuman Market, Neemrana</span><span>Open 9 to 8</span></div>
+        </aside>
+      </div>
+      <div class="mnav-foot"><a class="mnav-go" href="${quoteLink}" target="_blank" rel="noopener">Get a quote on WhatsApp</a><a class="mnav-call" href="tel:+917240107540">Call the shop</a></div>
+    </div>`);
+    document.body.insertAdjacentHTML('beforeend', `<footer class="foot no-print" id="foot">
+      <section class="foot-call">
+        <div>
+          <p class="foot-kicker">Line stopped?</p>
+          <h2>Call the counter.<br><em>We'll find the part.</em></h2>
+        </div>
+        <div class="foot-reach">
+          <a class="foot-phone" href="tel:+917240107540">+91 72401 07540</a>
+          <a class="foot-wa" href="${wa('Namaste, requirement bhejni hai')}" target="_blank" rel="noopener">Send your list on WhatsApp</a>
+        </div>
+      </section>
+      <div class="foot-stage" id="footStage" aria-hidden="true"><canvas></canvas></div>
+      <div class="foot-top">
+        <div class="foot-id">
+          <img src="assets/land/logo-full-white.png" alt="Shree Shyam Enterprises" width="652" height="760" loading="lazy">
+          <p>Industrial and project suppliers, and authorised Polymatic distributor.</p>
+        </div>
+        <div><h4>Visit</h4><p>Shop No. 191, RIICO Hanuman Market Complex, Neemrana (Alwar), Rajasthan 301705</p><p>Open 9 to 8</p></div>
+        <div><h4>Shop</h4><a href="shop.html">Catalogue</a><a href="checkout.html">Cart</a><a href="account.html">Your account</a></div>
+        <div><h4>Company</h4><a href="index.html#lake">Range</a><a href="index.html#air">Polymatic</a><a href="index.html#faq">FAQ</a></div>
+        <div><h4>Reach us</h4><a href="tel:+919887979884">+91 98879 79884</a><a href="mailto:shreeshyamenterprises7540@gmail.com">Email us</a></div>
+      </div>
+      <div class="foot-word" aria-hidden="true"><span>Shree Shyam</span></div>
+      <p class="foot-end"><span>© ${new Date().getFullYear()} Shree Shyam Enterprises</span><span>GSTIN 08SJHPS7017F1ZK</span><span><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></span></p>
+    </footer>`);
+    const foot = $('#foot');
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { foot.classList.add('in'); o.disconnect(); } }, { rootMargin: '0px 0px -8% 0px' }).observe($('.foot-word', foot));
+    // The bearing rolls in as you scroll, then opens. Loaded only when the footer is close.
+    const stage = $('#footStage');
+    if (stage.querySelector('canvas').getContext && document.createElement('canvas').getContext('webgl2')) {
+      new IntersectionObserver(([e], o) => {
+        if (!e.isIntersecting) return;
+        o.disconnect();
+        import('./bearing.js').then(({ start }) => start({
+          canvas: stage.querySelector('canvas'), box: stage,
+          onStops({ W, H }) {
+            const top = stage.getBoundingClientRect().top + scrollY, v = innerHeight;
+            // Fully open with the bearing centred under the header, and before the page runs out.
+            const from = top - v, to = Math.max(from + 200, Math.min(top + H / 2 - (v + 70) / 2, document.documentElement.scrollHeight - v - 40));
+            const at = f => from + (to - from) * f;
+            const phone = W < 620, s = phone ? 1.25 : Math.min(1.5, W / H * .46), open = s * (phone ? .68 : .86);
+            const st = (f, o2) => ({ at: at(f), x: 0, y: -.02, s, rx: .06, ry: -.14, rz: 0, ex: 0, a: 1, fl: 1, ...o2 });
+            return [
+              st(0, { x: -1.15, rz: 3.2 }),
+              st(.43, {}),
+              st(.67, {}),
+              st(.82, { ry: -1.16, rx: .12, s: open }),
+              st(1, { ry: -1.16, rx: .12, s: open, ex: 1 }),
+            ];
+          },
+        })).catch(() => stage.remove());
+      }, { rootMargin: '500px 0px' }).observe(stage);
+    } else stage.remove();
+    // Raking light: the sheet is lit from wherever the cursor is
+    if (matchMedia('(hover:hover)').matches) foot.addEventListener('pointermove', e => {
+      const r = foot.getBoundingClientRect();
+      foot.style.setProperty('--lx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+      foot.style.setProperty('--ly', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+    }, { passive: true });
 
-    // Inject dedicated backdrop for silk-smooth mobile drawer interaction
-    let backdrop = document.querySelector('.site-drawer-backdrop');
-    if (!backdrop) {
-      backdrop = document.createElement('div');
-      backdrop.className = 'site-drawer-backdrop';
-      backdrop.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(backdrop);
-    }
+    const hdr = $('#hdr'), navEl = $('.hdr-nav', hdr), ink = $('.hdr-ink', hdr), links = [...hdr.querySelectorAll('.hdr-link')];
+    const moveInk = el => {
+      if (!el || !el.offsetWidth) { ink.style.opacity = 0; return; }
+      ink.style.opacity = 1; ink.style.width = el.offsetWidth + 'px'; ink.style.transform = `translateX(${el.offsetLeft}px)`;
+    };
+    const rest = () => moveInk(links.find(l => l.classList.contains('is-on')));
+    links.forEach(l => l.addEventListener('pointerenter', () => moveInk(l)));
+    navEl.addEventListener('pointerleave', rest);
+    addEventListener('resize', rest);
+    (document.fonts?.ready || Promise.resolve()).then(rest);
+    rest();
+    const onScroll = () => {
+      hdr.classList.toggle('scrolled', scrollY > 24);
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    onScroll();
 
-    function toggleMenu(open) {
-      const isOpen = open !== undefined ? open : !drawer.classList.contains('open');
-      if (isOpen) {
-        drawer.classList.add('open');
-        document.body.classList.add('menu-open');
-        menuBtn.setAttribute('aria-expanded', 'true');
-      } else {
-        drawer.classList.remove('open');
-        document.body.classList.remove('menu-open');
-        menuBtn.setAttribute('aria-expanded', 'false');
-      }
-    }
+    const menu = $('#mnav'), btn = $('#hdrMenu');
+    const setMenu = open => {
+      menu.hidden = !open;
+      hdr.classList.toggle('menu-open', open);
+      document.documentElement.classList.toggle('no-scroll', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    btn.onclick = () => setMenu(menu.hidden);
+    menu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+    addEventListener('resize', () => { if (innerWidth > 900) setMenu(false); });
 
-    menuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleMenu();
-    });
-
-    if (drawerClose) {
-      drawerClose.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu(false);
-      });
-    }
-
-    backdrop.addEventListener('click', () => {
-      toggleMenu(false);
-    });
-
-    // Close on clicking outside drawer
-    document.addEventListener('click', (e) => {
-      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !menuBtn.contains(e.target)) {
-        toggleMenu(false);
-      }
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && drawer.classList.contains('open')) {
-        toggleMenu(false);
-      }
-    });
-
-    // Silk-smooth header elevation on scroll
-    const header = document.querySelector('.site-header');
-    if (header) {
-      let ticking = false;
-      const onScroll = () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            if (window.scrollY > 15) {
-              header.classList.add('scrolled');
-            } else {
-              header.classList.remove('scrolled');
-            }
-            ticking = false;
-          });
-          ticking = true;
-        }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      if (window.scrollY > 15) header.classList.add('scrolled');
-    }
+    if (document.body.dataset.nav === 'dark') hdr.classList.add('dark');
+    SSE_HDR.dark = v => hdr.classList.toggle('dark', v);
+    SSE_HDR.active = i => { links.forEach((l, k) => l.classList.toggle('is-on', k === i)); rest(); };
+    updateNavBadge();
   }
+  const SSE_HDR = { dark() {}, active() {} };
 
-  function initApp() {
-    footer();
-    initInsporaFeed();
-    initEventBedsHeader();
-  }
+  // Scripts sit at the end of body, so the page is parsed by now on every page.
+  if (document.body) chrome(); else document.addEventListener('DOMContentLoaded', chrome);
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);else initApp();
-
-  return { all, put, seed, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, logActivity, getActivities, seedActivities, motion, footer, updateNavBadge, initInsporaFeed, initEventBedsHeader, toast, copyText, $ };
+  return { hdr: SSE_HDR, all, put, putMany, del, clearProducts, localDate, fy, seed, catalog, filter, page, PAGE, content, saveContent, fmt, esc, safeImg, seq, totals, logStock, motion, updateNavBadge, getCart, setCart, cartCount, toast, wa, $ };
 })();
-
 
 

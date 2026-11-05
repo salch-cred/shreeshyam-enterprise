@@ -19,13 +19,12 @@ def get(url, markers=(), status=200):
         print('FAIL', url, e)
 
 get(site + '/', ['Shree Shyam', 'Polymatic', 'manifest.json'])
-get(site + '/shop', ['cattile', 'shoplay', 'id="sort"', 'quick view' if False else 'smeter'])
-get(site + '/checkout', ['costeps', 'Cash on delivery', 'trustchips'])
-get(site + '/account', ['authSeg', 'bot.js'])
+get(site + '/shop', ['shop-lay', 'id="sort"', 'shop.js'])
+get(site + '/checkout', ['coForm', 'checkout.js'])
+get(site + '/account', ['detailsForm', 'account.js'])
 get(site + '/404.html', ['Wrong'])
-get(site + '/admin.html', ['Open the console'])           # counter-only, must still serve
-get(site + '/assets/styles.css?v=20261011h', ['.mnav', '.botpanel', '.mbg', 'safe-area-inset'])
-get(site + '/assets/bot.js?v=20261011h', ['Shyam Assist', 'SSE_BOT_PROMPT'])
+get(site + '/admin.html', ['Counter console'])           # counter-only, must still serve
+get(site + '/assets/site.css?v=1', ['.nav', '.sheet', '@media print'])
 get(site + '/data/catalog-001.json', ['Polymatic'])
 get(site + '/manifest.json', ['Shree Shyam'])
 get(site + '/robots.txt', ['Disallow: /admin.html'])

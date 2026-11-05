@@ -1,387 +1,55 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Checkout — Shree Shyam Enterprises</title>
-<meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#1D4ED8">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261015c">
-<style>
-.costeps{display:flex;gap:8px;margin:14px 0 0;flex-wrap:wrap}
-.costeps span{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--muted);background:#fff}
-.costeps span.done{border-color:#BFE0BF;color:#2F7D33;background:#EAF5EA}
-.costeps span.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.trustchips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
-.trustchips span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--bg-soft);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
-.trustchips span::before{content:"\2713";font-weight:800}
-.payopt{cursor:pointer}
-.payopt .pm{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent-ink);opacity:0;transition:opacity .4s}
-.payopt.on .pm{opacity:1}
-.co-thumb{width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--line);background:var(--bg-soft);flex:none}
-/* sticky pay bar + mobile polish */
-.copaybar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}
-.copaybar .cpt small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.copaybar .cpt b{font-size:22px;letter-spacing:-.01em}
-.copaybar .btn{min-width:170px;justify-content:center}
-.co-items .line{flex-wrap:nowrap;gap:10px;padding:12px 0}
-.co-items .line>div:first-of-type{min-width:0;flex:1}
-.co-items .line b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:20px}
-.co-items .line .stepper button{width:30px;height:30px;font-size:14px}
-.co-items .line .rm{min-width:36px;min-height:36px}
-.billcard h3{font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
-.totals .grand b{font-size:22px}
-.payopt{padding:16px;border-radius:14px}
-@media (max-width:1020px){
-  main h1.title{font-size:28px;line-height:32px}
-  .console-head{margin-bottom:2px}
-  .device{display:none}
-  .costeps{margin:10px 0 0}
-  .co-grid{grid-template-columns:1fr;gap:16px;margin-top:14px}
-  .co-grid>section:first-child{order:2}
-  .co-grid>section:last-child{order:1}
-  .billcard{padding:18px;position:static}
-  .copaybar{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom));z-index:50;
-    background:rgba(255,255,255,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    border:1px solid var(--line);border-radius:16px;padding:12px 14px;
-    box-shadow:0 -10px 34px rgba(27,36,48,.14)}
-  .co-items .line{padding:10px 0}
-  .trustchips{margin:10px 0 2px}
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=52">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<title>Checkout — Shree Shyam Enterprises</title>
+<meta name="theme-color" content="#ffffff">
+<meta name="robots" content="noindex">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="grain no-print" aria-hidden="true"></div>
-<!-- EVENTBEDS™ LUXURY HEADER (https://www.eventbeds.com) -->
-<header class="site-header no-print">
-  <div class="site-header-inner">
-    <!-- Brand Logotype: EventBeds™ styling -->
-    <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
-      <div class="eventbeds-logo-icon">
-        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
-      </div>
-      <div class="eventbeds-brand-text">
-        <span class="eventbeds-title">
-          Shree Shyam<span class="eventbeds-tm">™</span>
-        </span>
-        <span class="eventbeds-sub">by RIICO Industrial Hub</span>
-      </div>
-    </a>
-
-    <!-- Center: EventBeds Desktop Nav -->
-    <nav class="eventbeds-nav-center" aria-label="Main Navigation">
-      <a href="shop.html" class="eventbeds-nav-link">
-        <span>Catalogue</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="index.html#lake" class="eventbeds-nav-link">
-        <span>For Plants</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="account.html" class="eventbeds-nav-link">
-        <span>Plant Credit</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="index.html#bulk" class="eventbeds-nav-link">
-        <span>Project BOQ</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-    </nav>
-
-    <!-- Right: Fast Action Suite -->
-    <div class="eventbeds-actions">
-      <a class="eventbeds-search-pill" href="shop.html" aria-label="Search parts">
-        <i class="hgi-stroke hgi-search-01"></i>
-        <span>Search parts...</span>
-        <kbd>⌘K</kbd>
-      </a>
-
-      <a class="eventbeds-cart-btn active" href="checkout.html" aria-label="Cart and Instant Estimate" style="border-color:#CDE06A">
-        <i class="hgi-stroke hgi-shopping-cart-01" style="color:#CDE06A"></i>
-        <span class="eventbeds-cart-label">Cart</span>
-        <span class="eventbeds-cart-count nav-badge" data-nav-badge>0</span>
-      </a>
-
-      <!-- EventBeds Signature Black Pill Button -->
-      <a class="eventbeds-black-btn desktop" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
-        <div class="eb-btn-slider">
-          <span class="eb-btn-text">Quick BOQ</span>
-          <span class="eb-btn-text hover">WhatsApp 24/7</span>
+<main id="main" class="wrap wide">
+  <header class="page-head" style="position:relative">
+    <p class="eyebrow">Checkout</p>
+    <h1>Your order.</h1>
+    <div class="steps-bar" aria-hidden="true"><span class="on">Review</span><span class="on">Details</span><span id="stepDone">Confirmed</span></div>
+  </header>
+  <div class="co">
+    <section class="co-panel" aria-label="Your items">
+      <h2>In your cart</h2>
+      <div id="coItems"></div>
+      <div class="totals" id="coTotals"></div>
+      <a class="btn line sm" href="shop.html" style="margin-top:12px">Add more items</a>
+    </section>
+    <section class="co-panel" aria-label="Details and payment" id="coSide">
+      <form id="coForm" novalidate>
+        <h2>Delivery details</h2>
+        <div class="field"><label for="coName">Name or firm</label><input id="coName" required autocomplete="organization"><span class="err"></span></div>
+        <div class="grid2">
+          <div class="field"><label for="coPhone">Mobile</label><input id="coPhone" inputmode="numeric" pattern="[6-9][0-9]{9}" required autocomplete="tel" maxlength="10" placeholder="10 digits"><span class="err"></span></div>
+          <div class="field"><label for="coGst">GSTIN (optional)</label><input id="coGst" maxlength="15" style="text-transform:uppercase" autocomplete="off"></div>
         </div>
-      </a>
-
-      <!-- EventBeds Menu Capsule -->
-      <button class="eventbeds-menu-btn" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
-        <div class="eb-menu-text-wrap">
-          <span class="eb-menu-label open">Menu</span>
-          <span class="eb-menu-label close">Close</span>
+        <div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" rows="3" required placeholder="Plot, RIICO area, city, pincode"></textarea><span class="err"></span></div>
+        <h2 style="margin-top:6px">Payment</h2>
+        <div class="pay" id="payPanel"></div>
+        <p class="co-err" id="coErr" role="alert"></p>
+        <div class="co-total">
+          <div><small id="coTotalLabel">Order total</small><b id="copayTotal">—</b></div>
+          <button class="btn" id="coPay" type="submit">Place order</button>
         </div>
-        <div class="eb-status-dots-box" aria-hidden="true">
-          <span class="eb-status-dot pulse-lime"></span>
-          <span class="eb-status-dot neutral"></span>
-        </div>
-      </button>
-    </div>
+        <p class="co-note" id="coNote"></p>
+      </form>
+    </section>
   </div>
-</header>
-
-<!-- EVENTBEDS™ MOBILE DRAWER -->
-<div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
-  <div class="site-drawer-head">
-    <div class="eventbeds-brand">
-      <div class="eventbeds-logo-icon">
-        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
-      </div>
-      <div class="eventbeds-brand-text">
-        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
-        <span class="eventbeds-sub">RIICO Industrial Hub</span>
-      </div>
-    </div>
-    <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
-  </div>
-
-  <div class="site-drawer-nav">
-    <a href="index.html" class="drawer-link-block">
-      <span>Home Overview</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="shop.html" class="drawer-link-block">
-      <span>Catalogue & Pricing (10k+ SKU)</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="index.html#lake" class="drawer-link-block">
-      <span>Warehouse OEM Lakes</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="account.html" class="drawer-link-block">
-      <span>Plant Credit & Net 30 Ledger</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="checkout.html" class="drawer-link-block">
-      <span>Cart & GST Estimate (Active)</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="billing.html" class="drawer-link-block">
-      <span>Billing Counter POS</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="admin.html" class="drawer-link-block">
-      <span>Admin & Activity Console</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-  </div>
-
-  <div class="site-drawer-footer">
-    <a class="eventbeds-black-btn" style="width:100%;height:46px;font-size:14px" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
-      <div class="eb-btn-slider" style="height:20px;line-height:20px">
-        <span class="eb-btn-text" style="height:20px">Instant WhatsApp Desk</span>
-        <span class="eb-btn-text hover" style="height:20px">+91 72401 07540</span>
-      </div>
-    </a>
-    <div class="drawer-socials">
-      <a class="drawer-social-icon" href="tel:+917240107540" title="Call Shop Desk"><i class="hgi-stroke hgi-call"></i></a>
-      <a class="drawer-social-icon" href="mailto:shreeshyamenterprises7540@gmail.com" title="Email Dispatch"><i class="hgi-stroke hgi-mail-01"></i></a>
-      <a class="drawer-social-icon" href="https://maps.google.com/?q=RIICO+Industrial+Area+Neemrana" target="_blank" rel="noopener" title="Directions"><i class="hgi-stroke hgi-location-01"></i></a>
-      <span style="font-size:11px;color:#94A3B8;margin-left:auto;font-weight:600">Open 9AM - 8PM</span>
-    </div>
-  </div>
-</div>
-
-<main id="main" class="wrap block" style="padding-top:48px">
-<div class="console-head">
-<div><p class="eyebrow">Checkout</p>
-<h1 class="title" style="margin:0">Confirm and pay</h1></div>
-<span class="device" id="payMode"><i class="hgi-stroke hgi-smart-phone-01" style="font-size:16px"></i><span>UPI direct · zero fee</span></span>
-</div>
-
-<div class="costeps" aria-hidden="true"><span class="done">1 · List</span><span class="done">2 · Details</span><span class="on">3 · Payment</span></div>
-<div class="co-grid">
-<section aria-label="Your items">
-<div class="billcard">
-<h3 style="margin:0 0 12px">Your list</h3>
-<div id="coItems" class="co-items"></div>
-<div class="totals" id="coTotals"></div>
-<a class="btn btn-ghost" href="shop.html" style="margin-top:14px"><i class="hgi-stroke hgi-arrow-left-01"></i>Add more items</a>
-</div>
-</section>
-
-<section aria-label="Details and payment">
-<div class="billcard">
-<form id="coForm" novalidate>
-<h3 style="margin:0 0 12px">Delivery details</h3>
-<div class="field"><label for="coName">Name or firm</label><input id="coName" required autocomplete="name"><span class="err"></span></div>
-<div class="formgrid">
-<div class="field"><label for="coPhone">Phone</label><input id="coPhone" inputmode="numeric" pattern="[0-9]{10}" required autocomplete="tel" maxlength="10" placeholder="10 digit mobile"><span class="err"></span></div>
-<div class="field"><label for="coEmail">Email <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="coEmail" type="email" autocomplete="email"></div>
-</div>
-<div class="field"><label for="coAddr">Delivery address</label><textarea id="coAddr" rows="3" required placeholder="Unit / plot, RIICO industrial area, city, pincode"></textarea><span class="err"></span></div>
-<div class="trustchips" aria-hidden="true"><span>GST invoice · HSN</span><span>Same-day RIICO belt</span><span>Genuine makes</span><span>COD available</span></div>
-<h3 style="margin:18px 0 8px">Payment method</h3>
-<div id="payPanel"></div>
-<p class="err" id="coErr" style="color:#9A3412;font-size:13px;min-height:20px"></p>
-<div class="copaybar"><div class="cpt"><small>Order total</small><b id="copayTotal">Rs 0</b></div>
-<button class="btn btn-primary" id="coPay" type="submit"><i class="hgi-stroke hgi-wallet-01"></i>Place order</button></div>
-<p style="font-size:12px;color:var(--muted);margin:10px 0 0">GST invoice with HSN is issued on confirmation. Rates are quote-based — counter confirms before dispatch for order above Rs 25,000.</p>
-</form>
-</div>
-</section>
-</div>
 </main>
-
-<div class="toasts no-print" id="toasts" aria-live="polite"></div>
-<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
-<script src="assets/app.js?v=20261012a"></script>
-<script>
-let cart=[],status={gateway:'none',upiId:'shreeshyam@upi'},made=null,ALL=[];
-const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
-  t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
-  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2600);};
-const api=()=> (localStorage.getItem('sse_api')||'').replace(/\/$/,'');
-try{cart=JSON.parse(localStorage.getItem('sse_cart')||'[]');}catch{cart=[];}
-
-async function init(){
-  SSE.seed().then(a=>{ALL=a;drawItems();});
-  if(api()){try{status=await (await fetch(api()+'/payments/status')).json();}catch{}}
-  SSE.$('#payMode').querySelector('span').textContent=status.gateway==='cashfree'?'UPI + Card · Cashfree':'UPI direct · zero fee';
-  drawItems();drawPay();
-  SSE.tabs();
-}
-function drawItems(){
-  const box=SSE.$('#coItems');
-  if(!cart.length){box.innerHTML=`<div class="empty" style="padding:24px"><i class="hgi-stroke hgi-shopping-cart-01"></i><b>List is empty</b><p>Add items from the shop page first.</p></div>`;
-    SSE.$('#coTotals').innerHTML='';SSE.$('#coPay').disabled=true;return;}
-  SSE.$('#coPay').disabled=false;
-  box.innerHTML=cart.map((c,i)=>{const src=ALL.find(x=>x.id===c.id);c.img=src?src.image:c.img;
-    return`<div class="line">${c.img?`<img class="co-thumb" loading="lazy" src="${SSE.safeImg(c.img)}" alt="">`:''}<div style="flex:1;min-width:0"><b>${SSE.esc(c.name)}</b><span>GST ${c.gst_pct||18}%</span></div>
-    <div class="stepper"><button type="button" data-i="${i}" data-d="-1">−</button><b>${c.qty}</b><button type="button" data-i="${i}" data-d="1">+</button></div>
-    <b style="min-width:90px;text-align:right">${c.rate?SSE.fmt(c.qty*c.rate):'On request'}</b>
-    <button type="button" class="rm" data-i="${i}" aria-label="Remove">×</button></div>`;}).join('');
-  box.querySelectorAll('.stepper button').forEach(b=>b.onclick=()=>{const it=cart[Number(b.dataset.i)];
-    it.qty=Math.max(1,it.qty+Number(b.dataset.d));saveCart();drawItems();});
-  box.querySelectorAll('.rm').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.i),1);saveCart();drawItems();});
-  const t=totals();
-  SSE.$('#coTotals').innerHTML=`<div><span>Subtotal</span><b>${SSE.fmt(t.sub)}</b></div>
-  <div><span>GST</span><b>${SSE.fmt(t.gst)}</b></div>
-  <div class="grand"><span>Total · incl GST</span><b>${SSE.fmt(t.grand)}</b></div>`;
-  const bar=SSE.$('.copaybar');
-  if(bar)bar.style.display=cart.length?'':'none';
-  const pt=SSE.$('#copayTotal');if(pt)pt.textContent=SSE.fmt(t.grand);
-}
-function totals(){
-  let sub=0,gst=0;
-  for(const it of cart){const tx=it.qty*(it.rate||0);sub+=tx;gst+=tx*((it.gst_pct||18)/100);}
-  return{sub,gst,grand:Math.round(sub+gst)};
-}
-function saveCart(){localStorage.setItem('sse_cart',JSON.stringify(cart));}
-let method='upi';
-function drawPay(){
-  const p=SSE.$('#payPanel');
-  const opts=[
-    ['upi','UPI · zero fee','Pay by any UPI app on the QR we share after confirmation.','smart-phone-01',true],
-    ['cod','Cash on delivery','Pay cash or UPI to the delivery van. RIICO belt area orders.','delivery-truck-01',true],
-  ];
-  if(status.gateway==='cashfree')opts.push(['card','Card · Netbanking','Secure checkout by Cashfree. All Indian cards and UPI apps.','wallet-01',true]);
-  p.innerHTML=opts.map(o=>`<div class="payopt ${method===o[0]?'on':''}" data-m="${o[0]}" role="button" tabindex="0">
-    <i class="hgi-stroke hgi-${o[3]}"></i><div style="flex:1"><b>${o[1]}</b><span>${o[2]}</span></div><span class="pm">SELECTED</span></div>`).join('');
-  p.querySelectorAll('.payopt').forEach(el=>{el.onclick=()=>{method=el.dataset.m;drawPay();};
-    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();method=el.dataset.m;drawPay();}};});
-}
-SSE.$('#coForm').addEventListener('submit',async e=>{
-  e.preventDefault();SSE.$('#coErr').textContent='';
-  if(!cart.length){SSE.$('#coErr').textContent='Your list is empty.';return;}
-  let ok=true;
-  e.target.querySelectorAll('[required]').forEach(i=>{const err=i.closest('.field').querySelector('.err');
-    const bad=!i.value.trim()||(i.pattern&&!(new RegExp('^'+i.pattern+'$').test(i.value.trim())));
-    if(err)err.textContent=bad?'Required':'';if(bad)ok=false;});
-  if(!ok)return;
-  const body={items:cart.map(c=>({id:c.id,name:c.name,qty:c.qty,rate:c.rate||0,gst_pct:c.gst_pct||18})),
-    name:SSE.$('#coName').value.trim(),phone:SSE.$('#coPhone').value.trim(),
-    email:SSE.$('#coEmail').value.trim(),address:SSE.$('#coAddr').value.trim(),method};
-  if(!api()){SSE.$('#coErr').textContent='Shop backend not connected on this device. Order saved locally — WhatsApp us to confirm.';return;}
-  try{
-    const r=await fetch(api()+'/payments/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const j=await r.json();
-    if(!r.ok){SSE.$('#coErr').textContent=j.error||'Could not place the order. Try again.';return;}
-    made=j;localStorage.setItem('sse_cart','[]');cart=[];saveCart();
-    if(j.mode==='cashfree'&&window.Cashfree){
-      const cf=new Cashfree({mode:'production'});
-      cf.checkout({paymentSessionId:j.paymentSessionId,redirectTarget:'_modal',
-        onSuccess:()=>{done(j,'Payment received. Invoice reaches you on WhatsApp.');},
-        onFailure:()=>{SSE.$('#coErr').textContent='Payment did not go through. Your order is saved — try paying again.';}});
-    }else if(j.mode==='cod')done(j,'Pay '+SSE.fmt(j.grand)+' cash or UPI to the delivery van. Invoice reaches you on WhatsApp.');
-    else done(j,null);
-  }catch{SSE.$('#coErr').textContent='Could not reach the shop backend. Check connection.';}
-});
-function done(j,payMsg){
-  SSE.$('#coForm').innerHTML=`<div class="empty" style="border-style:solid"><i class="hgi-stroke hgi-checkmark-badge-01"></i><b>Order ${SSE.esc(j.orderId)} placed</b>
-  <p>${payMsg?SSE.esc(payMsg):'We confirm stock and share the UPI QR on WhatsApp shortly. Total '+SSE.fmt(j.grand)+' (GST '+SSE.fmt(j.gst)+').'}</p>
-  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">
-  ${!payMsg?`<a class="btn btn-amber" href="${j.intent}"><i class="hgi-stroke hgi-smart-phone-01"></i>Pay ${SSE.fmt(j.grand)} via UPI</a>`:''}
-  <a class="btn btn-ghost" href="https://wa.me/917240107540?text=${encodeURIComponent('Order '+j.orderId+' placed on site. Name and address shared in checkout.')}"><i class="hgi-stroke hgi-whatsapp"></i>Confirm on WhatsApp</a></div></div>`;
-  toast('Order '+j.orderId+' placed');
-}
-init();
-</script>
-<nav class="mtabs no-print" aria-label="Mobile Navigation">
-  <a href="index.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>
-    </span>
-    <span class="tl">Home</span>
-  </a>
-  <a href="shop.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" rx="2"/>
-        <rect x="14" y="3" width="7" height="7" rx="2"/>
-        <rect x="14" y="14" width="7" height="7" rx="2"/>
-        <rect x="3" y="14" width="7" height="7" rx="2"/>
-      </svg>
-    </span>
-    <span class="tl">Shop</span>
-  </a>
-  <a href="checkout.html" class="mtabs-center on" aria-current="page" aria-label="Estimate and Cart">
-    <div class="mtabs-center-btn">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1.2"/>
-          <circle cx="19" cy="21" r="1.2"/>
-          <path d="M2.5 2.5h3l2.4 12.3a2 2 0 0 0 2 1.6h9.6a2 2 0 0 0 2-1.6l1.5-7.8H6.5"/>
-        </svg>
-        <span class="nav-badge" style="display:none">0</span>
-      </span>
-    </div>
-    <span class="tl">Estimate</span>
-  </a>
-  <a href="account.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-    </span>
-    <span class="tl">Account</span>
-  </a>
-  <a href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" class="mtabs-wa" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.04 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.66 20.16 9.3 19.8 8.1 19.09L7.81 18.92L4.69 19.74L5.52 16.7L5.33 16.39C4.55 15.16 4.14 13.55 4.14 11.91C4.14 7.37 7.84 3.67 12.04 3.67ZM8.98 7.37C8.78 7.37 8.63 7.38 8.49 7.42C8.32 7.47 8.08 7.57 7.88 7.79C7.68 8.01 7.12 8.53 7.12 9.6C7.12 10.67 7.9 11.7 8.01 11.85C8.12 12 9.53 14.24 11.75 15.15C13.59 15.91 13.97 15.76 14.37 15.72C14.77 15.68 15.66 15.19 15.84 14.68C16.03 14.17 16.03 13.73 15.97 13.64C15.91 13.55 15.76 13.5 15.54 13.39C15.32 13.28 14.24 12.75 14.04 12.68C13.84 12.6 13.7 12.57 13.55 12.79C13.4 13.01 12.98 13.5 12.85 13.65C12.72 13.79 12.59 13.81 12.37 13.7C12.15 13.59 11.44 13.36 10.6 12.61C9.94 12.02 9.5 11.3 9.39 11.11C9.28 10.92 9.38 10.82 9.49 10.71C9.59 10.61 9.71 10.45 9.82 10.32C9.93 10.19 9.97 10.1 10.04 9.95C10.11 9.8 10.08 9.67 10.02 9.56C9.97 9.45 9.53 8.36 9.35 7.93C9.17 7.51 8.99 7.57 8.85 7.56C8.73 7.55 8.58 7.55 8.44 7.55L8.98 7.37Z"/>
-      </svg>
-      <span class="wa-beacon" aria-hidden="true">
-        <span class="wa-beacon-ping"></span>
-        <span class="wa-beacon-dot"></span>
-      </span>
-    </span>
-    <span class="tl">WhatsApp</span>
-  </a>
-</nav>
-<a class="wafloat no-print" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" aria-label="Chat on WhatsApp"><i class="hgi-stroke hgi-whatsapp"></i></a>
-<script src="assets/mascot.js"></script>
-</body></html>
+<script src="assets/app.js?v=52"></script>
+<script src="assets/checkout.js?v=2"></script>
+</body>
+</html>

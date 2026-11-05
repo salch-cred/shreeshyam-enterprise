@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, type PoolClient } from 'pg';
 import { env } from './env.js';
 
 // Single pooled client. Vercel serverless reuses it across warm invocations.
@@ -26,4 +26,21 @@ export function requireDb() {
     throw err;
   }
   return p;
+}
+
+// BEGIN/COMMIT must share one connection. Calling them on the Pool can land each
+// statement on a different client, which silently breaks atomicity.
+export async function tx<T>(fn: (c: PoolClient) => Promise<T>): Promise<T> {
+  const c = await requireDb().connect();
+  try {
+    await c.query('BEGIN');
+    const out = await fn(c);
+    await c.query('COMMIT');
+    return out;
+  } catch (e) {
+    try { await c.query('ROLLBACK'); } catch { /* connection already gone */ }
+    throw e;
+  } finally {
+    c.release();
+  }
 }

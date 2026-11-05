@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env, type Role } from './env.js';
 
 export function signToken(role: Role, extra: Record<string, unknown> = {}) {
-  return jwt.sign({ role, ...extra }, env.JWT_SECRET, { expiresIn: '12h' });
+  return jwt.sign({ role, ...extra }, env.JWT_SECRET, { expiresIn: '12h', algorithm: 'HS256' });
 }
 
 export interface Authed extends Request {
@@ -17,7 +17,7 @@ export function auth(required: Role[]) {
     const token = h.startsWith('Bearer ') ? h.slice(7) : '';
     if (!token) return next(Object.assign(new Error('Missing token'), { status: 401 }));
     try {
-      const p = jwt.verify(token, env.JWT_SECRET) as { role: Role; phone?: string };
+      const p = jwt.verify(token, env.JWT_SECRET, { algorithms: ['HS256'] }) as { role: Role; phone?: string };
       if (!required.includes(p.role)) return next(Object.assign(new Error('Forbidden'), { status: 403 }));
       req.role = p.role;
       req.phone = p.phone;

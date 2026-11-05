@@ -1,559 +1,86 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Shop 10,000+ industrial items — Shree Shyam Enterprises</title>
-<meta name="description" content="Filter and order from 10,000+ line items: bearings, belts, fasteners, pneumatics, tools and electricals. Retail counter and project rates with GST invoice.">
-<meta name="theme-color" content="#1D4ED8">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231D4ED8'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="assets/land/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css">
-<link rel="stylesheet" href="assets/styles.css?v=20261015c">
-<style>
-/* ---- shop v4: large desktop marketplace ---- */
-main.wide{max-width:1440px}
-.crumbs{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.crumbs a{text-decoration:none;color:var(--muted)}
-.crumbs a:hover{color:var(--ink)}
-.crumbs b{color:var(--ink)}
-.banner{margin:6px 0 22px;border:1px solid var(--line);border-radius:var(--r-xl);background:var(--dark);color:#fff;padding:26px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;overflow:hidden}
-.banner::after{content:"BOQ";position:absolute;right:6px;bottom:-34px;font-size:120px;font-weight:800;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.14);pointer-events:none}
-.banner b{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#BFDBFE;display:block;margin-bottom:6px}
-.banner h2{margin:0 0 4px;font-size:24px;line-height:30px;letter-spacing:-.01em}
-.banner p{margin:0;color:#C3D2EE;font-size:14px;max-width:520px}
-.banner .btn{position:relative;z-index:2}
-.cattiles{display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:4px 2px 10px;scrollbar-width:none}
-.cattiles::-webkit-scrollbar{display:none}
-.cattile{flex:none;scroll-snap-align:start;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s var(--ease-out);white-space:nowrap}
-.cattile:hover{transform:translateY(-1px);border-color:var(--accent);color:var(--ink)}
-.cattile:active{transform:scale(.96)}
-.cattile i{font-size:17px;color:var(--accent)}
-.cattile small{font-weight:700;color:var(--muted);opacity:.7}
-.cattile.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(29,78,216,.25)}
-.cattile.on i,.cattile.on small{color:#fff}
-.shoplay{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start;margin-top:18px}
-.side{position:sticky;top:132px;border:1px solid var(--line);border-radius:var(--r-lg);background:#fff;padding:18px;max-height:calc(100vh - 150px);overflow:auto}
-.side h4{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
-.side h4 button{border:0;background:none;font:inherit;font-size:12px;font-weight:700;color:var(--accent);cursor:pointer}
-.fgroup{border-top:1px solid var(--line);padding:14px 0 6px}
-.flist{display:grid;gap:2px;max-height:230px;overflow:auto}
-.fitem{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;font-size:13px;cursor:pointer;border:0;background:none;width:100%;text-align:left;font-family:inherit;color:var(--ink);font-weight:500;transition:background .2s var(--ease-out)}
-.fitem:hover{background:var(--bg-soft)}
-.fitem.on{background:var(--bg-soft);font-weight:700}
-.fitem input{accent-color:var(--accent);width:15px;height:15px;flex:none}
-.fitem small{margin-left:auto;color:var(--muted);font-weight:600}
-.sidepromo{margin-top:14px;border:1px solid var(--line-dark);border-radius:var(--r-md);background:var(--dark);color:#fff;padding:18px}
-.sidepromo b{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#BFDBFE;margin-bottom:6px}
-.sidepromo p{margin:0 0 12px;font-size:13px;color:#C3D2EE}
-.tbar2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.tbar2 .rc{font-size:13px;color:var(--muted);font-weight:600}
-.tbar2 .rgt{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.tbar2 select{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;background:#fff}
-#fBtn{display:none}
-.fchips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
-.fchips:empty{display:none}
-.fchip{display:inline-flex;align-items:center;gap:7px;background:var(--bg-soft);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 12px;font-size:12px;font-weight:700}
-.fchip button{border:0;background:#fff;border-radius:50%;width:18px;height:18px;line-height:1;font-size:12px;cursor:pointer}
-/* larger cards */
-.grid-products{grid-template-columns:repeat(3,1fr);gap:20px}
-@media (min-width:1800px){.grid-products{grid-template-columns:repeat(4,1fr)}}
-.pcard{cursor:pointer;position:relative;border-radius:18px;background:#FFFFFF;border:1px solid var(--line);overflow:hidden;transition:transform .22s var(--ease-out), box-shadow .22s var(--ease-out), border-color .2s ease}
-.pcard::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease-out)}
-.pcard:hover{transform:translateY(-3.5px);box-shadow:0 16px 36px rgba(27,36,48,.12);border-color:var(--accent)}
-.pcard:hover::after{transform:scaleX(1)}
-.pmedia{position:relative;overflow:hidden;background:var(--bg-soft)}
-.pmedia img{aspect-ratio:1/1;transition:transform .3s var(--ease-out)}
-.pcard:hover .pmedia img{transform:scale(1.05)}
-.gstm{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;color:var(--accent-ink)}
-.pad{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
-.pbrand{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.pcard h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;line-height:23px;min-height:46px}
-.pstock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
-.pstock i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.pstock.ok{color:#2F7D33}.pstock.ok i{background:#2F7D33}
-.pstock.low{color:#9A3412}.pstock.low i{background:#9A3412}
-.smeter{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:2px}
-.smeter span{display:block;height:100%;border-radius:2px;background:var(--accent);transition:width .8s var(--ease)}
-.pfoot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:6px}
-.pprice{font-weight:800;font-size:20px;letter-spacing:-.01em}
-.pprice small{display:block;font-size:12px;color:var(--muted);font-weight:600}
-.padd{width:46px;height:46px;border-radius:13px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:24px;font-weight:600;cursor:pointer;flex:none;transition:all .18s var(--ease-out)}
-.padd:active{transform:scale(.88) !important}
-.padd:hover,.padd.in{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 6px 16px rgba(29,78,216,.3)}
-.skelp{border:1px solid var(--line);border-radius:var(--r-lg);aspect-ratio:3/3.5;position:relative;overflow:hidden;background:#fff}
-.skelp::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.7);transform:translateX(-100%);animation:shimmer 1.4s infinite}
-/* quick view */
-.qv{width:min(880px,100vw)}
-.qv-body{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.q-media img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--r-md);border:1px solid var(--line);background:var(--bg-soft)}
-.q-info{display:flex;flex-direction:column;gap:10px}
-.q-info h2{margin:0;font-size:24px;line-height:30px;letter-spacing:-.01em}
-.q-specs{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin:0;font-size:13px}
-.q-specs div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:5px 0}
-.q-specs dt{color:var(--muted)}
-.q-specs dd{margin:0;font-weight:700}
-.q-price{font-size:28px;font-weight:800;letter-spacing:-.02em}
-.q-price small{font-size:13px;color:var(--muted);font-weight:600}
-.q-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
-@media (max-width:1020px){
-  .shoplay{display:block}
-  .side{position:fixed;top:0;left:0;bottom:0;width:min(320px,86vw);max-height:none;border-radius:0 var(--r-lg) var(--r-lg) 0;z-index:115;
-    transform:translateX(-104%);transition:transform .7s var(--ease);box-shadow:30px 0 80px rgba(0,0,0,.2)}
-  #fBtn{display:inline-flex}
-  .cattiles{margin:0 -16px;padding:4px 16px 10px}
-  .grid-products{grid-template-columns:repeat(2,1fr);gap:12px}
-  .banner{flex-direction:column;align-items:flex-start;padding:20px 16px}
-  .banner::after{font-size:80px}
-  .qv-body{grid-template-columns:1fr}
-  .qv{width:100vw}
-}
-</style><link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600&family=Geist+Mono:wght@400;500&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=52">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<title>Catalogue — Shree Shyam Enterprises</title>
+<meta name="description" content="Buy bearings, belts, pneumatics, fasteners, tools and electricals from Shree Shyam Enterprises, Neemrana. GST invoice on every order.">
+<meta name="theme-color" content="#ffffff">
 </head>
-<body>
-<a class="skip" href="#main">Skip to content</a>
-<div class="grain" aria-hidden="true"></div>
-<div class="mbg" aria-hidden="true"></div>
-<!-- STICKY PRIMARY COLOR WEAV HEADER -->
-<!-- EVENTBEDS™ LUXURY HEADER (https://www.eventbeds.com) -->
-<header class="site-header no-print">
-  <div class="site-header-inner">
-    <!-- Brand Logotype: EventBeds™ styling -->
-    <a class="eventbeds-brand" href="index.html" aria-label="Shree Shyam Enterprise Homepage">
-      <div class="eventbeds-logo-icon">
-        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
-      </div>
-      <div class="eventbeds-brand-text">
-        <span class="eventbeds-title">
-          Shree Shyam<span class="eventbeds-tm">™</span>
-        </span>
-        <span class="eventbeds-sub">by RIICO Industrial Hub</span>
-      </div>
-    </a>
-
-    <!-- Center: EventBeds Desktop Nav -->
-    <nav class="eventbeds-nav-center" aria-label="Main Navigation">
-      <a href="shop.html" class="eventbeds-nav-link active" style="color:#FFFFFF">
-        <span>Catalogue</span>
-        <span class="eb-nav-arrow" style="opacity:1;transform:none"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="index.html#lake" class="eventbeds-nav-link">
-        <span>For Plants</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="account.html" class="eventbeds-nav-link">
-        <span>Plant Credit</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-      <a href="index.html#bulk" class="eventbeds-nav-link">
-        <span>Project BOQ</span>
-        <span class="eb-nav-arrow"><i class="hgi-stroke hgi-arrow-right-01" style="font-size:12px"></i></span>
-      </a>
-    </nav>
-
-    <!-- Right: Fast Action Suite -->
-    <div class="eventbeds-actions">
-      <a class="eventbeds-search-pill" href="shop.html" aria-label="Search parts">
-        <i class="hgi-stroke hgi-search-01"></i>
-        <span>Search parts...</span>
-        <kbd>⌘K</kbd>
-      </a>
-
-      <a class="eventbeds-cart-btn" href="checkout.html" aria-label="Cart and Instant Estimate">
-        <i class="hgi-stroke hgi-shopping-cart-01"></i>
-        <span class="eventbeds-cart-label">Cart</span>
-        <span class="eventbeds-cart-count nav-badge" data-nav-badge>0</span>
-      </a>
-
-      <!-- EventBeds Signature Black Pill Button -->
-      <a class="eventbeds-black-btn desktop" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
-        <div class="eb-btn-slider">
-          <span class="eb-btn-text">Quick BOQ</span>
-          <span class="eb-btn-text hover">WhatsApp 24/7</span>
-        </div>
-      </a>
-
-      <!-- EventBeds Menu Capsule -->
-      <button class="eventbeds-menu-btn" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
-        <div class="eb-menu-text-wrap">
-          <span class="eb-menu-label open">Menu</span>
-          <span class="eb-menu-label close">Close</span>
-        </div>
-        <div class="eb-status-dots-box" aria-hidden="true">
-          <span class="eb-status-dot pulse-lime"></span>
-          <span class="eb-status-dot neutral"></span>
-        </div>
-      </button>
+<body data-stage="shop">
+<a class="skip" href="#grid">Skip to products</a>
+<canvas id="stage" aria-hidden="true"></canvas>
+<main id="main">
+  <section class="shop-hero">
+    <div class="wrap wide" style="width:100%">
+      <p class="eyebrow">Catalogue</p>
+      <h1>Find it, add it,<br>we dispatch it.</h1>
+      <p>Search by part number, make or name. Anything not listed, ask us and we source it.</p>
+      <label class="shop-search"><span class="sr">Search products</span>
+        <input id="q" type="search" placeholder="6205, FRL, V-belt, Polymatic" autocomplete="off"><kbd>/</kbd>
+      </label>
     </div>
-  </div>
-</header>
+  </section>
 
-<!-- EVENTBEDS™ MOBILE DRAWER -->
-<div class="site-drawer no-print" id="mmenu" aria-label="Mobile Navigation">
-  <div class="site-drawer-head">
-    <div class="eventbeds-brand">
-      <div class="eventbeds-logo-icon">
-        <img src="assets/img/logo.png" alt="Shree Shyam Enterprises Logo" class="eventbeds-logo-img">
+  <section class="shop-body">
+    <div class="depts" id="depts" aria-label="Shop by department"></div>
+    <div class="shop-tools"><div class="wrap wide">
+      <span class="count" id="count"></span>
+      <button class="btn line sm filter-btn" id="fBtn">Filters</button>
+      <div class="seg" id="slabSeg" aria-label="Rate type">
+        <button data-s="retail" aria-pressed="true">Counter</button><button data-s="wholesale" aria-pressed="false">Project</button>
       </div>
-      <div class="eventbeds-brand-text">
-        <span class="eventbeds-title">Shree Shyam<span class="eventbeds-tm">™</span></span>
-        <span class="eventbeds-sub">RIICO Industrial Hub</span>
+      <select id="sort" aria-label="Sort products">
+        <option value="az">A to Z</option><option value="za">Z to A</option><option value="stock">In stock</option>
+      </select>
+    </div></div>
+    <div class="wrap wide shop-lay">
+      <aside class="filters" id="filters" aria-label="Filters">
+        <h4>Availability</h4><div id="fStock"></div>
+        <h4>Type</h4><div id="fCats"></div>
+        <h4>Make</h4><div id="fBrands"></div>
+        <button class="btn line sm" id="fClear" style="margin-top:14px">Clear filters</button>
+      </aside>
+      <div>
+        <div id="grid" class="grid-p" aria-live="polite"></div>
+        <button class="btn line more" id="more" hidden>Load more</button>
       </div>
     </div>
-    <button class="site-drawer-close" id="drawerClose" aria-label="Close navigation menu">&times;</button>
-  </div>
-
-  <div class="site-drawer-nav">
-    <a href="index.html" class="drawer-link-block">
-      <span>Home Overview</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="shop.html" class="drawer-link-block">
-      <span>Catalogue & Pricing (Active)</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="index.html#lake" class="drawer-link-block">
-      <span>Warehouse OEM Lakes</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="account.html" class="drawer-link-block">
-      <span>Plant Credit & Net 30 Ledger</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="checkout.html" class="drawer-link-block">
-      <span>Cart & GST Estimate</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="billing.html" class="drawer-link-block">
-      <span>Billing Counter POS</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-    <a href="admin.html" class="drawer-link-block">
-      <span>Admin & Activity Console</span>
-      <span class="arrow-svg"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
-    </a>
-  </div>
-
-  <div class="site-drawer-footer">
-    <a class="eventbeds-black-btn" style="width:100%;height:46px;font-size:14px" href="https://wa.me/917240107540?text=Namaste%2C%20mujhe%20industrial%20parts%20quote%20chahiye" target="_blank" rel="noopener">
-      <div class="eb-btn-slider" style="height:20px;line-height:20px">
-        <span class="eb-btn-text" style="height:20px">Instant WhatsApp Desk</span>
-        <span class="eb-btn-text hover" style="height:20px">+91 72401 07540</span>
-      </div>
-    </a>
-    <div class="drawer-socials">
-      <a class="drawer-social-icon" href="tel:+917240107540" title="Call Shop Desk"><i class="hgi-stroke hgi-call"></i></a>
-      <a class="drawer-social-icon" href="mailto:shreeshyamenterprises7540@gmail.com" title="Email Dispatch"><i class="hgi-stroke hgi-mail-01"></i></a>
-      <a class="drawer-social-icon" href="https://maps.google.com/?q=RIICO+Industrial+Area+Neemrana" target="_blank" rel="noopener" title="Directions"><i class="hgi-stroke hgi-location-01"></i></a>
-      <span style="font-size:11px;color:#94A3B8;margin-left:auto;font-weight:600">Open 9AM - 8PM</span>
-    </div>
-  </div>
-</div>
-
-<main id="main" class="wrap wide block" style="padding-top:24px">
-<p class="crumbs rv in"><a href="index.html">Home</a> / <b id="crumbCat">Catalogue</b></p>
-<div class="banner rv in" style="position:relative;background:#0F172A;border:1px solid #1E293B;border-radius:20px;box-shadow:0 16px 40px -10px rgba(15,23,42,.35)">
-  <div style="position:absolute;top:12px;left:14px;color:rgba(147,197,253,.3);font-family:monospace;font-size:13px;user-select:none">+</div>
-  <div style="position:absolute;top:12px;right:14px;color:rgba(147,197,253,.3);font-family:monospace;font-size:13px;user-select:none">+</div>
-  <div style="position:absolute;bottom:12px;left:14px;color:rgba(147,197,253,.3);font-family:monospace;font-size:13px;user-select:none">+</div>
-  <div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-      <span style="display:inline-flex;align-items:center;gap:6px;background:#1E293B;border:1px solid #334155;color:#93C5FD;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">
-        <span style="width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981"></span> Live Shelf Catalog
-      </span>
-      <span style="color:#94A3B8;font-size:12px">· Authorized Polymatic Pneumatics & Bearings Hub</span>
-    </div>
-    <h2 style="font-size:26px;line-height:34px;margin:0 0 6px;letter-spacing:-.02em;color:#F8FAFC">10,000+ Industrial Items Stocked on the Shelf</h2>
-    <p style="margin:0;color:#94A3B8;font-size:14px;max-width:580px;line-height:22px">Bearings, transmission belts, high tensile fasteners, cylinders, and pneumatic automation. Quoted fast, invoiced with 8 digit HSN, and dispatched same day across RIICO Neemrana.</p>
-  </div>
-  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:relative;z-index:2">
-    <a class="btn btn-amber" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" target="_blank" rel="noopener"><i class="hgi-stroke hgi-whatsapp"></i>WhatsApp BOQ list</a>
-    <a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.28)" href="index.html#bulk"><i class="hgi-stroke hgi-sent"></i>Project quote desk</a>
-  </div>
-</div>
-
-<div class="cmdbar shopbar rv in" style="background:var(--bg-soft);box-shadow:none;border:1px solid var(--line)">
-<label class="search" style="background:#fff;border-color:var(--line)"><i class="hgi-stroke hgi-search-01"></i><input id="q" type="search" placeholder="Search bearing, valve, belt, tube…" aria-label="Search products" style="color:var(--ink)"><kbd>/</kbd></label>
-<div class="seg" id="slabSeg" style="min-width:200px"><button data-s="retail" aria-pressed="true">Counter</button><button data-s="wholesale" aria-pressed="false">Project</button></div>
-</div>
-
-<div class="cattiles" id="tiles" aria-label="Shop by category"></div>
-
-<div class="shoplay">
-<aside class="side" id="side" aria-label="Filters">
-<h4>Refine<button id="fClear" type="button">Clear all</button></h4>
-<div class="fgroup"><div class="flist" id="fStock"></div></div>
-<div class="fgroup"><h4 style="border:0;padding:0;margin-bottom:8px">Category</h4><div class="flist" id="fCats"></div></div>
-<div class="fgroup"><h4 style="border:0;padding:0;margin-bottom:8px">Brand</h4><div class="flist" id="fBrands"></div></div>
-<div class="sidepromo"><b>Bulk enquiry</b><p>Send the full BOQ — one sheet back with makes, HSN and dispatch dates.</p>
-<a class="btn btn-amber" href="index.html#bulk" style="width:100%;justify-content:center">Get project quote</a></div>
-</aside>
-
-<section aria-label="Products">
-<div class="tbar2">
-<button class="btn btn-ghost" id="fBtn"><i class="hgi-stroke hgi-filter"></i>Filters</button>
-<span class="rc" id="count"></span>
-<div class="rgt">
-<select id="sort" aria-label="Sort products"><option value="az">Name A-Z</option><option value="za">Name Z-A</option><option value="stock">In stock first</option></select>
-</div>
-</div>
-<div class="fchips" id="chips"></div>
-<div id="grid" class="grid-products"></div>
-<div class="toolbar" id="sendbar" style="margin-top:24px">
-<button class="btn btn-ghost" id="more">Load more</button>
-<a class="btn btn-primary" href="checkout.html"><i class="hgi-stroke hgi-wallet-01"></i>Checkout</a>
-<a class="btn btn-amber" id="waSend" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai"><i class="hgi-stroke hgi-whatsapp"></i>Send list on WhatsApp</a>
-</div>
-</section>
-</div>
+  </section>
 </main>
 
-<footer class="sfooter"></footer>
-
-<div class="scrim no-print" id="qvScrim"></div>
-<aside class="sheet qv no-print" id="qv" aria-label="Product quick view">
-<header><div><p class="spec" style="margin:0">Quick view</p><h2 id="qvName" style="margin:4px 0 0;font-size:20px"></h2></div>
-<button class="btn btn-ghost" id="qvClose" aria-label="Close quick view"><i class="hgi-stroke hgi-cancel-01"></i></button></header>
-<div class="body qv-body">
-<div class="q-media"><img id="qvImg" alt=""></div>
-<div class="q-info">
-<span class="pbrand" id="qvBrand"></span>
-<span class="pstock" id="qvStock"></span>
-<dl class="q-specs" id="qvSpecs"></dl>
-<div class="q-price"><span id="qvPrice"></span> <small id="qvUnit"></small></div>
-<div class="q-actions">
-<div class="stepper"><button type="button" id="qvMinus" aria-label="Decrease">−</button><b id="qvQty">1</b><button type="button" id="qvPlus" aria-label="Increase">+</button></div>
-<button class="btn btn-primary" id="qvAdd" style="flex:1;justify-content:center"><i class="hgi-stroke hgi-plus-sign"></i>Add to list</button>
-</div>
-<a class="btn btn-ghost" id="qvWa" href="#"><i class="hgi-stroke hgi-whatsapp"></i>Ask about this item</a>
-</div>
-</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="qv" aria-label="Product details" aria-hidden="true">
+  <div class="sheet-head">
+    <div><p class="eyebrow" id="qvBrand" style="margin:0 0 4px"></p><h2 id="qvName"></h2></div>
+    <button class="sheet-x" id="qvClose" aria-label="Close">×</button>
+  </div>
+  <div class="sheet-body">
+    <div class="pv-media"><div class="draft" aria-hidden="true"></div><img id="qvImg" alt=""></div>
+    <div class="pv-rate"><span id="qvPrice"></span><small id="qvUnit"></small></div>
+    <dl class="pv-spec" id="qvSpecs"></dl>
+    <p id="qvStock" style="font-size:15px;margin-top:12px"></p>
+  </div>
+  <div class="sheet-foot">
+    <a class="btn line" id="qvWa" target="_blank" rel="noopener">Ask on WhatsApp</a>
+    <div class="stepper"><button id="qvMinus" aria-label="Decrease quantity">−</button><b id="qvQty">1</b><button id="qvPlus" aria-label="Increase quantity">+</button></div>
+    <button class="btn" id="qvAdd">Add to cart</button>
+  </div>
 </aside>
-<div class="toasts no-print" id="toasts" aria-live="polite"></div>
-<script src="assets/app.js?v=20261012a"></script>
-<script>
-let ALL=[],pg=1,cart=[],cat='',slab='retail',brands=new Set(),stockOnly=false,qvP=null,qvQty=1;
-const grid=SSE.$('#grid');
-const toast=(m,i='checkmark-circle-01')=>{const t=document.createElement('div');t.className='toast';
-  t.innerHTML=`<i class="hgi-stroke hgi-${i}"></i><span>${SSE.esc(m)}</span>`;SSE.$('#toasts').appendChild(t);
-  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),500)},2200);};
-try{cart=JSON.parse(localStorage.getItem('sse_cart')||'[]');}catch{cart=[];}
-function saveCart(){
-  localStorage.setItem('sse_cart',JSON.stringify(cart));
-  SSE.$('#cartN').textContent='List '+cart.reduce((a,c)=>a+c.qty,0);
-  SSE.updateNavBadge();
-}
-const iconFor=c=>/bearing|wheel|caster/.test(c)?'settings-01':/belt|chain|sprocket|transmission/.test(c)?'link-01':/fastener|seal|circlip|tool/.test(c)?'screw-driver':/valve|pneumat|frl|cylind|gripp|booster|pump/.test(c)?'wind-power-02':/fitting|tube|tubing|coupl|silencer/.test(c)?'pipe':/electric|switch|sensor/.test(c)?'plug-01':/gauge/.test(c)?'file-01':/pack|strap|tape/.test(c)?'layers-01':/weld/.test(c)?'shield-01':/adhes|glue|wd/.test(c)?'wallet-01':'package';
 
-async function init(){
-  grid.innerHTML=Array(9).fill('<div class="skelp"></div>').join('');
-  SSE.tabs();
-  ALL=await SSE.seed();
-  saveCart();
-  buildTiles();buildFilters();render();
-  SSE.$('#q').oninput=()=>{pg=1;render()};
-  SSE.$('#sort').onchange=()=>{pg=1;render()};
-  SSE.$('#slabSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    SSE.$('#slabSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
-    b.setAttribute('aria-pressed','true');slab=b.dataset.s;pg=1;render();});
-  SSE.$('#more').onclick=()=>{pg++;render(true)};
-  SSE.$('#fBtn').onclick=()=>{SSE.$('#side').classList.add('open');document.querySelector('.scrim')?.remove();const s=document.createElement('div');s.className='scrim open no-print';s.onclick=closeSide;document.body.appendChild(s);};
-  SSE.$('#fClear').onclick=()=>{cat='';brands.clear();stockOnly=false;pg=1;buildTiles();buildFilters();render();};
-  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();SSE.$('#q').focus();}
-    if(e.key==='Escape')closeQv();});
-  SSE.$('#waSend').onclick=e=>{if(!cart.length){e.preventDefault();toast('Add items to the list first','alert-01');return}
-    const t=cart.map(c=>`${c.name} x ${c.qty}`).join(', ');
-    e.currentTarget.href='https://wa.me/917240107540?text='+encodeURIComponent('Order: '+t);
-    try{const o=JSON.parse(localStorage.getItem('sse_orders')||'[]');o.push({id:'W'+Date.now(),source:'web',text:t,created:new Date().toISOString(),status:'new'});localStorage.setItem('sse_orders',JSON.stringify(o));}catch{}};
-  /* quick view wiring */
-  SSE.$('#qvClose').onclick=closeQv;SSE.$('#qvScrim').onclick=closeQv;
-  SSE.$('#qvMinus').onclick=()=>{qvQty=Math.max(1,qvQty-1);SSE.$('#qvQty').textContent=qvQty;};
-  SSE.$('#qvPlus').onclick=()=>{qvQty++;SSE.$('#qvQty').textContent=qvQty;};
-  SSE.$('#qvAdd').onclick=()=>{if(!qvP)return;const fnd=cart.find(c=>c.id===qvP.id);
-    const rate=slab==='wholesale'?qvP.rate_wholesale:qvP.rate_retail;
-    if(fnd)fnd.qty+=qvQty;else cart.push({id:qvP.id,name:qvP.name,qty:qvQty,rate,gst_pct:qvP.gst_pct});
-    saveCart();toast(qvP.name+' × '+qvQty+' in list');};
-  SSE.motion();SSE.tabs();
-}
-function closeSide(){SSE.$('#side').classList.remove('open');document.querySelector('.scrim')?.remove();}
-function openQv(p){qvP=p;qvQty=1;SSE.$('#qvQty').textContent='1';
-  const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
-  SSE.$('#qvImg').src=SSE.safeImg(p.image);SSE.$('#qvImg').alt=p.name;
-  SSE.$('#qvName').textContent=p.name;SSE.$('#qvBrand').textContent=p.brand;
-  const ok=(p.stock||0)>0;
-  SSE.$('#qvStock').className='pstock '+(ok?'ok':'low');
-  SSE.$('#qvStock').innerHTML=`<i class="stock-dot"></i>${ok?'In stock · '+Number(p.stock)+' '+SSE.esc(p.unit):'Made to order — dispatch 24h'}`;
-  SSE.$('#qvSpecs').innerHTML=`<div><dt>Category</dt><dd>${SSE.esc(p.category)}</dd></div>
-  <div><dt>HSN Code</dt><dd>${SSE.esc(p.hsn||'—')}</dd></div>
-  <div><dt>GST Slab</dt><dd>${Number(p.gst_pct)||0}%</dd></div>
-  <div><dt>Make / OEM</dt><dd>${SSE.esc(p.brand)}</dd></div>`;
-  SSE.$('#qvPrice').textContent=rate?SSE.fmt(rate):'₹ Quote on request';
-  SSE.$('#qvUnit').textContent=rate?('per '+p.unit):'counter confirms before dispatch';
-  SSE.$('#qvWa').href='https://wa.me/917240107540?text='+encodeURIComponent('Requirement: '+p.name+' ('+p.brand+') — please share rate and lead time.');
-  SSE.$('#qvScrim').classList.add('open');SSE.$('#qv').classList.add('open');}
-function closeQv(){SSE.$('#qvScrim').classList.remove('open');SSE.$('#qv').classList.remove('open');}
-function buildTiles(){
-  const cats=[...new Set(ALL.map(p=>p.category))];
-  const t=SSE.$('#tiles');t.innerHTML='';
-  const all=document.createElement('button');all.className='cattile'+(cat===''?' on':'');
-  all.innerHTML=`<i class="hgi-stroke hgi-package"></i>All items<small>${ALL.length}</small>`;
-  all.onclick=()=>{cat='';pg=1;buildTiles();buildFilters();render();};t.appendChild(all);
-  cats.forEach(cn=>{const b=document.createElement('button');b.className='cattile'+(cat===cn?' on':'');
-    b.innerHTML=`<i class="hgi-stroke hgi-${iconFor(cn)}"></i>${SSE.esc(cn)}<small>${ALL.filter(p=>p.category===cn).length}</small>`;
-    b.onclick=()=>{cat=cat===cn?'':cn;pg=1;buildTiles();buildFilters();render();};t.appendChild(b);});
-}
-function buildFilters(){
-  const st=SSE.$('#fStock');
-  st.innerHTML=`<button type="button" class="fitem ${stockOnly?'on':''}" id="stBtn"><input type="checkbox" ${stockOnly?'checked':''} tabindex="-1">In stock only</button>`;
-  SSE.$('#stBtn').onclick=()=>{stockOnly=!stockOnly;pg=1;buildFilters();render();};
-  const cats=[...new Set(ALL.map(p=>p.category))].sort();
-  SSE.$('#fCats').innerHTML=cats.map(cn=>`<button type="button" class="fitem ${cat===cn?'on':''}" data-c="${SSE.esc(cn)}">${SSE.esc(cn)}<small>${ALL.filter(p=>p.category===cn).length}</small></button>`).join('');
-  SSE.$('#fCats').querySelectorAll('.fitem').forEach(b=>b.onclick=()=>{cat=cat===b.dataset.c?'':b.dataset.c;pg=1;buildTiles();buildFilters();render();});
-  const bmap={};ALL.forEach(p=>{bmap[p.brand]=(bmap[p.brand]||0)+1;});
-  const brs=Object.keys(bmap).sort();
-  SSE.$('#fBrands').innerHTML=brs.map(br=>`<label class="fitem"><input type="checkbox" data-b="${SSE.esc(br)}" ${brands.has(br)?'checked':''}>${SSE.esc(br)}<small>${bmap[br]}</small></label>`).join('');
-  SSE.$('#fBrands').querySelectorAll('input').forEach(i=>i.onchange=()=>{i.checked?brands.add(i.dataset.b):brands.delete(i.dataset.b);pg=1;render();});
-}
-function filtered(){
-  let f=ALL.filter(p=>(!cat||p.category===cat)
-    &&(brands.size===0||brands.has(p.brand))
-    &&(!stockOnly||(p.stock||0)>0));
-  const q=SSE.$('#q').value.toLowerCase();
-  if(q)f=f.filter(p=>(p.name+' '+(p.brand||'')).toLowerCase().includes(q));
-  return f;
-}
-function chips(){
-  const box=SSE.$('#chips');box.innerHTML='';
-  const add=(label,fn)=>{const s=document.createElement('span');s.className='fchip';
-    s.innerHTML=SSE.esc(label)+'<button type="button" aria-label="Remove filter">×</button>';
-    s.querySelector('button').onclick=fn;box.appendChild(s);};
-  if(cat)add(cat,()=>{cat='';pg=1;buildTiles();buildFilters();render();});
-  if(stockOnly)add('In stock only',()=>{stockOnly=false;pg=1;buildFilters();render();});
-  brands.forEach(br=>add(br,()=>{brands.delete(br);pg=1;buildFilters();render();}));
-  SSE.$('#crumbCat').textContent=cat||'Catalogue';
-}
-function render(append){
-  chips();
-  const f=filtered();
-  const fs=[...f];const srt=SSE.$('#sort').value;
-  if(srt==='az')fs.sort((a,b)=>a.name.localeCompare(b.name));
-  if(srt==='za')fs.sort((a,b)=>b.name.localeCompare(a.name));
-  if(srt==='stock')fs.sort((a,b)=>b.stock-a.stock);
-  const items=SSE.page(fs,pg);
-  SSE.$('#count').textContent=`${f.length.toLocaleString('en-IN')} items · ${slab==='wholesale'?'project':'counter'} rates`;
-  SSE.$('#more').style.display=(pg*SSE.PAGE>=f.length)?'none':'';
-  if(!append)grid.innerHTML='';
-  if(!items.length&&!append){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><i class="hgi-stroke hgi-package-search"></i><b>Nothing matches these filters</b><p>Clear a filter, or WhatsApp us the part number — we arrange what is not listed.</p></div>`;return;}
-  for(const p of items){
-    const d=document.createElement('article');d.className='pcard rv in';
-    const inCart=cart.find(c=>c.id===p.id);
-    const rate=slab==='wholesale'?p.rate_wholesale:p.rate_retail;
-    const stockOk=(p.stock||0)>0;
-    const meter=stockOk?Math.min(100,Math.round(((p.stock||0)/Math.max(1,(p.min_stock||5)*4))*100)):0;
-    const brandName=SSE.esc(p.brand||'SSE');
-    const hsnText=p.hsn?`HSN ${SSE.esc(p.hsn)}`:'';
-    const waMsg=encodeURIComponent(`Requirement: ${p.name} (${p.brand}) — please share rate and delivery.`);
+<div class="cartbar no-print" id="cartbar">
+  <span id="cartbarText"></span>
+  <a class="btn sm" href="checkout.html">Checkout</a>
+</div>
 
-    d.innerHTML=`<div class="pmedia">
-      <img loading="lazy" src="${SSE.safeImg(p.image)}" alt="${SSE.esc(p.name)}">
-      <div class="pmedia-badges">
-        <span class="oem-badge"><i class="hgi-stroke hgi-award-04"></i>${brandName}</span>
-        <span class="gstm">GST ${Number(p.gst_pct)||0}%</span>
-      </div>
-      <div class="pmedia-actions">
-        <button type="button" class="pmedia-btn qv-act" title="Quick view" aria-label="Quick view ${SSE.esc(p.name)}"><i class="hgi-stroke hgi-view"></i></button>
-        <a class="pmedia-btn" href="https://wa.me/917240107540?text=${waMsg}" target="_blank" rel="noopener" title="WhatsApp enquiry" aria-label="WhatsApp rate"><i class="hgi-stroke hgi-whatsapp"></i></a>
-      </div>
-    </div>
-    <div class="pad">
-      <div class="pbrand-row">
-        <span class="pbrand">${brandName}</span>
-        ${hsnText?`<span class="hsn-tag">${hsnText}</span>`:''}
-      </div>
-      <h3>${SSE.esc(p.name)}</h3>
-      <span class="pstock ${stockOk?'ok':'low'}"><i class="stock-dot"></i>${stockOk?`In stock · ${Number(p.stock)} ${SSE.esc(p.unit)}`:'Made to order · 24h'}</span>
-      <div class="smeter" aria-hidden="true"><span style="width:${stockOk?Math.max(10,meter):100}%;${stockOk?'':'background:#F59E0B'}"></span></div>
-      <div class="pfoot">
-        <div class="pprice">${rate?SSE.fmt(rate):'₹ Quote on request'}<small>per ${SSE.esc(p.unit)} · ${slab==='wholesale'?'project':'counter'}</small></div>
-        <div class="pactions-row">
-          <a class="pwa-mini" href="https://wa.me/917240107540?text=${waMsg}" target="_blank" rel="noopener" title="Ask on WhatsApp" aria-label="Ask on WhatsApp"><i class="hgi-stroke hgi-whatsapp"></i></a>
-          <button class="padd ${inCart?'in':''}" aria-label="Add ${SSE.esc(p.name)} to list">${inCart?'✓ In list':'+ Add'}</button>
-        </div>
-      </div>
-    </div>`;
-
-    d.querySelector('.qv-act')?.addEventListener('click',e=>{e.stopPropagation();openQv(p);});
-    d.querySelector('.padd').onclick=e=>{
-      e.stopPropagation();
-      const fnd=cart.find(c=>c.id===p.id);
-      if(fnd)fnd.qty++;else cart.push({id:p.id,name:p.name,qty:1,rate,gst_pct:p.gst_pct});
-      saveCart();
-      const btn=d.querySelector('.padd');
-      btn.classList.add('in');
-      btn.textContent='✓ In list';
-      toast(p.name+' added to estimate');
-    };
-    d.onclick=()=>openQv(p);
-    grid.appendChild(d);
-  }
-}
-init();
-</script>
-<nav class="mtabs no-print" aria-label="Mobile Navigation">
-  <a href="index.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>
-    </span>
-    <span class="tl">Home</span>
-  </a>
-  <a href="shop.html" class="on" aria-current="page">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" rx="2"/>
-        <rect x="14" y="3" width="7" height="7" rx="2"/>
-        <rect x="14" y="14" width="7" height="7" rx="2"/>
-        <rect x="3" y="14" width="7" height="7" rx="2"/>
-      </svg>
-    </span>
-    <span class="tl">Shop</span>
-  </a>
-  <a href="checkout.html" class="mtabs-center" aria-label="Estimate and Cart">
-    <div class="mtabs-center-btn">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1.2"/>
-          <circle cx="19" cy="21" r="1.2"/>
-          <path d="M2.5 2.5h3l2.4 12.3a2 2 0 0 0 2 1.6h9.6a2 2 0 0 0 2-1.6l1.5-7.8H6.5"/>
-        </svg>
-        <span class="nav-badge" style="display:none">0</span>
-      </span>
-    </div>
-    <span class="tl">Estimate</span>
-  </a>
-  <a href="account.html">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-    </span>
-    <span class="tl">Account</span>
-  </a>
-  <a href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" class="mtabs-wa" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <span class="ti">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.04 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.66 20.16 9.3 19.8 8.1 19.09L7.81 18.92L4.69 19.74L5.52 16.7L5.33 16.39C4.55 15.16 4.14 13.55 4.14 11.91C4.14 7.37 7.84 3.67 12.04 3.67ZM8.98 7.37C8.78 7.37 8.63 7.38 8.49 7.42C8.32 7.47 8.08 7.57 7.88 7.79C7.68 8.01 7.12 8.53 7.12 9.6C7.12 10.67 7.9 11.7 8.01 11.85C8.12 12 9.53 14.24 11.75 15.15C13.59 15.91 13.97 15.76 14.37 15.72C14.77 15.68 15.66 15.19 15.84 14.68C16.03 14.17 16.03 13.73 15.97 13.64C15.91 13.55 15.76 13.5 15.54 13.39C15.32 13.28 14.24 12.75 14.04 12.68C13.84 12.6 13.7 12.57 13.55 12.79C13.4 13.01 12.98 13.5 12.85 13.65C12.72 13.79 12.59 13.81 12.37 13.7C12.15 13.59 11.44 13.36 10.6 12.61C9.94 12.02 9.5 11.3 9.39 11.11C9.28 10.92 9.38 10.82 9.49 10.71C9.59 10.61 9.71 10.45 9.82 10.32C9.93 10.19 9.97 10.1 10.04 9.95C10.11 9.8 10.08 9.67 10.02 9.56C9.97 9.45 9.53 8.36 9.35 7.93C9.17 7.51 8.99 7.57 8.85 7.56C8.73 7.55 8.58 7.55 8.44 7.55L8.98 7.37Z"/>
-      </svg>
-      <span class="wa-beacon" aria-hidden="true">
-        <span class="wa-beacon-ping"></span>
-        <span class="wa-beacon-dot"></span>
-      </span>
-    </span>
-    <span class="tl">WhatsApp</span>
-  </a>
-</nav>
-<a class="wafloat no-print" href="https://wa.me/917240107540?text=Namaste%2C%20requirement%20bhejni%20hai" aria-label="Chat on WhatsApp"><i class="hgi-stroke hgi-whatsapp"></i></a>
-<script src="assets/mascot.js"></script>
-</body></html>
+<script src="assets/app.js?v=52"></script>
+<script src="assets/shop.js?v=34"></script>
+<script type="module" src="assets/stage.js?v=8"></script>
+</body>
+</html>

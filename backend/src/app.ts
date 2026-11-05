@@ -12,8 +12,9 @@ export function createApp() {
   const app = express();
   app.set('trust proxy', 1); // Vercel/proxied deploys: real client IP for rate limiting
   app.use(helmet());
-  app.use(cors({ origin: env.CORS_ORIGIN.split(','), maxAge: 86400 }));
-  app.use(express.json({ limit: '256kb' }));
+  app.use(cors({ origin: env.CORS_ORIGIN.split(',').map((o) => o.trim()), maxAge: 86400 }));
+  // The webhook route reads the raw body to check its signature, so JSON parsing skips it.
+  app.use((req, res, next) => (req.path === '/payments/webhook' ? next() : express.json({ limit: '256kb' })(req, res, next)));
 
   app.get('/health', (_req, res) => res.json({ ok: true, db: Boolean(process.env.DATABASE_URL) }));
   app.use('/auth', authRoutes);
@@ -28,7 +29,7 @@ export function createApp() {
     const e = err as { status?: number; message?: string; issues?: unknown };
     const status = e.status || (e.issues ? 400 : 500);
     if (status >= 500) console.error('[api]', e);
-    res.status(status).json({ error: status >= 500 ? 'Server error' : (e.message || 'Bad request') });
+    res.status(status).json({ error: status >= 500 ? 'Server error' : (e.issues ? 'Please check the details and try again' : e.message || 'Bad request') });
   });
   return app;
 }
